@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/activity_login_username_edit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_default_height"
+            android:background="@android:color/white"
+            android:drawableLeft="@mipmap/login_user_image"
+            android:drawablePadding="@dimen/login_enter_left_padding"
+            android:hint="@string/prompt_user_name"
+            android:inputType="text"
+            android:paddingLeft="@dimen/login_enter_left_padding"
+            android:singleLine="true"/>
+
+        <EditText
+            android:id="@+id/activity_login_password_edit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_default_height"
+            android:layout_marginTop="@dimen/row_default_divide_height"
+            android:background="@android:color/white"
+            android:drawableLeft="@mipmap/login_password_image"
+            android:drawablePadding="@dimen/login_enter_left_padding"
+            android:hint="@string/prompt_password"
+            android:inputType="textPassword"
+            android:paddingLeft="@dimen/login_enter_left_padding"
+            android:singleLine="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/activity_login_login_button"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/button_default_height"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:background="@color/blue"
+                android:onClick="LoginButton"
+                android:text="@string/login_button"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/button_default_text_size"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/loginSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/login_save"/>
+
+        <CheckBox
+            android:id="@+id/loginAuto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/login_auto"/>
+    </LinearLayout>
+
+</LinearLayout>

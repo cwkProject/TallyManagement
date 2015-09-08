@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="grid_item_function_name_list">
+        <item>功能1</item>
+        <item>功能2</item>
+        <item>功能3</item>
+        <item>功能4</item>
+    </string-array>
+
+    <array name="grid_item_function_image_list">
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+        <item>@mipmap/ic_launcher</item>
+    </array>
+
+</resources>

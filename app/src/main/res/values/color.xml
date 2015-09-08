@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="toolbar_color">#FF33B5E5</color>
+    <color name="red">#FF3300</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blue">#FF33B5E5</color>
+    <color name="orange">#FF6600</color>
+    <color name="green">#55FF88</color>
+    <color name="light_blue">#3366EE</color>
+    <color name="transparent">@null</color>
+    <color name="bottom_divider">#B7B7B7</color>
+    <color name="default_background">#B8B8B8</color>
+    <color name="fragment_chart_bg_color">#5f97cca0</color>
+    <color name="chart_bg_color">#f6b96D45</color>
+    <color name="chart_grid_color">#55797C7E</color>
+    <color name="chart_line_green_color">#DF1A9B32</color>
+    <color name="chart_line_orange_color">#FFFF9432</color>
+</resources>
