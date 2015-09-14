@@ -28,4 +28,6 @@ dependencies {
     compile fileTree(include: ['*.jar'] , dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.port:mobile-library:0.4'
+    compile files('libs/baidumapapi_v2_1_3.jar')
+    compile files('libs/locSDK_3.1.jar')
 }
