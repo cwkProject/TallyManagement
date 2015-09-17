@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.port.tally.management.adapter.FunctionIndex.toFunction;
+
 /**
  * 主界面
  *
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @return 简单适配器对象
      */
-    protected SimpleAdapter onGridSimpleAdapter() {
+    private SimpleAdapter onGridSimpleAdapter() {
         return new SimpleAdapter(this, initFunctionResource(), R.layout.function_grid_item, new
                 String[]{FUNCTION_NAME , FUNCTION_IMAGE}, new int[]{R.id.function_grid_item_text
                 , R.id.function_grid_item_image});
@@ -143,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view     当前点击的功能布局对象
      * @param position 点击的位置索引
      */
-    protected void onGridItemClick(View view, int position) {
+    private void onGridItemClick(View view, int position) {
 
         if (!LoginStatus.getLoginStatus().isLogin()) {
             // 未登录
@@ -155,11 +157,8 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        switch (position) {
-            case 0:
-                // 功能页跳转
-                break;
-        }
+        // 转到功能
+        toFunction(position);
     }
 
     /**
@@ -170,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Map<String, Object>> initFunctionResource() {
         // 加载功能项
         // 资源集合
-        List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> dataList = new ArrayList<>();
 
         // 功能名称数组
         String[] functionTitle = getResources().getStringArray(R.array
