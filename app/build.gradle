@@ -30,4 +30,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:cardview-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
+    compile files('libs/baidumapapi_v2_1_3.jar')
+    compile files('libs/locSDK_3.1.jar')
 }

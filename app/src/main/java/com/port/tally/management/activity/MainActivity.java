@@ -8,7 +8,6 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.port.tally.management.adapter.FunctionIndex.toFunction;
 
 /**
  * 主界面
@@ -145,49 +146,18 @@ public class MainActivity extends AppCompatActivity {
      */
     protected void onGridItemClick(View view, int position) {
 
-//        if (!LoginStatus.getLoginStatus().isLogin()) {
-//            // 未登录
-//            // 新建意图,跳转到登录页面
-//            Intent intent = new Intent(this, LoginActivity.class);
-//            // 执行跳转
-//            startActivity(intent);
-//            finish();
-//            return;
-//        }
-
-        switch (position) {
-            case 0:
-                // 功能页跳转
-                Intent intent = new Intent(this, LiHuoActivity.class);
-           // 执行跳转
-                startActivity(intent);
-                break;
-
-            case 1:
-                // 功能页跳转
-                break;
-            case 2:
-                // 功能页跳转
-                break;
-            case 3:
-                // 功能页跳转
-                break;
-            case 4:
-                // 功能页跳转
-                break;
-            case 5:
-                // 功能页跳转
-                break;
-            case 6:
-                // 功能页跳转
-                break;
-            case 7:
-                // 功能页跳转
-                break;
-            case 8:
-                // 功能页跳转
-                break;
+        if (!LoginStatus.getLoginStatus().isLogin()) {
+            // 未登录
+            // 新建意图,跳转到登录页面
+            Intent intent = new Intent(this, LoginActivity.class);
+            // 执行跳转
+            startActivity(intent);
+            finish();
+            return;
         }
+
+        // 跳转到功能
+        toFunction(this, position);
     }
 
     /**

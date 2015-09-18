@@ -1,8 +1,5 @@
 package com.port.tally.management.activity;
 
-import java.util.Calendar;
-
-import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -12,163 +9,149 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.DatePicker;
+import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
-import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.TimePicker.OnTimeChangedListener;
 
 import com.port.tally.management.R;
 
+import java.util.Calendar;
+
 public class QiYunZuoYe extends Activity {
 
-	/**
-	 * @param args
-	 */
-	     private PopupWindow datePopupWindow,datePopupWindow1;
-	     private EditText date1,date2;
-	     private ImageView imgLeft;
-	 	private TextView title;
-	 	  // ¶¨Òå5¸ö¼ÇÂ¼µ±Ç°Ê±¼äµÄ±äÁ¿  
-	    private int year,year1;  
-	    private int month,month1;  
-	    private int day,day1;  
-	    private int hour,hour1;  
-	    private int minute,minute1; 
-		public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			requestWindowFeature(Window.FEATURE_NO_TITLE);
-			setContentView(R.layout.qichezuoye);
-			
-			 Init();
-			 }
-		
-		public void Init(){
-			title = (TextView) findViewById(R.id.title);
-			imgLeft= (ImageView)findViewById(R.id.left);
-			date1 = (EditText) findViewById(R.id.date_1);
-			date2 = (EditText) findViewById(R.id.date_2);
-			title.setText("ÆûÔË×÷Òµ");
-			date1.setText("Ñ¡ÔñÊ±¼ä");
-			title.setVisibility(View.VISIBLE);
-			imgLeft.setVisibility(View.VISIBLE);
-			View popupView = getLayoutInflater().inflate(R.layout.datepopupwin, null);
-			View popupView1 = getLayoutInflater().inflate(R.layout.datepopupwin1, null);
-	        datePopupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-	        datePopupWindow1 = new PopupWindow(popupView1, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, true);
-	        datePopupWindow.setTouchable(true);
-	        datePopupWindow.setOutsideTouchable(true);
-	        datePopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-	      
-	        datePopupWindow1.setTouchable(true);
-	        datePopupWindow1.setOutsideTouchable(true);
-	        datePopupWindow1.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-	        imgLeft.setOnClickListener(new OnClickListener() {
-	       	 
-//				@Override
-	 			public void onClick(View arg0) {
-	 				finish();
-	 			}
-	 		});
-	        date2.setOnClickListener(new OnClickListener() {
-		            public void onClick(View v) {
-		            	datePopupWindow1.showAsDropDown(v);   
-		            }
-		        });
-	        date1.setOnClickListener(new OnClickListener() {
-	            public void onClick(View v) {
-	            	datePopupWindow.showAsDropDown(v);   
-	            }
-	        });
-	        DatePicker datePicker = (DatePicker)popupView.findViewById(R.id.datePicker);
-	        TimePicker timePicker = (TimePicker)popupView.findViewById(R.id.timePicker);
-	        DatePicker datePicker1 = (DatePicker)popupView1.findViewById(R.id.datePicker1);
-	        TimePicker timePicker1 = (TimePicker)popupView1.findViewById(R.id.timePicker1);
-	            // »ñÈ¡µ±Ç°µÄÄê¡¢ÔÂ¡¢ÈÕ¡¢Ğ¡Ê±¡¢·ÖÖÓ  
-	            Calendar c = Calendar.getInstance();
-	            year = c.get(Calendar.YEAR);
-	            month = c.get(Calendar.MONTH);
-	            day = c.get(Calendar.DAY_OF_MONTH);
-	            hour = c.get(Calendar.HOUR);
-	            minute = c.get(Calendar.MINUTE);
-	          
-	    
-	            Calendar c1 = Calendar.getInstance();
-	            year1 = c1.get(Calendar.YEAR);
-	            month1 = c1.get(Calendar.MONTH);
-	            day1 = c1.get(Calendar.DAY_OF_MONTH);
-	            hour1 = c1.get(Calendar.HOUR);
-	            minute1 = c1.get(Calendar.MINUTE);
-	            datePicker1.init(year1, month1, day1, new OnDateChangedListener()
-	            {   
-	                public void onDateChanged(DatePicker arg0, int year
-	                        , int month, int day)  
-	                {  
-	                	QiYunZuoYe.this.year1 = year;  
-	                	QiYunZuoYe.this.month1 = month;  
-	                	QiYunZuoYe.this.day1 = day;  
-	                    // ÏÔÊ¾µ±Ç°ÈÕÆÚ¡¢Ê±¼ä  
- 	                    showDate2(year, month, day, hour1, minute1);  
-	                }  
-	            }); 
-	            // ÎªTimePickerÖ¸¶¨¼àÌıÆ÷  
-	            timePicker.setOnTimeChangedListener(new OnTimeChangedListener()
-	            {  
-	      
-	                @Override
-	                public void onTimeChanged(TimePicker view
-	                        , int hourOfDay, int minute)  
-	                {  
-	                	QiYunZuoYe.this.hour = hourOfDay;  
-	                	QiYunZuoYe.this.minute = minute; 
-	                	showDate(year, month, day, hour, minute);
-	                	  
-	                }  
-	            }); 
-	            timePicker1.setOnTimeChangedListener(new OnTimeChangedListener()
-	            {  
-	      
-	                @Override
-	                public void onTimeChanged(TimePicker view
-	                        , int hourOfDay, int minute)  
-	                {  
-	                	QiYunZuoYe.this.hour1 = hourOfDay;  
-	                	QiYunZuoYe.this.minute1 = minute;  
-	                	 showDate2(year, month, day, hour1, minute1);
-	                }  
-	            }); 
-	            // ³õÊ¼»¯DatePicker×é¼ş£¬³õÊ¼»¯Ê±Ö¸¶¨¼àÌıÆ÷  
-	            datePicker.init(year, month, day, new OnDateChangedListener()
-	            {   
-	                public void onDateChanged(DatePicker arg0, int year
-	                        , int month, int day)  
-	                {  
-	                	QiYunZuoYe.this.year = year;  
-	                	QiYunZuoYe.this.month = month;  
-	                	QiYunZuoYe.this.day = day;  
-	                    // ÏÔÊ¾µ±Ç°ÈÕÆÚ¡¢Ê±¼ä  
- 	                    showDate(year, month, day, hour, minute);  
-	                }  
-	            });
-	          
-		}
+    /**
+     * @param args
+     */
+    private PopupWindow datePopupWindow, datePopupWindow1;
+    private EditText date1, date2;
+    private ImageView imgLeft;
+    private TextView title;
+    // å®šä¹‰5ä¸ªè®°å½•å½“å‰æ—¶é—´çš„å˜é‡
+    private int year, year1;
+    private int month, month1;
+    private int day, day1;
+    private int hour, hour1;
+    private int minute, minute1;
 
-		   // ¶¨ÒåÔÚEditTextÖĞÏÔÊ¾µ±Ç°ÈÕÆÚ¡¢Ê±¼äµÄ·½·¨  
-	    private void showDate(int year, int month , int day, int hour, int minute)  
-	    {  
-	    	date1.setText(+year + "Äê"   
-	                + (month + 1) + "ÔÂ" + day + "ÈÕ  "  
-	                + hour + "Ê±" + minute + "·Ö");  
-	    }
-	    private void showDate2(int year, int month  
-	            , int day, int hour, int minute)  
-	    {   
-	    	date2.setText(+year + "Äê"   
-	                + (month + 1) + "ÔÂ" + day + "ÈÕ  "  
-	                + hour + "Ê±" + minute + "·Ö");  
-	    }
- 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.qichezuoye);
+
+        Init();
+    }
+
+    public void Init() {
+        title = (TextView) findViewById(R.id.title);
+        imgLeft = (ImageView) findViewById(R.id.left);
+        date1 = (EditText) findViewById(R.id.date_1);
+        date2 = (EditText) findViewById(R.id.date_2);
+        title.setText("æ±½è¿ä½œä¸š");
+        date1.setText("é€‰æ‹©æ—¶é—´");
+        title.setVisibility(View.VISIBLE);
+        imgLeft.setVisibility(View.VISIBLE);
+        View popupView = getLayoutInflater().inflate(R.layout.datepopupwin, null);
+        View popupView1 = getLayoutInflater().inflate(R.layout.datepopupwin1, null);
+        datePopupWindow = new PopupWindow(popupView, LayoutParams.MATCH_PARENT, LayoutParams
+                .WRAP_CONTENT, true);
+        datePopupWindow1 = new PopupWindow(popupView1, LayoutParams.MATCH_PARENT, LayoutParams
+                .WRAP_CONTENT, true);
+        datePopupWindow.setTouchable(true);
+        datePopupWindow.setOutsideTouchable(true);
+        datePopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+
+        datePopupWindow1.setTouchable(true);
+        datePopupWindow1.setOutsideTouchable(true);
+        datePopupWindow1.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
+        imgLeft.setOnClickListener(new OnClickListener() {
+
+            //				@Override
+            public void onClick(View arg0) {
+                finish();
+            }
+        });
+        date2.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                datePopupWindow1.showAsDropDown(v);
+            }
+        });
+        date1.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                datePopupWindow.showAsDropDown(v);
+            }
+        });
+        DatePicker datePicker = (DatePicker) popupView.findViewById(R.id.datePicker);
+        TimePicker timePicker = (TimePicker) popupView.findViewById(R.id.timePicker);
+        DatePicker datePicker1 = (DatePicker) popupView1.findViewById(R.id.datePicker1);
+        TimePicker timePicker1 = (TimePicker) popupView1.findViewById(R.id.timePicker1);
+        // è·å–å½“å‰çš„å¹´ã€æœˆã€æ—¥ã€å°æ—¶ã€åˆ†é’Ÿ
+        Calendar c = Calendar.getInstance();
+        year = c.get(Calendar.YEAR);
+        month = c.get(Calendar.MONTH);
+        day = c.get(Calendar.DAY_OF_MONTH);
+        hour = c.get(Calendar.HOUR);
+        minute = c.get(Calendar.MINUTE);
+
+
+        Calendar c1 = Calendar.getInstance();
+        year1 = c1.get(Calendar.YEAR);
+        month1 = c1.get(Calendar.MONTH);
+        day1 = c1.get(Calendar.DAY_OF_MONTH);
+        hour1 = c1.get(Calendar.HOUR);
+        minute1 = c1.get(Calendar.MINUTE);
+        datePicker1.init(year1, month1, day1, new OnDateChangedListener() {
+            public void onDateChanged(DatePicker arg0, int year, int month, int day) {
+                QiYunZuoYe.this.year1 = year;
+                QiYunZuoYe.this.month1 = month;
+                QiYunZuoYe.this.day1 = day;
+                // æ˜¾ç¤ºå½“å‰æ—¥æœŸã€æ—¶é—´
+                showDate2(year, month, day, hour1, minute1);
+            }
+        });
+        // ä¸ºTimePickeræŒ‡å®šç›‘å¬å™¨
+        timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
+
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                QiYunZuoYe.this.hour = hourOfDay;
+                QiYunZuoYe.this.minute = minute;
+                showDate(year, month, day, hour, minute);
+
+            }
+        });
+        timePicker1.setOnTimeChangedListener(new OnTimeChangedListener() {
+
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                QiYunZuoYe.this.hour1 = hourOfDay;
+                QiYunZuoYe.this.minute1 = minute;
+                showDate2(year, month, day, hour1, minute1);
+            }
+        });
+        // åˆå§‹åŒ–DatePickerç»„ä»¶ï¼Œåˆå§‹åŒ–æ—¶æŒ‡å®šç›‘å¬å™¨
+        datePicker.init(year, month, day, new OnDateChangedListener() {
+            public void onDateChanged(DatePicker arg0, int year, int month, int day) {
+                QiYunZuoYe.this.year = year;
+                QiYunZuoYe.this.month = month;
+                QiYunZuoYe.this.day = day;
+                // æ˜¾ç¤ºå½“å‰æ—¥æœŸã€æ—¶é—´
+                showDate(year, month, day, hour, minute);
+            }
+        });
+
+    }
+
+    // å®šä¹‰åœ¨EditTextä¸­æ˜¾ç¤ºå½“å‰æ—¥æœŸã€æ—¶é—´çš„æ–¹æ³•
+    private void showDate(int year, int month, int day, int hour, int minute) {
+        date1.setText(+year + "å¹´" + (month + 1) + "æœˆ" + day + "æ—¥  " + hour + "æ—¶" + minute + "åˆ†");
+    }
+
+    private void showDate2(int year, int month, int day, int hour, int minute) {
+        date2.setText(+year + "å¹´" + (month + 1) + "æœˆ" + day + "æ—¥  " + hour + "æ—¶" + minute + "åˆ†");
+    }
+
 }

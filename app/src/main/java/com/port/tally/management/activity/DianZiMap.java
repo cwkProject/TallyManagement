@@ -1,4 +1,18 @@
 package com.port.tally.management.activity;
+
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.MeasureSpec;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -15,312 +29,290 @@ import com.baidu.mapapi.map.PopupOverlay;
 import com.baidu.platform.comapi.basestruct.GeoPoint;
 import com.port.tally.management.R;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
 public class DianZiMap extends Activity {
 
-	private Toast mToast;
-	private BMapManager mBMapManager;
-	private MapView mMapView = null;
-	private MapController mMapController = null;
-	
-	
-	private LocationClient mLocClient;
-	private LocationData mLocData;
-	//¶¨Î»Í¼²ã
-	private	LocationOverlay myLocationOverlay = null;
-	
-	private boolean isRequest = false;//ÊÇ·ñÊÖ¶¯´¥·¢ÇëÇó¶¨Î»
-	private boolean isFirstLoc = true;//ÊÇ·ñÊ×´Î¶¨Î»
-	
-	private PopupOverlay mPopupOverlay  = null;//µ¯³öÅİÅİÍ¼²ã£¬ä¯ÀÀ½ÚµãÊ±Ê¹ÓÃ
-	private View viewCache;
-	private BDLocation location;
+    private Toast mToast;
+    private BMapManager mBMapManager;
+    private MapView mMapView = null;
+    private MapController mMapController = null;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		//Ê¹ÓÃµØÍ¼sdkÇ°ĞèÏÈ³õÊ¼»¯BMapManager£¬Õâ¸ö±ØĞëÔÚsetContentView()ÏÈ³õÊ¼»¯
-		mBMapManager = new BMapManager(this);
-		
-		//µÚÒ»¸ö²ÎÊıÊÇAPI key,
-		//µÚ¶ş¸ö²ÎÊıÊÇ³£ÓÃÊÂ¼ş¼àÌı£¬ÓÃÀ´´¦ÀíÍ¨³£µÄÍøÂç´íÎó£¬ÊÚÈ¨ÑéÖ¤´íÎóµÈ£¬ÄãÒ²¿ÉÒÔ²»Ìí¼ÓÕâ¸ö»Øµ÷½Ó¿ÚPTMdf5ZfHZkhRwHvAtUwYpZX
-//		mBMapManager.init("7ae13368159d6a513eaa7a17b9413b4b", new MKGeneralListenerImpl());
-		mBMapManager.init("5qbHbwrW3Q7iOcD2ARFeiHk4", new MKGeneralListenerImpl());
-		setContentView(R.layout.my_position);
-		
-		//µã»÷°´Å¥ÊÖ¶¯ÇëÇó¶¨Î»
-		((Button) findViewById(R.id.request)).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				requestLocation();
-			}
-		});
-		
-		mMapView = (MapView) findViewById(R.id.bmapView); //»ñÈ¡°Ù¶ÈµØÍ¼¿Ø¼şÊµÀı
-        mMapController = mMapView.getController(); //»ñÈ¡µØÍ¼¿ØÖÆÆ÷
-        mMapController.enableClick(true);   //ÉèÖÃµØÍ¼ÊÇ·ñÏìÓ¦µã»÷ÊÂ¼ş
-        mMapController.setZoom(14);   //ÉèÖÃµØÍ¼Ëõ·Å¼¶±ğ
-        mMapView.setBuiltInZoomControls(true);   //ÏÔÊ¾ÄÚÖÃËõ·Å¿Ø¼ş
-        
+
+    private LocationClient mLocClient;
+    private LocationData mLocData;
+    //å®šä½å›¾å±‚
+    private LocationOverlay myLocationOverlay = null;
+
+    private boolean isRequest = false;//æ˜¯å¦æ‰‹åŠ¨è§¦å‘è¯·æ±‚å®šä½
+    private boolean isFirstLoc = true;//æ˜¯å¦é¦–æ¬¡å®šä½
+
+    private PopupOverlay mPopupOverlay = null;//å¼¹å‡ºæ³¡æ³¡å›¾å±‚ï¼Œæµè§ˆèŠ‚ç‚¹æ—¶ä½¿ç”¨
+    private View viewCache;
+    private BDLocation location;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //ä½¿ç”¨åœ°å›¾sdkå‰éœ€å…ˆåˆå§‹åŒ–BMapManagerï¼Œè¿™ä¸ªå¿…é¡»åœ¨setContentView()å…ˆåˆå§‹åŒ–
+        mBMapManager = new BMapManager(this);
+
+        //ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯API key,
+        //ç¬¬äºŒä¸ªå‚æ•°æ˜¯å¸¸ç”¨äº‹ä»¶ç›‘å¬ï¼Œç”¨æ¥å¤„ç†é€šå¸¸çš„ç½‘ç»œé”™è¯¯ï¼ŒæˆæƒéªŒè¯é”™è¯¯ç­‰ï¼Œä½ ä¹Ÿå¯ä»¥ä¸æ·»åŠ è¿™ä¸ªå›è°ƒæ¥å£PTMdf5ZfHZkhRwHvAtUwYpZX
+        //		mBMapManager.init("7ae13368159d6a513eaa7a17b9413b4b", new MKGeneralListenerImpl());
+        mBMapManager.init("5qbHbwrW3Q7iOcD2ARFeiHk4", new MKGeneralListenerImpl());
+        setContentView(R.layout.my_position);
+
+        //ç‚¹å‡»æŒ‰é’®æ‰‹åŠ¨è¯·æ±‚å®šä½
+        ((Button) findViewById(R.id.request)).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                requestLocation();
+            }
+        });
+
+        mMapView = (MapView) findViewById(R.id.bmapView); //è·å–ç™¾åº¦åœ°å›¾æ§ä»¶å®ä¾‹
+        mMapController = mMapView.getController(); //è·å–åœ°å›¾æ§åˆ¶å™¨
+        mMapController.enableClick(true);   //è®¾ç½®åœ°å›¾æ˜¯å¦å“åº”ç‚¹å‡»äº‹ä»¶
+        mMapController.setZoom(14);   //è®¾ç½®åœ°å›¾ç¼©æ”¾çº§åˆ«
+        mMapView.setBuiltInZoomControls(true);   //æ˜¾ç¤ºå†…ç½®ç¼©æ”¾æ§ä»¶
+
         viewCache = LayoutInflater.from(this).inflate(R.layout.pop_layout, null);
-        mPopupOverlay = new PopupOverlay(mMapView ,new PopupClickListener() {
-			
-			@Override
-			public void onClickedPopup(int arg0) {
-				mPopupOverlay.hidePop();
-			}
-		});
-        
-        
-        
+        mPopupOverlay = new PopupOverlay(mMapView, new PopupClickListener() {
+
+            @Override
+            public void onClickedPopup(int arg0) {
+                mPopupOverlay.hidePop();
+            }
+        });
+
+
         mLocData = new LocationData();
-        
-        
-        //ÊµÀı»¯¶¨Î»·şÎñ£¬LocationClientÀà±ØĞëÔÚÖ÷Ïß³ÌÖĞÉùÃ÷
+
+
+        //å®ä¾‹åŒ–å®šä½æœåŠ¡ï¼ŒLocationClientç±»å¿…é¡»åœ¨ä¸»çº¿ç¨‹ä¸­å£°æ˜
         mLocClient = new LocationClient(getApplicationContext());
-		mLocClient.registerLocationListener(new BDLocationListenerImpl());//×¢²á¶¨Î»¼àÌı½Ó¿Ú
-		
-		/**
-		 * ÉèÖÃ¶¨Î»²ÎÊı
-		 */
-		LocationClientOption option = new LocationClientOption();
-		option.setOpenGps(true); //´ò¿ªGPRS
-		option.setAddrType("all");//·µ»ØµÄ¶¨Î»½á¹û°üº¬µØÖ·ĞÅÏ¢
-		option.setCoorType("bd09ll");//·µ»ØµÄ¶¨Î»½á¹ûÊÇ°Ù¶È¾­Î³¶È,Ä¬ÈÏÖµgcj02
-		option.setScanSpan(5000); //ÉèÖÃ·¢Æğ¶¨Î»ÇëÇóµÄ¼ä¸ôÊ±¼äÎª5000ms
-		option.disableCache(false);//½ûÖ¹ÆôÓÃ»º´æ¶¨Î»
-//		option.setPoiNumber(5);    //×î¶à·µ»ØPOI¸öÊı   
-//		option.setPoiDistance(1000); //poi²éÑ¯¾àÀë        
-//		option.setPoiExtraInfo(true);  //ÊÇ·ñĞèÒªPOIµÄµç»°ºÍµØÖ·µÈÏêÏ¸ĞÅÏ¢        
-		
-		mLocClient.setLocOption(option);
-		mLocClient.start();  //	µ÷ÓÃ´Ë·½·¨¿ªÊ¼¶¨Î»
-		
-		//¶¨Î»Í¼²ã³õÊ¼»¯
-		myLocationOverlay = new LocationOverlay(mMapView);
-		//ÉèÖÃ¶¨Î»Êı¾İ
-	    myLocationOverlay.setData(mLocData);
-	    
-	    myLocationOverlay.setMarker(getResources().getDrawable(R.drawable.location_arrows));
-	    
-	    //Ìí¼Ó¶¨Î»Í¼²ã
-	    mMapView.getOverlays().add(myLocationOverlay);
-	    myLocationOverlay.enableCompass();
-	    
-	    //ĞŞ¸Ä¶¨Î»Êı¾İºóË¢ĞÂÍ¼²ãÉúĞ§
-	    mMapView.refresh();
-        
-	}
-	
-	
-	/**
-	 * ¶¨Î»½Ó¿Ú£¬ĞèÒªÊµÏÖÁ½¸ö·½·¨
-	 * @author xiaanming
-	 *
-	 */
-	public class BDLocationListenerImpl implements BDLocationListener {
+        mLocClient.registerLocationListener(new BDLocationListenerImpl());//æ³¨å†Œå®šä½ç›‘å¬æ¥å£
 
-		/**
-		 * ½ÓÊÕÒì²½·µ»ØµÄ¶¨Î»½á¹û£¬²ÎÊıÊÇBDLocationÀàĞÍ²ÎÊı
-		 */
-		@Override
-		public void onReceiveLocation(BDLocation location) {
-			if (location == null) {
-				return;
-			}
-			
-			DianZiMap.this.location = location;
-			
-			mLocData.latitude = location.getLatitude();
-			mLocData.longitude = location.getLongitude();
-			//Èç¹û²»ÏÔÊ¾¶¨Î»¾«¶ÈÈ¦£¬½«accuracy¸³ÖµÎª0¼´¿É
-			mLocData.accuracy = location.getRadius();
-			mLocData.direction = location.getDerect();
-			
-			//½«¶¨Î»Êı¾İÉèÖÃµ½¶¨Î»Í¼²ãÀï
+        /**
+         * è®¾ç½®å®šä½å‚æ•°
+         */
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true); //æ‰“å¼€GPRS
+        option.setAddrType("all");//è¿”å›çš„å®šä½ç»“æœåŒ…å«åœ°å€ä¿¡æ¯
+        option.setCoorType("bd09ll");//è¿”å›çš„å®šä½ç»“æœæ˜¯ç™¾åº¦ç»çº¬åº¦,é»˜è®¤å€¼gcj02
+        option.setScanSpan(5000); //è®¾ç½®å‘èµ·å®šä½è¯·æ±‚çš„é—´éš”æ—¶é—´ä¸º5000ms
+        option.disableCache(false);//ç¦æ­¢å¯ç”¨ç¼“å­˜å®šä½
+        //		option.setPoiNumber(5);    //æœ€å¤šè¿”å›POIä¸ªæ•°
+        //		option.setPoiDistance(1000); //poiæŸ¥è¯¢è·ç¦»
+        //		option.setPoiExtraInfo(true);  //æ˜¯å¦éœ€è¦POIçš„ç”µè¯å’Œåœ°å€ç­‰è¯¦ç»†ä¿¡æ¯
+
+        mLocClient.setLocOption(option);
+        mLocClient.start();  //	è°ƒç”¨æ­¤æ–¹æ³•å¼€å§‹å®šä½
+
+        //å®šä½å›¾å±‚åˆå§‹åŒ–
+        myLocationOverlay = new LocationOverlay(mMapView);
+        //è®¾ç½®å®šä½æ•°æ®
+        myLocationOverlay.setData(mLocData);
+
+        myLocationOverlay.setMarker(getResources().getDrawable(R.drawable.location_arrows));
+
+        //æ·»åŠ å®šä½å›¾å±‚
+        mMapView.getOverlays().add(myLocationOverlay);
+        myLocationOverlay.enableCompass();
+
+        //ä¿®æ”¹å®šä½æ•°æ®ååˆ·æ–°å›¾å±‚ç”Ÿæ•ˆ
+        mMapView.refresh();
+
+    }
+
+
+    /**
+     * å®šä½æ¥å£ï¼Œéœ€è¦å®ç°ä¸¤ä¸ªæ–¹æ³•
+     *
+     * @author xiaanming
+     */
+    public class BDLocationListenerImpl implements BDLocationListener {
+
+        /**
+         * æ¥æ”¶å¼‚æ­¥è¿”å›çš„å®šä½ç»“æœï¼Œå‚æ•°æ˜¯BDLocationç±»å‹å‚æ•°
+         */
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            if (location == null) {
+                return;
+            }
+
+            DianZiMap.this.location = location;
+
+            mLocData.latitude = location.getLatitude();
+            mLocData.longitude = location.getLongitude();
+            //å¦‚æœä¸æ˜¾ç¤ºå®šä½ç²¾åº¦åœˆï¼Œå°†accuracyèµ‹å€¼ä¸º0å³å¯
+            mLocData.accuracy = location.getRadius();
+            mLocData.direction = location.getDerect();
+
+            //å°†å®šä½æ•°æ®è®¾ç½®åˆ°å®šä½å›¾å±‚é‡Œ
             myLocationOverlay.setData(mLocData);
-            //¸üĞÂÍ¼²ãÊı¾İÖ´ĞĞË¢ĞÂºóÉúĞ§
+            //æ›´æ–°å›¾å±‚æ•°æ®æ‰§è¡Œåˆ·æ–°åç”Ÿæ•ˆ
             mMapView.refresh();
-            
-            
-			
-            if(isFirstLoc || isRequest){
-				mMapController.animateTo(new GeoPoint(
-						(int) (location.getLatitude() * 1e6), (int) (location
-								.getLongitude() * 1e6)));
-				
-				showPopupOverlay(location);
-				
-				isRequest = false;
+
+
+            if (isFirstLoc || isRequest) {
+                mMapController.animateTo(new GeoPoint((int) (location.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)));
+
+                showPopupOverlay(location);
+
+                isRequest = false;
             }
-            
+
             isFirstLoc = false;
-		}
+        }
 
-		/**
-		 * ½ÓÊÕÒì²½·µ»ØµÄPOI²éÑ¯½á¹û£¬²ÎÊıÊÇBDLocationÀàĞÍ²ÎÊı
-		 */
-		@Override
-		public void onReceivePoi(BDLocation poiLocation) {
-			
-		}
+        /**
+         * æ¥æ”¶å¼‚æ­¥è¿”å›çš„POIæŸ¥è¯¢ç»“æœï¼Œå‚æ•°æ˜¯BDLocationç±»å‹å‚æ•°
+         */
+        @Override
+        public void onReceivePoi(BDLocation poiLocation) {
 
-	}
-	
-	
-	/**
-	 * ³£ÓÃÊÂ¼ş¼àÌı£¬ÓÃÀ´´¦ÀíÍ¨³£µÄÍøÂç´íÎó£¬ÊÚÈ¨ÑéÖ¤´íÎóµÈ
-	 * @author xiaanming
-	 *
-	 */
-	public class MKGeneralListenerImpl implements MKGeneralListener {
+        }
 
-		/**
-		 * Ò»Ğ©ÍøÂç×´Ì¬µÄ´íÎó´¦Àí»Øµ÷º¯Êı
-		 */
-		@Override
-		public void onGetNetworkState(int iError) {
-			if (iError == MKEvent.ERROR_NETWORK_CONNECT) {
-				showToast("ÄúµÄÍøÂç³ö´íÀ²£¡");
+    }
+
+
+    /**
+     * å¸¸ç”¨äº‹ä»¶ç›‘å¬ï¼Œç”¨æ¥å¤„ç†é€šå¸¸çš„ç½‘ç»œé”™è¯¯ï¼ŒæˆæƒéªŒè¯é”™è¯¯ç­‰
+     *
+     * @author xiaanming
+     */
+    public class MKGeneralListenerImpl implements MKGeneralListener {
+
+        /**
+         * ä¸€äº›ç½‘ç»œçŠ¶æ€çš„é”™è¯¯å¤„ç†å›è°ƒå‡½æ•°
+         */
+        @Override
+        public void onGetNetworkState(int iError) {
+            if (iError == MKEvent.ERROR_NETWORK_CONNECT) {
+                showToast("æ‚¨çš„ç½‘ç»œå‡ºé”™å•¦ï¼");
             }
-		}
+        }
 
-		/**
-		 * ÊÚÈ¨´íÎóµÄÊ±ºòµ÷ÓÃµÄ»Øµ÷º¯Êı
-		 */
-		@Override
-		public void onGetPermissionState(int iError) {
-			if (iError ==  MKEvent.ERROR_PERMISSION_DENIED) {
-				showToast("API KEY´íÎó, Çë¼ì²é£¡");
+        /**
+         * æˆæƒé”™è¯¯çš„æ—¶å€™è°ƒç”¨çš„å›è°ƒå‡½æ•°
+         */
+        @Override
+        public void onGetPermissionState(int iError) {
+            if (iError == MKEvent.ERROR_PERMISSION_DENIED) {
+                showToast("API KEYé”™è¯¯, è¯·æ£€æŸ¥ï¼");
             }
-		}
-		
-	}
+        }
 
-	//
-	private class LocationOverlay extends MyLocationOverlay {
+    }
 
-		public LocationOverlay(MapView arg0) {
-			super(arg0);
-		}
+    //
+    private class LocationOverlay extends MyLocationOverlay {
 
-		@Override
-		protected boolean dispatchTap() {
-			showPopupOverlay(location);
-			return super.dispatchTap();
-		}
+        public LocationOverlay(MapView arg0) {
+            super(arg0);
+        }
 
-		@Override
-		public void setMarker(Drawable arg0) {
-			super.setMarker(arg0);
-		}
-		
-		
-		
-	}
-	
-	
-	
-	private void showPopupOverlay(BDLocation location){
-		 TextView popText = ((TextView)viewCache.findViewById(R.id.location_tips));
-		 popText.setText("[ÎÒµÄÎ»ÖÃ]\n" + location.getAddrStr());
-		 mPopupOverlay.showPopup(getBitmapFromView(popText),
-					new GeoPoint((int)(location.getLatitude()*1e6), (int)(location.getLongitude()*1e6)),
-					10);
-	}
-	
-	
-	
-	/**
-	 * ÊÖ¶¯ÇëÇó¶¨Î»µÄ·½·¨
-	 */
-	public void requestLocation() {
-		isRequest = true;
-		
-		if(mLocClient != null && mLocClient.isStarted()){
-			showToast("ÕıÔÚ¶¨Î»......");
-			mLocClient.requestLocation();
-		}else{
-			Log.d("LocSDK3", "locClient is null or not started");
-		}
-	}
-	
-	@Override
-	protected void onResume() {
-    	//MapViewµÄÉúÃüÖÜÆÚÓëActivityÍ¬²½£¬µ±activity¹ÒÆğÊ±Ğèµ÷ÓÃMapView.onPause()
-		mMapView.onResume();
-		super.onResume();
-	}
+        @Override
+        protected boolean dispatchTap() {
+            showPopupOverlay(location);
+            return super.dispatchTap();
+        }
+
+        @Override
+        public void setMarker(Drawable arg0) {
+            super.setMarker(arg0);
+        }
 
 
+    }
 
-	@Override
-	protected void onPause() {
-		//MapViewµÄÉúÃüÖÜÆÚÓëActivityÍ¬²½£¬µ±activity¹ÒÆğÊ±Ğèµ÷ÓÃMapView.onPause()
-		mMapView.onPause();
-		super.onPause();
-	}
 
-	@Override
-	protected void onDestroy() {
-		//MapViewµÄÉúÃüÖÜÆÚÓëActivityÍ¬²½£¬µ±activityÏú»ÙÊ±Ğèµ÷ÓÃMapView.destroy()
-		mMapView.destroy();
-		
-		//ÍË³öÓ¦ÓÃµ÷ÓÃBMapManagerµÄdestroy()·½·¨
-		if(mBMapManager != null){
-			mBMapManager.destroy();
-			mBMapManager = null;
-		}
-		
-		//ÍË³öÊ±Ïú»Ù¶¨Î»
-        if (mLocClient != null){
+    private void showPopupOverlay(BDLocation location) {
+        TextView popText = ((TextView) viewCache.findViewById(R.id.location_tips));
+        popText.setText("[æˆ‘çš„ä½ç½®]\n" + location.getAddrStr());
+        mPopupOverlay.showPopup(getBitmapFromView(popText), new GeoPoint((int) (location
+				.getLatitude() * 1e6), (int) (location.getLongitude() * 1e6)), 10);
+    }
+
+
+    /**
+     * æ‰‹åŠ¨è¯·æ±‚å®šä½çš„æ–¹æ³•
+     */
+    public void requestLocation() {
+        isRequest = true;
+
+        if (mLocClient != null && mLocClient.isStarted()) {
+            showToast("æ­£åœ¨å®šä½......");
+            mLocClient.requestLocation();
+        } else {
+            Log.d("LocSDK3", "locClient is null or not started");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        //MapViewçš„ç”Ÿå‘½å‘¨æœŸä¸ActivityåŒæ­¥ï¼Œå½“activityæŒ‚èµ·æ—¶éœ€è°ƒç”¨MapView.onPause()
+        mMapView.onResume();
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        //MapViewçš„ç”Ÿå‘½å‘¨æœŸä¸ActivityåŒæ­¥ï¼Œå½“activityæŒ‚èµ·æ—¶éœ€è°ƒç”¨MapView.onPause()
+        mMapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //MapViewçš„ç”Ÿå‘½å‘¨æœŸä¸ActivityåŒæ­¥ï¼Œå½“activityé”€æ¯æ—¶éœ€è°ƒç”¨MapView.destroy()
+        mMapView.destroy();
+
+        //é€€å‡ºåº”ç”¨è°ƒç”¨BMapManagerçš„destroy()æ–¹æ³•
+        if (mBMapManager != null) {
+            mBMapManager.destroy();
+            mBMapManager = null;
+        }
+
+        //é€€å‡ºæ—¶é”€æ¯å®šä½
+        if (mLocClient != null) {
             mLocClient.stop();
         }
-		
-		super.onDestroy();
-	}
 
-	
-	
-	 /** 
-     * ÏÔÊ¾ToastÏûÏ¢ 
-     * @param msg 
-     */  
-    private void showToast(String msg){
-        if(mToast == null){  
+        super.onDestroy();
+    }
+
+
+    /**
+     * æ˜¾ç¤ºToastæ¶ˆæ¯
+     *
+     * @param msg
+     */
+    private void showToast(String msg) {
+        if (mToast == null) {
             mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
-        }else{  
-            mToast.setText(msg);  
+        } else {
+            mToast.setText(msg);
             mToast.setDuration(Toast.LENGTH_SHORT);
-        }  
-        mToast.show();  
-    } 
-	
-	/**
-	 * 
-	 * @param view
-	 * @return
-	 */
-	public static Bitmap getBitmapFromView(View view) {
-		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+        }
+        mToast.show();
+    }
+
+    /**
+     * @param view
+     *
+     * @return
+     */
+    public static Bitmap getBitmapFromView(View view) {
+        view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
         view.buildDrawingCache();
         Bitmap bitmap = view.getDrawingCache();
         return bitmap;
-	}
-	
+    }
+
 
 }

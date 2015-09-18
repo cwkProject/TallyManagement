@@ -19,44 +19,44 @@ import java.util.List;
 
 public class LiHuoDetail extends Activity {
 
-	/**
-	 * @param args
-	 */
-	private ImageView imgLeft;
-	private TextView title;
-	private Spinner weiTuoSp;
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.lihuodetail);
-		init();
-	}
-	 
-		
-	 
-	private void init(){
-		title = (TextView) findViewById(R.id.title);
-		imgLeft= (ImageView)findViewById(R.id.left);
-		title.setText("×÷ÒµÆ±Éú³É");
-		title.setVisibility(View.VISIBLE);
-		imgLeft.setVisibility(View.VISIBLE);
-		weiTuoSp = (Spinner) findViewById(R.id.weituo_spinner1);
-		// ½¨Á¢Êı¾İÔ´  
-		List<LiHuoWeiTuo> persons=new ArrayList<LiHuoWeiTuo>();
-		persons.add(new LiHuoWeiTuo("ÕÅÈı", "ÉÏº£ "));  
-		persons.add(new LiHuoWeiTuo("ÀîËÄ", "ÉÏº£ "));  
-		persons.add(new LiHuoWeiTuo("ÍõÎå", "±±¾©" ));  
-		persons.add(new LiHuoWeiTuo("ÕÔÁù", "¹ãÖİ "));  
-		//  ½¨Á¢Adapter°ó¶¨Êı¾İÔ´  
-		LiHuoWeiTuoAdapter LiHuoWeiTuoAdapter=new LiHuoWeiTuoAdapter(this, persons);
-		//°ó¶¨Adapter  
-		weiTuoSp.setAdapter(LiHuoWeiTuoAdapter); 
-		imgLeft.setOnClickListener(new OnClickListener() {
-			 
-//			@Override
- 			public void onClick(View arg0) {
- 				finish();
- 			}
- 		});
-	
-	}
+    /**
+     * @param args
+     */
+    private ImageView imgLeft;
+    private TextView title;
+    private Spinner weiTuoSp;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.lihuodetail);
+        init();
+    }
+
+
+    private void init() {
+        title = (TextView) findViewById(R.id.title);
+        imgLeft = (ImageView) findViewById(R.id.left);
+        title.setText("ä½œä¸šç¥¨ç”Ÿæˆ");
+        title.setVisibility(View.VISIBLE);
+        imgLeft.setVisibility(View.VISIBLE);
+        weiTuoSp = (Spinner) findViewById(R.id.weituo_spinner1);
+        // å»ºç«‹æ•°æ®æº
+        List<LiHuoWeiTuo> persons = new ArrayList<LiHuoWeiTuo>();
+        persons.add(new LiHuoWeiTuo("å¼ ä¸‰", "ä¸Šæµ· "));
+        persons.add(new LiHuoWeiTuo("æå››", "ä¸Šæµ· "));
+        persons.add(new LiHuoWeiTuo("ç‹äº”", "åŒ—äº¬"));
+        persons.add(new LiHuoWeiTuo("èµµå…­", "å¹¿å· "));
+        //  å»ºç«‹Adapterç»‘å®šæ•°æ®æº
+        LiHuoWeiTuoAdapter LiHuoWeiTuoAdapter = new LiHuoWeiTuoAdapter(this, persons);
+        //ç»‘å®šAdapter
+        weiTuoSp.setAdapter(LiHuoWeiTuoAdapter);
+        imgLeft.setOnClickListener(new OnClickListener() {
+
+            //			@Override
+            public void onClick(View arg0) {
+                finish();
+            }
+        });
+
+    }
 }

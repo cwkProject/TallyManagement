@@ -1,5 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.port.tally.management">
+<manifest
+    package="com.port.tally.management"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
@@ -9,40 +10,33 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
-    <application android:allowBackup="true"
-                 android:label="@string/app_name"
-                 android:icon="@mipmap/ic_launcher"
-                 android:theme="@style/AppTheme">
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.SplashActivity"/>
+        <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.LiHuoActivity"/>
         <activity android:name=".activity.LiHuoDetail"/>
-        <activity android:name=".activity.WorkPlanQuery"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity android:name=".activity.WeiTuoQuery"
-            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".activity.WorkPlanQuery"/>
+        <activity android:name=".activity.WeiTuoQuery"/>
 
-        <activity android:name=".activity.DuiCunQuery"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity android:name=".activity.HenZhongQuery"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity android:name=".activity.DianZiMap"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity android:name=".activity.JiaoJieQuery"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity android:name=".activity.QiYunZuoYe"
-            />
+        <activity android:name=".activity.DuiCunQuery"/>
+        <activity android:name=".activity.HenZhongQuery"/>
+        <activity android:name=".activity.DianZiMap"/>
+        <activity android:name=".activity.JiaoJieQuery"/>
+        <activity android:name=".activity.QiYunZuoYe"/>
 
-        <activity android:name=".activity.QiYunQuery"
-            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name=".activity.QiYunQuery"/>
     </application>
 
 </manifest>

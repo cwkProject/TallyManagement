@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     android:orientation="vertical"  
-    android:layout_width="fill_parent"  
-    android:layout_height="fill_parent" >
-<ScrollView 
-	 	  android:id="@+id/container"   
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical">
+
+    <ScrollView
+        android:id="@+id/container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
 
-        android:scrollbars="none"      
         android:background="@color/white"
-        >  
+        android:scrollbars="none"
+        >
 
-<LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/header"
-    android:isScrollContainer="true"
-    android:orientation="vertical"
-    android:paddingBottom="10.0dip" >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/header"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            android:paddingBottom="10.0dip">
 
-    <!-- 显示用户输入日期、时间的控件 -->
-
-    
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="请选择日期和时间" />
-    <!-- 定义一个DatePicker组件 -->
-
-    <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center_horizontal"
-        android:theme="@android:style/Theme.Light"
-        android:calendarViewShown="true"
-        android:endYear="2050"
-        android:spinnersShown="true"
-        android:startYear="2000" />
+            <!-- 显示用户输入日期、时间的控件 -->
 
 
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-         android:theme="@android:style/Theme.Light"
-        android:layout_gravity="center_horizontal"
-         />
-</LinearLayout>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="请选择日期和时间"/>
+            <!-- 定义一个DatePicker组件 -->
 
- </ScrollView>
+            <DatePicker
+                android:id="@+id/datePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:calendarViewShown="true"
+                android:endYear="2050"
+                android:spinnersShown="true"
+                android:startYear="2000"
+                android:theme="@android:style/Theme.Light"/>
+
+
+            <TimePicker
+                android:id="@+id/timePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_horizontal"
+                android:theme="@android:style/Theme.Light"
+                />
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
