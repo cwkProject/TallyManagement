@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+     android:background="#eaeaea"
+     >
+     <include
+        android:id="@+id/header"
+        layout="@layout/header" 
+         />
+                   
+             
+              
+                <ScrollView 
+	 	  android:id="@+id/container"   
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/header" 
+        android:scrollbars="none"
+               
+        android:background="@color/white"
+        >  
+<LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:orientation="vertical"
+            android:layout_below="@+id/header"
+            android:paddingBottom="10.0dip" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2.0dip"
+                android:gravity="center_vertical"
+                android:orientation="vertical" >
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+                   <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    
+                    android:orientation="vertical"
+              >
+          <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                 
+              >
+                       <ImageView
+                           android:id="@+id/collect_im_photo"
+                           android:layout_width="90dip"
+                           android:layout_height="90dip"
+                           android:layout_weight="0.22"
+                           android:paddingTop="4.0dip"
+                          
+                           android:src="@drawable/h001" />
+ 				</LinearLayout>
+                    <Button
+                      android:id="@+id/exitBtn0"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="扫码"
+                      android:textSize="18sp"
+                      android:textColor="#fff"
+                      android:layout_marginBottom="10dp"
+                      android:layout_marginLeft="10dp"
+                       android:layout_marginRight="10dp"
+                     android:background="@drawable/btn_style_alert_dialog_special"
+                     android:gravity="center"
+		       	    
+              />
+               </LinearLayout>
+                 <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+                 <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+                     
+                   
+                    >
+                    <TextView
+
+                        
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_width="0dip"
+                        android:layout_weight="1.0"
+                        android:text="开工时间"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                          />
+                    <View  
+    					android:layout_width="1dip" 
+    					android:layout_height="match_parent"
+    					android:background="#66CCFF"
+    					android:layout_gravity="center_horizontal"
+    					/>
+
+                    <EditText 
+                        android:id="@+id/date_1"  
+    					 android:layout_width="0dip"
+    					android:layout_height="wrap_content"  
+    					android:layout_weight="3.0"
+    					android:editable="false"  
+    					android:text="请选择时间"
+    					android:textColor="@color/black"
+    					 android:textSize="@dimen/BasicTextSize"
+    					android:cursorVisible="false"  
+    				/> 
+                </LinearLayout>
+                 <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+                <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+                    
+                  
+                    >
+                    <TextView
+
+                        
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_width="0dip"
+                        android:layout_weight="1.0"
+                        android:text="完工时间"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                         />
+                    <View  
+    					android:layout_width="1dip" 
+    					android:layout_height="match_parent"
+    					android:background="#66CCFF"
+    					android:layout_gravity="center_horizontal"
+    					/>
+                    <EditText
+                        android:id="@+id/date_2"
+                         android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                         android:layout_weight="3.0"
+                        android:layout_marginRight="10.0dip"
+                        android:text="请选择时间"
+                        android:editable="false"  
+                        android:cursorVisible="false"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"/>
+                </LinearLayout>
+                   <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+                     <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+                    
+                  
+                    >
+                    <TextView
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_width="0dip"
+                        android:layout_weight="1.0"
+                        android:text="放行时间"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                         />
+                    <View  
+    					android:layout_width="1dip" 
+    					android:layout_height="match_parent"
+    					android:background="#66CCFF"
+    					android:layout_gravity="center_horizontal"
+    					/>
+                    <EditText
+
+                         android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                         android:layout_weight="3.0"
+                        android:layout_marginRight="10.0dip"
+                        android:text="请选择时间"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                         />
+                </LinearLayout>
+                 <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+                   <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+
+
+                        >
+                    <TextView
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_width="0dip"
+                        android:layout_weight="1.0"
+                        android:text="是否放行"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                         />
+                    <View  
+    					android:layout_width="1dip" 
+    					android:layout_height="match_parent"
+    					android:background="#66CCFF"
+    					android:layout_gravity="center_horizontal"
+    					/>
+                    <EditText
+
+                         android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                         android:layout_weight="3.0"
+                        android:layout_marginRight="10.0dip"
+                        android:text="泊位"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                         />
+                </LinearLayout>
+                 <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+                   <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+                    
+                   
+                    >
+                    <TextView
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_width="0dip"
+                        android:layout_weight="1.0"
+                        android:text="货"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                          />
+                    <View  
+    					android:layout_width="1dip" 
+    					android:layout_height="match_parent"
+    					android:background="#66CCFF"
+    					android:layout_gravity="center_horizontal"
+    					/>
+                    <EditText
+
+                         android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                         android:layout_weight="3.0"
+                        android:layout_marginRight="10.0dip"
+                        android:text="泊位"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                          />
+                </LinearLayout>
+                 <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+                   <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+
+
+                        >
+                    <TextView
+
+                        
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_width="0dip"
+                        android:layout_weight="1.0"
+                        android:text="货代"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                          />
+                    <View  
+    					android:layout_width="1dip" 
+    					android:layout_height="match_parent"
+    					android:background="#66CCFF"
+    					android:layout_gravity="center_horizontal"
+    					/>
+                   <EditText
+
+                         android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                         android:layout_weight="3.0"
+                        android:layout_marginRight="10.0dip"
+                        android:text="泊位"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                         />
+                </LinearLayout>
+                 <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+                   <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+                    
+                   
+                    >
+                    <TextView
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_width="0dip"
+                        android:layout_weight="1.0"
+                        android:text="委托"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                          />
+                    <View  
+    					android:layout_width="1dip" 
+    					android:layout_height="match_parent"
+    					android:background="#66CCFF"
+    					android:layout_gravity="center_horizontal"
+    					/>
+                    <EditText
+
+                         android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                         android:layout_weight="3.0"
+                        android:layout_marginRight="10.0dip"
+                        android:text="泊位"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                         />
+                </LinearLayout>
+                 <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+                 <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+                    
+                   
+                    >
+                    <TextView
+
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_width="0dip"
+                        android:layout_weight="1.0"
+                        android:text="单位"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                          />
+                    <View  
+    					android:layout_width="1dip" 
+    					android:layout_height="match_parent"
+    					android:background="#66CCFF"
+    					android:layout_gravity="center_horizontal"
+    					/>
+                    <EditText
+
+                         android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                         android:layout_weight="3.0"
+                        android:layout_marginRight="10.0dip"
+                        android:text="泊位"
+                        android:textColor="@color/black" 
+                        android:textSize="@dimen/BasicTextSize"
+                          />
+                </LinearLayout>
+                 <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line" />
+              
+                 </LinearLayout>
+           </LinearLayout>
+           </ScrollView>
+          
+</LinearLayout>
