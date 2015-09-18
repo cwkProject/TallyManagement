@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" defaultCharsetForPropertiesFiles="GBK">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/DianZiMap.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/DuiCunQuery.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/HenZhongQuery.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/JiaoJieQuery.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/LiHuoDetail.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/QiYunQuery.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/QiYunQuery.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/QiYunZuoYe.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/WeiTuoQuery.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/WorkPlanQuery.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/WeiTuoQuery.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/WorkPlanQuery.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/adapter/DateSpinerAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/adapter/LiHuoDetailAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/adapter/LiHuoWeiTuoAdapter.java" charset="GBK" />
