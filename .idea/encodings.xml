@@ -1,46 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" defaultCharsetForPropertiesFiles="GBK">
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/DianZiMap.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/DuiCunQuery.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/HenZhongQuery.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/JiaoJieQuery.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/LiHuoDetail.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/QiYunQuery.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/QiYunZuoYe.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/WeiTuoQuery.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/activity/WorkPlanQuery.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/adapter/DateSpinerAdapter.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/adapter/LiHuoDetailAdapter.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/adapter/LiHuoWeiTuoAdapter.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/port/tally/management/bean/LiHuoWeiTuo.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_alert_dialog_special_normal.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/btn_style_alert_dialog_special_pressed.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/button_search_bg_normal.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/button_search_bg_press.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/custom_loc.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/edittext_search.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/edittext_search_image.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/h001.jpg" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_launcher.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/location_arrows.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/location_tips.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/menu_bg.9.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/menu_file.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/menu_map.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/phonetitlebar_bg.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-hdpi/xlistview_arrow.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/btn_style_alert_dialog_special.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/button_search_background.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/shape_line.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/datepopupwin.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/datepopupwin1.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/my_position.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/plan_item.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/pop_layout.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/qichezuoye.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/qiyunquery.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/search_activity.xml" charset="GBK" />
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
