@@ -90,7 +90,7 @@ public class SplashActivity extends Activity {
             // 自动登录
             autoLogin();
         } else {
-            Log.i(LOG_TAG + "checkLoadData", "no network");
+//            Log.i(LOG_TAG + "checkLoadData", "no network");
             // 没有数据要加载，提前跳转
             instantJump();
         }
@@ -101,7 +101,7 @@ public class SplashActivity extends Activity {
      * 启动页等待
      */
     private void splashWait() {
-        Log.i(LOG_TAG + "splashWait", "timeout timer open");
+//        Log.i(LOG_TAG + "splashWait", "timeout timer open");
 
         handler = new Handler();
 
@@ -122,7 +122,7 @@ public class SplashActivity extends Activity {
      * 自动登录
      */
     private void autoLogin() {
-        Log.i(LOG_TAG + "autoLogin", "autoLogin() is invoked");
+//        Log.i(LOG_TAG + "autoLogin", "autoLogin() is invoked");
 
         // 自动登录
         AutoLogin.checkAutoLogin(SplashActivity.this, StaticValue.APP_CODE);
@@ -143,7 +143,7 @@ public class SplashActivity extends Activity {
      * 注册广播接收者
      */
     private void registerReceivers() {
-        Log.i(LOG_TAG + "registerReceivers", "registerReceivers() is invoked");
+//        Log.i(LOG_TAG + "registerReceivers", "registerReceivers() is invoked");
         // 新建本地广播管理器
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
@@ -159,7 +159,7 @@ public class SplashActivity extends Activity {
      * 注销广播接收者
      */
     private void unregisterReceivers() {
-        Log.i(LOG_TAG + "unregisterReceivers", "unregisterReceivers() is invoked");
+//        Log.i(LOG_TAG + "unregisterReceivers", "unregisterReceivers() is invoked");
         if (localBroadcastManager == null) {
             return;
         }
@@ -212,16 +212,16 @@ public class SplashActivity extends Activity {
 
             // 得到动作字符串
             String actionString = intent.getAction();
-            Log.i(LOG_TAG + "LoadingReceiver.onReceive", "action is " + actionString);
+//            Log.i(LOG_TAG + "LoadingReceiver.onReceive", "action is " + actionString);
 
             switch (actionString) {
                 case BroadcastUtil.MEMORY_STATE_LOGIN:
                     // 完成一个动作信号量减1
                     actionSemaphore--;
-                    Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");
+//                    Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");
             }
-            Log.i(LOG_TAG + "LoadingReceiver.onReceive", "now actionSemaphore is " +
-                    actionSemaphore);
+//            Log.i(LOG_TAG + "LoadingReceiver.onReceive", "now actionSemaphore is " +
+//                    actionSemaphore);
 
             if (actionSemaphore <= 0) {
                 // 数据加载完成
@@ -237,7 +237,7 @@ public class SplashActivity extends Activity {
      * 提前跳转
      */
     private void instantJump() {
-        Log.i(LOG_TAG + "instantJump", "instantJump() is invoked");
+//        Log.i(LOG_TAG + "instantJump", "instantJump() is invoked");
 
         if (handler != null && runnable != null) {
             handler.removeCallbacks(runnable);
