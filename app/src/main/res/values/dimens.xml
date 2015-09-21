@@ -5,6 +5,9 @@
     <dimen name="navigation_drawer_list_item_height">64dp</dimen>
     <dimen name="navigation_drawer_list_item_function_title_size">16sp</dimen>
 
+    <dimen name="default_margin_small">2dp</dimen>
+    <dimen name="default_padding_small">2dp</dimen>
+
     <dimen name="sliding_tab_height">45dp</dimen>
 
     <dimen name="list_item_default_height">54dp</dimen>
@@ -61,5 +64,6 @@
 
     <dimen name="BasicTextSize">16dp</dimen>
 
+    <dimen name="filter_content_max_height">320dp</dimen>
 
 </resources>

@@ -6,6 +6,7 @@ package com.port.tally.management.adapter;
 import android.content.Context;
 import android.content.Intent;
 
+import com.port.tally.management.activity.EntrustQueryActivity;
 import com.port.tally.management.activity.LiHuoActivity;
 import com.port.tally.management.activity.QiYunZuoYe;
 import com.port.tally.management.activity.WorkPlanQuery;
@@ -39,10 +40,11 @@ public class FunctionIndex {
                 // 功能页跳转
                 break;
             case 2:
-                // 功能页跳转
+                // 委托查询
+                intent = new Intent(context, EntrustQueryActivity.class);
                 break;
             case 3:
-                // 功能页跳转
+
                 break;
             case 4:
                 // 功能页跳转

@@ -20,4 +20,9 @@ public interface StaticValue {
      * 样例任务地址
      */
     String HTTP_GET_SAMPLE_URL = "http://168.100.1.218/wlkg/Service/";
+
+    /**
+     * 查询委托列表的请求地址
+     */
+    String ENTRUST_QUERY_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Consign/GetConsign.aspx";
 }
