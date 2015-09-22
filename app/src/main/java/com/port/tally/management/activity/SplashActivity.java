@@ -14,6 +14,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.port.tally.management.R;
+import com.port.tally.management.function.CargoOwnerListFunction;
+import com.port.tally.management.function.CargoTypeListFunction;
+import com.port.tally.management.function.CodeListManager;
+import com.port.tally.management.function.OperationListFunction;
+import com.port.tally.management.function.VoyageListFunction;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.common.function.AutoLogin;
@@ -81,6 +86,9 @@ public class SplashActivity extends Activity {
         // 定时
         splashWait();
 
+        // 尝试加载本地数据
+        loadData();
+
         // 网络可用时继续执行
         if (CheckNetwork.isOpenNetwork()) {
 
@@ -116,6 +124,19 @@ public class SplashActivity extends Activity {
         };
 
         handler.postDelayed(runnable, SPLASH_DISPLAY_LENGTH);
+    }
+
+    /**
+     * 尝试加载本地数据
+     */
+    private void loadData() {
+        CodeListManager.put(StaticValue.CodeListTag.CARGO_TYPE_LIST, new CargoTypeListFunction
+                (this));
+        CodeListManager.put(StaticValue.CodeListTag.CARGO_OWNER_LIST, new CargoOwnerListFunction
+                (this));
+        CodeListManager.put(StaticValue.CodeListTag.VOYAGE_LIST, new VoyageListFunction(this));
+        CodeListManager.put(StaticValue.CodeListTag.OPERATION_LIST, new OperationListFunction
+                (this));
     }
 
     /**

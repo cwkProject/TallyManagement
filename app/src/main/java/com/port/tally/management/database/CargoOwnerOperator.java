@@ -28,7 +28,7 @@ public class CargoOwnerOperator extends BaseOperator<CargoOwner> {
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "CargoTypeOperator.";
+    private static final String LOG_TAG = "CargoOwnerOperator.";
 
     public CargoOwnerOperator(Context context) {
         super(context);

@@ -17,6 +17,32 @@ public interface StaticValue {
     String APP_CODE = "LHGL";
 
     /**
+     * 数据列表工具标签
+     */
+    interface CodeListTag {
+        /**
+         * 货物类别
+         */
+        String CARGO_TYPE_LIST = "cargo_type_list";
+
+        /**
+         * 货主
+         */
+        String CARGO_OWNER_LIST = "cargo_owner_list";
+
+        /**
+         * 航次
+         */
+        String VOYAGE_LIST = "voyage_list";
+
+        /**
+         * 作业过程
+         */
+        String OPERATION_LIST = "operation_list";
+
+    }
+
+    /**
      * 样例任务地址
      */
     String HTTP_GET_SAMPLE_URL = "http://168.100.1.218/wlkg/Service/";
