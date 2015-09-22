@@ -62,7 +62,20 @@ public class EntrustRecyclerViewAdapter extends RecyclerView.Adapter<EntrustItem
      */
     public void addData(int position, List<Entrust> data) {
         this.dataList.addAll(position, data);
-        super.notifyItemRangeInserted(position, data.size());
+        notifyItemRangeInserted(position, data.size());
+    }
+
+    /**
+     * 重置数据
+     *
+     * @param data 新数据
+     */
+    public void reset(List<Entrust> data) {
+        this.dataList.clear();
+        if (data != null) {
+            this.dataList.addAll(data);
+        }
+        notifyDataSetChanged();
     }
 
     /**

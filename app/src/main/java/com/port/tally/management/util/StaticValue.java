@@ -22,6 +22,26 @@ public interface StaticValue {
     String HTTP_GET_SAMPLE_URL = "http://168.100.1.218/wlkg/Service/";
 
     /**
+     * 获取货主列表请求地址
+     */
+    String CARGO_OWNER_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetCargoOwner.aspx";
+
+    /**
+     * 获取航次列表请求地址
+     */
+    String VOYAGE_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetVoyage.aspx";
+
+    /**
+     * 获取作业过程请求地址
+     */
+    String OPERATION_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetOperation.aspx";
+
+    /**
+     * 获取货物种类列表的请求地址
+     */
+    String CARGO_TYPE_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetCargo.aspx";
+
+    /**
      * 查询委托列表的请求地址
      */
     String ENTRUST_QUERY_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Consign/GetConsign.aspx";

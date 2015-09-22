@@ -152,7 +152,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
      * @param start 起始位置
      * @param count 加载数量
      */
-    private void loadData(int start, int count) {
+    private void loadData(final int start, int count) {
 
         if (count < 0 || start < 0) {
             return;
@@ -165,9 +165,15 @@ public class EntrustQueryActivity extends AppCompatActivity {
             @Override
             public void doEndWork(boolean state, List<Entrust> data) {
                 if (state) {
-                    // 插入新数据
-                    viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
-                            .getItemCount(), data);
+                    if (start > 0) {
+                        // 插入新数据
+                        viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
+                                .getItemCount(), data);
+
+                    } else {
+                        // 重置数据
+                        viewHolder.recyclerViewAdapter.reset(data);
+                    }
                 }
             }
         });
