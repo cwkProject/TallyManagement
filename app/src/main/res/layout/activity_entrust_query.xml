@@ -7,7 +7,8 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:elevation="3dp">
 
         <include
             layout="@layout/toolbar_default_title"/>
@@ -18,7 +19,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.DrawerLayout
-        android:id="@+id/activity_identity_authentication_drawer_layout"
+        android:id="@+id/activity_entrust_query_drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -30,10 +31,11 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <FrameLayout
+            android:id="@+id/activity_entrust_query_frameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="160dp"
-            android:layout_gravity="start"
-            android:background="@android:color/white"/>
+            android:background="@android:color/white"
+            android:maxHeight="320dp"
+            android:minHeight="160dp"/>
     </android.support.v4.widget.DrawerLayout>
 </android.support.design.widget.CoordinatorLayout>

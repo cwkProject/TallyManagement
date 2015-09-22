@@ -4,12 +4,15 @@ package com.port.tally.management.activity;
  */
 
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.EntrustRecyclerViewAdapter;
@@ -43,6 +46,51 @@ public class EntrustQueryActivity extends AppCompatActivity {
          * 委托列表数据适配器
          */
         public EntrustRecyclerViewAdapter recyclerViewAdapter = null;
+
+        /**
+         * 侧滑抽屉
+         */
+        public DrawerLayout drawerLayout = null;
+
+        /**
+         * 货物类别文本框
+         */
+        public EditText cargoTypeEditText = null;
+
+        /**
+         * 货主文本框
+         */
+        public EditText cargoOwnerEditText = null;
+
+        /**
+         * 航次文本框
+         */
+        public EditText voyageEditText = null;
+
+        /**
+         * 操作过程文本框
+         */
+        public EditText operationEditText = null;
+
+        /**
+         * 当前货物类别
+         */
+        public String cargoType = null;
+
+        /**
+         * 当前货主
+         */
+        public String cargoOwner = null;
+
+        /**
+         * 当前航次
+         */
+        public String voyage = null;
+
+        /**
+         * 当前操作过程
+         */
+        public String operation = null;
     }
 
     /**
@@ -77,6 +125,17 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 委托列表适配器
         viewHolder.recyclerViewAdapter = new EntrustRecyclerViewAdapter();
+
+        viewHolder.cargoTypeEditText = (EditText) findViewById(R.id.cargo_edit_editText);
+
+        viewHolder.cargoOwnerEditText = (EditText) findViewById(R.id.cargo_owner_edit_editText);
+
+        viewHolder.voyageEditText = (EditText) findViewById(R.id.voyage_edit_editText);
+
+        viewHolder.operationEditText = (EditText) findViewById(R.id.operation_edit_editText);
+
+        viewHolder.drawerLayout = (DrawerLayout) findViewById(R.id
+                .activity_entrust_query_drawer_layout);
     }
 
     /**
@@ -88,6 +147,18 @@ public class EntrustQueryActivity extends AppCompatActivity {
         setTitle(R.string.entrust_query);
         // 初始化列表
         initListView();
+        // 初始化过滤器
+        initFilter();
+    }
+
+    /**
+     * 初始化过滤器
+     */
+    private void initFilter() {
+        // 抽屉布局
+        viewHolder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        // 初始化cargo
     }
 
     /**
@@ -182,4 +253,33 @@ public class EntrustQueryActivity extends AppCompatActivity {
         pullEntrustList.beginExecute(String.valueOf(start), String.valueOf(count), "14",
                 "2015-08-19", "2015-09-19");
     }
+
+    /**
+     * 关闭导航抽屉
+     *
+     * @return 成功关闭返回true，未打开则返回false
+     */
+    public boolean closeDrawer() {
+        if (viewHolder.drawerLayout != null) {
+            if (viewHolder.drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                viewHolder.drawerLayout.closeDrawer(Gravity.RIGHT);
+                return true;
+            }
+            if (viewHolder.drawerLayout.isDrawerOpen(Gravity.LEFT)) {
+                viewHolder.drawerLayout.closeDrawer(Gravity.LEFT);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        // 如果抽屉已打开，则先关闭抽屉
+        if (!closeDrawer()) {
+            super.onBackPressed();
+        }
+    }
+
 }
