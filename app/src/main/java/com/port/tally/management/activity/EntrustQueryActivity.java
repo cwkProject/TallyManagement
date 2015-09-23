@@ -4,21 +4,28 @@ package com.port.tally.management.activity;
  */
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
 
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.EntrustRecyclerViewAdapter;
+import com.port.tally.management.bean.CargoType;
 import com.port.tally.management.bean.Entrust;
+import com.port.tally.management.fragment.CargoTypeFragment;
+import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullEntrustList;
 
+import org.mobile.library.common.function.InputMethodController;
+import org.mobile.library.model.operate.DataChangeObserver;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.List;
@@ -38,6 +45,11 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private static final String LOG_TAG = "EntrustQueryActivity.";
 
     /**
+     * 一次性加载的数据行数
+     */
+    private static final int ROW_COUNT = 30;
+
+    /**
      * 控件集
      */
     private class LocalViewHolder {
@@ -53,24 +65,24 @@ public class EntrustQueryActivity extends AppCompatActivity {
         public DrawerLayout drawerLayout = null;
 
         /**
-         * 货物类别文本框
+         * 当前是否在选择货物类别
          */
-        public EditText cargoTypeEditText = null;
+        public boolean cargoTypeUse = false;
 
         /**
-         * 货主文本框
+         * 当前是否在选择货主
          */
-        public EditText cargoOwnerEditText = null;
+        public boolean cargoOwnerUse = false;
 
         /**
-         * 航次文本框
+         * 当前是否在选择航次
          */
-        public EditText voyageEditText = null;
+        public boolean voyageUse = false;
 
         /**
-         * 操作过程文本框
+         * 当前是否在选择操作过程
          */
-        public EditText operationEditText = null;
+        public boolean operationUse = false;
 
         /**
          * 当前货物类别
@@ -91,6 +103,11 @@ public class EntrustQueryActivity extends AppCompatActivity {
          * 当前操作过程
          */
         public String operation = null;
+
+        /**
+         * 保留上次查询数据
+         */
+        public String oldParameter = null;
     }
 
     /**
@@ -126,14 +143,6 @@ public class EntrustQueryActivity extends AppCompatActivity {
         // 委托列表适配器
         viewHolder.recyclerViewAdapter = new EntrustRecyclerViewAdapter();
 
-        viewHolder.cargoTypeEditText = (EditText) findViewById(R.id.cargo_edit_editText);
-
-        viewHolder.cargoOwnerEditText = (EditText) findViewById(R.id.cargo_owner_edit_editText);
-
-        viewHolder.voyageEditText = (EditText) findViewById(R.id.voyage_edit_editText);
-
-        viewHolder.operationEditText = (EditText) findViewById(R.id.operation_edit_editText);
-
         viewHolder.drawerLayout = (DrawerLayout) findViewById(R.id
                 .activity_entrust_query_drawer_layout);
     }
@@ -157,8 +166,128 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private void initFilter() {
         // 抽屉布局
         viewHolder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        viewHolder.drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                if (isSelecting()) {
+                    // 选择结束
+                    resetData();
+                    clearSelect();
+                }
+            }
+        });
 
-        // 初始化cargo
+        // 初始化cargoType
+        initCargoType();
+    }
+
+    /**
+     * 初始化cargoType
+     */
+    private void initCargoType() {
+        CargoTypeFragment cargoTypeFragment = new CargoTypeFragment();
+
+        cargoTypeFragment.setClickListener(new DataChangeObserver<CargoType>() {
+            @Override
+            public void notifyDataChange(CargoType data) {
+                if (viewHolder.cargoTypeUse) {
+                    // 第二次点击
+                    // 关闭软键盘
+                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                    // 关闭抽屉
+                    closeDrawer();
+                } else {
+                    // 第一次点击
+                    clearSelect();
+                    viewHolder.cargoTypeUse = true;
+                    // 替换内容片段
+                    showFragment(StaticValue.CodeListTag.CARGO_TYPE_LIST);
+                }
+            }
+        });
+
+        cargoTypeFragment.setSelectedListener(new DataChangeObserver<CargoType>() {
+            @Override
+            public void notifyDataChange(CargoType data) {
+                // 关闭软键盘
+                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                // 关闭抽屉
+                closeDrawer();
+            }
+        });
+
+        // 加入布局管理器
+        getSupportFragmentManager().beginTransaction().add(R.id
+                .activity_entrust_query_frameLayout, cargoTypeFragment, StaticValue.CodeListTag
+                .CARGO_TYPE_LIST).hide(cargoTypeFragment).commit();
+    }
+
+    /**
+     * 显示指定标签的片段布局
+     *
+     * @param tag 指定的标签
+     */
+    private void showFragment(String tag) {
+        // 获取片段管理器
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        // 尝试获取该片段
+        Fragment tagFragment = fragmentManager.findFragmentByTag(tag);
+        // 尝试获取当前显示的片段对象
+        Fragment currentFragment = getVisibleFragment();
+
+        if (currentFragment != null) {
+            // 有显示的片段则先隐藏
+            Log.i(LOG_TAG + "showFragment", currentFragment.getTag() + " fragment is gone");
+            fragmentManager.beginTransaction().hide(currentFragment).commit();
+        }
+
+        // 显示
+        Log.i(LOG_TAG + "showFragment", tagFragment.getTag() + " fragment is show");
+        fragmentManager.beginTransaction().show(tagFragment).commit();
+    }
+
+    /**
+     * 获取当前显示的片段对象
+     *
+     * @return 当前显示的片段实例，没有则返回null
+     */
+    private Fragment getVisibleFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if (fragments == null || fragments.size() == 0) {
+            Log.i(LOG_TAG + "getVisibleFragment", "no fragment");
+            return null;
+        } else {
+            Log.i(LOG_TAG + "getVisibleFragment", "fragment count is " + fragments.size());
+        }
+        for (Fragment fragment : fragments) {
+            if (fragment != null && fragment.isVisible()) {
+                Log.i(LOG_TAG + "getVisibleFragment", "fragment tag is " + fragment.getTag());
+                return fragment;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 判断是否有使用中的选择器
+     *
+     * @return 如果有返回true
+     */
+    private boolean isSelecting() {
+        return viewHolder.cargoTypeUse || viewHolder.cargoOwnerUse || viewHolder.voyageUse ||
+                viewHolder.operationUse;
+    }
+
+    /**
+     * 清除选择器状态
+     */
+    private void clearSelect() {
+        viewHolder.cargoTypeUse = false;
+        viewHolder.cargoOwnerUse = false;
+        viewHolder.voyageUse = false;
+        viewHolder.operationUse = false;
     }
 
     /**
@@ -211,10 +340,25 @@ public class EntrustQueryActivity extends AppCompatActivity {
     }
 
     /**
+     * 尝试重置数据
+     */
+    private void resetData() {
+
+        // 新参数
+        String newParameter = viewHolder.cargoType + viewHolder.cargoOwner + viewHolder.voyage +
+                viewHolder.operation;
+
+        if (viewHolder.oldParameter == null || !viewHolder.oldParameter.equals(newParameter)) {
+            initData();
+            viewHolder.oldParameter = newParameter;
+        }
+    }
+
+    /**
      * 初始化数据
      */
     private void initData() {
-        loadData(0, 30);
+        loadData(0, ROW_COUNT);
     }
 
     /**
@@ -251,7 +395,8 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 执行任务
         pullEntrustList.beginExecute(String.valueOf(start), String.valueOf(count), "14",
-                "2015-08-19", "2015-09-19");
+                "2015-08-19", "2015-09-19", viewHolder.cargoType, viewHolder.cargoOwner,
+                viewHolder.voyage, viewHolder.operation);
     }
 
     /**

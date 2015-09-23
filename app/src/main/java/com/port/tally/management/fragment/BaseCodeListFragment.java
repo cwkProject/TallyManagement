@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.port.tally.management.R;
+import com.port.tally.management.holder.ISelectListener;
 
 import org.mobile.library.model.operate.DataChangeObserver;
 
@@ -29,7 +30,8 @@ import java.util.List;
  * @version 1.0 2015/9/22
  * @since 1.0
  */
-public abstract class BaseCodeListFragment<DataModel> extends Fragment {
+public abstract class BaseCodeListFragment<DataModel> extends Fragment implements
+        ISelectListener<DataModel> {
 
     /**
      * 列表布局
@@ -52,9 +54,14 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment {
     private DataModel currentData = null;
 
     /**
-     * 数据改变监听器
+     * 数据选中监听器
      */
-    private DataChangeObserver<DataModel> dataChangeObserver = null;
+    private DataChangeObserver<DataModel> selectedListener = null;
+
+    /**
+     * 目标控件点击触发监听器
+     */
+    private DataChangeObserver<DataModel> clickListener = null;
 
     /**
      * 名称取值标签
@@ -66,13 +73,14 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment {
      */
     protected static final String SHORT_CODE_TAG = "short_code_tag";
 
-    /**
-     * 设置数据改变监听器
-     *
-     * @param dataChangeObserver 监听器实例
-     */
-    public void setDataChangeObserver(DataChangeObserver<DataModel> dataChangeObserver) {
-        this.dataChangeObserver = dataChangeObserver;
+    @Override
+    public void setClickListener(DataChangeObserver<DataModel> clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    @Override
+    public void setSelectedListener(DataChangeObserver<DataModel> selectedListener) {
+        this.selectedListener = selectedListener;
     }
 
     @Nullable
@@ -100,20 +108,30 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 currentData = dataList.get(position);
                 itemClick(currentData);
-                if (dataChangeObserver != null) {
-                    dataChangeObserver.notifyDataChange(currentData);
+                if (selectedListener != null) {
+                    selectedListener.notifyDataChange(currentData);
                 }
             }
         });
 
-        // 设置数据过滤器
-        onSetFilter(listView, adapter, dataList);
-
         // 自定义
         onCustom(rootView, listView, adapter, dataList);
 
+        // 设置数据过滤器
+        onSetFilter(listView, adapter, dataList);
+
+        // 设置点击触发器
+        onSetClickBind(clickListener);
+
         return rootView;
     }
+
+    /**
+     * 设置目标控件点击触发器绑定
+     *
+     * @param clickListener 要绑定的触发器
+     */
+    protected abstract void onSetClickBind(DataChangeObserver<DataModel> clickListener);
 
     /**
      * 自定义布局
@@ -123,8 +141,8 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment {
      * @param adapter  适配器
      * @param dataList 数据源
      */
-    private void onCustom(View rootView, ListView listView, SimpleAdapter adapter,
-                          List<DataModel> dataList) {
+    protected void onCustom(View rootView, ListView listView, SimpleAdapter adapter,
+                            List<DataModel> dataList) {
 
     }
 

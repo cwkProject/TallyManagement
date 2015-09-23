@@ -5,6 +5,7 @@ package com.port.tally.management.fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -13,6 +14,8 @@ import com.port.tally.management.R;
 import com.port.tally.management.bean.CargoType;
 import com.port.tally.management.function.CodeListManager;
 import com.port.tally.management.util.StaticValue;
+
+import org.mobile.library.model.operate.DataChangeObserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,13 +36,12 @@ public class CargoTypeFragment extends BaseCodeListFragment<CargoType> {
      */
     private EditText editText = null;
 
-    /**
-     * 设置关联编辑框
-     *
-     * @param editText 关联的输入框
-     */
-    public void setEditText(EditText editText) {
-        this.editText = editText;
+    @Override
+    protected void onCustom(View rootView, ListView listView, SimpleAdapter adapter,
+                            List<CargoType> dataList) {
+
+        // 获取activity布局中的关联控件
+        editText = (EditText) getActivity().findViewById(R.id.cargo_edit_editText);
     }
 
     @Override
@@ -57,6 +59,20 @@ public class CargoTypeFragment extends BaseCodeListFragment<CargoType> {
 
         return new SimpleAdapter(getContext(), mapList, R.layout.two_column_text_item, new
                 String[]{NAME_TAG , SHORT_CODE_TAG}, new int[]{R.id.two_column_text_item_left_textView , R.id.two_column_text_item_right_textView});
+    }
+
+    @Override
+    protected void onSetClickBind(final DataChangeObserver<CargoType> clickListener) {
+        if (clickListener != null) {
+            editText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CargoType cargoType = new CargoType();
+                    cargoType.setName(editText.getText().toString());
+                    clickListener.notifyDataChange(cargoType);
+                }
+            });
+        }
     }
 
     @Override
