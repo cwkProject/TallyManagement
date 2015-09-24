@@ -56,8 +56,6 @@ public abstract class BaseCodeListFunction<DataModel> {
         Log.i(LOG_TAG + "BaseCodeListFunction", "BaseCodeListFunction is invoked");
         Log.i(LOG_TAG + "BaseCodeListFunction", "onCreateOperator is invoked");
         this.operator = onCreateOperator(context);
-        // 初始化数据
-        onCreate();
     }
 
     /**
