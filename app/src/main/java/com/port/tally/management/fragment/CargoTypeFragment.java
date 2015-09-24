@@ -6,16 +6,16 @@ package com.port.tally.management.fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.port.tally.management.R;
 import com.port.tally.management.bean.CargoType;
 import com.port.tally.management.function.CodeListManager;
 import com.port.tally.management.util.StaticValue;
-
-import org.mobile.library.model.operate.DataChangeObserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ import java.util.Map;
  * @version 1.0 2015/9/22
  * @since 1.0
  */
-public class CargoTypeFragment extends BaseCodeListFragment<CargoType> {
+public class CargoTypeFragment extends BaseCodeListFragment<CargoType, String> {
 
     /**
      * 关联的输入框
@@ -67,20 +67,6 @@ public class CargoTypeFragment extends BaseCodeListFragment<CargoType> {
     }
 
     @Override
-    protected void onSetClickBind(final DataChangeObserver<CargoType> clickListener) {
-        if (clickListener != null) {
-            editText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CargoType cargoType = new CargoType();
-                    cargoType.setName(editText.getText().toString());
-                    clickListener.notifyDataChange(cargoType);
-                }
-            });
-        }
-    }
-
-    @Override
     protected void onSetFilter(ListView listView, SimpleAdapter adapter, List<CargoType> dataList) {
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -107,9 +93,11 @@ public class CargoTypeFragment extends BaseCodeListFragment<CargoType> {
     }
 
     @Override
-    protected void itemClick(CargoType data) {
-        if (editText != null) {
-            editText.setText(data.getName());
-        }
+    protected String itemClick(AdapterView parent, View view, int position, long id) {
+
+        // 名称文本框
+        TextView name = (TextView) view.findViewById(R.id.two_column_text_item_left_textView);
+
+        return name.getText().toString();
     }
 }

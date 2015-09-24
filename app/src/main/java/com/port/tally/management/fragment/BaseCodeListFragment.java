@@ -25,13 +25,14 @@ import java.util.List;
  * 仅列表内容布局
  *
  * @param <DataModel> 列表项数据模型
+ * @param <Result>    向外界返回的结果
  *
  * @author 超悟空
  * @version 1.0 2015/9/22
  * @since 1.0
  */
-public abstract class BaseCodeListFragment<DataModel> extends Fragment implements
-        ISelectListener<DataModel> {
+public abstract class BaseCodeListFragment<DataModel, Result> extends Fragment implements
+        ISelectListener<Result> {
 
     /**
      * 列表布局
@@ -44,24 +45,14 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment implement
     private SimpleAdapter adapter = null;
 
     /**
-     * 列表数据源
-     */
-    private List<DataModel> dataList = null;
-
-    /**
      * 当前选中的数据项
      */
-    private DataModel currentData = null;
+    private Result currentData = null;
 
     /**
      * 数据选中监听器
      */
-    private DataChangeObserver<DataModel> selectedListener = null;
-
-    /**
-     * 目标控件点击触发监听器
-     */
-    private DataChangeObserver<DataModel> clickListener = null;
+    private DataChangeObserver<Result> selectedListener = null;
 
     /**
      * 名称取值标签
@@ -74,12 +65,7 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment implement
     protected static final String SHORT_CODE_TAG = "short_code_tag";
 
     @Override
-    public void setClickListener(DataChangeObserver<DataModel> clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    @Override
-    public void setSelectedListener(DataChangeObserver<DataModel> selectedListener) {
+    public void setSelectedListener(DataChangeObserver<Result> selectedListener) {
         this.selectedListener = selectedListener;
     }
 
@@ -94,7 +80,9 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment implement
         listView = (ListView) rootView.findViewById(R.id.fragment_only_list_listView);
 
         // 加载数据源
-        dataList = onCreateDataList();
+
+        // 列表数据源
+        List<DataModel> dataList = onCreateDataList();
 
         // 加载适配器
         adapter = onCreateAdapter(dataList);
@@ -106,8 +94,8 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment implement
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                currentData = dataList.get(position);
-                itemClick(currentData);
+
+                currentData = itemClick(parent, view, position, id);
                 if (selectedListener != null) {
                     selectedListener.notifyDataChange(currentData);
                 }
@@ -120,18 +108,8 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment implement
         // 设置数据过滤器
         onSetFilter(listView, adapter, dataList);
 
-        // 设置点击触发器
-        onSetClickBind(clickListener);
-
         return rootView;
     }
-
-    /**
-     * 设置目标控件点击触发器绑定
-     *
-     * @param clickListener 要绑定的触发器
-     */
-    protected abstract void onSetClickBind(DataChangeObserver<DataModel> clickListener);
 
     /**
      * 自定义布局
@@ -175,9 +153,14 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment implement
     /**
      * 点击列表项触发
      *
-     * @param data 选中数据对象
+     * @param parent   布局适配器
+     * @param view     当前item
+     * @param position 当前索引位置
+     * @param id       布局id
+     *
+     * @return 要返回的数据
      */
-    protected abstract void itemClick(DataModel data);
+    protected abstract Result itemClick(AdapterView<?> parent, View view, int position, long id);
 
     /**
      * 数据过滤
@@ -185,7 +168,6 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment implement
      * @param filterText 过滤文本
      */
     protected void filter(String filterText) {
-
         adapter.getFilter().filter(filterText);
     }
 }

@@ -16,7 +16,5 @@ import org.mobile.library.model.operate.DataChangeObserver;
  */
 public interface ISelectListener<DataModel> {
 
-    void setClickListener(DataChangeObserver<DataModel> clickListener);
-
     void setSelectedListener(DataChangeObserver<DataModel> selectedListener);
 }

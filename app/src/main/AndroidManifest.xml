@@ -38,9 +38,8 @@
 
         <activity android:name=".activity.QiYunQuery"/>
 
-        <activity
-            android:name=".activity.EntrustQueryActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateAlwaysHidden"/>
+        <activity android:name=".activity.EntrustQueryActivity"
+                  android:windowSoftInputMode="adjustUnspecified|stateAlwaysHidden"/>
 
     </application>
 
