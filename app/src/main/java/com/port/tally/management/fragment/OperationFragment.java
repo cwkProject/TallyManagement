@@ -40,6 +40,11 @@ public class OperationFragment extends BaseCodeListFragment<Operation> {
     protected SimpleAdapter onCreateAdapter(List<Operation> dataList) {
         List<Map<String, String>> mapList = new ArrayList<>();
 
+        if (dataList == null) {
+            // 数据加载失败或未完成
+            dataList = new ArrayList<>();
+        }
+
         for (Operation data : dataList) {
             Map<String, String> map = new HashMap<>();
 
@@ -77,7 +82,6 @@ public class OperationFragment extends BaseCodeListFragment<Operation> {
 
     @Override
     protected void onSetFilter(ListView listView, SimpleAdapter adapter, List<Operation> dataList) {
-        listView.setTextFilterEnabled(true);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,7 +103,7 @@ public class OperationFragment extends BaseCodeListFragment<Operation> {
 
     @Override
     protected List<Operation> onCreateDataList() {
-        return (List<Operation>) CodeListManager.get(StaticValue.CodeListTag.OPERATION_LIST);
+        return CodeListManager.get(StaticValue.CodeListTag.OPERATION_LIST).getDataList();
     }
 
     @Override

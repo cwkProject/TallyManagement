@@ -40,6 +40,11 @@ public class VoyageFragment extends BaseCodeListFragment<Voyage> {
     protected SimpleAdapter onCreateAdapter(List<Voyage> dataList) {
         List<Map<String, String>> mapList = new ArrayList<>();
 
+        if (dataList == null) {
+            // 数据加载失败或未完成
+            dataList = new ArrayList<>();
+        }
+
         for (Voyage data : dataList) {
             Map<String, String> map = new HashMap<>();
 
@@ -77,7 +82,6 @@ public class VoyageFragment extends BaseCodeListFragment<Voyage> {
 
     @Override
     protected void onSetFilter(ListView listView, SimpleAdapter adapter, List<Voyage> dataList) {
-        listView.setTextFilterEnabled(true);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,7 +103,7 @@ public class VoyageFragment extends BaseCodeListFragment<Voyage> {
 
     @Override
     protected List<Voyage> onCreateDataList() {
-        return (List<Voyage>) CodeListManager.get(StaticValue.CodeListTag.VOYAGE_LIST);
+        return CodeListManager.get(StaticValue.CodeListTag.VOYAGE_LIST).getDataList();
     }
 
     @Override

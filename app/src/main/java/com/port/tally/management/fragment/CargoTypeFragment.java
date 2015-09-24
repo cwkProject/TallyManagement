@@ -48,6 +48,11 @@ public class CargoTypeFragment extends BaseCodeListFragment<CargoType> {
     protected SimpleAdapter onCreateAdapter(List<CargoType> dataList) {
         List<Map<String, String>> mapList = new ArrayList<>();
 
+        if (dataList == null) {
+            // 数据加载失败或未完成
+            dataList = new ArrayList<>();
+        }
+
         for (CargoType data : dataList) {
             Map<String, String> map = new HashMap<>();
 
@@ -77,7 +82,6 @@ public class CargoTypeFragment extends BaseCodeListFragment<CargoType> {
 
     @Override
     protected void onSetFilter(ListView listView, SimpleAdapter adapter, List<CargoType> dataList) {
-        listView.setTextFilterEnabled(true);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,7 +103,7 @@ public class CargoTypeFragment extends BaseCodeListFragment<CargoType> {
 
     @Override
     protected List<CargoType> onCreateDataList() {
-        return (List<CargoType>) CodeListManager.get(StaticValue.CodeListTag.CARGO_TYPE_LIST);
+        return CodeListManager.get(StaticValue.CodeListTag.CARGO_TYPE_LIST).getDataList();
     }
 
     @Override

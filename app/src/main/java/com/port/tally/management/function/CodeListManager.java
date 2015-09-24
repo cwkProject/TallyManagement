@@ -3,6 +3,8 @@ package com.port.tally.management.function;
  * Created by 超悟空 on 2015/9/22.
  */
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -18,9 +20,14 @@ import java.util.concurrent.Executors;
 public class CodeListManager {
 
     /**
+     * 日志标签前缀
+     */
+    private static final String LOG_TAG = "CodeListManager.";
+
+    /**
      * 线程池线程数
      */
-    private static final int POOL_COUNT = Runtime.getRuntime().availableProcessors() * 3 + 2;
+    private static final int POOL_COUNT = Runtime.getRuntime().availableProcessors() * 2 + 2;
 
     /**
      * 线程池
@@ -30,7 +37,7 @@ public class CodeListManager {
     /**
      * 功能数据工具列表
      */
-    private static Map<String, BaseCodeListFunction<?>> functionList = new HashMap<>();
+    private static Map<String, BaseCodeListFunction> functionList = new HashMap<>();
 
     /**
      * 将一个功能数据列表工具加入管理器，
@@ -40,14 +47,17 @@ public class CodeListManager {
      * @param tag              工具索引标签
      * @param codeListFunction 工具对象
      */
-    public static void put(String tag, final BaseCodeListFunction<?> codeListFunction) {
+    public static void put(String tag, final BaseCodeListFunction codeListFunction) {
+        Log.i(LOG_TAG + "put", "put tag " + tag);
         taskExecutor.submit(new Runnable() {
             @Override
             public void run() {
+                Log.i(LOG_TAG + "put", "task run");
                 codeListFunction.onCreate();
             }
         });
 
+        Log.i(LOG_TAG + "put", "put list");
         functionList.put(tag, codeListFunction);
     }
 
@@ -58,7 +68,8 @@ public class CodeListManager {
      *
      * @return 列表工具对象，没有返回null
      */
-    public static BaseCodeListFunction<?> get(String tag) {
+    public static BaseCodeListFunction get(String tag) {
+        Log.i(LOG_TAG + "get", "object exist is " + functionList.containsKey(tag));
         return functionList.get(tag);
     }
 }

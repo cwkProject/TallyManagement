@@ -154,7 +154,6 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment implement
      * @param dataList 数据源
      */
     protected void onSetFilter(ListView listView, SimpleAdapter adapter, List<DataModel> dataList) {
-        listView.setTextFilterEnabled(true);
     }
 
     /**
@@ -187,6 +186,6 @@ public abstract class BaseCodeListFragment<DataModel> extends Fragment implement
      */
     protected void filter(String filterText) {
 
-        listView.setFilterText(filterText);
+        adapter.getFilter().filter(filterText);
     }
 }

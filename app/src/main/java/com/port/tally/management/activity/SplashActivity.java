@@ -86,14 +86,14 @@ public class SplashActivity extends Activity {
         // 定时
         splashWait();
 
+        // 注册广播接收者
+        registerReceivers();
+
         // 尝试加载本地数据
         loadData();
 
         // 网络可用时继续执行
         if (CheckNetwork.isOpenNetwork()) {
-
-            // 注册广播接收者
-            registerReceivers();
 
             // 自动登录
             autoLogin();
@@ -212,7 +212,7 @@ public class SplashActivity extends Activity {
          * 初始时为注册的动作数量，
          * 当减少到0时表示数据加载完毕
          */
-        private volatile int actionSemaphore = 1;
+        private volatile int actionSemaphore = 5;
 
         /**
          * 得到本接收者监听的动作集合
@@ -224,7 +224,11 @@ public class SplashActivity extends Activity {
             IntentFilter filter = new IntentFilter();
             // 登录结果监听
             filter.addAction(BroadcastUtil.MEMORY_STATE_LOGIN);
-
+            // 数据加载
+            filter.addAction(StaticValue.CodeListTag.CARGO_TYPE_LIST);
+            filter.addAction(StaticValue.CodeListTag.CARGO_OWNER_LIST);
+            filter.addAction(StaticValue.CodeListTag.VOYAGE_LIST);
+            filter.addAction(StaticValue.CodeListTag.OPERATION_LIST);
             return filter;
         }
 
@@ -237,6 +241,10 @@ public class SplashActivity extends Activity {
 
             switch (actionString) {
                 case BroadcastUtil.MEMORY_STATE_LOGIN:
+                case StaticValue.CodeListTag.CARGO_TYPE_LIST:
+                case StaticValue.CodeListTag.CARGO_OWNER_LIST:
+                case StaticValue.CodeListTag.VOYAGE_LIST:
+                case StaticValue.CodeListTag.OPERATION_LIST:
                     // 完成一个动作信号量减1
                     actionSemaphore--;
                     Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");

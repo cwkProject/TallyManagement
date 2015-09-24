@@ -34,6 +34,7 @@
             android:id="@+id/activity_entrust_query_frameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:background="@android:color/white"
             android:maxHeight="320dp"
             android:minHeight="160dp"/>

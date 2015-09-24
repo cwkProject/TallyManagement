@@ -7,10 +7,12 @@ import android.content.Context;
 
 import com.port.tally.management.bean.Voyage;
 import com.port.tally.management.database.VoyageOperator;
+import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullVoyageList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkModel;
+import org.mobile.library.model.work.WorkBack;
+import org.mobile.library.util.BroadcastUtil;
 
 import java.util.List;
 
@@ -38,8 +40,21 @@ public class VoyageListFunction extends BaseCodeListFunction<Voyage> {
     }
 
     @Override
-    protected WorkModel<?, List<Voyage>> onCreateWork(BaseOperator<Voyage> operator, Context
-            context) {
-        return new PullVoyageList();
+    protected void onLoadFromNetWork() {
+        PullVoyageList pullVoyageList = new PullVoyageList();
+
+        pullVoyageList.setWorkBackListener(new WorkBack<List<Voyage>>() {
+            @Override
+            public void doEndWork(boolean state, List<Voyage> data) {
+                netWorkEndSetData(state, data);
+            }
+        });
+
+        pullVoyageList.beginExecute();
+    }
+
+    @Override
+    protected void onNotify(Context context) {
+        BroadcastUtil.sendBroadcast(context, StaticValue.CodeListTag.VOYAGE_LIST);
     }
 }

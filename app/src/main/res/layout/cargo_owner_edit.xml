@@ -9,6 +9,7 @@
     android:layout_weight="1"
     android:gravity="center_vertical"
     android:hint="@string/edit_hint_cargo_owner"
+    android:singleLine="true"
     android:textColor="@android:color/black">
 
 </EditText>

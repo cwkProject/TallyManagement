@@ -15,12 +15,19 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.EntrustRecyclerViewAdapter;
+import com.port.tally.management.bean.CargoOwner;
 import com.port.tally.management.bean.CargoType;
 import com.port.tally.management.bean.Entrust;
+import com.port.tally.management.bean.Operation;
+import com.port.tally.management.bean.Voyage;
+import com.port.tally.management.fragment.CargoOwnerFragment;
 import com.port.tally.management.fragment.CargoTypeFragment;
+import com.port.tally.management.fragment.OperationFragment;
+import com.port.tally.management.fragment.VoyageFragment;
 import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullEntrustList;
 
@@ -85,24 +92,24 @@ public class EntrustQueryActivity extends AppCompatActivity {
         public boolean operationUse = false;
 
         /**
-         * 当前货物类别
+         * 货物类别编辑框
          */
-        public String cargoType = null;
+        public EditText cargoTypeEditText = null;
 
         /**
-         * 当前货主
+         * 货主编辑框
          */
-        public String cargoOwner = null;
+        public EditText cargoOwnerEditText = null;
 
         /**
-         * 当前航次
+         * 航次编辑框
          */
-        public String voyage = null;
+        public EditText voyageEditText = null;
 
         /**
-         * 当前操作过程
+         * 作业过程编辑框
          */
-        public String operation = null;
+        public EditText opeartionEditText = null;
 
         /**
          * 保留上次查询数据
@@ -143,8 +150,18 @@ public class EntrustQueryActivity extends AppCompatActivity {
         // 委托列表适配器
         viewHolder.recyclerViewAdapter = new EntrustRecyclerViewAdapter();
 
+        // 侧滑栏
         viewHolder.drawerLayout = (DrawerLayout) findViewById(R.id
                 .activity_entrust_query_drawer_layout);
+
+        viewHolder.cargoTypeEditText = (EditText) findViewById(R.id.cargo_edit_editText);
+
+        viewHolder.cargoOwnerEditText = (EditText) findViewById(R.id.cargo_owner_edit_editText);
+
+        viewHolder.voyageEditText = (EditText) findViewById(R.id.voyage_edit_editText);
+
+        viewHolder.opeartionEditText = (EditText) findViewById(R.id.operation_edit_editText);
+
     }
 
     /**
@@ -173,6 +190,8 @@ public class EntrustQueryActivity extends AppCompatActivity {
                 if (isSelecting()) {
                     // 选择结束
                     resetData();
+                    // 关闭软键盘
+                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
                     clearSelect();
                 }
             }
@@ -180,6 +199,12 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 初始化cargoType
         initCargoType();
+        // 初始化cargoOwner
+        initCargoOwner();
+        // 初始化voyage
+        initVoyage();
+        // 初始化operation
+        initOperation();
     }
 
     /**
@@ -193,16 +218,21 @@ public class EntrustQueryActivity extends AppCompatActivity {
             public void notifyDataChange(CargoType data) {
                 if (viewHolder.cargoTypeUse) {
                     // 第二次点击
-                    // 关闭软键盘
-                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
                     // 关闭抽屉
                     closeDrawer();
+                    // 关闭软键盘
+                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
                 } else {
                     // 第一次点击
                     clearSelect();
-                    viewHolder.cargoTypeUse = true;
+                    // 先关闭抽屉
+                    closeDrawer();
                     // 替换内容片段
                     showFragment(StaticValue.CodeListTag.CARGO_TYPE_LIST);
+                    // 设置操作状态
+                    viewHolder.cargoTypeUse = true;
+                    // 打开抽屉
+                    viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
                 }
             }
         });
@@ -221,6 +251,144 @@ public class EntrustQueryActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id
                 .activity_entrust_query_frameLayout, cargoTypeFragment, StaticValue.CodeListTag
                 .CARGO_TYPE_LIST).hide(cargoTypeFragment).commit();
+    }
+
+    /**
+     * 初始化cargoOwner
+     */
+    private void initCargoOwner() {
+        CargoOwnerFragment cargoOwnerFragment = new CargoOwnerFragment();
+
+        cargoOwnerFragment.setClickListener(new DataChangeObserver<CargoOwner>() {
+            @Override
+            public void notifyDataChange(CargoOwner data) {
+                if (viewHolder.cargoOwnerUse) {
+                    // 第二次点击
+                    // 关闭软键盘
+                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                    // 关闭抽屉
+                    closeDrawer();
+                } else {
+                    // 第一次点击
+                    clearSelect();
+                    // 先关闭抽屉
+                    closeDrawer();
+                    // 替换内容片段
+                    showFragment(StaticValue.CodeListTag.CARGO_OWNER_LIST);
+                    // 设置操作状态
+                    viewHolder.cargoOwnerUse = true;
+                    // 打开抽屉
+                    viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
+                }
+            }
+        });
+
+        cargoOwnerFragment.setSelectedListener(new DataChangeObserver<CargoOwner>() {
+            @Override
+            public void notifyDataChange(CargoOwner data) {
+                // 关闭软键盘
+                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                // 关闭抽屉
+                closeDrawer();
+            }
+        });
+
+        // 加入布局管理器
+        getSupportFragmentManager().beginTransaction().add(R.id
+                .activity_entrust_query_frameLayout, cargoOwnerFragment, StaticValue.CodeListTag
+                .CARGO_OWNER_LIST).hide(cargoOwnerFragment).commit();
+    }
+
+    /**
+     * 初始化voyage
+     */
+    private void initVoyage() {
+        VoyageFragment voyageFragment = new VoyageFragment();
+
+        voyageFragment.setClickListener(new DataChangeObserver<Voyage>() {
+            @Override
+            public void notifyDataChange(Voyage data) {
+                if (viewHolder.voyageUse) {
+                    // 第二次点击
+                    // 关闭软键盘
+                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                    // 关闭抽屉
+                    closeDrawer();
+                } else {
+                    // 第一次点击
+                    clearSelect();
+                    // 先关闭抽屉
+                    closeDrawer();
+                    // 替换内容片段
+                    showFragment(StaticValue.CodeListTag.VOYAGE_LIST);
+                    // 设置操作状态
+                    viewHolder.voyageUse = true;
+                    // 打开抽屉
+                    viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
+                }
+            }
+        });
+
+        voyageFragment.setSelectedListener(new DataChangeObserver<Voyage>() {
+            @Override
+            public void notifyDataChange(Voyage data) {
+                // 关闭软键盘
+                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                // 关闭抽屉
+                closeDrawer();
+            }
+        });
+
+        // 加入布局管理器
+        getSupportFragmentManager().beginTransaction().add(R.id
+                .activity_entrust_query_frameLayout, voyageFragment, StaticValue.CodeListTag
+                .VOYAGE_LIST).hide(voyageFragment).commit();
+    }
+
+    /**
+     * 初始化operation
+     */
+    private void initOperation() {
+        OperationFragment operationFragment = new OperationFragment();
+
+        operationFragment.setClickListener(new DataChangeObserver<Operation>() {
+            @Override
+            public void notifyDataChange(Operation data) {
+                if (viewHolder.operationUse) {
+                    // 第二次点击
+                    // 关闭软键盘
+                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                    // 关闭抽屉
+                    closeDrawer();
+                } else {
+                    // 第一次点击
+                    clearSelect();
+                    // 先关闭抽屉
+                    closeDrawer();
+                    // 替换内容片段
+                    showFragment(StaticValue.CodeListTag.OPERATION_LIST);
+                    // 设置操作状态
+                    viewHolder.operationUse = true;
+                    // 打开抽屉
+                    viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
+                }
+            }
+        });
+
+        operationFragment.setSelectedListener(new DataChangeObserver<Operation>() {
+            @Override
+            public void notifyDataChange(Operation data) {
+                // 关闭软键盘
+                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                // 关闭抽屉
+                closeDrawer();
+            }
+        });
+
+        // 加入布局管理器
+        getSupportFragmentManager().beginTransaction().add(R.id
+                .activity_entrust_query_frameLayout, operationFragment, StaticValue.CodeListTag
+                .OPERATION_LIST).hide(operationFragment).commit();
     }
 
     /**
@@ -345,8 +513,10 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private void resetData() {
 
         // 新参数
-        String newParameter = viewHolder.cargoType + viewHolder.cargoOwner + viewHolder.voyage +
-                viewHolder.operation;
+        String newParameter = viewHolder.cargoTypeEditText.getText().toString() + viewHolder
+                .cargoOwnerEditText.getText().toString() +
+                viewHolder.voyageEditText.getText().toString() +
+                viewHolder.opeartionEditText.getText().toString();
 
         if (viewHolder.oldParameter == null || !viewHolder.oldParameter.equals(newParameter)) {
             initData();
@@ -394,9 +564,10 @@ public class EntrustQueryActivity extends AppCompatActivity {
         });
 
         // 执行任务
-        pullEntrustList.beginExecute(String.valueOf(start), String.valueOf(count), "14",
-                "2015-08-19", "2015-09-19", viewHolder.cargoType, viewHolder.cargoOwner,
-                viewHolder.voyage, viewHolder.operation);
+        pullEntrustList.beginExecute("14", String.valueOf(start), String.valueOf(count),
+                "2015-08-19", "2015-09-19", viewHolder.cargoTypeEditText.getText().toString(),
+                viewHolder.cargoOwnerEditText.getText().toString(), viewHolder.voyageEditText
+                        .getText().toString(), viewHolder.opeartionEditText.getText().toString());
     }
 
     /**

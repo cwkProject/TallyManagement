@@ -40,6 +40,11 @@ public class CargoOwnerFragment extends BaseCodeListFragment<CargoOwner> {
     protected SimpleAdapter onCreateAdapter(List<CargoOwner> dataList) {
         List<Map<String, String>> mapList = new ArrayList<>();
 
+        if (dataList == null) {
+            // 数据加载失败或未完成
+            dataList = new ArrayList<>();
+        }
+
         for (CargoOwner data : dataList) {
             Map<String, String> map = new HashMap<>();
 
@@ -78,7 +83,6 @@ public class CargoOwnerFragment extends BaseCodeListFragment<CargoOwner> {
     @Override
     protected void onSetFilter(ListView listView, SimpleAdapter adapter, List<CargoOwner>
             dataList) {
-        listView.setTextFilterEnabled(true);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,7 +104,7 @@ public class CargoOwnerFragment extends BaseCodeListFragment<CargoOwner> {
 
     @Override
     protected List<CargoOwner> onCreateDataList() {
-        return (List<CargoOwner>) CodeListManager.get(StaticValue.CodeListTag.CARGO_OWNER_LIST);
+        return CodeListManager.get(StaticValue.CodeListTag.CARGO_OWNER_LIST).getDataList();
     }
 
     @Override

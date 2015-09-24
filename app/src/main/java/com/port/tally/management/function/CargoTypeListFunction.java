@@ -7,10 +7,12 @@ import android.content.Context;
 
 import com.port.tally.management.bean.CargoType;
 import com.port.tally.management.database.CargoTypeOperator;
+import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullCargoTypeList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkModel;
+import org.mobile.library.model.work.WorkBack;
+import org.mobile.library.util.BroadcastUtil;
 
 import java.util.List;
 
@@ -38,8 +40,21 @@ public class CargoTypeListFunction extends BaseCodeListFunction<CargoType> {
     }
 
     @Override
-    protected WorkModel<?, List<CargoType>> onCreateWork(BaseOperator<CargoType> operator,
-                                                         Context context) {
-        return new PullCargoTypeList();
+    protected void onLoadFromNetWork() {
+        PullCargoTypeList pullCargoTypeList = new PullCargoTypeList();
+
+        pullCargoTypeList.setWorkBackListener(new WorkBack<List<CargoType>>() {
+            @Override
+            public void doEndWork(boolean state, List<CargoType> data) {
+                netWorkEndSetData(state, data);
+            }
+        });
+
+        pullCargoTypeList.beginExecute();
+    }
+
+    @Override
+    protected void onNotify(Context context) {
+        BroadcastUtil.sendBroadcast(context, StaticValue.CodeListTag.CARGO_TYPE_LIST);
     }
 }

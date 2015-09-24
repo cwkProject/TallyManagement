@@ -7,10 +7,12 @@ import android.content.Context;
 
 import com.port.tally.management.bean.Operation;
 import com.port.tally.management.database.OperationOperator;
+import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullOperationList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkModel;
+import org.mobile.library.model.work.WorkBack;
+import org.mobile.library.util.BroadcastUtil;
 
 import java.util.List;
 
@@ -38,8 +40,22 @@ public class OperationListFunction extends BaseCodeListFunction<Operation> {
     }
 
     @Override
-    protected WorkModel<?, List<Operation>> onCreateWork(BaseOperator<Operation> operator,
-                                                         Context context) {
-        return new PullOperationList();
+    protected void onLoadFromNetWork() {
+        PullOperationList pullOperationList = new PullOperationList();
+
+        pullOperationList.setWorkBackListener(new WorkBack<List<Operation>>() {
+            @Override
+            public void doEndWork(boolean state, List<Operation> data) {
+                netWorkEndSetData(state, data);
+            }
+        });
+
+        pullOperationList.beginExecute();
     }
+
+    @Override
+    protected void onNotify(Context context) {
+        BroadcastUtil.sendBroadcast(context, StaticValue.CodeListTag.OPERATION_LIST);
+    }
+
 }
