@@ -4,6 +4,7 @@ package com.port.tally.management.activity;
  */
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -293,6 +295,23 @@ public class EntrustQueryActivity extends AppCompatActivity {
                     clearSelect();
                 }
             }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+                // 获得焦点
+                EditText editText = getFocus();
+
+                // 弹出软键盘
+                // 得到InputMethodManager的实例
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context
+                        .INPUT_METHOD_SERVICE);
+
+                Log.i(LOG_TAG + "initFilter", "open soft input");
+                imm.toggleSoftInputFromWindow(editText.getWindowToken(), 0, InputMethodManager
+                        .SHOW_FORCED);
+            }
         });
 
         // 清除编辑框焦点
@@ -321,8 +340,6 @@ public class EntrustQueryActivity extends AppCompatActivity {
                     // 第二次点击
                     // 关闭抽屉
                     closeDrawer();
-                    // 关闭软键盘
-                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
                 } else {
                     // 第一次点击
                     clearSelect();
@@ -332,10 +349,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
                     showFragment(StaticValue.CodeListTag.CARGO_TYPE_LIST);
                     // 设置操作状态
                     viewHolder.cargoTypeUse = true;
+                    getFocus();
                     // 打开抽屉
                     viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
-                    // 获得焦点
-                    getFocus(viewHolder.cargoTypeEditText);
                 }
             }
         });
@@ -369,8 +385,6 @@ public class EntrustQueryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (viewHolder.cargoOwnerUse) {
                     // 第二次点击
-                    // 关闭软键盘
-                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
                     // 关闭抽屉
                     closeDrawer();
                 } else {
@@ -382,10 +396,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
                     showFragment(StaticValue.CodeListTag.CARGO_OWNER_LIST);
                     // 设置操作状态
                     viewHolder.cargoOwnerUse = true;
+                    getFocus();
                     // 打开抽屉
                     viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
-                    // 获得焦点
-                    getFocus(viewHolder.cargoOwnerEditText);
                 }
             }
         });
@@ -419,8 +432,6 @@ public class EntrustQueryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (viewHolder.voyageUse) {
                     // 第二次点击
-                    // 关闭软键盘
-                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
                     // 关闭抽屉
                     closeDrawer();
                 } else {
@@ -432,10 +443,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
                     showFragment(StaticValue.CodeListTag.VOYAGE_LIST);
                     // 设置操作状态
                     viewHolder.voyageUse = true;
+                    getFocus();
                     // 打开抽屉
                     viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
-                    // 获得焦点
-                    getFocus(viewHolder.voyageEditText);
                 }
             }
         });
@@ -469,8 +479,6 @@ public class EntrustQueryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (viewHolder.operationUse) {
                     // 第二次点击
-                    // 关闭软键盘
-                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
                     // 关闭抽屉
                     closeDrawer();
                 } else {
@@ -482,10 +490,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
                     showFragment(StaticValue.CodeListTag.OPERATION_LIST);
                     // 设置操作状态
                     viewHolder.operationUse = true;
+                    getFocus();
                     // 打开抽屉
                     viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
-                    // 获得焦点
-                    getFocus(viewHolder.operationEditText);
                 }
             }
         });
@@ -567,26 +574,35 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
     /**
      * 让指定编辑框获得焦点
-     *
-     * @param editText 编辑框
      */
-    private void getFocus(EditText editText) {
+    private EditText getFocus() {
         Log.i(LOG_TAG + "getFocus", "get focus");
 
-        editText.setFocusable(true);
-        editText.setFocusableInTouchMode(true);
-        editText.requestFocus();
+        EditText editText = null;
 
-        //        // 弹出软键盘
-        //        // 得到InputMethodManager的实例
-        //        InputMethodManager imm = (InputMethodManager) getSystemService(Context
-        //                .INPUT_METHOD_SERVICE);
-        //
-        //            Log.i(LOG_TAG + "getFocus", "open soft input");
-        //            imm.toggleSoftInputFromWindow(editText.getWindowToken(), 0, InputMethodManager
-        //                    .SHOW_FORCED);
+        if (viewHolder.cargoTypeUse) {
+            editText = viewHolder.cargoTypeEditText;
+        }
 
+        if (viewHolder.cargoOwnerUse) {
+            editText = viewHolder.cargoOwnerEditText;
+        }
 
+        if (viewHolder.voyageUse) {
+            editText = viewHolder.voyageEditText;
+        }
+
+        if (viewHolder.operationUse) {
+            editText = viewHolder.operationEditText;
+        }
+
+        if (editText != null) {
+            editText.setFocusable(true);
+            editText.setFocusableInTouchMode(true);
+            editText.requestFocus();
+        }
+
+        return editText;
     }
 
     /**
