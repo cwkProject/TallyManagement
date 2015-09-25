@@ -336,6 +336,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
         viewHolder.cargoTypeEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                viewHolder.cargoTypeEditText.setText("");
                 if (viewHolder.cargoTypeUse) {
                     // 第二次点击
                     // 关闭抽屉
@@ -383,6 +384,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
         viewHolder.cargoOwnerEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                viewHolder.cargoOwnerEditText.setText("");
                 if (viewHolder.cargoOwnerUse) {
                     // 第二次点击
                     // 关闭抽屉
@@ -430,6 +432,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
         viewHolder.voyageEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                viewHolder.voyageEditText.setText("");
                 if (viewHolder.voyageUse) {
                     // 第二次点击
                     // 关闭抽屉
@@ -477,6 +480,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
         viewHolder.operationEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                viewHolder.operationEditText.setText("");
                 if (viewHolder.operationUse) {
                     // 第二次点击
                     // 关闭抽屉
