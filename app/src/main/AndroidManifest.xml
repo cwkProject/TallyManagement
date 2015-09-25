@@ -44,6 +44,8 @@
             android:name=".activity.EntrustQueryActivity"
             android:windowSoftInputMode="adjustUnspecified|stateAlwaysHidden"/>
 
+        <activity android:name=".activity.EntrustContentActivity"/>
+
     </application>
 
 </manifest>

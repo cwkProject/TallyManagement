@@ -4,6 +4,7 @@ package com.port.tally.management.activity;
  */
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,11 +28,13 @@ import com.port.tally.management.fragment.CargoOwnerFragment;
 import com.port.tally.management.fragment.CargoTypeFragment;
 import com.port.tally.management.fragment.OperationFragment;
 import com.port.tally.management.fragment.VoyageFragment;
+import com.port.tally.management.holder.EntrustItemViewHolder;
 import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullEntrustList;
 
 import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.DataChangeObserver;
+import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 import org.mobile.library.model.work.WorkBack;
 
 import java.text.ParseException;
@@ -652,6 +655,27 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 设置布局管理器
         recyclerView.setLayoutManager(layoutManager);
+
+        // 设置点击事件
+        viewHolder.recyclerViewAdapter.setOnItemClickListener(new OnItemClickListenerForRecyclerViewItem<List<Entrust>, EntrustItemViewHolder>() {
+            @Override
+            public void onClick(List<Entrust> entrusts, EntrustItemViewHolder
+                    entrustItemViewHolder) {
+                Entrust entrust = entrusts.get(entrustItemViewHolder.getAdapterPosition());
+
+                // 委托编号
+                String entrustId = entrust.getId();
+
+                // 跳转意图
+                Intent intent = new Intent(EntrustQueryActivity.this, EntrustContentActivity.class);
+
+                // 加入委托编号
+                intent.putExtra(StaticValue.IntentTag.ENTRUST_ID_TAG, entrustId);
+
+                // 跳转到详情页面
+                startActivity(intent);
+            }
+        });
 
         // 设置列表适配器
         recyclerView.setAdapter(viewHolder.recyclerViewAdapter);

@@ -17,6 +17,16 @@ public interface StaticValue {
     String APP_CODE = "LHGL";
 
     /**
+     * 意图数据传递标签
+     */
+    interface IntentTag {
+        /**
+         * 委托编码取值标签
+         */
+        String ENTRUST_ID_TAG = "entrust_id_tag";
+    }
+
+    /**
      * 数据列表工具标签
      */
     interface CodeListTag {
@@ -71,4 +81,10 @@ public interface StaticValue {
      * 查询委托列表的请求地址
      */
     String ENTRUST_QUERY_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Consign/GetConsign.aspx";
+
+    /**
+     * 获取委托详情的请求地址
+     */
+    String ENTRUST_CONTENT_URL = "http://218.92.115.55/M_Lhgl/Service/Consign/GetConsignDetail" +
+            ".aspx";
 }
