@@ -3,6 +3,7 @@ package com.port.tally.management.activity;
  * Created by 超悟空 on 2015/9/19.
  */
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,7 +16,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.EntrustRecyclerViewAdapter;
@@ -31,6 +34,9 @@ import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.DataChangeObserver;
 import org.mobile.library.model.work.WorkBack;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -111,6 +117,16 @@ public class EntrustQueryActivity extends AppCompatActivity {
          * 保留上次查询数据
          */
         public String oldParameter = null;
+
+        /**
+         * 开始日期
+         */
+        public TextView startDateTextView = null;
+
+        /**
+         * 结束日期
+         */
+        public TextView endDateTextView = null;
     }
 
     /**
@@ -158,6 +174,11 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         viewHolder.operationEditText = (EditText) findViewById(R.id.operation_edit_editText);
 
+        viewHolder.startDateTextView = (TextView) findViewById(R.id
+                .region_date_select_text_start_date_textView);
+
+        viewHolder.endDateTextView = (TextView) findViewById(R.id
+                .region_date_select_text_end_date_textView);
     }
 
     /**
@@ -171,6 +192,83 @@ public class EntrustQueryActivity extends AppCompatActivity {
         initListView();
         // 初始化过滤器
         initFilter();
+        // 初始化日期控件
+        initDate();
+    }
+
+    /**
+     * 初始化日期控件
+     */
+    private void initDate() {
+        Calendar calendar = Calendar.getInstance();
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        String nowDate = format.format(calendar.getTime());
+
+        viewHolder.endDateTextView.setText(nowDate);
+
+        final DatePickerDialog endDialog = new DatePickerDialog(EntrustQueryActivity.this, new
+                DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                String date = year + "-" + (monthOfYear + 1) + "-" +
+                        dayOfMonth;
+
+                try {
+                    viewHolder.endDateTextView.setText(format.format(format.parse(date)));
+                } catch (ParseException e) {
+                    Log.e(LOG_TAG + "initDate", "onDateSet ParseException is " + e.getMessage());
+                    viewHolder.endDateTextView.setText(date);
+                }
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar
+                .DAY_OF_MONTH));
+
+        viewHolder.endDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                clearSelect();
+                closeDrawer();
+                endDialog.show();
+                resetData();
+            }
+        });
+
+        calendar.add(Calendar.DAY_OF_YEAR, -30);
+        String beforeDate = format.format(calendar.getTime());
+
+        viewHolder.startDateTextView.setText(beforeDate);
+
+        final DatePickerDialog startDialog = new DatePickerDialog(EntrustQueryActivity.this, new
+                DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String date = year + "-" + (monthOfYear + 1) + "-" +
+                        dayOfMonth;
+
+                try {
+                    viewHolder.startDateTextView.setText(format.format(format.parse(date)));
+                } catch (ParseException e) {
+                    Log.e(LOG_TAG + "initDate", "onDateSet ParseException is " + e.getMessage());
+                    viewHolder.startDateTextView.setText(date);
+                }
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar
+                .DAY_OF_MONTH));
+
+        viewHolder.startDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startDialog.show();
+                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                clearSelect();
+                closeDrawer();
+                resetData();
+            }
+        });
     }
 
     /**
@@ -568,7 +666,8 @@ public class EntrustQueryActivity extends AppCompatActivity {
         String newParameter = viewHolder.cargoTypeEditText.getText().toString() + viewHolder
                 .cargoOwnerEditText.getText().toString() +
                 viewHolder.voyageEditText.getText().toString() +
-                viewHolder.operationEditText.getText().toString();
+                viewHolder.operationEditText.getText().toString() + viewHolder.startDateTextView
+                .getText().toString() + viewHolder.endDateTextView.getText().toString();
 
         if (viewHolder.oldParameter == null || !viewHolder.oldParameter.equals(newParameter)) {
             initData();
@@ -620,8 +719,10 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 执行任务
         pullEntrustList.beginExecute("14", String.valueOf(start), String.valueOf(count),
-                "2015-08-19", "2015-09-19", viewHolder.cargoTypeEditText.getText().toString(),
-                viewHolder.cargoOwnerEditText.getText().toString(), viewHolder.voyageEditText.getText().toString(), viewHolder.operationEditText.getText().toString());
+                viewHolder.startDateTextView.getText().toString(), viewHolder.endDateTextView
+                        .getText().toString(), viewHolder.cargoTypeEditText.getText().toString(),
+                viewHolder.cargoOwnerEditText.getText().toString(), viewHolder.voyageEditText
+                        .getText().toString(), viewHolder.operationEditText.getText().toString());
     }
 
     /**
