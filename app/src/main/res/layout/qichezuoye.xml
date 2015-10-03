@@ -71,7 +71,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/btn_style_alert_dialog_special"
+
                         android:gravity="center"
                         android:text="扫码"
                         android:textColor="#fff"
@@ -124,6 +124,7 @@
                         android:cursorVisible="false"
                         android:editable="false"
                         android:text="请选择时间"
+                        android:background="@drawable/edittext_search"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"
                         />

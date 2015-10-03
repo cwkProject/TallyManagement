@@ -13,7 +13,6 @@ import com.port.tally.management.R;
 import com.port.tally.management.adapter.LiHuoWeiTuoAdapter;
 import com.port.tally.management.bean.LiHuoWeiTuo;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

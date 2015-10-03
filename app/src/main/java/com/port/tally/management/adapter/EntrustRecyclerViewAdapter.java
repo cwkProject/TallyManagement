@@ -18,6 +18,7 @@ import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * 委托查询结果列表数据适配器
  *

@@ -6,7 +6,52 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     >
+    <LinearLayout
 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        android:minHeight="40.0dip"
+        android:orientation="horizontal"
+        android:padding="8.0dip"
+
+        >
+
+        <TextView
+
+
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_weight="1.0"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="委托编码"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"/>
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="#66CCFF"
+            />
+
+        <TextView
+            android:id="@+id/tv_entrust"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10.0dip"
+            android:layout_weight="3.0"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="泊位"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"/>
+    </LinearLayout>
     <LinearLayout
 
         android:layout_width="fill_parent"
@@ -41,7 +86,7 @@
             />
 
         <TextView
-            android:id="@+id/bowei_2"
+            android:id="@+id/tv_bowei"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10.0dip"
@@ -87,7 +132,7 @@
             />
 
         <TextView
-            android:id="@+id/guocheng_2"
+            android:id="@+id/tv_process"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10.0dip"
@@ -95,7 +140,7 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="货名"
+            android:text="过程"
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"/>
     </LinearLayout>
@@ -134,7 +179,7 @@
             />
 
         <TextView
-            android:id="@+id/start_2"
+            android:id="@+id/tv_start"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10.0dip"
@@ -148,7 +193,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/table_3"
+
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:clickable="false"
@@ -181,7 +226,7 @@
             />
 
         <TextView
-            android:id="@+id/end_2"
+            android:id="@+id/tv_end"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10.0dip"
@@ -207,8 +252,6 @@
         >
 
         <TextView
-
-
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10.0dip"
@@ -228,7 +271,7 @@
             />
 
         <TextView
-            android:id="@+id/huoming_2"
+            android:id="@+id/tv_cargoname"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10.0dip"

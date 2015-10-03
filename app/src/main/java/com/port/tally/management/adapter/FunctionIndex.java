@@ -6,9 +6,13 @@ package com.port.tally.management.adapter;
 import android.content.Context;
 import android.content.Intent;
 
+import com.port.tally.management.activity.DianZiMap;
 import com.port.tally.management.activity.EntrustQueryActivity;
-import com.port.tally.management.activity.LiHuoActivity;
-import com.port.tally.management.activity.QiYunZuoYe;
+import com.port.tally.management.activity.TallyActivity;
+import com.port.tally.management.activity.PushMessage;
+import com.port.tally.management.activity.ShiftDuty;
+import com.port.tally.management.activity.TrunkActivity;
+import com.port.tally.management.activity.TrunkQuery;
 import com.port.tally.management.activity.WorkPlanQuery;
 
 /**
@@ -34,35 +38,46 @@ public class FunctionIndex {
         switch (position) {
             case 0:
                 // 作业票
-                intent = new Intent(context, LiHuoActivity.class);
+                intent = new Intent(context, TallyActivity.class);
                 break;
             case 1:
-                // 功能页跳转
+                // 衡重
+                intent = new Intent(context,TrunkActivity.class);
                 break;
             case 2:
                 // 委托查询
                 intent = new Intent(context, EntrustQueryActivity.class);
                 break;
             case 3:
-
+                // 堆存
+                intent = new Intent(context, WorkPlanQuery.class);
                 break;
             case 4:
-                // 功能页跳转
+                // 汽运查询
+                intent = new Intent(context, TrunkQuery.class);
                 break;
             case 5:
                 // 汽运作业
-                intent = new Intent(context, QiYunZuoYe.class);
+                intent = new Intent(context, TrunkActivity.class);
                 break;
             case 6:
                 // 作业计划
                 intent = new Intent(context, WorkPlanQuery.class);
                 break;
             case 7:
-                // 功能页跳转
+                // 交接班
+                intent = new Intent(context,ShiftDuty.class);
                 break;
+
             case 8:
-                // 功能页跳转
+                // 电子场图
+                intent = new Intent(context, DianZiMap.class);
                 break;
+            case 9:
+                // 消息推送
+                intent = new Intent(context, PushMessage.class);
+                break;
+
         }
 
         if (intent != null) {

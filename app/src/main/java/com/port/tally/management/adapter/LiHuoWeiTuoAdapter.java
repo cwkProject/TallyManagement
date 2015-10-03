@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-
 import com.port.tally.management.R;
 import com.port.tally.management.bean.LiHuoWeiTuo;
 

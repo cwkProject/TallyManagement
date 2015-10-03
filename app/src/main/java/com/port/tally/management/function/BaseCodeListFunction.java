@@ -6,6 +6,7 @@ package com.port.tally.management.function;
 import android.content.Context;
 import android.util.Log;
 
+
 import org.mobile.library.model.database.BaseOperator;
 
 import java.util.List;

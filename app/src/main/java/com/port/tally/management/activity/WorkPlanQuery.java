@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.port.tally.management.R;
-import com.port.tally.management.adapter.LiHuoDetailAdapter;
+import com.port.tally.management.adapter.TallyManageAdapter;
 import com.port.tally.management.adapter.LiHuoWeiTuoAdapter;
 import com.port.tally.management.bean.LiHuoWeiTuo;
 import com.port.tally.management.xlistview.XListView;
@@ -18,11 +18,11 @@ import com.port.tally.management.xlistview.XListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkPlanQuery extends Activity implements XListView.IXListViewListener {
+public class WorkPlanQuery extends Activity {
     private XListView listView;
 
     private ArrayAdapter<String> mAdapter;
-    private LiHuoDetailAdapter adapter;
+    private TallyManageAdapter adapter;
     private List<String> items = new ArrayList<String>();
     private Spinner Date1Sp;
     private Handler mHandler;
@@ -33,67 +33,67 @@ public class WorkPlanQuery extends Activity implements XListView.IXListViewListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_activity);
         Init();
-        listView = (XListView) findViewById(R.id.xListView);
-        listView.setPullLoadEnable(true);
-        adapter = new LiHuoDetailAdapter(WorkPlanQuery.this, items);
-        listView.setAdapter(adapter);
-        listView.setXListViewListener(this);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-
-                Intent intent = new Intent();
-                intent = new Intent(WorkPlanQuery.this, LiHuoDetail.class);
-
-                startActivity(intent);
-
-
-            }
-
-        });
-        mHandler = new Handler();
+//        listView = (XListView) findViewById(R.id.xListView);
+//        listView.setPullLoadEnable(true);
+//        adapter = new TallyManageAdapter(WorkPlanQuery.this, items);
+//        listView.setAdapter(adapter);
+//        listView.setXListViewListener(this);
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//
+//            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+//
+//                Intent intent = new Intent();
+//                intent = new Intent(WorkPlanQuery.this, LiHuoDetail.class);
+//
+//                startActivity(intent);
+//
+//
+//            }
+//
+//        });
+//        mHandler = new Handler();
     }
-
-    private void geneItems() {
-        for (int i = 0; i != 20; ++i) {
-            items.add("refresh cnt " + (++start));
-        }
-    }
-
-    private void onLoad() {
-        listView.stopRefresh();
-        listView.stopLoadMore();
-        listView.setRefreshTime("上拉刷新");
-    }
-
-    @Override
-    public void onRefresh() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                start = ++refreshCnt;
-                items.clear();
-                geneItems();
-                // mAdapter.notifyDataSetChanged();
-                mAdapter = new ArrayAdapter<String>(WorkPlanQuery.this, R.layout.plan_item, items);
-                listView.setAdapter(adapter);
-                onLoad();
-            }
-        }, 2000);
-    }
-
-    @Override
-    public void onLoadMore() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                geneItems();
-                adapter.notifyDataSetChanged();
-                onLoad();
-            }
-        }, 2000);
-    }
+//
+//    private void geneItems() {
+//        for (int i = 0; i != 20; ++i) {
+//            items.add("refresh cnt " + (++start));
+//        }
+//    }
+//
+//    private void onLoad() {
+//        listView.stopRefresh();
+//        listView.stopLoadMore();
+//        listView.setRefreshTime("上拉刷新");
+//    }
+//
+//    @Override
+//    public void onRefresh() {
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                start = ++refreshCnt;
+//                items.clear();
+//                geneItems();
+//                // mAdapter.notifyDataSetChanged();
+//                mAdapter = new ArrayAdapter<String>(WorkPlanQuery.this, R.layout.plan_item, items);
+//                listView.setAdapter(adapter);
+//                onLoad();
+//            }
+//        }, 2000);
+//    }
+//
+//    @Override
+//    public void onLoadMore() {
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                geneItems();
+//                adapter.notifyDataSetChanged();
+//                onLoad();
+//            }
+//        }, 2000);
+//    }
 
     private void Init() {
         // TODO Auto-generated method stub
@@ -108,7 +108,7 @@ public class WorkPlanQuery extends Activity implements XListView.IXListViewListe
         LiHuoWeiTuoAdapter LiHuoWeiTuoAdapter = new LiHuoWeiTuoAdapter(this, persons);
         //绑定Adapter
         Date1Sp.setAdapter(LiHuoWeiTuoAdapter);
-        geneItems();
+//        geneItems();
 
 
     }

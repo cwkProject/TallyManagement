@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:background="@drawable/edittext_search"
             android:drawableLeft="@drawable/edittext_search_image"
-            android:hint="@string/search_hit"
+
             android:paddingLeft="15dip"
             android:textSize="14dip">
         </EditText>

@@ -11,8 +11,61 @@
         <item>作业计划</item>
         <item>交接班</item>
         <item>电子场图</item>
-    </string-array>
+        <item>消息中心</item>
 
+    </string-array>
+    <string-array name="work"> //完工
+        <item>白班</item>
+        <item>夜班</item>
+
+    </string-array>
+    <string-array name="trunkquery_city">
+        <item>晋</item>
+        <item>冀</item>
+        <item>鲁</item>
+        <item>豫</item>
+        <item>皖</item>
+        <item>苏</item>
+        <item>浙</item>
+        <item>湘</item>
+        <item>鄂</item>
+        <item>赣</item>
+        <item>粤</item>
+        <item>闽</item>
+        <item>陕</item>
+        <item>甘</item>
+        <item>宁</item>
+        <item>辽</item>
+        <item>吉</item>
+        <item>黑</item>
+        <item>蒙</item>
+        <item>云</item>
+        <item>贵</item>
+        <item>川</item>
+        <item>新</item>
+        <item>桂</item>
+    </string-array>
+    <string-array name="trunkquery_letter">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+        <item>F</item>
+        <item>G</item>
+        <item>H</item>
+        <item>J</item>
+        <item>K</item>
+        <item>L</item>
+        <item>M</item>
+        <item>N</item>
+        <item>P</item>
+        <item>Q</item>
+        <item>R</item>
+        <item>S</item>
+        <item>T</item>
+        <item>U</item>
+    </string-array>
     <array name="grid_item_function_image_list">
         <item>@mipmap/work_bill_icon</item>
         <item>@mipmap/balance_weight_icon</item>
@@ -23,6 +76,7 @@
         <item>@mipmap/work_plan_icon</item>
         <item>@mipmap/shift_icon</item>
         <item>@mipmap/electron_map_icon</item>
+        <item>@mipmap/email</item>
     </array>
 
 </resources>

@@ -6,17 +6,22 @@ package com.port.tally.management.activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.port.tally.management.R;
+import com.port.tally.management.adapter.MessgaePushAdapter;
 import com.port.tally.management.util.StaticValue;
+import com.port.tally.management.xlistview.XListView;
 
 import org.mobile.library.common.function.CheckUpdate;
 import org.mobile.library.util.LoginStatus;
@@ -35,8 +40,16 @@ import static com.port.tally.management.adapter.FunctionIndex.toFunction;
  * @version 1.0 2015/9/7
  * @since 1.0
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements XListView.IXListViewListener{
+    private TextView moreTv;
+    private XListView listView;
+    private ArrayAdapter<String> mAdapter;
+    private MessgaePushAdapter adapter;
+    private List<String> items = new ArrayList<String>();
 
+    private Handler mHandler;
+    private int start = 0;
+    private static int refreshCnt = 0;
     /**
      * 日志标签前缀
      */
@@ -59,6 +72,15 @@ public class MainActivity extends AppCompatActivity {
 
         // 加载界面
         initView();
+        Init();
+        moreTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PushMessage.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
     /**
@@ -71,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 初始化功能布局
         initGridView();
-
+        moreTv = (TextView)findViewById(R.id.tv_more);
         // 执行检查更新
         checkUpdate();
     }
@@ -97,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 关联ActionBar
         setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+//        toolbar.setLogo(R.mipmap.ic_launcher);
 
         // 取消原actionBar标题
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -220,5 +242,68 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+    private void geneItems() {
+        for (int i = 0; i != 20; ++i) {
+            items.add("消息" + (++start));
+        }
+    }
+
+    private void onLoad() {
+        listView.stopRefresh();
+        listView.stopLoadMore();
+        listView.setRefreshTime("上拉刷新");
+    }
+
+    @Override
+    public void onRefresh() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                start = ++refreshCnt;
+                items.clear();
+                geneItems();
+                // mAdapter.notifyDataSetChanged();
+                mAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.push_item, items);
+                listView.setAdapter(adapter);
+                onLoad();
+            }
+        }, 2000);
+    }
+
+    @Override
+    public void onLoadMore() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                geneItems();
+                adapter.notifyDataSetChanged();
+                onLoad();
+            }
+        }, 2000);
+    }
+    private void Init() {
+        geneItems();
+        listView = (XListView) findViewById(R.id.xListView);
+        listView.setPullLoadEnable(true);
+        adapter = new MessgaePushAdapter(MainActivity.this, items);
+        listView.setAdapter(adapter);
+        listView.setXListViewListener(this);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+
+                Intent intent = new Intent();
+                intent = new Intent(MainActivity.this, LiHuoDetail.class);
+
+                startActivity(intent);
+
+
+            }
+
+        });
+        mHandler = new Handler();
+
     }
 }
