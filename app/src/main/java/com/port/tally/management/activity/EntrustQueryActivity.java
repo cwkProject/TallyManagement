@@ -15,6 +15,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -302,6 +303,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
                 // 获得焦点
                 EditText editText = getFocus();
+
+                editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType
+                        .TYPE_TEXT_VARIATION_NORMAL);
 
                 // 弹出软键盘
                 // 得到InputMethodManager的实例
