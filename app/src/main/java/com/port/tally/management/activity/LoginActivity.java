@@ -49,6 +49,7 @@ public class LoginActivity extends BaseLoginActivity {
     protected void onPostClickLoginButton() {
         // 跳转到主Activity
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("companyCode", "14");
         startActivity(intent);
         finish();
     }

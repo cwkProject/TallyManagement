@@ -70,12 +70,19 @@ public class TallyManageAdapter extends BaseAdapter {
         } else {
             hand = (Hand) convertView.getTag();
         }
-           hand.tv_entrust.setText((CharSequence)item.get("entrust"));
+        if(!item.get("entrust").equals("")){
+           hand.tv_entrust.setText((CharSequence)item.get("entrust"));}
+        if(!item.get("bowei").equals("")){
            hand.bowei2.setText((CharSequence) item.get("bowei"));
-           hand.tv_process.setText((CharSequence) item.get("process"));
-           hand.tv_start.setText((CharSequence) item.get("start"));
-           hand.tv_end.setText((CharSequence) item.get("end"));
-           hand.tv_cargoname.setText((CharSequence) item.get("cargoname"));
+        }
+            if(!item.get("process").equals("")){
+           hand.tv_process.setText((CharSequence) item.get("process"));}
+                if(!item.get("start").equals("")){
+           hand.tv_start.setText((CharSequence) item.get("start"));}
+                    if(!item.get("end").equals("")){
+           hand.tv_end.setText((CharSequence) item.get("end"));}
+                        if(!item.get("cargoname").equals("")){
+           hand.tv_cargoname.setText((CharSequence) item.get("cargoname"));}
            convertView.setTag(hand);
         return convertView;
     }

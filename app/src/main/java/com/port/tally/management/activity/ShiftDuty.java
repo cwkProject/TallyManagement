@@ -20,7 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.port.tally.management.R;
+import com.port.tally.management.bean.FormPicFile;
 import com.port.tally.management.util.FloatTextToast;
+import com.port.tally.management.util.HttpFormPicUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,6 +32,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by song on 2015/9/21.
@@ -125,6 +131,40 @@ public class ShiftDuty extends Activity{
         });
         setButtonHandlers();
     }
+    private String uploadFile(InputStream fStream) {
+
+        String urlStr = "http://218.92.115.55/M_Lhgl/Service/Handover/UploadPicture.aspx";
+        String result = "0";
+        try {
+
+            byte[] buffer = new byte[fStream.available()];
+            fStream.read(buffer);
+            FormPicFile ff = new FormPicFile(buffer,"picFile","image/gif");
+            Map<String, String> params = new HashMap<String, String>();
+            Date date = new Date();
+            String dateStr = new SimpleDateFormat("yy-MM-dd").format(date);
+            params.put("uploadtime", dateStr);
+            result = HttpFormPicUtil.post(urlStr, params, new FormPicFile[]{ff});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    private boolean validate(){
+        return true;
+    }
+//    private boolean submit(){
+//        String url = HttpUtil.BASE_URL+"servlet/PeopleInfoCollectServlet";
+//
+//        HttpPost request = HttpUtil.getHttpPost(url);
+//        request.setEntity(makeEntity());
+//
+//        String result= HttpUtil.queryStringForPost(request);
+//        if(result!=null&&result.equals("1"))
+//            return true;
+//
+//        return false;
+//    }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == NONE)
             return;

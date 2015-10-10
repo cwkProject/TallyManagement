@@ -49,9 +49,7 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
         title.setText("理货作业票");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
-
         imgLeft.setOnClickListener(new OnClickListener() {
-
             //			@Override
             public void onClick(View arg0) {
                 finish();
@@ -181,18 +179,12 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
                 if (b) {
-//                    tv_vehiclenum.setText(data.get(0));
-//                    tv_boatname.setText(startWorkBean.getBoatName());
-//                    tv_huodai.setText(startWorkBean.getForwarder());
-//                    tv_huowu.setText(startWorkBean.getCargo());
-//                    tv_place.setText(startWorkBean.getPlace());
-//                    tv_huowei.setText(startWorkBean.getAllocation());
-//                    tv_port.setText(startWorkBean.getSetport());
-//                    tv_loader.setText(startWorkBean.getLoader());
-//                    tv_task.setText(startWorkBean.getTask());
-                    //如果开始时间值不为空，记录人也不为空，则设置记录人为不可编辑状态
-//                    tv_startTime.setText(startWorkBean.getStartTime());
-//                    et_noteperson.setText(startWorkBean.getNotePerson());
+                    tallyManageAdapter = new TallyManageAdapter(TallyActivity.this, data);
+
+                    tallyManageAdapter.notifyDataSetChanged();
+                    listView.setAdapter(tallyManageAdapter);
+
+
 
                 } else {
                     //清空操作

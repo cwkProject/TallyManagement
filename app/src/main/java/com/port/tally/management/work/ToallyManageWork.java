@@ -15,6 +15,7 @@ import java.util.Map;
  //泛型第一参数为业务请求要传入的参数类型，
  // 泛型第二参数为业务请求返回的数据类型，
  // 泛型第三参数为业务请求强绑定的请求数据模型类型（data包中类型）
+
 public class ToallyManageWork extends DefaultWorkModel<String, List<Map<String, Object>>, TallyManageData>{
     @Override
     protected boolean onCheckParameters(String... parameters) {
