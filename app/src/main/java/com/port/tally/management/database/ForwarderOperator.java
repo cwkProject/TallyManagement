@@ -93,6 +93,22 @@ public class ForwarderOperator extends BaseOperator<Forwarder> {
     }
 
     @Override
+    public List<Forwarder> queryWithCondition(String... Parameters) {
+        Log.i(LOG_TAG + "queryWithCondition", "queryWithCondition is invoked");
+
+        if (Parameters == null || Parameters.length < 1) {
+            Log.d(LOG_TAG + "queryWithCondition", "parameters is null");
+            return null;
+        }
+
+        // 查询语句
+        String sql = String.format("select * from %s where %s='%s'", TableConst.Forwarder
+                .TABLE_NAME, CommonConst.COMPANY_CODE, Parameters[0]);
+
+        return query(sql);
+    }
+
+    @Override
     protected String onWhereSql(Forwarder data) {
         return String.format("%s='%s'", CommonConst.CODE, data.getId());
     }

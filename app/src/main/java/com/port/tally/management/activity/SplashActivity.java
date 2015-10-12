@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -22,7 +21,6 @@ import com.port.tally.management.function.VoyageListFunction;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.common.function.AutoLogin;
-import org.mobile.library.common.function.CheckNetwork;
 import org.mobile.library.util.BroadcastUtil;
 import org.mobile.library.util.LoginStatus;
 
@@ -41,11 +39,6 @@ public class SplashActivity extends Activity {
     private static final String LOG_TAG = "SplashActivity.";
 
     /**
-     * 延迟时间
-     */
-    private static final int SPLASH_DISPLAY_LENGTH = 3000;
-
-    /**
      * 本地广播管理器
      */
     private LocalBroadcastManager localBroadcastManager = null;
@@ -54,16 +47,6 @@ public class SplashActivity extends Activity {
      * 数据加载结果的广播接收者
      */
     private LoadingReceiver loadingReceiver = null;
-
-    /**
-     * 用于跳转等待的线程
-     */
-    private Handler handler = null;
-
-    /**
-     * 用于执行跳转的动作
-     */
-    private Runnable runnable = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,47 +66,14 @@ public class SplashActivity extends Activity {
      */
     private void checkLoadData() {
 
-        // 定时
-        splashWait();
-
         // 注册广播接收者
         registerReceivers();
 
         // 尝试加载本地数据
         loadData();
 
-        // 网络可用时继续执行
-        if (CheckNetwork.isOpenNetwork()) {
-
-            // 自动登录
-            autoLogin();
-        } else {
-            Log.i(LOG_TAG + "checkLoadData", "no network");
-            // 没有数据要加载，提前跳转
-            instantJump();
-        }
-
-    }
-
-    /**
-     * 启动页等待
-     */
-    private void splashWait() {
-        Log.i(LOG_TAG + "splashWait", "timeout timer open");
-
-        handler = new Handler();
-
-        // 新建动作，执行跳转
-        runnable = new Runnable() {
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                SplashActivity.this.startActivity(intent);
-                finish();
-                runnable = null;
-            }
-        };
-
-        handler.postDelayed(runnable, SPLASH_DISPLAY_LENGTH);
+        // 自动登录
+        autoLogin();
     }
 
     /**
@@ -256,25 +206,20 @@ public class SplashActivity extends Activity {
                 // 数据加载完成
                 // 注销广播接收者
                 unregisterReceivers();
-                // 提前跳转
-                instantJump();
+                // 跳转
+                jump();
             }
         }
     }
 
     /**
-     * 提前跳转
+     * 数据加载完毕跳转
      */
-    private void instantJump() {
+    private void jump() {
         Log.i(LOG_TAG + "instantJump", "instantJump() is invoked");
-
-        if (handler != null && runnable != null) {
-            handler.removeCallbacks(runnable);
-        }
 
         if (LoginStatus.getLoginStatus().isLogin()) {
             // 已登录
-
             Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(mainIntent);
         } else {

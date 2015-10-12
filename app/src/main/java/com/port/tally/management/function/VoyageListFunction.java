@@ -23,7 +23,7 @@ import java.util.List;
  * @version 1.0 2015/9/22
  * @since 1.0
  */
-public class VoyageListFunction extends BaseCodeListFunction<Voyage> {
+public class VoyageListFunction extends BaseCodeListFunction<Voyage, Void> {
 
     /**
      * 构造函数
@@ -40,7 +40,7 @@ public class VoyageListFunction extends BaseCodeListFunction<Voyage> {
     }
 
     @Override
-    protected void onLoadFromNetWork() {
+    protected void onLoadFromNetWork(Void parameter) {
         PullVoyageList pullVoyageList = new PullVoyageList();
 
         pullVoyageList.setWorkBackListener(new WorkBack<List<Voyage>>() {
@@ -50,7 +50,7 @@ public class VoyageListFunction extends BaseCodeListFunction<Voyage> {
             }
         });
 
-        pullVoyageList.beginExecute();
+        pullVoyageList.execute();
     }
 
     @Override

@@ -15,12 +15,13 @@ import java.util.List;
  * 代码列表功能基类
  *
  * @param <DataModel> 代码数据模型
+ * @param <Condition> 数据集提取条件参数类型
  *
  * @author 超悟空
  * @version 1.0 2015/9/22
  * @since 1.0
  */
-public abstract class BaseCodeListFunction<DataModel> {
+public abstract class BaseCodeListFunction<DataModel, Condition> {
 
     /**
      * 日志标签前缀
@@ -43,9 +44,14 @@ public abstract class BaseCodeListFunction<DataModel> {
     private BaseOperator<DataModel> operator = null;
 
     /**
-     * 标识是否正在从网络加载
+     * 标识是否正在加载数据
      */
-    private volatile boolean networkLoading = false;
+    private volatile boolean loading = false;
+
+    /**
+     * 数据提取条件参数
+     */
+    private Condition parameter;
 
     /**
      * 构造函数
@@ -55,8 +61,18 @@ public abstract class BaseCodeListFunction<DataModel> {
     public BaseCodeListFunction(Context context) {
         this.context = context;
         Log.i(LOG_TAG + "BaseCodeListFunction", "BaseCodeListFunction is invoked");
-        Log.i(LOG_TAG + "BaseCodeListFunction", "onCreateOperator is invoked");
-        this.operator = onCreateOperator(context);
+    }
+
+    /**
+     * 构造函数
+     *
+     * @param context   上下文
+     * @param parameter 取值条件参数
+     */
+    public BaseCodeListFunction(Context context, Condition parameter) {
+        this.context = context;
+        this.parameter = parameter;
+        Log.i(LOG_TAG + "BaseCodeListFunction", "BaseCodeListFunction is invoked");
     }
 
     /**
@@ -69,12 +85,12 @@ public abstract class BaseCodeListFunction<DataModel> {
     protected abstract BaseOperator<DataModel> onCreateOperator(Context context);
 
     /**
-     * 判断是否正在从网络获取数据
+     * 判断是否正在加载数据
      *
-     * @return true表示正在从网络加载数据
+     * @return true表示正在加载数据
      */
-    public boolean isNetworkLoading() {
-        return networkLoading;
+    public boolean isLoading() {
+        return loading;
     }
 
     /**
@@ -82,21 +98,33 @@ public abstract class BaseCodeListFunction<DataModel> {
      */
     public void onCreate() {
         Log.i(LOG_TAG + "onCreate", "getDataList is invoked");
+        // 加载开始
+        loading = true;
+        Log.i(LOG_TAG + "onCreate", "onCreateOperator is invoked");
+        this.operator = onCreateOperator(context);
 
         if (dataList == null) {
             // 从数据库拉取
-            Log.i(LOG_TAG + "getDataList", "from database");
-            dataList = onLoadFromDataBase(operator);
+            Log.i(LOG_TAG + "onCreate", "from database");
+            dataList = onLoadFromDataBase(operator, parameter);
         }
 
         if (dataList == null || dataList.size() == 0) {
             // 从网络拉取
-            Log.i(LOG_TAG + "getDataList", "from network");
-            networkLoading = true;
-            onLoadFromNetWork();
+            Log.i(LOG_TAG + "onCreate", "from network");
+            onLoadFromNetWork(parameter);
         } else {
             onNotify(context);
+            // 加载结束
+            loading = false;
         }
+    }
+
+    /**
+     * 通知该工具已存在，不必重新加载
+     */
+    public final void notifyExist() {
+        onNotify(context);
     }
 
     /**
@@ -119,7 +147,8 @@ public abstract class BaseCodeListFunction<DataModel> {
      *
      * @return 数据集合
      */
-    protected List<DataModel> onLoadFromDataBase(BaseOperator<DataModel> operator) {
+    protected List<DataModel> onLoadFromDataBase(BaseOperator<DataModel> operator, Condition
+            parameter) {
         if (operator == null || operator.IsEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return null;
@@ -130,8 +159,10 @@ public abstract class BaseCodeListFunction<DataModel> {
 
     /**
      * 从网络加载数据
+     *
+     * @param parameter 取值条件参数
      */
-    protected abstract void onLoadFromNetWork();
+    protected abstract void onLoadFromNetWork(Condition parameter);
 
     /**
      * 网络请求结束后在回调中调用
@@ -147,8 +178,9 @@ public abstract class BaseCodeListFunction<DataModel> {
         // 保存数据
         Log.i(LOG_TAG + "netWorkEndSetData", "onSaveData is invoked");
         onSaveData(operator, dataList);
-        networkLoading = false;
         onNotify(context);
+        // 加载结束
+        loading = false;
     }
 
     /**

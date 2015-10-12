@@ -50,6 +50,11 @@ public interface StaticValue {
          */
         String OPERATION_LIST = "operation_list";
 
+        /**
+         * 货代
+         */
+        String FORWARDER_LIST = "forwarder_list";
+
     }
 
     String HTTP_GET_SAMPLE_URL = "http://168.100.1.218/wlkg/Service/";
@@ -59,7 +64,7 @@ public interface StaticValue {
     //派工计划第一页IP
     String HTTP_GET_TASKONE_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionPlan.aspx";
     //详细派工页
-    String HTTP_GET_TASKDETAIL_URL = "http://218.92.115" +
+    String HTTP_GET_TASKDETAIL_URL = "http://218.92.115" + "" +
             ".55/M_Lhgl/Service/Slip/GetMissionPlanDetail.aspx";
     //派工获取委托查询数据
     String HTTP_GET_ENTRUST_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetConsign.aspx";
@@ -70,7 +75,7 @@ public interface StaticValue {
     //获取作业数据列表数据
     String HTTP_GET_OPERATDATA_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkingArea.aspx";
     //汽运查询地址
-    String HTTP_GET_TRUNKQUERY_URL = "http://218.92.115" +
+    String HTTP_GET_TRUNKQUERY_URL = "http://218.92.115" + "" +
             ".55/M_Lhgl/Service/Vehicle/GetVehicleTransport.aspx";
     //汽运作业地址
     String HTTP_GET_TRUNKWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetStartWork.aspx";

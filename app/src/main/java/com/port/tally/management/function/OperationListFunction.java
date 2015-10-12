@@ -23,7 +23,7 @@ import java.util.List;
  * @version 1.0 2015/9/22
  * @since 1.0
  */
-public class OperationListFunction extends BaseCodeListFunction<Operation> {
+public class OperationListFunction extends BaseCodeListFunction<Operation, Void> {
 
     /**
      * 构造函数
@@ -40,7 +40,7 @@ public class OperationListFunction extends BaseCodeListFunction<Operation> {
     }
 
     @Override
-    protected void onLoadFromNetWork() {
+    protected void onLoadFromNetWork(Void parameter) {
         PullOperationList pullOperationList = new PullOperationList();
 
         pullOperationList.setWorkBackListener(new WorkBack<List<Operation>>() {
@@ -50,7 +50,7 @@ public class OperationListFunction extends BaseCodeListFunction<Operation> {
             }
         });
 
-        pullOperationList.beginExecute();
+        pullOperationList.execute();
     }
 
     @Override
