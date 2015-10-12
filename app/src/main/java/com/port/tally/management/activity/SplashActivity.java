@@ -16,6 +16,7 @@ import com.port.tally.management.R;
 import com.port.tally.management.function.CargoOwnerListFunction;
 import com.port.tally.management.function.CargoTypeListFunction;
 import com.port.tally.management.function.CodeListManager;
+import com.port.tally.management.function.ForwarderListFunction;
 import com.port.tally.management.function.OperationListFunction;
 import com.port.tally.management.function.VoyageListFunction;
 import com.port.tally.management.util.StaticValue;
@@ -69,11 +70,11 @@ public class SplashActivity extends Activity {
         // 注册广播接收者
         registerReceivers();
 
-        // 尝试加载本地数据
-        loadData();
-
         // 自动登录
         autoLogin();
+
+        // 尝试加载本地数据
+        loadData();
     }
 
     /**
@@ -87,6 +88,14 @@ public class SplashActivity extends Activity {
         CodeListManager.put(StaticValue.CodeListTag.VOYAGE_LIST, new VoyageListFunction(this));
         CodeListManager.put(StaticValue.CodeListTag.OPERATION_LIST, new OperationListFunction
                 (this));
+    }
+
+    /**
+     * 登录成功后加载数据
+     */
+    private void onLoginLoadData() {
+        CodeListManager.put(StaticValue.CodeListTag.FORWARDER_LIST, new ForwarderListFunction
+                (this, LoginStatus.getLoginStatus().getCodeCompany()), true);
     }
 
     /**
@@ -162,7 +171,7 @@ public class SplashActivity extends Activity {
          * 初始时为注册的动作数量，
          * 当减少到0时表示数据加载完毕
          */
-        private volatile int actionSemaphore = 5;
+        private volatile int actionSemaphore = 6;
 
         /**
          * 得到本接收者监听的动作集合
@@ -179,6 +188,7 @@ public class SplashActivity extends Activity {
             filter.addAction(StaticValue.CodeListTag.CARGO_OWNER_LIST);
             filter.addAction(StaticValue.CodeListTag.VOYAGE_LIST);
             filter.addAction(StaticValue.CodeListTag.OPERATION_LIST);
+            filter.addAction(StaticValue.CodeListTag.FORWARDER_LIST);
             return filter;
         }
 
@@ -191,10 +201,20 @@ public class SplashActivity extends Activity {
 
             switch (actionString) {
                 case BroadcastUtil.MEMORY_STATE_LOGIN:
+                    // 登录执行完毕
+                    if (LoginStatus.getLoginStatus().isLogin()) {
+                        // 登录成功
+                        // 加载数据
+                        onLoginLoadData();
+                    } else {
+                        // 跳过一条数据加载
+                        actionSemaphore--;
+                    }
                 case StaticValue.CodeListTag.CARGO_TYPE_LIST:
                 case StaticValue.CodeListTag.CARGO_OWNER_LIST:
                 case StaticValue.CodeListTag.VOYAGE_LIST:
                 case StaticValue.CodeListTag.OPERATION_LIST:
+                case StaticValue.CodeListTag.FORWARDER_LIST:
                     // 完成一个动作信号量减1
                     actionSemaphore--;
                     Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");

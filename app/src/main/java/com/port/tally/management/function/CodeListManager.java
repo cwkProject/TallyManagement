@@ -73,14 +73,20 @@ public class CodeListManager {
 
         if (!replace && codeList != null) {
             // 不必替换且目标已存在
-            // 通知加载完成
-            if (!codeList.isLoading()) {
-                codeList.notifyExist();
+            if (codeList.isLoading()) {
+                // 正在加载
+                return;
+            } else {
+                // 加载完毕
+                if (codeList.getDataList() != null) {
+                    // 通知加载完成
+                    codeList.notifyExist();
+                    return;
+                }
             }
-            return;
         }
 
-        // 目标不存在或需要替换
+        // 目标不存在(可能是上次加载失败)或需要替换
         taskExecutor.submit(new Runnable() {
             @Override
             public void run() {
