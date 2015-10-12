@@ -128,7 +128,7 @@ public class PushMessage extends Activity implements XListView.IXListViewListene
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
                 Intent intent = new Intent();
-                intent = new Intent(PushMessage.this, LiHuoDetail.class);
+                intent = new Intent(PushMessage.this, WorkPlanDetail.class);
 
                 startActivity(intent);
 

@@ -34,6 +34,7 @@ import com.port.tally.management.util.FloatTextToast;
 import com.port.tally.management.work.StartWorkWork;
 
 import org.mobile.library.model.work.WorkBack;
+import org.mobile.library.util.LoginStatus;
 
 import java.nio.charset.Charset;
 import java.util.Calendar;
@@ -95,6 +96,7 @@ public class StartWork extends Activity {
         et_noteperson = (EditText) findViewById(R.id.et_noteperson);
         startWork_btn = (Button) findViewById(R.id.startWork_btn);
         title.setText("开工");
+        et_noteperson.setText(LoginStatus.getLoginStatus().getNickname());
         tv_startTime.setText("选择时间");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);

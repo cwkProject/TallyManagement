@@ -79,7 +79,7 @@ public class DianZiMap extends Activity {
         // 构建mark图标
         //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
-                .target(desLatLng)
+                .target(p)
                 .zoom(18)
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
@@ -88,7 +88,7 @@ public class DianZiMap extends Activity {
         mbaidumap.setMapStatus(mMapStatusUpdate);
         BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.tip);
         // 构建markeroption,用于在地图上添加marker
-        OverlayOptions options = new MarkerOptions().icon(bitmap).position(desLatLng);
+        OverlayOptions options = new MarkerOptions().icon(bitmap).position(p);
         mbaidumap.addOverlay(options);
         onLoadFromNetWork();
         mHandler = new Handler();

@@ -9,39 +9,6 @@
         android:id="@+id/header"
         layout="@layout/header"/>
 
-    <LinearLayout
-
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:minHeight="40.0dip"
-        android:orientation="horizontal"
-        android:padding="8.0dip">
-
-        <TextView
-
-
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
-            android:layout_weight="1.0"
-            android:text="武钢资源/铁矿砂/散/0吨进口/内贸/德勤118_1520/巴西金粉/0/7709"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:id="@+id/tv_shipment"
-            android:focusableInTouchMode="true"
-            android:singleLine="true"
-            android:textColor="@color/black"
-            android:textSize="@dimen/BasicTextSize"
-            />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1.0px"
-        android:background="@drawable/shape_line"/>
 
     <ScrollView
         android:id="@+id/container"
@@ -87,7 +54,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="委托"
+                        android:text="货主"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -98,8 +65,8 @@
                         android:background="#66CCFF"
                         />
 
-                    <Spinner
-                        android:id="@+id/weituo_spinner1"
+                    <TextView
+                        android:id="@+id/tv_cargo_owner"
                         android:layout_width="0dip"
                         android:layout_height="40.0dip"
                         android:layout_marginRight="10.0dip"
@@ -116,7 +83,7 @@
                     android:background="@drawable/shape_line"/>
 
                 <LinearLayout
-                    android:id="@+id/table_2"
+
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
@@ -128,13 +95,13 @@
                     >
 
                     <TextView
-                        android:id="@+id/bowei_2"
+
 
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="票货1"
+                        android:text="货物"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -145,13 +112,13 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/bowei_3"
+                    <TextView
+                        android:id="@+id/tv_cargo"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
                         android:layout_weight="3.0"
-                        android:text="你好"
+
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
                 </LinearLayout>
@@ -162,7 +129,7 @@
                     android:background="@drawable/shape_line"/>
 
                 <LinearLayout
-                    android:id="@+id/table_3"
+
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
@@ -174,13 +141,13 @@
                     >
 
                     <TextView
-                        android:id="@+id/bowei_4"
+
 
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="票货2"
+                        android:text="航次"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -191,13 +158,13 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/bowei_5"
+                    <TextView
+                        android:id="@+id/tv_voyage"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
                         android:layout_weight="3.0"
-                        android:text="你好"
+
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
                 </LinearLayout>
@@ -220,13 +187,13 @@
                     >
 
                     <TextView
-                        android:id="@+id/bowei_7"
+
 
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="起"
+                        android:text="货代"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -237,8 +204,8 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/bowei_8"
+                    <TextView
+                        android:id="@+id/tv_forwarder"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
@@ -265,13 +232,12 @@
                     >
 
                     <TextView
-                        android:id="@+id/bowei_9"
 
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="止"
+                        android:text="货场"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -282,8 +248,8 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/bowei_10"
+                    <TextView
+                        android:id="@+id/tv_goodsyard"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
@@ -310,13 +276,11 @@
                     >
 
                     <TextView
-                        android:id="@+id/bowei_11"
-
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="重"
+                        android:text="重量"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -327,8 +291,8 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/bowei_12"
+                    <TextView
+                        android:id="@+id/tv_weight"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
@@ -351,7 +315,7 @@
                     android:orientation="horizontal"
 
 
-                    >
+                   >
 
                     <TextView
                         android:id="@+id/tv_piece1"
@@ -360,7 +324,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="件1"
+                        android:text="进场日期"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -371,8 +335,8 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/et_piece1"
+                    <TextView
+                        android:id="@+id/tv_enter"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
@@ -380,6 +344,10 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
                 </LinearLayout>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line"/>
                 <LinearLayout
 
                     android:layout_width="fill_parent"
@@ -393,13 +361,13 @@
                     >
 
                     <TextView
-                        android:id="@+id/tv_piece2"
+
 
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="件2"
+                        android:text="进出口"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -410,8 +378,8 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/_piece2"
+                    <TextView
+                        android:id="@+id/tv_out"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
@@ -444,7 +412,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="子过程标志"
+                        android:text="内外贸"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -455,8 +423,8 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/bowei_ET1"
+                    <TextView
+                        android:id="@+id/tv_trade"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
@@ -488,10 +456,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="作业数量"
+                        android:text="唛头"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"
-                       />
+                        />
 
                     <View
                         android:layout_width="1dip"
@@ -500,8 +468,8 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/bowei_Et2"
+                    <TextView
+                        android:id="@+id/tv_maitou"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
@@ -532,7 +500,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="作业数量"
+                        android:text="货位"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -543,8 +511,8 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/bowei_Et7"
+                    <TextView
+                        android:id="@+id/tv_allocation"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
@@ -575,7 +543,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10.0dip"
                         android:layout_weight="1.0"
-                        android:text="单位"
+                        android:text="包装"
                         android:textColor="@color/black"
                         android:textSize="@dimen/BasicTextSize"/>
 
@@ -586,8 +554,137 @@
                         android:background="#66CCFF"
                         />
 
-                    <EditText
-                        android:id="@+id/bowei_ET3"
+                    <TextView
+                        android:id="@+id/tv_pack"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_weight="3.0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/BasicTextSize"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line"/>
+
+                <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+
+
+                    >
+
+                    <TextView
+
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_weight="1.0"
+                        android:text="件数"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/BasicTextSize"/>
+
+                    <View
+                        android:layout_width="1dip"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#66CCFF"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_count"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_weight="3.0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/BasicTextSize"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line"/>
+
+                <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+
+
+                    >
+
+                    <TextView
+
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_weight="1.0"
+                        android:text="件重"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/BasicTextSize"/>
+
+                    <View
+                        android:layout_width="1dip"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#66CCFF"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_countweight"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10.0dip"
+                        android:layout_weight="3.0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/BasicTextSize"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0px"
+                    android:background="@drawable/shape_line"/>
+
+                <LinearLayout
+
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:minHeight="30.0dip"
+                    android:orientation="horizontal"
+
+
+                    >
+
+                    <TextView
+
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10.0dip"
+                        android:layout_weight="1.0"
+                        android:text="排序"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/BasicTextSize"/>
+
+                    <View
+                        android:layout_width="1dip"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#66CCFF"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_pai"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10.0dip"
@@ -600,30 +697,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="1.0px"
                     android:background="@drawable/shape_line"/>
-
-                <LinearLayout
-                    android:id="@+id/table_1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:layout_marginTop="3dp"
-                    android:gravity="center"
-                    android:minHeight="30.0dip"
-                    android:orientation="horizontal"
-                    android:weightSum="1">
-
-                    <Button
-                        android:id="@+id/exitBtn0"
-                        android:layout_width="140dip"
-                        android:layout_height="40.0dip"
-                        android:layout_gravity="center"
-                        android:background="@drawable/darkblue_btn_bg"
-                        android:text="提交"
-                        android:gravity="center"
-                        android:layout_marginLeft="5.0dip"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

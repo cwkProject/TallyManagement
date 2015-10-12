@@ -7,7 +7,7 @@
         android:id="@+id/header"
         layout="@layout/header"/>
     <ScrollView
-        android:id="@+id/container"
+
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/header"
@@ -105,271 +105,307 @@
                 android:textSize="18sp"
 
                 />
-
-            <LinearLayout
-
+            <ScrollView
+                android:id="@+id/container"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:layout_marginTop="5dip"
-                android:gravity="center_vertical"
-                android:minHeight="30.0dip"
-                android:orientation="horizontal"
+                android:layout_height="fill_parent"
+                android:layout_below="@id/header"
+                android:background="@color/white"
+
+                android:scrollbars="none"
                 >
 
-                <TextView
-
-                    android:layout_width="0dip"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5.0dip"
-                    android:layout_weight="1.0"
-                    android:text="货代"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/BasicTextSize"
-                     />
+                    android:layout_below="@+id/header"
+                    android:isScrollContainer="true"
+                    android:orientation="vertical"
+                    android:paddingBottom="10.0dip">
 
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:background="#66CCFF"
-                    />
+                    <LinearLayout
 
-                <TextView
-
-                    android:layout_width="0dip"
-                    android:layout_height="40dip"
-                    android:layout_marginRight="10.0dip"
-                    android:layout_weight="3.0"
-                    android:textColor="@color/black"
-                    android:gravity="center"
-
-                    android:textSize="@dimen/BasicTextSize"
-                    android:id="@+id/tv_forwarder"/>
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:background="#66CCFF"
-                    />
-                <TextView
-
-                    android:layout_width="0dip"
-                    android:layout_height="40dip"
-                    android:layout_marginLeft="5.0dip"
-                    android:layout_weight="1.0"
-                    android:text="货物"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/BasicTextSize"
-                    />
-
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:background="#66CCFF"
-                    />
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center_vertical"
+                        android:minHeight="30.0dip"
+                        android:orientation="horizontal"
 
 
-                <TextView
+                        >
 
-                    android:layout_width="0dip"
-                    android:layout_height="40dip"
-                    android:layout_marginRight="5.0dip"
-                    android:layout_weight="3.0"
-                    android:textColor="@color/black"
-                    android:gravity="center"
+                        <TextView
 
-                    android:textSize="@dimen/BasicTextSize"
-                    android:id="@+id/tv_cargo"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_gravity="center_horizontal"
-                android:background="#66CCFF"
-                />
-            <LinearLayout
 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:gravity="center_vertical"
-                android:minHeight="30.0dip"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10.0dip"
+                            android:layout_weight="1.0"
+                            android:text="货代"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/BasicTextSize"/>
 
-                android:orientation="horizontal"
-                >
+                        <View
+                            android:layout_width="1dip"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="#66CCFF"
+                            />
 
-                <TextView
+                        <TextView
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5.0dip"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10.0dip"
+                            android:layout_weight="3.0"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_forwarder"
+                            android:textSize="@dimen/BasicTextSize"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#66CCFF"
+                        />
+                    <LinearLayout
 
-                    android:text="车号"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/BasicTextSize"
-                     />
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center_vertical"
+                        android:minHeight="30.0dip"
+                        android:orientation="horizontal"
 
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:background="#66CCFF"
-                    />
 
-                <TextView
+                        >
 
-                    android:layout_width="0dip"
-                    android:layout_height="40dip"
-                    android:layout_marginRight="20.0dip"
-                    android:layout_weight="5.0"
-                    android:textColor="@color/black"
-                    android:gravity="center"
-                    android:textSize="@dimen/BasicTextSize"
-                    android:id="@+id/tv_vehiclenum"/>
+                        <TextView
 
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_gravity="center_horizontal"
-                android:background="#66CCFF"
-                />
-            <LinearLayout
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10.0dip"
+                            android:layout_weight="1.0"
+                            android:text="货物"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/BasicTextSize"/>
 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
+                        <View
+                            android:layout_width="1dip"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="#66CCFF"
+                            />
 
-                android:gravity="center_vertical"
-                android:minHeight="30.0dip"
-                android:orientation="horizontal"
-                >
+                        <TextView
 
-                <TextView
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10.0dip"
+                            android:layout_weight="3.0"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_cargo"
+                            android:textSize="@dimen/BasicTextSize"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#66CCFF"
+                        />
+                    <LinearLayout
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5.0dip"
-                    android:text="班组"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/BasicTextSize"
-                    />
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center_vertical"
+                        android:minHeight="30.0dip"
+                        android:orientation="horizontal"
 
-                    android:background="#66CCFF"
-                    />
-                <TextView
 
-                    android:layout_width="0dip"
-                    android:layout_height="40dip"
-                    android:layout_marginRight="10.0dip"
-                    android:layout_weight="3.0"
-                    android:textColor="@color/black"
-                    android:gravity="center"
-                    android:textSize="@dimen/BasicTextSize"
-                    android:id="@+id/tv_group"/>
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="38dip"
-                    android:background="#66CCFF"
-                    />
+                        >
 
-                <Spinner
-                    android:id="@+id/spinner"
-                    android:layout_width="0dip"
-                    android:layout_height="40.0dip"
-                    android:layout_marginRight="5.0dip"
-                    android:entries="@array/trunkquery_letter"
-                    android:layout_weight="3.0"
-                    android:textColor="@color/black"
-                    />
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:layout_gravity="center_horizontal"
-                android:background="#66CCFF"
-                />
-            <LinearLayout
+                        <TextView
+                            android:id="@+id/bowei_7"
 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:gravity="center_vertical"
-                android:minHeight="30.0dip"
-                android:orientation="horizontal"
-                >
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10.0dip"
+                            android:layout_weight="1.0"
+                            android:text="班组"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/BasicTextSize"/>
 
-                <TextView
+                        <View
+                            android:layout_width="1dip"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="#66CCFF"
+                            />
 
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5.0dip"
-                    android:layout_weight="1.0"
-                    android:text="件数"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/BasicTextSize"
-                   />
+                        <TextView
 
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:background="#66CCFF"
-                    />
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10.0dip"
+                            android:layout_weight="3.0"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_group"
+                            android:textSize="@dimen/BasicTextSize"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#66CCFF"
+                        />
+                    <LinearLayout
 
-                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center_vertical"
+                        android:minHeight="30.0dip"
+                        android:orientation="horizontal"
 
-                    android:layout_width="0dip"
-                    android:layout_height="40dip"
-                    android:layout_marginRight="10.0dip"
-                    android:layout_weight="2.0"
-                    android:textColor="@color/black"
-                    android:gravity="center"
 
-                    android:textSize="@dimen/BasicTextSize"
-                    android:id="@+id/tv_case"/>
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="30dip"
-                    android:background="#66CCFF"
-                    />
-                <TextView
+                        >
 
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5.0dip"
-                    android:layout_weight="1.0"
-                    android:text="记录"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/BasicTextSize"/>
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="1dip"
-                    android:background="#66CCFF"
-                    />
-                <Spinner
-                    android:id="@+id/spinner3"
-                    android:layout_width="0dip"
-                    android:layout_height="40.0dip"
-                    android:layout_marginRight="5.0dip"
+                        <TextView
 
-                    android:layout_weight="3.0"
-                    android:textColor="@color/black"
-                    />
-            </LinearLayout>
+
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10.0dip"
+                            android:layout_weight="1.0"
+                            android:text="车号"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/BasicTextSize"/>
+
+                        <View
+                            android:layout_width="1dip"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="#66CCFF"
+                            />
+
+                        <TextView
+
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10.0dip"
+                            android:layout_weight="3.0"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_vehiclenum"
+                            android:textSize="@dimen/BasicTextSize"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#66CCFF"
+                        />
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+
+                        android:entries="@array/trunkquery_letter"
+
+                        android:textColor="@color/black"
+                        />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#66CCFF"
+                        />
+                    <LinearLayout
+                        android:id="@+id/table_6"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center_vertical"
+                        android:minHeight="30.0dip"
+                        android:orientation="horizontal"
+
+
+                        >
+
+                        <TextView
+
+
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10.0dip"
+                            android:layout_weight="1.0"
+                            android:text="件数"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/BasicTextSize"/>
+
+                        <View
+                            android:layout_width="1dip"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="#66CCFF"
+                            />
+
+                        <TextView
+
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10.0dip"
+                            android:layout_weight="3.0"
+                            android:textColor="@color/black"
+                            android:id="@+id/tv_case"
+                            android:textSize="@dimen/BasicTextSize"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#66CCFF"
+                        />
+                    <LinearLayout
+                        android:id="@+id/table_7"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:gravity="center_vertical"
+                        android:minHeight="30.0dip"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+
+
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10.0dip"
+                            android:layout_weight="1.0"
+                            android:text="记录"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/BasicTextSize"/>
+
+                        <View
+                            android:layout_width="1dip"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_horizontal"
+                            android:background="#66CCFF"
+                            />
+
+                        <Spinner
+                            android:id="@+id/spinner3"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10.0dip"
+                            android:layout_weight="3.0"
+                            android:textColor="@color/black"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
 
         </LinearLayout>
     </ScrollView>

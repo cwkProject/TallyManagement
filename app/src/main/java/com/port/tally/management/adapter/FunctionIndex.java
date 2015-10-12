@@ -13,6 +13,7 @@ import com.port.tally.management.activity.PushMessage;
 import com.port.tally.management.activity.ShiftDuty;
 import com.port.tally.management.activity.TrunkActivity;
 import com.port.tally.management.activity.TrunkQuery;
+import com.port.tally.management.activity.WorkPlan;
 import com.port.tally.management.activity.WorkPlanQuery;
 
 /**
@@ -42,7 +43,7 @@ public class FunctionIndex {
                 break;
             case 1:
                 // 衡重
-                intent = new Intent(context,TrunkActivity.class);
+//                intent = new Intent(context,TrunkActivity.class);
                 break;
             case 2:
                 // 委托查询
@@ -50,7 +51,7 @@ public class FunctionIndex {
                 break;
             case 3:
                 // 堆存
-                intent = new Intent(context, WorkPlanQuery.class);
+//                intent = new Intent(context, WorkPlanQuery.class);
                 break;
             case 4:
                 // 汽运查询
@@ -62,7 +63,7 @@ public class FunctionIndex {
                 break;
             case 6:
                 // 作业计划
-                intent = new Intent(context, WorkPlanQuery.class);
+                intent = new Intent(context, WorkPlan.class);
                 break;
             case 7:
                 // 交接班

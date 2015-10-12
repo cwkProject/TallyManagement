@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,8 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
-public class TallyActivity extends Activity implements XListView.IXListViewListener {
+/**
+ * Created by song on 2015/10/10.
+ */
+public class WorkPlan extends Activity implements XListView.IXListViewListener {
 
     private ImageView imgLeft;
     private TextView title;
@@ -32,23 +33,18 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
     int flag = 1;
     private Handler mHandler;
     Intent intent;
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lihuomain);
         Init();
-
         initListView();
+
         showData();
-
-
     }
 
     private void initListView() {
         listView.setPullRefreshEnable(false);
-        listView.setPullLoadEnable(true);
-        tallyManageAdapter = new TallyManageAdapter(TallyActivity.this, dataList);
+        tallyManageAdapter = new TallyManageAdapter(WorkPlan.this, dataList);
 
         tallyManageAdapter.notifyDataSetChanged();
         listView.setAdapter(tallyManageAdapter);
@@ -58,15 +54,42 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
 
 
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-
+                //                HashMap map = (HashMap) arg0.getItemAtPosition(arg2);
+                //                String[] strings = new String[]{
+                //                        map.get("name").toString(),
+                //                        map.get("vename").toString(),
+                //
+                //                        map.get("country").toString(),
+                //                        map.get("sex").toString(),
+                //                        map.get("birth").toString(),
+                //                        map.get("idnumber1").toString(),
+                //                        map.get("idnumber2").toString(),
+                //                        map.get("idnumber3").toString(),
+                //                        map.get("homenumber").toString(),
+                //                        map.get("phonenumber").toString(),
+                //
+                //                        map.get("email").toString(),
+                //                        map.get("qq").toString(),
+                //                        map.get("address").toString(),
+                //                        map.get("bankaccount").toString(),
+                //                        map.get("characters").toString(),
+                //                        map.get("vehicle").toString(),
+                //                        map.get("trackact").toString(),
+                //                        map.get("source").toString(),
+                //                        map.get("rank").toString(),
+                //                        map.get("picPath").toString()
+                //
+                //                };
                 String cgno = "14";
                 Bundle b = new Bundle();
                 Intent intent = new Intent();
                 //                b.putStringArray("Cgno", cgno);
                 b.putString("Cgno", cgno);
-                intent = new Intent(TallyActivity.this, TallyDetail.class);
+                intent = new Intent(WorkPlan.this, WorkPlanDetail.class);
                 intent.putExtras(b);
                 startActivity(intent);
+
+
             }
 
         });
@@ -77,10 +100,10 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
         title = (TextView) findViewById(R.id.title);
         imgLeft = (ImageView) findViewById(R.id.left);
         listView = (XListView) findViewById(R.id.xListView);
-        title.setText("理货作业票");
+        title.setText("作业计划");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
-        imgLeft.setOnClickListener(new OnClickListener() {
+        imgLeft.setOnClickListener(new View.OnClickListener() {
             //			@Override
             public void onClick(View arg0) {
                 finish();
@@ -92,7 +115,7 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
     //显示数据
     private void showData() {
 
-        String count = "3";
+        String count = "5";
         String stratcount = "1";
         String company = "14";
         loadValue(count, stratcount, company);
@@ -100,6 +123,20 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
 
     @Override
     public void onLoadMore() {
+        //        mHandler.postDelayed(new Runnable() {
+        //
+        //            public void run() {
+        //                flag = false;
+        //                String count = "5";
+        //                String stratcount = "1";
+        //                String company = "14";
+        //                initValue(count, stratcount, company);
+        //
+        //                tallyManageAdapter.notifyDataSetChanged();
+        //                onLoad();
+        //            }
+        //        }, 2000);
+
         String count = "5";
         String stratcount = String.valueOf(flag);
         String company = "14";
@@ -130,19 +167,18 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
 
                 if ("1".equals(type)) {
                     dataList.clear();
-
                     flag = 1;
                 }
 
                 if (b && data != null) {
 
                     flag += data.size();
-                    listView.setPullLoadEnable(true);
+
                     dataList.addAll(data);
 
                 } else {
                     //清空操作
-                    listView.setPullLoadEnable(false);
+
                     //                    FloatTextToast.makeText(StartWork.this, tongxin_edt,
                     // "信息不存在", FloatTextToast.LENGTH_SHORT).show();
                 }

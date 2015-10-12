@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/mediumslateblue"
-              android:layout_margin="5dip"
+              android:layout_margin="2dip"
     >
     <RelativeLayout
         android:layout_width="fill_parent"

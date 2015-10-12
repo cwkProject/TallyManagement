@@ -295,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements XListView.IXListV
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
                 Intent intent = new Intent();
-                intent = new Intent(MainActivity.this, LiHuoDetail.class);
+                intent = new Intent(MainActivity.this,TallyDetail.class);
 
                 startActivity(intent);
 
