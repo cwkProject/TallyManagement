@@ -5,7 +5,7 @@ package com.port.tally.management.data;
 
 import android.util.Log;
 
-import com.port.tally.management.bean.Operation;
+import com.port.tally.management.bean.Forwarder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,36 +17,51 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 作业过程列表任务数据模型
+ * 货代列表任务数据模型
  *
  * @author 超悟空
  * @version 1.0 2015/9/21
  * @since 1.0
  */
-public class OperationListData extends JsonDataModel {
+public class ForwarderListData extends JsonDataModel {
 
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "OperationListData.";
+    private static final String LOG_TAG = "ForwarderListData.";
 
     /**
-     * 作业过程列表
+     * 货代列表
      */
-    private List<Operation> operationList = null;
+    private List<Forwarder> forwarderList = null;
 
     /**
-     * 获取作业过程列表
+     * 公司编码
+     */
+    private String company = null;
+
+    /**
+     * 获取货代列表
      *
-     * @return 作业过程列表
+     * @return 货代列表
      */
-    public List<Operation> getOperationList() {
-        return operationList;
+    public List<Forwarder> getForwarderList() {
+        return forwarderList;
+    }
+
+    /**
+     * 设置公司编码
+     *
+     * @param company 公司编码
+     */
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override
     protected void onFillRequestParameters(Map<String, String> dataMap) {
-
+        dataMap.put("CodeCompany", company);
+        Log.i(LOG_TAG + "onFillRequestParameters", "CodeCompany is " + company);
     }
 
     @Override
@@ -68,28 +83,29 @@ public class OperationListData extends JsonDataModel {
 
         if (jsonArray != null) {
 
-            Log.i(LOG_TAG + "onRequestSuccess", "get operationList count is " + jsonArray.length());
+            Log.i(LOG_TAG + "onRequestSuccess", "get forwarderList count is " + jsonArray.length());
 
-            // 新建列表
-            operationList = new ArrayList<>();
+            // 新建货主列表
+            forwarderList = new ArrayList<>();
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONArray jsonRow = jsonArray.getJSONArray(i);
 
                 if (jsonRow.length() > 2) {
-                    // 一条数据
-                    Operation operation = new Operation();
-                    operation.setId(jsonRow.getString(0));
-                    operation.setName(jsonRow.getString(1));
-                    operation.setShortCode(jsonRow.getString(2));
+                    // 一条货主数据
+                    Forwarder forwarder = new Forwarder();
+                    forwarder.setId(jsonRow.getString(0));
+                    forwarder.setName(jsonRow.getString(1));
+                    forwarder.setShortCode(jsonRow.getString(2));
+                    forwarder.setCompany(company);
 
                     // 加入列表
-                    operationList.add(operation);
+                    forwarderList.add(forwarder);
                 }
             }
 
-            Log.i(LOG_TAG + "onRequestSuccess", "operation list count is " + operationList.size());
+            Log.i(LOG_TAG + "onRequestSuccess", "forwarder list count is " + forwarderList.size());
         }
     }
 }

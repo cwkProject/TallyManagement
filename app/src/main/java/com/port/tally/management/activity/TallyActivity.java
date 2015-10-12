@@ -7,19 +7,17 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.TallyManageAdapter;
-import com.port.tally.management.util.FloatTextToast;
 import com.port.tally.management.work.ToallyManageWork;
 import com.port.tally.management.xlistview.XListView;
 
 import org.mobile.library.model.work.WorkBack;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,15 +28,72 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
     private TextView title;
     private XListView listView;
     private TallyManageAdapter tallyManageAdapter;
-    List<Map<String, Object>> data = null;
-    boolean flag = false;
+    private List<Map<String, Object>> dataList = null;
+    int flag = 1;
     private Handler mHandler;
     Intent intent;
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lihuomain);
         Init();
+        initListView();
+
         showData();
+    }
+
+    private void initListView() {
+        listView.setPullRefreshEnable(false);
+        tallyManageAdapter = new TallyManageAdapter(TallyActivity.this, dataList);
+
+        tallyManageAdapter.notifyDataSetChanged();
+        listView.setAdapter(tallyManageAdapter);
+
+        listView.setXListViewListener(this);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                //                HashMap map = (HashMap) arg0.getItemAtPosition(arg2);
+                //                String[] strings = new String[]{
+                //                        map.get("name").toString(),
+                //                        map.get("vename").toString(),
+                //
+                //                        map.get("country").toString(),
+                //                        map.get("sex").toString(),
+                //                        map.get("birth").toString(),
+                //                        map.get("idnumber1").toString(),
+                //                        map.get("idnumber2").toString(),
+                //                        map.get("idnumber3").toString(),
+                //                        map.get("homenumber").toString(),
+                //                        map.get("phonenumber").toString(),
+                //
+                //                        map.get("email").toString(),
+                //                        map.get("qq").toString(),
+                //                        map.get("address").toString(),
+                //                        map.get("bankaccount").toString(),
+                //                        map.get("characters").toString(),
+                //                        map.get("vehicle").toString(),
+                //                        map.get("trackact").toString(),
+                //                        map.get("source").toString(),
+                //                        map.get("rank").toString(),
+                //                        map.get("picPath").toString()
+                //
+                //                };
+                String cgno = "14";
+                Bundle b = new Bundle();
+                Intent intent = new Intent();
+                //                b.putStringArray("Cgno", cgno);
+                b.putString("Cgno", cgno);
+                intent = new Intent(TallyActivity.this, LiHuoDetail.class);
+                intent.putExtras(b);
+                startActivity(intent);
+
+
+            }
+
+        });
     }
 
     private void Init() {
@@ -55,122 +110,54 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
                 finish();
             }
         });
-
+        dataList = new ArrayList<>();
     }
+
     //显示数据
     private void showData() {
-        flag = true;
 
         String count = "5";
         String stratcount = "1";
-        String company ="14";
-        initValue(count, stratcount, company);
-
-//        data.clear();
-
-//
-//        if(data.size() <= 5 && DataUtil.getPeopleNumber(keyWord) <= 5){
-//            listView.setPullLoadEnable(false);
-//        }else{
-//            listView.setPullLoadEnable(true);
-//        }
-
-
-        listView.setPullRefreshEnable(false);
-        tallyManageAdapter = new TallyManageAdapter(TallyActivity.this, initValue(count,  stratcount, company));
-
-        tallyManageAdapter.notifyDataSetChanged();
-        listView.setAdapter(tallyManageAdapter);
-
-
-        listView.setXListViewListener(this);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-
-            public void onItemClick(AdapterView<?> arg0, View arg1,
-                                    int arg2, long arg3) {
-//                HashMap map = (HashMap) arg0.getItemAtPosition(arg2);
-//                String[] strings = new String[]{
-//                        map.get("name").toString(),
-//                        map.get("vename").toString(),
-//
-//                        map.get("country").toString(),
-//                        map.get("sex").toString(),
-//                        map.get("birth").toString(),
-//                        map.get("idnumber1").toString(),
-//                        map.get("idnumber2").toString(),
-//                        map.get("idnumber3").toString(),
-//                        map.get("homenumber").toString(),
-//                        map.get("phonenumber").toString(),
-//
-//                        map.get("email").toString(),
-//                        map.get("qq").toString(),
-//                        map.get("address").toString(),
-//                        map.get("bankaccount").toString(),
-//                        map.get("characters").toString(),
-//                        map.get("vehicle").toString(),
-//                        map.get("trackact").toString(),
-//                        map.get("source").toString(),
-//                        map.get("rank").toString(),
-//                        map.get("picPath").toString()
-//
-//                };
-                String cgno = "14";
-                Bundle b = new Bundle();
-                Intent intent = new Intent();
-//                b.putStringArray("Cgno", cgno);
-                b.putString("Cgno", cgno);
-                intent = new Intent(TallyActivity.this, LiHuoDetail.class);
-                intent.putExtras(b);
-                startActivity(intent);
-
-
-            }
-
-        });
+        String company = "14";
+        loadValue(count, stratcount, company);
     }
+
+    @Override
     public void onLoadMore() {
-        mHandler.postDelayed(new Runnable() {
+        //        mHandler.postDelayed(new Runnable() {
+        //
+        //            public void run() {
+        //                flag = false;
+        //                String count = "5";
+        //                String stratcount = "1";
+        //                String company = "14";
+        //                initValue(count, stratcount, company);
+        //
+        //                tallyManageAdapter.notifyDataSetChanged();
+        //                onLoad();
+        //            }
+        //        }, 2000);
 
-            public void run() {
-                flag = false;
-                String count = "5";
-                String stratcount = "1";
-                String company ="14";
-            initValue(count, stratcount,company);
+        String count = "5";
+        String stratcount = String.valueOf(flag);
+        String company = "14";
 
-                tallyManageAdapter.notifyDataSetChanged();
-                onLoad();
-            }
-        }, 2000);
+        loadValue(count, stratcount, company);
     }
+
     private void onLoad() {
 
         listView.stopRefresh();
         listView.stopLoadMore();
         listView.setRefreshTime("刚刚");
-
     }
 
     public void onRefresh() {
-        mHandler.postDelayed(new Runnable() {
-
-            public void run() {
-                flag = false;
-                String count = "5";
-                String stratcount = "1";
-                String company ="14";
-                List<Map<String, Object>> data = initValue(count,stratcount,company);
-
-                tallyManageAdapter = new TallyManageAdapter(TallyActivity.this, data);
-                listView.setAdapter(tallyManageAdapter);
-                onLoad();
-            }
-        }, 2000);
-
+        showData();
     }
+
     //给个控件赋值
-    private List<Map<String, Object>> initValue(String key,String type,String company) {
+    private void loadValue(String key, final String type, String company) {
 
         //实例化，传入参数
         ToallyManageWork toallyManageWork = new ToallyManageWork();
@@ -178,23 +165,28 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
         toallyManageWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
-                if (b) {
-                    tallyManageAdapter = new TallyManageAdapter(TallyActivity.this, data);
 
-                    tallyManageAdapter.notifyDataSetChanged();
-                    listView.setAdapter(tallyManageAdapter);
+                if ("1".equals(type)) {
+                    dataList.clear();
+                    flag = 1;
+                }
 
+                if (b && data != null) {
 
+                    flag += data.size();
+
+                    dataList.addAll(data);
 
                 } else {
                     //清空操作
 
-//                    FloatTextToast.makeText(StartWork.this, tongxin_edt, "信息不存在", FloatTextToast.LENGTH_SHORT).show();
+                    //                    FloatTextToast.makeText(StartWork.this, tongxin_edt,
+                    // "信息不存在", FloatTextToast.LENGTH_SHORT).show();
                 }
+                tallyManageAdapter.notifyDataSetChanged();
+                onLoad();
             }
         });
         toallyManageWork.beginExecute(key, company, type);
-
-        return  data;
     }
 }

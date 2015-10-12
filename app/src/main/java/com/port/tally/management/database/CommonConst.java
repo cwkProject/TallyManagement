@@ -41,4 +41,9 @@ public interface CommonConst {
      * 速记码列
      */
     String SHORT_CODE = "short_code";
+
+    /**
+     * 公司编码列
+     */
+    String COMPANY_CODE = "company_code";
 }

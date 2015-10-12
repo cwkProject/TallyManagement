@@ -75,14 +75,14 @@ public class CargoTypeListData extends JsonDataModel {
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
-                JSONArray jsonCargo = jsonArray.getJSONArray(i);
+                JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-                if (jsonCargo.length() > 2) {
+                if (jsonRow.length() > 2) {
                     // 一条货物数据
                     CargoType cargoType = new CargoType();
-                    cargoType.setId(jsonCargo.getString(0));
-                    cargoType.setName(jsonCargo.getString(1));
-                    cargoType.setShortCode(jsonCargo.getString(2));
+                    cargoType.setId(jsonRow.getString(0));
+                    cargoType.setName(jsonRow.getString(1));
+                    cargoType.setShortCode(jsonRow.getString(2));
 
                     // 加入列表
                     cargoTypeList.add(cargoType);

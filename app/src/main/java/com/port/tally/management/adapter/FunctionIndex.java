@@ -10,7 +10,6 @@ import com.port.tally.management.activity.DianZiMap;
 import com.port.tally.management.activity.EntrustQueryActivity;
 import com.port.tally.management.activity.TallyActivity;
 import com.port.tally.management.activity.PushMessage;
-import com.port.tally.management.activity.ShiftDuty;
 import com.port.tally.management.activity.TrunkActivity;
 import com.port.tally.management.activity.TrunkQuery;
 import com.port.tally.management.activity.WorkPlanQuery;
@@ -66,7 +65,7 @@ public class FunctionIndex {
                 break;
             case 7:
                 // 交接班
-                intent = new Intent(context,ShiftDuty.class);
+
                 break;
 
             case 8:
