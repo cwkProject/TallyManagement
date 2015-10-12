@@ -42,7 +42,7 @@ public abstract class BaseCodeListFragment<DataModel, Result> extends Fragment i
     /**
      * 列表使用的数据适配器
      */
-    private SimpleAdapter adapter = null;
+    protected SimpleAdapter adapter = null;
 
     /**
      * 当前选中的数据项

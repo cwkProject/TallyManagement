@@ -55,6 +55,11 @@ public interface StaticValue {
          */
         String FORWARDER_LIST = "forwarder_list";
 
+        /**
+         * 货场
+         */
+        String STORAGE_LIST = "storage_list";
+
     }
 
     String HTTP_GET_SAMPLE_URL = "http://168.100.1.218/wlkg/Service/";
@@ -114,6 +119,11 @@ public interface StaticValue {
      * 获取货代列表的请求地址
      */
     String FORWARDER_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetClient.aspx";
+
+    /**
+     * 获取货场列表的请求地址
+     */
+    String STORAGER_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetStorage.aspx";
 
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";

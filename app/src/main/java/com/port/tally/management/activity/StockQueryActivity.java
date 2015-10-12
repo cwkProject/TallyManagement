@@ -3,7 +3,6 @@ package com.port.tally.management.activity;
  * Created by 超悟空 on 2015/9/19.
  */
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,9 +19,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.EntrustRecyclerViewAdapter;
@@ -30,7 +27,6 @@ import com.port.tally.management.bean.Entrust;
 import com.port.tally.management.fragment.BaseCodeListFragment;
 import com.port.tally.management.fragment.CargoOwnerFragment;
 import com.port.tally.management.fragment.CargoTypeFragment;
-import com.port.tally.management.fragment.OperationFragment;
 import com.port.tally.management.fragment.VoyageFragment;
 import com.port.tally.management.holder.EntrustItemViewHolder;
 import com.port.tally.management.util.StaticValue;
@@ -41,24 +37,21 @@ import org.mobile.library.model.operate.DataChangeObserver;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 import org.mobile.library.model.work.WorkBack;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 /**
- * 委托查询Activity
+ * 堆存查询Activity
  *
  * @author 超悟空
  * @version 1.0 2015/9/19
  * @since 1.0
  */
-public class EntrustQueryActivity extends AppCompatActivity {
+public class StockQueryActivity extends AppCompatActivity {
 
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "EntrustQueryActivity.";
+    private static final String LOG_TAG = "StockQueryActivity.";
 
     /**
      * 一次性加载的数据行数
@@ -93,27 +86,12 @@ public class EntrustQueryActivity extends AppCompatActivity {
         /**
          * 航次编辑框
          */
-        public EditText voyageEditText = null;
-
-        /**
-         * 作业过程编辑框
-         */
-        public EditText operationEditText = null;
+        public EditText forwarderEditText = null;
 
         /**
          * 保留上次查询数据
          */
         public String oldParameter = null;
-
-        /**
-         * 开始日期
-         */
-        public TextView startDateTextView = null;
-
-        /**
-         * 结束日期
-         */
-        public TextView endDateTextView = null;
     }
 
     /**
@@ -124,7 +102,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entrust_query);
+        setContentView(R.layout.activity_stock_query);
 
         // 初始化控件引用
         initViewHolder();
@@ -151,21 +129,13 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 侧滑栏
         viewHolder.drawerLayout = (DrawerLayout) findViewById(R.id
-                .activity_entrust_query_drawer_layout);
+                .activity_stock_query_drawer_layout);
 
         viewHolder.cargoTypeEditText = (EditText) findViewById(R.id.cargo_edit_editText);
 
         viewHolder.cargoOwnerEditText = (EditText) findViewById(R.id.cargo_owner_edit_editText);
 
-        viewHolder.voyageEditText = (EditText) findViewById(R.id.voyage_edit_editText);
-
-        viewHolder.operationEditText = (EditText) findViewById(R.id.operation_edit_editText);
-
-        viewHolder.startDateTextView = (TextView) findViewById(R.id
-                .region_date_select_text_start_date_textView);
-
-        viewHolder.endDateTextView = (TextView) findViewById(R.id
-                .region_date_select_text_end_date_textView);
+        viewHolder.forwarderEditText = (EditText) findViewById(R.id.forwarder_edit_editText);
     }
 
     /**
@@ -174,88 +144,11 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private void initView() {
         // 初始化Toolbar
         initToolbar();
-        setTitle(R.string.entrust_query);
+        setTitle(R.string.forwarder_query);
         // 初始化列表
         initListView();
         // 初始化过滤器
         initFilter();
-        // 初始化日期控件
-        initDate();
-    }
-
-    /**
-     * 初始化日期控件
-     */
-    private void initDate() {
-        Calendar calendar = Calendar.getInstance();
-        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-        String nowDate = format.format(calendar.getTime());
-
-        viewHolder.endDateTextView.setText(nowDate);
-
-        final DatePickerDialog endDialog = new DatePickerDialog(EntrustQueryActivity.this, new
-                DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
-                String date = year + "-" + (monthOfYear + 1) + "-" +
-                        dayOfMonth;
-
-                try {
-                    viewHolder.endDateTextView.setText(format.format(format.parse(date)));
-                } catch (ParseException e) {
-                    Log.e(LOG_TAG + "initDate", "onDateSet ParseException is " + e.getMessage());
-                    viewHolder.endDateTextView.setText(date);
-                }
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar
-                .DAY_OF_MONTH));
-
-        viewHolder.endDateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
-                clearSelect();
-                closeDrawer();
-                endDialog.show();
-                resetData();
-            }
-        });
-
-        calendar.add(Calendar.DAY_OF_YEAR, -30);
-        String beforeDate = format.format(calendar.getTime());
-
-        viewHolder.startDateTextView.setText(beforeDate);
-
-        final DatePickerDialog startDialog = new DatePickerDialog(EntrustQueryActivity.this, new
-                DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                String date = year + "-" + (monthOfYear + 1) + "-" +
-                        dayOfMonth;
-
-                try {
-                    viewHolder.startDateTextView.setText(format.format(format.parse(date)));
-                } catch (ParseException e) {
-                    Log.e(LOG_TAG + "initDate", "onDateSet ParseException is " + e.getMessage());
-                    viewHolder.startDateTextView.setText(date);
-                }
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar
-                .DAY_OF_MONTH));
-
-        viewHolder.startDateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startDialog.show();
-                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
-                clearSelect();
-                closeDrawer();
-                resetData();
-            }
-        });
     }
 
     /**
@@ -273,7 +166,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
                     resetData();
                     // 关闭软键盘
                     Log.i(LOG_TAG + "initFilter", "close soft input");
-                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                    InputMethodController.CloseInputMethod(StockQueryActivity.this);
                     clearSelect();
                 }
             }
@@ -307,12 +200,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
         // 初始化cargoOwner
         initFilterFragment(new CargoOwnerFragment(), viewHolder.cargoOwnerEditText, StaticValue
                 .CodeListTag.CARGO_OWNER_LIST);
-        // 初始化voyage
-        initFilterFragment(new VoyageFragment(), viewHolder.voyageEditText, StaticValue
-                .CodeListTag.VOYAGE_LIST);
-        // 初始化operation
-        initFilterFragment(new OperationFragment(), viewHolder.operationEditText, StaticValue
-                .CodeListTag.OPERATION_LIST);
+        // 初始化forwarder
+        initFilterFragment(new VoyageFragment(), viewHolder.forwarderEditText, StaticValue
+                .CodeListTag.FORWARDER_LIST);
     }
 
     /**
@@ -363,7 +253,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 加入布局管理器
         getSupportFragmentManager().beginTransaction().add(R.id
-                .activity_entrust_query_frameLayout, fragment, tag).hide(fragment).commit();
+                .activity_stock_query_frameLayout, fragment, tag).hide(fragment).commit();
     }
 
     /**
@@ -423,11 +313,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
         // 获取状态
         boolean cargoTypeUse = (boolean) viewHolder.cargoTypeEditText.getTag();
         boolean cargoOwnerUse = (boolean) viewHolder.cargoOwnerEditText.getTag();
-        boolean voyageUse = (boolean) viewHolder.voyageEditText.getTag();
-        boolean operationUse = (boolean) viewHolder.operationEditText.getTag();
+        boolean forwarderUse = (boolean) viewHolder.forwarderEditText.getTag();
 
-        return cargoTypeUse || cargoOwnerUse || voyageUse ||
-                operationUse;
+        return cargoTypeUse || cargoOwnerUse || forwarderUse;
     }
 
     /**
@@ -441,8 +329,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
         // 获取状态
         boolean cargoTypeUse = (boolean) viewHolder.cargoTypeEditText.getTag();
         boolean cargoOwnerUse = (boolean) viewHolder.cargoOwnerEditText.getTag();
-        boolean voyageUse = (boolean) viewHolder.voyageEditText.getTag();
-        boolean operationUse = (boolean) viewHolder.operationEditText.getTag();
+        boolean forwarderUse = (boolean) viewHolder.forwarderEditText.getTag();
 
         if (cargoTypeUse) {
             editText = viewHolder.cargoTypeEditText;
@@ -452,12 +339,8 @@ public class EntrustQueryActivity extends AppCompatActivity {
             editText = viewHolder.cargoOwnerEditText;
         }
 
-        if (voyageUse) {
-            editText = viewHolder.voyageEditText;
-        }
-
-        if (operationUse) {
-            editText = viewHolder.operationEditText;
+        if (forwarderUse) {
+            editText = viewHolder.forwarderEditText;
         }
 
         if (editText != null) {
@@ -476,8 +359,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
         Log.i(LOG_TAG + "clearSelect", "clear select");
         viewHolder.cargoTypeEditText.setTag(false);
         viewHolder.cargoOwnerEditText.setTag(false);
-        viewHolder.voyageEditText.setTag(false);
-        viewHolder.operationEditText.setTag(false);
+        viewHolder.forwarderEditText.setTag(false);
         clearFocus();
     }
 
@@ -487,8 +369,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private void clearFocus() {
         viewHolder.cargoTypeEditText.setFocusable(false);
         viewHolder.cargoOwnerEditText.setFocusable(false);
-        viewHolder.voyageEditText.setFocusable(false);
-        viewHolder.operationEditText.setFocusable(false);
+        viewHolder.forwarderEditText.setFocusable(false);
     }
 
     /**
@@ -547,7 +428,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
                 String entrustId = entrust.getId();
 
                 // 跳转意图
-                Intent intent = new Intent(EntrustQueryActivity.this, EntrustContentActivity.class);
+                Intent intent = new Intent(StockQueryActivity.this, EntrustContentActivity.class);
 
                 // 加入委托编号
                 intent.putExtra(StaticValue.IntentTag.ENTRUST_ID_TAG, entrustId);
@@ -569,9 +450,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
         // 新参数
         String newParameter = viewHolder.cargoTypeEditText.getText().toString() + viewHolder
                 .cargoOwnerEditText.getText().toString() +
-                viewHolder.voyageEditText.getText().toString() +
-                viewHolder.operationEditText.getText().toString() + viewHolder.startDateTextView
-                .getText().toString() + viewHolder.endDateTextView.getText().toString();
+                viewHolder.forwarderEditText.getText().toString();
 
         if (viewHolder.oldParameter == null || !viewHolder.oldParameter.equals(newParameter)) {
             initData();
@@ -623,10 +502,8 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 执行任务
         pullEntrustList.beginExecute("14", String.valueOf(start), String.valueOf(count),
-                viewHolder.startDateTextView.getText().toString(), viewHolder.endDateTextView
-                        .getText().toString(), viewHolder.cargoTypeEditText.getText().toString(),
-                viewHolder.cargoOwnerEditText.getText().toString(), viewHolder.voyageEditText
-                        .getText().toString(), viewHolder.operationEditText.getText().toString());
+                viewHolder.cargoTypeEditText.getText().toString(), viewHolder.cargoOwnerEditText
+                        .getText().toString(), viewHolder.forwarderEditText.getText().toString());
     }
 
     /**

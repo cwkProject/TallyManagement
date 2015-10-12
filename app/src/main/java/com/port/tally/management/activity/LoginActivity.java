@@ -8,6 +8,7 @@ import android.content.Intent;
 import com.port.tally.management.R;
 import com.port.tally.management.function.CodeListManager;
 import com.port.tally.management.function.ForwarderListFunction;
+import com.port.tally.management.function.StorageListFunction;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.activity.BaseLoginActivity;
@@ -65,5 +66,7 @@ public class LoginActivity extends BaseLoginActivity {
     private void onLoginLoadData() {
         CodeListManager.put(StaticValue.CodeListTag.FORWARDER_LIST, new ForwarderListFunction
                 (this, LoginStatus.getLoginStatus().getCodeCompany()), true);
+        CodeListManager.put(StaticValue.CodeListTag.STORAGE_LIST, new StorageListFunction(this,
+                LoginStatus.getLoginStatus().getCodeCompany()), true);
     }
 }

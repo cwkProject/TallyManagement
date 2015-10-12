@@ -19,7 +19,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.port.tally.management.R;
-import com.port.tally.management.bean.Forwarder;
+import com.port.tally.management.bean.Storage;
 import com.port.tally.management.function.CodeListManager;
 import com.port.tally.management.util.StaticValue;
 
@@ -29,18 +29,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 货代片段
+ * 货场片段
  *
  * @author 超悟空
  * @version 1.0 2015/10/12
  * @since 1.0
  */
-public class ForwarderFragment extends BaseCodeListFragment<Forwarder, String> {
+public class StorageFragment extends BaseCodeListFragment<Storage, String> {
 
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "ForwarderFragment.";
+    private static final String LOG_TAG = "StorageFragment.";
 
     /**
      * 列表使用的数据集
@@ -63,7 +63,7 @@ public class ForwarderFragment extends BaseCodeListFragment<Forwarder, String> {
     private LoadingReceiver loadingReceiver = null;
 
     @Override
-    protected SimpleAdapter onCreateAdapter(List<Forwarder> dataList) {
+    protected SimpleAdapter onCreateAdapter(List<Storage> dataList) {
 
         fillDataList(dataList);
 
@@ -76,13 +76,13 @@ public class ForwarderFragment extends BaseCodeListFragment<Forwarder, String> {
      *
      * @param dataList 数据源列表
      */
-    private void fillDataList(List<Forwarder> dataList) {
+    private void fillDataList(List<Storage> dataList) {
         if (dataList == null) {
             // 数据加载失败或未完成
             dataList = new ArrayList<>();
         }
 
-        for (Forwarder data : dataList) {
+        for (Storage data : dataList) {
             Map<String, String> map = new HashMap<>();
 
             map.put(NAME_TAG, data.getName());
@@ -94,14 +94,14 @@ public class ForwarderFragment extends BaseCodeListFragment<Forwarder, String> {
 
     @Override
     protected void onCustom(View rootView, ListView listView, SimpleAdapter adapter,
-                            List<Forwarder> dataList) {
+                            List<Storage> dataList) {
 
         // 获取activity布局中的关联控件
-        editText = (EditText) getActivity().findViewById(R.id.forwarder_edit_editText);
+        editText = (EditText) getActivity().findViewById(R.id.storage_edit_editText);
     }
 
     @Override
-    protected void onSetFilter(ListView listView, SimpleAdapter adapter, List<Forwarder> dataList) {
+    protected void onSetFilter(ListView listView, SimpleAdapter adapter, List<Storage> dataList) {
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -122,14 +122,14 @@ public class ForwarderFragment extends BaseCodeListFragment<Forwarder, String> {
     }
 
     @Override
-    protected List<Forwarder> onCreateDataList() {
+    protected List<Storage> onCreateDataList() {
 
-        if (CodeListManager.get(StaticValue.CodeListTag.FORWARDER_LIST).isLoading()) {
+        if (CodeListManager.get(StaticValue.CodeListTag.STORAGE_LIST).isLoading()) {
             // 仍然在加载，注册广播接收者
             registerReceivers();
         }
 
-        return CodeListManager.get(StaticValue.CodeListTag.FORWARDER_LIST).getDataList();
+        return CodeListManager.get(StaticValue.CodeListTag.STORAGE_LIST).getDataList();
     }
 
     @Override
@@ -158,7 +158,7 @@ public class ForwarderFragment extends BaseCodeListFragment<Forwarder, String> {
         public final IntentFilter getRegisterIntentFilter() {
             // 新建动作集合
             IntentFilter filter = new IntentFilter();
-            filter.addAction(StaticValue.CodeListTag.FORWARDER_LIST);
+            filter.addAction(StaticValue.CodeListTag.STORAGE_LIST);
             return filter;
         }
 
@@ -169,7 +169,7 @@ public class ForwarderFragment extends BaseCodeListFragment<Forwarder, String> {
             Log.i(LOG_TAG + "LoadReceiver.onReceive", "action is " + actionString);
 
             switch (actionString) {
-                case StaticValue.CodeListTag.FORWARDER_LIST:
+                case StaticValue.CodeListTag.STORAGE_LIST:
                     // 加载完毕
                     fillDataList(onCreateDataList());
                     adapter.notifyDataSetChanged();
