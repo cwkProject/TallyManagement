@@ -20,7 +20,7 @@ import java.util.Map;
  * 货代列表任务数据模型
  *
  * @author 超悟空
- * @version 1.0 2015/9/21
+ * @version 1.0 2015/10/12
  * @since 1.0
  */
 public class ForwarderListData extends JsonDataModel {

@@ -15,7 +15,7 @@ import java.util.List;
  * 获取货代列表任务
  *
  * @author 超悟空
- * @version 1.0 2015/9/21
+ * @version 1.0 2015/10/12
  * @since 1.0
  */
 public class PullForwarderList extends DefaultWorkModel<String, List<Forwarder>,

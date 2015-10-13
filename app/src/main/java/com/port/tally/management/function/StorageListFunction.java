@@ -63,7 +63,7 @@ public class StorageListFunction extends BaseCodeListFunction<Storage, String> {
 
     @Override
     protected List<Storage> onLoadFromDataBase(BaseOperator<Storage> operator, String parameter) {
-        if (operator == null || operator.IsEmpty() || parameter == null) {
+        if (operator == null || operator.isEmpty() || parameter == null) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null or parameter null");
             return null;
         }

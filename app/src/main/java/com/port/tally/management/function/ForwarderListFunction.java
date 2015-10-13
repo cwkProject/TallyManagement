@@ -64,7 +64,7 @@ public class ForwarderListFunction extends BaseCodeListFunction<Forwarder, Strin
     @Override
     protected List<Forwarder> onLoadFromDataBase(BaseOperator<Forwarder> operator, String
             parameter) {
-        if (operator == null || operator.IsEmpty() || parameter == null) {
+        if (operator == null || operator.isEmpty() || parameter == null) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null or parameter null");
             return null;
         }

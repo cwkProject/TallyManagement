@@ -213,8 +213,10 @@ public class SplashActivity extends Activity {
                     } else {
                         // 跳过一条数据加载
                         actionSemaphore--;
+                        Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");
                         // 跳过一条数据加载
                         actionSemaphore--;
+                        Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");
                     }
                 case StaticValue.CodeListTag.CARGO_TYPE_LIST:
                 case StaticValue.CodeListTag.CARGO_OWNER_LIST:

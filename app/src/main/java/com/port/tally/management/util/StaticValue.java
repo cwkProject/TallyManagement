@@ -24,6 +24,11 @@ public interface StaticValue {
          * 委托编码取值标签
          */
         String ENTRUST_ID_TAG = "entrust_id_tag";
+
+        /**
+         * 堆存编码取值标签
+         */
+        String STOCK_ID_TAG = "stock_id_tag";
     }
 
     /**
@@ -123,7 +128,17 @@ public interface StaticValue {
     /**
      * 获取货场列表的请求地址
      */
-    String STORAGER_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetStorage.aspx";
+    String STORAGE_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetStorage.aspx";
+
+    /**
+     * 查询堆存列表的请求地址
+     */
+    String STOCK_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Stock/GetStock.aspx";
+
+    /**
+     * 获取堆存详情的请求地址
+     */
+    String STOCK_CONTENT_URL = "http://218.92.115.55/M_Lhgl/Service/Stock/GetStockDetail.aspx";
 
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";

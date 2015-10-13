@@ -18,7 +18,7 @@ import java.util.List;
  * @param <Condition> 数据集提取条件参数类型
  *
  * @author 超悟空
- * @version 1.0 2015/9/22
+ * @version 1.1 2015/10/12
  * @since 1.0
  */
 public abstract class BaseCodeListFunction<DataModel, Condition> {
@@ -149,7 +149,7 @@ public abstract class BaseCodeListFunction<DataModel, Condition> {
      */
     protected List<DataModel> onLoadFromDataBase(BaseOperator<DataModel> operator, Condition
             parameter) {
-        if (operator == null || operator.IsEmpty()) {
+        if (operator == null || operator.isEmpty()) {
             Log.i(LOG_TAG + "onLoadFromDataBase", "database null");
             return null;
         }

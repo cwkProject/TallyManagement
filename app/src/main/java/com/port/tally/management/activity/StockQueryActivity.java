@@ -22,15 +22,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.port.tally.management.R;
-import com.port.tally.management.adapter.EntrustRecyclerViewAdapter;
-import com.port.tally.management.bean.Entrust;
+import com.port.tally.management.adapter.StockRecyclerViewAdapter;
+import com.port.tally.management.bean.Stock;
 import com.port.tally.management.fragment.BaseCodeListFragment;
 import com.port.tally.management.fragment.CargoOwnerFragment;
 import com.port.tally.management.fragment.CargoTypeFragment;
-import com.port.tally.management.fragment.VoyageFragment;
-import com.port.tally.management.holder.EntrustItemViewHolder;
+import com.port.tally.management.fragment.ForwarderFragment;
+import com.port.tally.management.fragment.StorageFragment;
+import com.port.tally.management.holder.StockItemViewHolder;
 import com.port.tally.management.util.StaticValue;
-import com.port.tally.management.work.PullEntrustList;
+import com.port.tally.management.work.PullStockList;
 
 import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.DataChangeObserver;
@@ -43,7 +44,7 @@ import java.util.List;
  * 堆存查询Activity
  *
  * @author 超悟空
- * @version 1.0 2015/9/19
+ * @version 1.0 2015/10/12
  * @since 1.0
  */
 public class StockQueryActivity extends AppCompatActivity {
@@ -64,9 +65,9 @@ public class StockQueryActivity extends AppCompatActivity {
     private class LocalViewHolder {
 
         /**
-         * 委托列表数据适配器
+         * 堆存列表数据适配器
          */
-        public EntrustRecyclerViewAdapter recyclerViewAdapter = null;
+        public StockRecyclerViewAdapter recyclerViewAdapter = null;
 
         /**
          * 侧滑抽屉
@@ -84,9 +85,14 @@ public class StockQueryActivity extends AppCompatActivity {
         public EditText cargoOwnerEditText = null;
 
         /**
-         * 航次编辑框
+         * 货代编辑框
          */
         public EditText forwarderEditText = null;
+
+        /**
+         * 货场编辑框
+         */
+        public EditText storageEditText = null;
 
         /**
          * 保留上次查询数据
@@ -124,8 +130,8 @@ public class StockQueryActivity extends AppCompatActivity {
     private void initViewHolder() {
         viewHolder = new LocalViewHolder();
 
-        // 委托列表适配器
-        viewHolder.recyclerViewAdapter = new EntrustRecyclerViewAdapter();
+        // 堆存列表适配器
+        viewHolder.recyclerViewAdapter = new StockRecyclerViewAdapter();
 
         // 侧滑栏
         viewHolder.drawerLayout = (DrawerLayout) findViewById(R.id
@@ -136,6 +142,8 @@ public class StockQueryActivity extends AppCompatActivity {
         viewHolder.cargoOwnerEditText = (EditText) findViewById(R.id.cargo_owner_edit_editText);
 
         viewHolder.forwarderEditText = (EditText) findViewById(R.id.forwarder_edit_editText);
+
+        viewHolder.storageEditText = (EditText) findViewById(R.id.storage_edit_editText);
     }
 
     /**
@@ -201,8 +209,11 @@ public class StockQueryActivity extends AppCompatActivity {
         initFilterFragment(new CargoOwnerFragment(), viewHolder.cargoOwnerEditText, StaticValue
                 .CodeListTag.CARGO_OWNER_LIST);
         // 初始化forwarder
-        initFilterFragment(new VoyageFragment(), viewHolder.forwarderEditText, StaticValue
+        initFilterFragment(new ForwarderFragment(), viewHolder.forwarderEditText, StaticValue
                 .CodeListTag.FORWARDER_LIST);
+        // 初始化storage
+        initFilterFragment(new StorageFragment(), viewHolder.storageEditText, StaticValue
+                .CodeListTag.STORAGE_LIST);
     }
 
     /**
@@ -252,8 +263,8 @@ public class StockQueryActivity extends AppCompatActivity {
         });
 
         // 加入布局管理器
-        getSupportFragmentManager().beginTransaction().add(R.id
-                .activity_stock_query_frameLayout, fragment, tag).hide(fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.activity_stock_query_frameLayout,
+                fragment, tag).hide(fragment).commit();
     }
 
     /**
@@ -314,8 +325,9 @@ public class StockQueryActivity extends AppCompatActivity {
         boolean cargoTypeUse = (boolean) viewHolder.cargoTypeEditText.getTag();
         boolean cargoOwnerUse = (boolean) viewHolder.cargoOwnerEditText.getTag();
         boolean forwarderUse = (boolean) viewHolder.forwarderEditText.getTag();
+        boolean storageUse = (boolean) viewHolder.storageEditText.getTag();
 
-        return cargoTypeUse || cargoOwnerUse || forwarderUse;
+        return cargoTypeUse || cargoOwnerUse || forwarderUse || storageUse;
     }
 
     /**
@@ -330,6 +342,7 @@ public class StockQueryActivity extends AppCompatActivity {
         boolean cargoTypeUse = (boolean) viewHolder.cargoTypeEditText.getTag();
         boolean cargoOwnerUse = (boolean) viewHolder.cargoOwnerEditText.getTag();
         boolean forwarderUse = (boolean) viewHolder.forwarderEditText.getTag();
+        boolean storageUse = (boolean) viewHolder.storageEditText.getTag();
 
         if (cargoTypeUse) {
             editText = viewHolder.cargoTypeEditText;
@@ -341,6 +354,10 @@ public class StockQueryActivity extends AppCompatActivity {
 
         if (forwarderUse) {
             editText = viewHolder.forwarderEditText;
+        }
+
+        if (storageUse) {
+            editText = viewHolder.storageEditText;
         }
 
         if (editText != null) {
@@ -360,6 +377,7 @@ public class StockQueryActivity extends AppCompatActivity {
         viewHolder.cargoTypeEditText.setTag(false);
         viewHolder.cargoOwnerEditText.setTag(false);
         viewHolder.forwarderEditText.setTag(false);
+        viewHolder.storageEditText.setTag(false);
         clearFocus();
     }
 
@@ -370,6 +388,7 @@ public class StockQueryActivity extends AppCompatActivity {
         viewHolder.cargoTypeEditText.setFocusable(false);
         viewHolder.cargoOwnerEditText.setFocusable(false);
         viewHolder.forwarderEditText.setFocusable(false);
+        viewHolder.storageEditText.setFocusable(false);
     }
 
     /**
@@ -406,7 +425,7 @@ public class StockQueryActivity extends AppCompatActivity {
 
         // RecyclerView列表对象
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id
-                .activity_entrust_query_recyclerView);
+                .activity_stock_query_recyclerView);
 
         // 设置item动画
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -418,20 +437,19 @@ public class StockQueryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // 设置点击事件
-        viewHolder.recyclerViewAdapter.setOnItemClickListener(new OnItemClickListenerForRecyclerViewItem<List<Entrust>, EntrustItemViewHolder>() {
+        viewHolder.recyclerViewAdapter.setOnItemClickListener(new OnItemClickListenerForRecyclerViewItem<List<Stock>, StockItemViewHolder>() {
             @Override
-            public void onClick(List<Entrust> entrusts, EntrustItemViewHolder
-                    entrustItemViewHolder) {
-                Entrust entrust = entrusts.get(entrustItemViewHolder.getAdapterPosition());
+            public void onClick(List<Stock> stocks, StockItemViewHolder stockItemViewHolder) {
+                Stock stock = stocks.get(stockItemViewHolder.getAdapterPosition());
 
-                // 委托编号
-                String entrustId = entrust.getId();
+                // 堆存编号
+                String stockId = stock.getId();
 
                 // 跳转意图
-                Intent intent = new Intent(StockQueryActivity.this, EntrustContentActivity.class);
+                Intent intent = new Intent(StockQueryActivity.this, StockContentActivity.class);
 
-                // 加入委托编号
-                intent.putExtra(StaticValue.IntentTag.ENTRUST_ID_TAG, entrustId);
+                // 加入堆存编号
+                intent.putExtra(StaticValue.IntentTag.STOCK_ID_TAG, stockId);
 
                 // 跳转到详情页面
                 startActivity(intent);
@@ -450,7 +468,8 @@ public class StockQueryActivity extends AppCompatActivity {
         // 新参数
         String newParameter = viewHolder.cargoTypeEditText.getText().toString() + viewHolder
                 .cargoOwnerEditText.getText().toString() +
-                viewHolder.forwarderEditText.getText().toString();
+                viewHolder.forwarderEditText.getText().toString() +
+                viewHolder.storageEditText.getText().toString();
 
         if (viewHolder.oldParameter == null || !viewHolder.oldParameter.equals(newParameter)) {
             initData();
@@ -477,12 +496,12 @@ public class StockQueryActivity extends AppCompatActivity {
             return;
         }
 
-        // 委托列表任务
-        PullEntrustList pullEntrustList = new PullEntrustList();
+        // 堆存列表任务
+        PullStockList pullStockList = new PullStockList();
 
-        pullEntrustList.setWorkBackListener(new WorkBack<List<Entrust>>() {
+        pullStockList.setWorkBackListener(new WorkBack<List<Stock>>() {
             @Override
-            public void doEndWork(boolean state, List<Entrust> data) {
+            public void doEndWork(boolean state, List<Stock> data) {
                 if (state) {
                     if (start > 0) {
                         // 插入新数据
@@ -501,9 +520,10 @@ public class StockQueryActivity extends AppCompatActivity {
         });
 
         // 执行任务
-        pullEntrustList.beginExecute("14", String.valueOf(start), String.valueOf(count),
-                viewHolder.cargoTypeEditText.getText().toString(), viewHolder.cargoOwnerEditText
-                        .getText().toString(), viewHolder.forwarderEditText.getText().toString());
+        pullStockList.beginExecute("14", String.valueOf(start), String.valueOf(count), viewHolder
+                .cargoTypeEditText.getText().toString(), viewHolder.cargoOwnerEditText.getText()
+                .toString(), viewHolder.forwarderEditText.getText().toString(), viewHolder
+                .storageEditText.getText().toString());
     }
 
     /**

@@ -34,7 +34,7 @@ public class EntrustItemViewHolder extends RecyclerView.ViewHolder {
     public TextView voyageTextView = null;
 
     /**
-     * 航次文本框
+     * 委托号文本框
      */
     public TextView entrustTextView = null;
 

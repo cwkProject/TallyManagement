@@ -8,6 +8,7 @@ import android.content.Intent;
 
 import com.port.tally.management.activity.DianZiMap;
 import com.port.tally.management.activity.EntrustQueryActivity;
+import com.port.tally.management.activity.StockQueryActivity;
 import com.port.tally.management.activity.TallyActivity;
 import com.port.tally.management.activity.PushMessage;
 import com.port.tally.management.activity.TrunkActivity;
@@ -41,7 +42,7 @@ public class FunctionIndex {
                 break;
             case 1:
                 // 衡重
-                intent = new Intent(context,TrunkActivity.class);
+                intent = new Intent(context, TrunkActivity.class);
                 break;
             case 2:
                 // 委托查询
@@ -49,7 +50,7 @@ public class FunctionIndex {
                 break;
             case 3:
                 // 堆存
-                intent = new Intent(context, WorkPlanQuery.class);
+                intent = new Intent(context, StockQueryActivity.class);
                 break;
             case 4:
                 // 汽运查询

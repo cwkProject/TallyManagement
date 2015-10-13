@@ -82,6 +82,8 @@ public class StorageFragment extends BaseCodeListFragment<Storage, String> {
             dataList = new ArrayList<>();
         }
 
+        mapList.clear();
+
         for (Storage data : dataList) {
             Map<String, String> map = new HashMap<>();
 

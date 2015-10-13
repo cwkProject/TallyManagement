@@ -82,6 +82,8 @@ public class ForwarderFragment extends BaseCodeListFragment<Forwarder, String> {
             dataList = new ArrayList<>();
         }
 
+        mapList.clear();
+
         for (Forwarder data : dataList) {
             Map<String, String> map = new HashMap<>();
 

@@ -15,7 +15,7 @@ import java.util.List;
  * 获取货场列表任务
  *
  * @author 超悟空
- * @version 1.0 2015/9/21
+ * @version 1.0 2015/10/12
  * @since 1.0
  */
 public class PullStorageList extends DefaultWorkModel<String, List<Storage>, StorageListData> {
@@ -27,7 +27,7 @@ public class PullStorageList extends DefaultWorkModel<String, List<Storage>, Sto
 
     @Override
     protected String onTaskUri() {
-        return StaticValue.STORAGER_LIST_URL;
+        return StaticValue.STORAGE_LIST_URL;
     }
 
     @Override

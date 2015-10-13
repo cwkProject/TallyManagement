@@ -93,7 +93,7 @@ public class Entrust {
     private String pack = null;
 
     /**
-     * 标识
+     * 唛头
      */
     private String mark = null;
 
@@ -391,18 +391,18 @@ public class Entrust {
     }
 
     /**
-     * 获取标识
+     * 获取唛头
      *
-     * @return 标识
+     * @return 唛头
      */
     public String getMark() {
         return mark;
     }
 
     /**
-     * 设置标识
+     * 设置唛头
      *
-     * @param mark 标识
+     * @param mark 唛头
      */
     public void setMark(String mark) {
         this.mark = mark;
