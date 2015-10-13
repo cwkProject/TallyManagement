@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:background="#f0f0f0"
+
               android:orientation="vertical">
 
     <include
@@ -15,7 +15,14 @@
         android:id="@+id/xListView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:cacheColorHint="#00000000">
+        android:cacheColorHint="#00000000"
+        android:divider="#D3D3D3"
+        android:dividerHeight="4px"
+        android:background="@color/lightgray"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+
+        android:scrollbarStyle="outsideOverlay">
     </com.port.tally.management.xlistview.XListView>
 
 </LinearLayout>

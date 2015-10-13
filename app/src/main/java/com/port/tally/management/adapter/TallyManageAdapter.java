@@ -54,7 +54,6 @@ public class TallyManageAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         Map<String, Object> item = getItem(position);
-        final int mPosition = position;
         final Hand hand;
         if (convertView == null) {
             hand = new Hand();
@@ -70,8 +69,8 @@ public class TallyManageAdapter extends BaseAdapter {
         } else {
             hand = (Hand) convertView.getTag();
         }
-        if(!item.get("entrust").equals("")){
-           hand.tv_entrust.setText((CharSequence)item.get("entrust"));}
+        if(!item.get("taskno").equals("")){
+           hand.tv_entrust.setText((CharSequence)item.get("taskno"));}
         if(!item.get("bowei").equals("")){
            hand.bowei2.setText((CharSequence) item.get("bowei"));
         }
@@ -89,7 +88,7 @@ public class TallyManageAdapter extends BaseAdapter {
 
     private class Hand {
 
-        // 锟斤拷锟斤拷锟斤拷坪徒锟斤拷锟斤拷谋锟�
+
         TextView tv_entrust,bowei2, tv_process, tv_start,tv_end, tv_cargoname;
 
     }

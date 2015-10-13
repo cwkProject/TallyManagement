@@ -9,7 +9,7 @@ import org.mobile.library.model.work.DefaultWorkModel;
 /**
  * Created by song on 2015/10/2.
  */
-public class UpDateStartWork extends DefaultWorkModel<String, StartWorkBean, UpdataStartData> {
+public class UpDateStartWork extends DefaultWorkModel<String,String, UpdataStartData> {
 
 /**
  * 参数合法性检测，
@@ -48,8 +48,8 @@ protected String onTaskUri() {
  * @return 任务返回数据
  */
 @Override
-protected StartWorkBean onRequestSuccessSetResult(UpdataStartData data) {
-        return null;
+protected String onRequestSuccessSetResult(UpdataStartData data) {
+        return data.getResult();
         }
 
 /**
@@ -64,7 +64,7 @@ protected StartWorkBean onRequestSuccessSetResult(UpdataStartData data) {
  * @return 任务返回数据
  */
 @Override
-protected StartWorkBean onRequestFailedSetResult(UpdataStartData data) {
+protected String onRequestFailedSetResult(UpdataStartData data) {
         return null;
         }
 

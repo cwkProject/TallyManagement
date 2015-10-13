@@ -1,12 +1,7 @@
 package com.port.tally.management.activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.TabActivity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -23,8 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.port.tally.management.R;
-import com.port.tally.management.adapter.LiHuoWeiTuoAdapter;
-import com.port.tally.management.bean.LiHuoWeiTuo;
 import com.port.tally.management.work.ToallyDetailWork;
 
 import org.mobile.library.model.work.WorkBack;
@@ -76,17 +69,17 @@ public class TallyDetail extends TabActivity {
             // TODO Auto-generated method stub
             @Override
             public void onTabChanged(String tabId) {
-                Dialog dialog = new AlertDialog.Builder(TallyDetail.this)
-                        .setTitle("提示")
-                        .setMessage("当前选中：" + tabId + "标签")
-                        .setPositiveButton("确定",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        dialog.cancel();
-                                    }
-                                }).create();//创建按钮
-
-                dialog.show();
+//                Dialog dialog = new AlertDialog.Builder(TallyDetail.this)
+//                        .setTitle("提示")
+//                        .setMessage("当前选中：" + tabId + "标签")
+//                        .setPositiveButton("确定",
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int whichButton) {
+//                                        dialog.cancel();
+//                                    }
+//                                }).create();//创建按钮
+//
+//                dialog.show();
             }
         });
     }
@@ -132,24 +125,22 @@ public class TallyDetail extends TabActivity {
                 R.id.LinearLayout001).setIndicator("机械"));
         mTabHost.addTab(mTabHost.newTabSpec("班组").setContent(
                 R.id.LinearLayout002).setIndicator("班组"));
-        mTabHost.addTab(mTabHost.newTabSpec("tab3").setContent(
-                R.id.LinearLayout003).setIndicator("Tab3"));
+
 
         // mTabHost.setCurrentTab(1);
-        btnVisiable = (Button) findViewById(R.id.btnVisiable);
-        btnStrip = (Button) findViewById(R.id.btnStrip);
+
 
         //
-        // 建立数据源
-        List<LiHuoWeiTuo> persons = new ArrayList<LiHuoWeiTuo>();
-        persons.add(new LiHuoWeiTuo("张三", "上海 "));
-        persons.add(new LiHuoWeiTuo("李四", "上海 "));
-        persons.add(new LiHuoWeiTuo("王五", "北京"));
-        persons.add(new LiHuoWeiTuo("赵六", "广州 "));
-        //  建立Adapter绑定数据源
-        LiHuoWeiTuoAdapter LiHuoWeiTuoAdapter = new LiHuoWeiTuoAdapter(this, persons);
-        //绑定Adapter
-        weiTuoSp.setAdapter(LiHuoWeiTuoAdapter);
+//        // 建立数据源
+//        List<LiHuoWeiTuo> persons = new ArrayList<LiHuoWeiTuo>();
+//        persons.add(new LiHuoWeiTuo("张三", "上海 "));
+//        persons.add(new LiHuoWeiTuo("李四", "上海 "));
+//        persons.add(new LiHuoWeiTuo("王五", "北京"));
+//        persons.add(new LiHuoWeiTuo("赵六", "广州 "));
+//        //  建立Adapter绑定数据源
+//        LiHuoWeiTuoAdapter LiHuoWeiTuoAdapter = new LiHuoWeiTuoAdapter(this, persons);
+//        //绑定Adapter
+//        weiTuoSp.setAdapter(LiHuoWeiTuoAdapter);
         imgLeft.setOnClickListener(new View.OnClickListener() {
 
             //			@Override

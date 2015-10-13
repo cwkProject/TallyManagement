@@ -1,8 +1,10 @@
 package com.port.tally.management.activity;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,14 +14,19 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,31 +37,40 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.port.tally.management.R;
+import com.port.tally.management.adapter.EndWorkTeamAutoAdapter;
 import com.port.tally.management.bean.StartWorkBean;
 import com.port.tally.management.util.FloatTextToast;
+import com.port.tally.management.work.EndWorkAutoTeamWork;
 import com.port.tally.management.work.StartWorkWork;
+import com.port.tally.management.work.UploadEndWork;
 
 import org.mobile.library.model.work.WorkBack;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
-
+//
 /**
  * Created by song on 2015/9/29.
  */
 public class EndWork extends Activity {
     private static final int msgKey1 = 1;
+    private AutoCompleteTextView teamAuto;
+    EndWorkTeamAutoAdapter endWorkTeamAutoAdapter;
+    private  List<Map<String, Object>> dataList=null;
 
     private TextView tv_vehiclenum, tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task;
-    private EditText tongxin_edt, et_group,et_count;
+    private EditText tongxin_edt,et_count;
     private Button tongxing_search_btn, endWork_btn;
     private TextView tv_entime;
     private TextView title;
     private ImageView imgLeft;
     private Spinner spinner_over,spinner_note;
-
+    private String spinner_overText;
     private PopupWindow startPopupWindow;
     // 定义5个记录当前时间的变量
     private int year;
@@ -69,16 +85,20 @@ public class EndWork extends Activity {
     private NdefMessage mNdefPushMessage;
     private AlertDialog mDialog;
     private Button card_btn;
-
+    private static final String[] COUNTRIES = {"China","Russia","Germany",
+            "Ukraine","Belarus","USA","China1","China2","USA1"};
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.endwork);
         init();
+
         new TimeThread().start();
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     private void init() {
+
         title = (TextView) findViewById(R.id.title);
         imgLeft = (ImageView) findViewById(R.id.left);
         tv_entime = (TextView) findViewById(R.id.tv_entime);
@@ -96,9 +116,24 @@ public class EndWork extends Activity {
         tv_loader=(TextView)findViewById(R.id.tv_loader);
         tv_task =(TextView)findViewById(R.id.tv_task);
         et_count = (EditText) findViewById(R.id.et_count);
-        et_group =(EditText)findViewById(R.id.et_group);
+        teamAuto =(AutoCompleteTextView)findViewById(R.id.et_group);
+        dataList = new ArrayList<>();
+        spinner_over =(Spinner)findViewById(R.id.spinner_over);
+
+          loadValue("010111");
+        Log.i("dataList的值",dataList.toString());
+//        endWorkTeamAutoAdapter = new EndWorkTeamAutoAdapter( dataList, getApplicationContext());
+//        teamAuto.setAdapter(endWorkTeamAutoAdapter);
+//        teamAuto.setThreshold(1);  //设置输入一个字符 提示，默认为2
+//        teamAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Map<String, Object> pc =dataList.get(position);
+//                teamAuto.setText(pc.get("tv1") + " " + pc.get("tv2"));
+//            }
+//        });
         endWork_btn = (Button) findViewById(R.id.save_btn);
-        title.setText("开工");
+        title.setText("完工");
         tv_entime.setText("选择时间");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
@@ -132,7 +167,14 @@ public class EndWork extends Activity {
                 startPopupWindow.showAsDropDown(v);
             }
         });
+        endWork_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner_overText = spinner_over.getSelectedItem().toString();
+                uploadValue(spinner_overText, teamAuto.getText().toString(),et_count.getText().toString(),"","","");
 
+            }
+        });
         //通行证点击事件
         tongxing_search_btn.setOnClickListener(new View.OnClickListener() {
 
@@ -209,7 +251,59 @@ public class EndWork extends Activity {
     private void showDate(int year, int month, int day, int hour, int minute) {
         tv_entime.setText(+year + "年" + (month + 1) + "月" + day + "日" + hour + "时" + minute + "分");
     }
+//文本提示框
+    private void initAutodata(){
+//        loadValue("010111");
+//        Log.i("dataList的值",dataList.toString());
+//        endWorkTeamAutoAdapter = new EndWorkTeamAutoAdapter( dataList, getApplicationContext());
+//        teamAuto.setAdapter(endWorkTeamAutoAdapter);
+//        teamAuto.setThreshold(1);  //设置输入一个字符 提示，默认为2
+//        teamAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Map<String, Object> pc =dataList.get(position);
+//                teamAuto.setText(pc.get("tv1") + " " + pc.get("tv2"));
+//            }
+//        });
+    }
 
+
+    //给个控件赋值
+    private void loadValue( String company) {
+
+        //实例化，传入参数
+        EndWorkAutoTeamWork endWorkAutoTeamWork = new EndWorkAutoTeamWork();
+
+        endWorkAutoTeamWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
+
+            public void doEndWork(boolean b, List<Map<String, Object>> data) {
+
+
+
+                if (b) {
+                    dataList.addAll(data);
+                    Log.i("dataList1的值", dataList.toString());
+                    Log.i("data的值", data.toString());
+                    endWorkTeamAutoAdapter = new EndWorkTeamAutoAdapter( dataList, EndWork.this.getApplicationContext());
+                    teamAuto.setAdapter(endWorkTeamAutoAdapter);
+                    teamAuto.setThreshold(1);  //设置输入一个字符 提示，默认为2
+                    teamAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Map<String, Object> pc = dataList.get(position);
+                            teamAuto.setText(pc.get("tv1") + " " + pc.get("tv2"));
+                        }
+                    });
+                } else {
+
+
+                }
+                endWorkTeamAutoAdapter.notifyDataSetChanged();
+            }
+
+        });
+        endWorkAutoTeamWork.beginExecute(company);
+    }
     //NFC部分
     private void showMessage(int title, int message) {
         mDialog.setTitle(title);
@@ -217,6 +311,7 @@ public class EndWork extends Activity {
         mDialog.show();
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private NdefRecord newTextRecord(String text, Locale locale, boolean encodeInUtf8) {
         byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
 
@@ -234,6 +329,7 @@ public class EndWork extends Activity {
         return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], data);
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     @Override
     protected void onResume() {
         super.onResume();
@@ -246,6 +342,7 @@ public class EndWork extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     @Override
     protected void onPause() {
         super.onPause();
@@ -274,6 +371,7 @@ public class EndWork extends Activity {
         return;
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     private void resolveIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -353,18 +451,40 @@ public class EndWork extends Activity {
                     tv_task.setText("");
                     clearEnd();
 
-                    FloatTextToast.makeText(EndWork.this, tongxin_edt, "信息不存在", FloatTextToast.LENGTH_SHORT).show();
+                    showDialog("信息不存在");
                 }
             }
         });
-        startWorkWork.beginExecute(key,company,type);
+        startWorkWork.beginExecute(key, company, type);
+
+//公司、
+    }
+
+    //给个控件赋值
+    private void uploadValue(String key,String company,String count,String time,String team,String teamwork) {
+
+        //实例化，传入参数
+        UploadEndWork uploadEndWork = new UploadEndWork();
+        uploadEndWork.setWorkBackListener(new WorkBack<String>() {
+            @Override
+            public void doEndWork(boolean b, String s) {
+                if(b&& s.equals("IsSuccess")){
+                    showDialog("提交成功");
+
+                }
+                else {
+                    showDialog("提交失败");
+                }
+            }
+        });
+
+        uploadEndWork.beginExecute(key,company,count,time,team,teamwork);
 
 
     }
-
     private void clearEnd() {
         tv_entime.setText("请选择时间");
-        et_group.setText("");
+        teamAuto.setText("");
     }
 
 
@@ -411,6 +531,19 @@ public class EndWork extends Activity {
                 }
             } while (true);
         }
+    }
+    private void showDialog(String str){
+        Dialog dialog = new AlertDialog.Builder(EndWork.this)
+                .setTitle("提示")
+                .setMessage(str)
+                .setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        }).create();//创建按钮
+
+        dialog.show();
     }
 }
 

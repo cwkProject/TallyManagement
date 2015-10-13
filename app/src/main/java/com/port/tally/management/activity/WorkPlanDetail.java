@@ -2,24 +2,16 @@ package com.port.tally.management.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.port.tally.management.R;
-import com.port.tally.management.adapter.LiHuoWeiTuoAdapter;
-import com.port.tally.management.bean.LiHuoWeiTuo;
 import com.port.tally.management.bean.WorkPlanDetailBean;
-import com.port.tally.management.work.ToallyDetailWork;
 import com.port.tally.management.work.WorkPlanDetailWork;
 
 import org.mobile.library.model.work.WorkBack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by song on 2015/10/10.

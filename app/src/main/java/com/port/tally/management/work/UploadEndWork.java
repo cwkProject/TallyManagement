@@ -1,16 +1,17 @@
 package com.port.tally.management.work;
 
 import com.port.tally.management.bean.StartWorkBean;
-import com.port.tally.management.data.UpdataStartData;
+import com.port.tally.management.data.StartWorkData;
 import com.port.tally.management.data.UploadEndWorkData;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
 
 /**
- * Created by song on 2015/10/2.
+ * Created by song on 2015/10/12.
  */
-public class UpDataEndWork extends DefaultWorkModel<String, String, UploadEndWorkData> {
+public class UploadEndWork extends DefaultWorkModel<String, String, UploadEndWorkData> {
+
     /**
      * 参数合法性检测，
      * 用于检测传入参数是否合法，
@@ -20,6 +21,7 @@ public class UpDataEndWork extends DefaultWorkModel<String, String, UploadEndWor
      *
      * @return 检测结果，合法返回true，非法返回false
      */
+
     protected boolean onCheckParameters(String... parameters) {
         // 需要至少两个传入参数
         return !(parameters == null || parameters.length < 1);
@@ -32,7 +34,7 @@ public class UpDataEndWork extends DefaultWorkModel<String, String, UploadEndWor
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_UPDATEND_URL;
+        return StaticValue.HTTP_GET_STARTWORK_URL;
     }
 
     /**
@@ -48,7 +50,7 @@ public class UpDataEndWork extends DefaultWorkModel<String, String, UploadEndWor
      */
     @Override
     protected String onRequestSuccessSetResult(UploadEndWorkData data) {
-        return null;
+        return data.getResult();
     }
 
     /**
@@ -77,7 +79,9 @@ public class UpDataEndWork extends DefaultWorkModel<String, String, UploadEndWor
      */
     @Override
     protected UploadEndWorkData onCreateDataModel(String... parameters) {
-        UploadEndWorkData uploadEndWorkData  = new UploadEndWorkData();
+
+
+        UploadEndWorkData  uploadEndWorkData  = new UploadEndWorkData();
 
         uploadEndWorkData.setId(parameters[0]);
         uploadEndWorkData.setNotperson(parameters[1]);
@@ -88,3 +92,4 @@ public class UpDataEndWork extends DefaultWorkModel<String, String, UploadEndWor
         return uploadEndWorkData;
     }
 }
+

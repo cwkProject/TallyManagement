@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-
+    android:background="@drawable/shape"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
+    android:padding="5dp"
+
     >
     <LinearLayout
 
@@ -14,7 +16,7 @@
         android:gravity="center_vertical"
         android:minHeight="40.0dip"
         android:orientation="horizontal"
-        android:padding="8.0dip"
+
 
         >
 
@@ -284,10 +286,5 @@
             android:textSize="@dimen/BasicTextSize"/>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#66CCFF"
 
-        />
 </LinearLayout>

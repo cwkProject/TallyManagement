@@ -1,8 +1,10 @@
 package com.port.tally.management.activity;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +14,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,8 +33,11 @@ import android.widget.TimePicker;
 
 import com.port.tally.management.R;
 import com.port.tally.management.bean.StartWorkBean;
+import com.port.tally.management.data.UpdataStartData;
 import com.port.tally.management.util.FloatTextToast;
 import com.port.tally.management.work.StartWorkWork;
+import com.port.tally.management.work.UpDateStartWork;
+import com.port.tally.management.work.UploadEndWork;
 
 import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.LoginStatus;
@@ -76,6 +82,7 @@ public class StartWork extends Activity {
         new TimeThread().start();
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     private void init() {
         title = (TextView) findViewById(R.id.title);
         imgLeft = (ImageView) findViewById(R.id.left);
@@ -155,7 +162,7 @@ public class StartWork extends Activity {
                     long sysTime = System.currentTimeMillis();
                     CharSequence sysTimeStr = DateFormat.format("hh:mm:ss", sysTime);
                     tv_startTime.setText(sysTimeStr);
-                    initValue(key,sysTimeStr.toString(),"");
+                    uploadValue(key,sysTimeStr.toString(),LoginStatus.getLoginStatus().getNickname());
                 };
             }
         });
@@ -228,6 +235,7 @@ public class StartWork extends Activity {
         mDialog.show();
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private NdefRecord newTextRecord(String text, Locale locale, boolean encodeInUtf8) {
         byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
 
@@ -245,6 +253,7 @@ public class StartWork extends Activity {
         return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], data);
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     @Override
     protected void onResume() {
         super.onResume();
@@ -257,6 +266,7 @@ public class StartWork extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     @Override
     protected void onPause() {
         super.onPause();
@@ -285,6 +295,7 @@ public class StartWork extends Activity {
         return;
     }
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     private void resolveIntent(Intent intent) {
         String action = intent.getAction();
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -368,11 +379,28 @@ public class StartWork extends Activity {
                 }
             }
         });
-        startWorkWork.beginExecute(key,company,type);
+        startWorkWork.beginExecute(key, company, type);
 
 
     }
+    //给个控件赋值
+    private void uploadValue(String key,String company,String count) {
 
+        //实例化，传入参数
+        UpDateStartWork updataStartWork = new UpDateStartWork();
+        updataStartWork.setWorkBackListener(new WorkBack<String>() {
+            @Override
+            public void doEndWork(boolean b, String s) {
+                if (b && s.equals("Yes")) {
+                    showDialog("提交成功");
+
+                } else {
+                    showDialog("提交失败");
+                }
+            }
+        });
+        updataStartWork .beginExecute(key, company, count);
+    }
     private void clearStart() {
         tv_startTime.setText("请选择时间");
         et_noteperson.setText("");
@@ -422,5 +450,18 @@ public class StartWork extends Activity {
                 }
             } while (true);
         }
+    }
+    private void showDialog(String str){
+        Dialog dialog = new AlertDialog.Builder(StartWork.this)
+                .setTitle("提示")
+                .setMessage(str)
+                .setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        }).create();//创建按钮
+
+        dialog.show();
     }
 }

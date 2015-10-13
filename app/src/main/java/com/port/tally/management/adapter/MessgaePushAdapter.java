@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.port.tally.management.R;
-import com.port.tally.management.bean.LiHuoWeiTuo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class MessgaePushAdapter extends BaseAdapter {
     private List<String> data;
     private Context context;
     private LayoutInflater inflater;
-    List<LiHuoWeiTuo> persons = new ArrayList<LiHuoWeiTuo>();
+//    List<LiHuoWeiTuo> persons = new ArrayList<LiHuoWeiTuo>();
 
     public MessgaePushAdapter(Context context, List<String> data) {
         this.data = data;

@@ -8,6 +8,21 @@
     <include
         android:id="@+id/header"
         layout="@layout/header"/>
+    <ScrollView
+        android:id="@+id/container1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:scrollbars="none"
+        android:layout_below="@+id/header"
+        >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:isScrollContainer="true"
+        android:orientation="vertical"
+        >
     <LinearLayout
         android:layout_below="@+id/header"
         android:layout_width="fill_parent"
@@ -78,11 +93,214 @@
         android:layout_height="1.0px"
         android:background="@drawable/shape_line"/>
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="30.0dip"
+        android:id="@+id/entrust1"
         android:layout_below="@+id/weituo"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_weight="1.0"
+            android:text="票货1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"
+             />
+
+
+
+        <Spinner
+            android:id="@+id/entrust1_spinner"
+            android:layout_width="0dip"
+            android:layout_height="40.0dip"
+            android:layout_marginRight="10.0dip"
+
+            android:layout_weight="7.0"
+            android:textColor="@color/black"
+
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0px"
+        android:background="@drawable/shape_line"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="30.0dip"
+        android:id="@+id/entrust2"
+        android:layout_below="@+id/entrust1"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_weight="1.0"
+            android:text="票货2"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"
+            />
+
+
+
+        <Spinner
+            android:id="@+id/entrust2_spinner1"
+            android:layout_width="0dip"
+            android:layout_height="40.0dip"
+            android:layout_marginRight="10.0dip"
+
+            android:layout_weight="7.0"
+            android:textColor="@color/black"
+
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0px"
+        android:background="@drawable/shape_line"/>
+    <LinearLayout
+        android:id="@+id/table_6"
+        android:layout_below="@+id/entrust2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:minHeight="30.0dip"
+        android:orientation="horizontal"
+
+
+        >
+
+        <TextView
+
+
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_weight="1.0"
+            android:text="起"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"/>
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="#66CCFF"
+            />
+
+        <EditText
+            android:id="@+id/bowei_8"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10.0dip"
+            android:layout_weight="3.0"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0px"
+        android:background="@drawable/shape_line"/>
+
+    <LinearLayout
+        android:id="@+id/table_7"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:layout_below="@+id/table_6"
+        android:gravity="center_vertical"
+        android:minHeight="30.0dip"
+        android:orientation="horizontal"
+
+
+        >
+
+        <TextView
+
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_weight="1.0"
+            android:text="止"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"/>
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="#66CCFF"
+            />
+
+        <EditText
+            android:id="@+id/bowei_10"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10.0dip"
+            android:layout_weight="3.0"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/table_8"
+        android:layout_below="@+id/table_7"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:minHeight="30.0dip"
+        android:orientation="horizontal"
+
+
+        >
+
+        <TextView
+
+
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_weight="1.0"
+            android:text="子过程标志"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"/>
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="#66CCFF"
+            />
+
+        <EditText
+            android:id="@+id/flag_edt"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10.0dip"
+            android:layout_weight="3.0"
+            android:textColor="@color/black"
+            android:textSize="@dimen/BasicTextSize"/>
+    </LinearLayout>
+    <LinearLayout
+
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:id="@+id/count"
+        android:layout_below="@+id/table_8"
         android:gravity="center_vertical"
         android:minHeight="30.0dip"
         android:orientation="horizontal"
@@ -101,7 +319,7 @@
         <LinearLayout
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/count"
+
             android:gravity="center_vertical"
             android:minHeight="30.0dip"
             android:layout_weight="7.0"
@@ -154,6 +372,7 @@
         android:layout_height="1.0px"
         android:background="@drawable/shape_line"/>
     <LinearLayout
+        android:id="@+id/layout8"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/count"
@@ -162,7 +381,7 @@
         android:layout_marginBottom="40dp"
         >
     <TabHost
-             android:layout_width="wrap_content"
+             android:layout_width="fill_parent"
              android:layout_height="wrap_content"
 
              android:id="@android:id/tabhost">
@@ -187,6 +406,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:isScrollContainer="true"
+
             android:orientation="vertical"
           >
             <FrameLayout
@@ -198,118 +418,154 @@
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
-                    <Button
-                        android:id="@+id/btnVisiable"
-                        android:text="显示状态切换"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content">
-                    </Button>
-                    <Button
-
-                        android:layout_width="fill_parent"
+                    <LinearLayout
+                        android:id="@+id/activity_prepare_test_layout_e"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="分隔线状态切换">
-
-                    </Button>
-                    <Button
-
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="分隔线状态切换">
-
-                    </Button>
-                    <Button
-
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="分隔线状态切换">
-
-                    </Button>
-                    <Button
-
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="分隔线状态切换">
-
-                    </Button>
-                    <Button
-                        android:id="@+id/btnStrip"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="分隔线状态切换">
-
-                    </Button>
-                    <Button
-
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="分隔线状态切换">
-
-                    </Button>    <Button
-
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="分隔线状态切换">
-
-                </Button>
-                    <Button
-
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="分隔线状态切换">
-
-                    </Button>
-                    <Button
-
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="分隔线状态切换">
-
-                    </Button>
-                    <Button
-
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="分隔线状态切换">
-
-                    </Button>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:background="@drawable/machine_choose_bg"
+                        android:padding="8dp" >
 
 
-                    <TextView
-                        android:id="@+id/TextView1"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="小龙是好人!!!">
-                    </TextView>
+                        <TextView
+                            android:id="@+id/tv_mac"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                           android:gravity="center"
+                            android:layout_marginLeft="12dp"
+                            android:text="机械号"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
 
+                        <TextView
+                            android:id="@+id/tv_start"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="起"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+                            android:id="@+id/tv_end"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="止"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+                            android:id="@+id/tv_count"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:text="数量"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                    <include
+
+                        layout="@layout/machine_item"/>
+                    <include
+
+                        layout="@layout/machine_item"/>
+                    <include
+
+                        layout="@layout/machine_item"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:orientation="vertical"
                     android:id="@+id/LinearLayout002"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
-                    <TextView
-                        android:id="@+id/TextView2"
-                        android:layout_width="fill_parent"
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="小龙是坏蛋!"></TextView>
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:background="@drawable/machine_choose_bg"
+                        android:padding="8dp" >
+
+
+                        <TextView
+
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginLeft="12dp"
+                            android:text="班别"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+
+                        <TextView
+
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="姓名"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="起"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="止"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:text="数量"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                    <include
+
+                        layout="@layout/tem_item"/>
+                    <include
+
+                        layout="@layout/tem_item"/>
+                    <include
+
+                        layout="@layout/tem_item"/>
                 </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/LinearLayout003"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-                    <TextView
-                        android:id="@+id/TextView3"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:text="小龙还是坏蛋!">
-                    </TextView>
-                </LinearLayout>
+
             </FrameLayout>
         </LinearLayout>
         </ScrollView>
         </LinearLayout>
     </TabHost>
     </LinearLayout>
+    </LinearLayout>
+    </ScrollView>
     <View
         android:layout_width="fill_parent"
         android:layout_height="1.0px"
@@ -317,6 +573,8 @@
 
         <LinearLayout
         android:id="@+id/table_1"
+
+
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
