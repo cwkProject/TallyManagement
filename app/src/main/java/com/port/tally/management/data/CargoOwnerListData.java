@@ -76,14 +76,14 @@ public class CargoOwnerListData extends JsonDataModel {
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
-                JSONArray jsonCargo = jsonArray.getJSONArray(i);
+                JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-                if (jsonCargo.length() > 2) {
+                if (jsonRow.length() > 2) {
                     // 一条货主数据
                     CargoOwner cargoOwner = new CargoOwner();
-                    cargoOwner.setId(jsonCargo.getString(0));
-                    cargoOwner.setName(jsonCargo.getString(1));
-                    cargoOwner.setShortCode(jsonCargo.getString(2));
+                    cargoOwner.setId(jsonRow.getString(0));
+                    cargoOwner.setName(jsonRow.getString(1));
+                    cargoOwner.setShortCode(jsonRow.getString(2));
 
                     // 加入列表
                     cargoOwnerList.add(cargoOwner);

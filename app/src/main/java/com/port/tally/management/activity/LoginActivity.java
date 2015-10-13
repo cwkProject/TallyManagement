@@ -6,9 +6,13 @@ package com.port.tally.management.activity;
 import android.content.Intent;
 
 import com.port.tally.management.R;
+import com.port.tally.management.function.CodeListManager;
+import com.port.tally.management.function.ForwarderListFunction;
+import com.port.tally.management.function.StorageListFunction;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.activity.BaseLoginActivity;
+import org.mobile.library.util.LoginStatus;
 
 
 /**
@@ -47,10 +51,22 @@ public class LoginActivity extends BaseLoginActivity {
 
     @Override
     protected void onPostClickLoginButton() {
+        // 加载数据
+        onLoginLoadData();
         // 跳转到主Activity
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("companyCode", "14");
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * 登录成功后加载数据
+     */
+    private void onLoginLoadData() {
+        CodeListManager.put(StaticValue.CodeListTag.FORWARDER_LIST, new ForwarderListFunction
+                (this, LoginStatus.getLoginStatus().getCodeCompany()), true);
+        CodeListManager.put(StaticValue.CodeListTag.STORAGE_LIST, new StorageListFunction(this,
+                LoginStatus.getLoginStatus().getCodeCompany()), true);
     }
 }

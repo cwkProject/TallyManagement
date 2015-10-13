@@ -15,7 +15,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -27,6 +26,7 @@ import android.widget.TextView;
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.EntrustRecyclerViewAdapter;
 import com.port.tally.management.bean.Entrust;
+import com.port.tally.management.fragment.BaseCodeListFragment;
 import com.port.tally.management.fragment.CargoOwnerFragment;
 import com.port.tally.management.fragment.CargoTypeFragment;
 import com.port.tally.management.fragment.OperationFragment;
@@ -44,6 +44,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 委托查询Activity
@@ -78,26 +80,6 @@ public class EntrustQueryActivity extends AppCompatActivity {
          * 侧滑抽屉
          */
         public DrawerLayout drawerLayout = null;
-
-        /**
-         * 当前是否在选择货物类别
-         */
-        public boolean cargoTypeUse = false;
-
-        /**
-         * 当前是否在选择货主
-         */
-        public boolean cargoOwnerUse = false;
-
-        /**
-         * 当前是否在选择航次
-         */
-        public boolean voyageUse = false;
-
-        /**
-         * 当前是否在选择操作过程
-         */
-        public boolean operationUse = false;
 
         /**
          * 货物类别编辑框
@@ -283,6 +265,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private void initFilter() {
         // 抽屉布局
         viewHolder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         viewHolder.drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -301,11 +284,18 @@ public class EntrustQueryActivity extends AppCompatActivity {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
-                // 获得焦点
-                EditText editText = getFocus();
-
-                editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType
-                        .TYPE_TEXT_VARIATION_NORMAL);
+                // 延迟抢夺焦点
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getFocus();
+                            }
+                        });
+                    }
+                }, 200);
 
                 // 弹出软键盘
                 // 得到InputMethodManager的实例
@@ -313,8 +303,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
                         .INPUT_METHOD_SERVICE);
 
                 Log.i(LOG_TAG + "initFilter", "open soft input");
-                imm.toggleSoftInputFromWindow(editText.getWindowToken(), 0, InputMethodManager
-                        .SHOW_FORCED);
+                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
             }
         });
 
@@ -322,52 +311,59 @@ public class EntrustQueryActivity extends AppCompatActivity {
         clearFocus();
 
         // 初始化cargoType
-        initCargoType();
+        initFilterFragment(new CargoTypeFragment(), viewHolder.cargoTypeEditText, StaticValue
+                .CodeListTag.CARGO_TYPE_LIST);
         // 初始化cargoOwner
-        initCargoOwner();
+        initFilterFragment(new CargoOwnerFragment(), viewHolder.cargoOwnerEditText, StaticValue
+                .CodeListTag.CARGO_OWNER_LIST);
         // 初始化voyage
-        initVoyage();
+        initFilterFragment(new VoyageFragment(), viewHolder.voyageEditText, StaticValue
+                .CodeListTag.VOYAGE_LIST);
         // 初始化operation
-        initOperation();
+        initFilterFragment(new OperationFragment(), viewHolder.operationEditText, StaticValue
+                .CodeListTag.OPERATION_LIST);
     }
 
     /**
-     * 初始化cargoType
+     * 初始化选择列表布局
      */
-    private void initCargoType() {
-        CargoTypeFragment cargoTypeFragment = new CargoTypeFragment();
+    private void initFilterFragment(BaseCodeListFragment<?, String> fragment, final EditText
+            editText, final String tag) {
 
-        viewHolder.cargoTypeEditText.setOnClickListener(new View.OnClickListener() {
+        // 用tag保存激活状态，初始化为未激活状态
+        editText.setTag(false);
+
+        editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewHolder.cargoTypeEditText.setText("");
-                if (viewHolder.cargoTypeUse) {
+                editText.setText("");
+
+                boolean flag = (boolean) editText.getTag();
+
+                if (flag) {
                     // 第二次点击
                     // 关闭抽屉
                     closeDrawer();
                 } else {
                     // 第一次点击
                     clearSelect();
-                    // 先关闭抽屉
-                    closeDrawer();
                     // 替换内容片段
-                    showFragment(StaticValue.CodeListTag.CARGO_TYPE_LIST);
+                    showFragment(tag);
                     // 设置操作状态
-                    viewHolder.cargoTypeUse = true;
-                    getFocus();
+                    editText.setTag(true);
                     // 打开抽屉
                     viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
+                    // 获得焦点
+                    getFocus();
                 }
             }
         });
 
-        cargoTypeFragment.setSelectedListener(new DataChangeObserver<String>() {
+        fragment.setSelectedListener(new DataChangeObserver<String>() {
             @Override
             public void notifyDataChange(String data) {
                 // 文本框赋值
-                viewHolder.cargoTypeEditText.setText(data);
-                // 关闭软键盘
-                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                editText.setText(data);
                 // 关闭抽屉
                 closeDrawer();
             }
@@ -375,152 +371,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 加入布局管理器
         getSupportFragmentManager().beginTransaction().add(R.id
-                .activity_entrust_query_frameLayout, cargoTypeFragment, StaticValue.CodeListTag
-                .CARGO_TYPE_LIST).hide(cargoTypeFragment).commit();
-    }
-
-    /**
-     * 初始化cargoOwner
-     */
-    private void initCargoOwner() {
-        CargoOwnerFragment cargoOwnerFragment = new CargoOwnerFragment();
-
-        viewHolder.cargoOwnerEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewHolder.cargoOwnerEditText.setText("");
-                if (viewHolder.cargoOwnerUse) {
-                    // 第二次点击
-                    // 关闭抽屉
-                    closeDrawer();
-                } else {
-                    // 第一次点击
-                    clearSelect();
-                    // 先关闭抽屉
-                    closeDrawer();
-                    // 替换内容片段
-                    showFragment(StaticValue.CodeListTag.CARGO_OWNER_LIST);
-                    // 设置操作状态
-                    viewHolder.cargoOwnerUse = true;
-                    getFocus();
-                    // 打开抽屉
-                    viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
-                }
-            }
-        });
-
-        cargoOwnerFragment.setSelectedListener(new DataChangeObserver<String>() {
-            @Override
-            public void notifyDataChange(String data) {
-                // 文本框赋值
-                viewHolder.cargoOwnerEditText.setText(data);
-                // 关闭软键盘
-                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
-                // 关闭抽屉
-                closeDrawer();
-            }
-        });
-
-        // 加入布局管理器
-        getSupportFragmentManager().beginTransaction().add(R.id
-                .activity_entrust_query_frameLayout, cargoOwnerFragment, StaticValue.CodeListTag
-                .CARGO_OWNER_LIST).hide(cargoOwnerFragment).commit();
-    }
-
-    /**
-     * 初始化voyage
-     */
-    private void initVoyage() {
-        VoyageFragment voyageFragment = new VoyageFragment();
-
-        viewHolder.voyageEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewHolder.voyageEditText.setText("");
-                if (viewHolder.voyageUse) {
-                    // 第二次点击
-                    // 关闭抽屉
-                    closeDrawer();
-                } else {
-                    // 第一次点击
-                    clearSelect();
-                    // 先关闭抽屉
-                    //closeDrawer();
-                    // 替换内容片段
-                    showFragment(StaticValue.CodeListTag.VOYAGE_LIST);
-                    // 设置操作状态
-                    viewHolder.voyageUse = true;
-                    getFocus();
-                    // 打开抽屉
-                    viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
-                }
-            }
-        });
-
-        voyageFragment.setSelectedListener(new DataChangeObserver<String>() {
-            @Override
-            public void notifyDataChange(String data) {
-                // 文本框赋值
-                viewHolder.voyageEditText.setText(data);
-                // 关闭软键盘
-                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
-                // 关闭抽屉
-                closeDrawer();
-            }
-        });
-
-        // 加入布局管理器
-        getSupportFragmentManager().beginTransaction().add(R.id
-                .activity_entrust_query_frameLayout, voyageFragment, StaticValue.CodeListTag
-                .VOYAGE_LIST).hide(voyageFragment).commit();
-    }
-
-    /**
-     * 初始化operation
-     */
-    private void initOperation() {
-        OperationFragment operationFragment = new OperationFragment();
-
-        viewHolder.operationEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewHolder.operationEditText.setText("");
-                if (viewHolder.operationUse) {
-                    // 第二次点击
-                    // 关闭抽屉
-                    closeDrawer();
-                } else {
-                    // 第一次点击
-                    clearSelect();
-                    // 先关闭抽屉
-                    closeDrawer();
-                    // 替换内容片段
-                    showFragment(StaticValue.CodeListTag.OPERATION_LIST);
-                    // 设置操作状态
-                    viewHolder.operationUse = true;
-                    getFocus();
-                    // 打开抽屉
-                    viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
-                }
-            }
-        });
-
-        operationFragment.setSelectedListener(new DataChangeObserver<String>() {
-            @Override
-            public void notifyDataChange(String data) {
-                // 文本框赋值
-                viewHolder.operationEditText.setText(data);
-                // 关闭软键盘
-                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
-                // 关闭抽屉
-                closeDrawer();
-            }
-        });
-
-        // 加入布局管理器
-        getSupportFragmentManager().beginTransaction().add(R.id
-                .activity_entrust_query_frameLayout, operationFragment, StaticValue.CodeListTag
-                .OPERATION_LIST).hide(operationFragment).commit();
+                .activity_entrust_query_frameLayout, fragment, tag).hide(fragment).commit();
     }
 
     /**
@@ -576,8 +427,15 @@ public class EntrustQueryActivity extends AppCompatActivity {
      * @return 如果有返回true
      */
     private boolean isSelecting() {
-        return viewHolder.cargoTypeUse || viewHolder.cargoOwnerUse || viewHolder.voyageUse ||
-                viewHolder.operationUse;
+
+        // 获取状态
+        boolean cargoTypeUse = (boolean) viewHolder.cargoTypeEditText.getTag();
+        boolean cargoOwnerUse = (boolean) viewHolder.cargoOwnerEditText.getTag();
+        boolean voyageUse = (boolean) viewHolder.voyageEditText.getTag();
+        boolean operationUse = (boolean) viewHolder.operationEditText.getTag();
+
+        return cargoTypeUse || cargoOwnerUse || voyageUse ||
+                operationUse;
     }
 
     /**
@@ -588,19 +446,25 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         EditText editText = null;
 
-        if (viewHolder.cargoTypeUse) {
+        // 获取状态
+        boolean cargoTypeUse = (boolean) viewHolder.cargoTypeEditText.getTag();
+        boolean cargoOwnerUse = (boolean) viewHolder.cargoOwnerEditText.getTag();
+        boolean voyageUse = (boolean) viewHolder.voyageEditText.getTag();
+        boolean operationUse = (boolean) viewHolder.operationEditText.getTag();
+
+        if (cargoTypeUse) {
             editText = viewHolder.cargoTypeEditText;
         }
 
-        if (viewHolder.cargoOwnerUse) {
+        if (cargoOwnerUse) {
             editText = viewHolder.cargoOwnerEditText;
         }
 
-        if (viewHolder.voyageUse) {
+        if (voyageUse) {
             editText = viewHolder.voyageEditText;
         }
 
-        if (viewHolder.operationUse) {
+        if (operationUse) {
             editText = viewHolder.operationEditText;
         }
 
@@ -618,10 +482,10 @@ public class EntrustQueryActivity extends AppCompatActivity {
      */
     private void clearSelect() {
         Log.i(LOG_TAG + "clearSelect", "clear select");
-        viewHolder.cargoTypeUse = false;
-        viewHolder.cargoOwnerUse = false;
-        viewHolder.voyageUse = false;
-        viewHolder.operationUse = false;
+        viewHolder.cargoTypeEditText.setTag(false);
+        viewHolder.cargoOwnerEditText.setTag(false);
+        viewHolder.voyageEditText.setTag(false);
+        viewHolder.operationEditText.setTag(false);
         clearFocus();
     }
 

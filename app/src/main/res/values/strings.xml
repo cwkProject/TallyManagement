@@ -2,6 +2,8 @@
     <string name="app_name">掌上云港</string>
     <string name="entrust_query">委托查询</string>
     <string name="entrust_content">委托详情</string>
+    <string name="forwarder_query">堆存查询</string>
+    <string name="forwarder_content">堆存详情</string>
 
     <string name="search_hit"> </string>
     <string name="search_text">搜索</string>

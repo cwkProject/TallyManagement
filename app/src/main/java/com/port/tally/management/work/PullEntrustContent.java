@@ -19,8 +19,8 @@ import java.util.Map;
  */
 public class PullEntrustContent extends DefaultWorkModel<String, Map<String, String>, EntrustData> {
     @Override
-    protected boolean onCheckParameters(String... strings) {
-        return strings != null && strings.length > 0;
+    protected boolean onCheckParameters(String... parameters) {
+        return parameters != null && parameters.length > 0;
     }
 
     @Override
@@ -29,20 +29,20 @@ public class PullEntrustContent extends DefaultWorkModel<String, Map<String, Str
     }
 
     @Override
-    protected Map<String, String> onRequestSuccessSetResult(EntrustData entrustData) {
-        return entrustData.getEntrust();
+    protected Map<String, String> onRequestSuccessSetResult(EntrustData data) {
+        return data.getEntrust();
     }
 
     @Override
-    protected Map<String, String> onRequestFailedSetResult(EntrustData entrustData) {
+    protected Map<String, String> onRequestFailedSetResult(EntrustData data) {
         return null;
     }
 
     @Override
-    protected EntrustData onCreateDataModel(String... strings) {
+    protected EntrustData onCreateDataModel(String... parameters) {
         EntrustData data = new EntrustData();
 
-        data.setEntrustId(strings[0]);
+        data.setEntrustId(parameters[0]);
 
         return data;
     }

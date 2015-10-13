@@ -54,8 +54,8 @@ public class OperationFragment extends BaseCodeListFragment<Operation, String> {
             mapList.add(map);
         }
 
-        return new SimpleAdapter(getContext(), mapList, R.layout.two_column_text_item, new
-                String[]{NAME_TAG , SHORT_CODE_TAG}, new int[]{R.id.two_column_text_item_left_textView , R.id.two_column_text_item_right_textView});
+        return new SimpleAdapter(getContext(), mapList, R.layout.two_row_text_item, new
+                String[]{NAME_TAG , SHORT_CODE_TAG}, new int[]{R.id.two_row_text_item_top_textView , R.id.two_row_text_item_bottom_textView});
     }
 
     @Override
@@ -96,7 +96,7 @@ public class OperationFragment extends BaseCodeListFragment<Operation, String> {
     protected String itemClick(AdapterView parent, View view, int position, long id) {
 
         // 名称文本框
-        TextView name = (TextView) view.findViewById(R.id.two_column_text_item_left_textView);
+        TextView name = (TextView) view.findViewById(R.id.two_row_text_item_top_textView);
 
         return name.getText().toString();
     }

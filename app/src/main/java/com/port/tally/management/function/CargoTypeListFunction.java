@@ -23,7 +23,7 @@ import java.util.List;
  * @version 1.0 2015/9/22
  * @since 1.0
  */
-public class CargoTypeListFunction extends BaseCodeListFunction<CargoType> {
+public class CargoTypeListFunction extends BaseCodeListFunction<CargoType, Void> {
 
     /**
      * 构造函数
@@ -40,7 +40,7 @@ public class CargoTypeListFunction extends BaseCodeListFunction<CargoType> {
     }
 
     @Override
-    protected void onLoadFromNetWork() {
+    protected void onLoadFromNetWork(Void parameter) {
         PullCargoTypeList pullCargoTypeList = new PullCargoTypeList();
 
         pullCargoTypeList.setWorkBackListener(new WorkBack<List<CargoType>>() {
@@ -50,7 +50,7 @@ public class CargoTypeListFunction extends BaseCodeListFunction<CargoType> {
             }
         });
 
-        pullCargoTypeList.beginExecute();
+        pullCargoTypeList.execute();
     }
 
     @Override

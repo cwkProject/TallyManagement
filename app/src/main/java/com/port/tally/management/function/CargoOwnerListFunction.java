@@ -23,7 +23,7 @@ import java.util.List;
  * @version 1.0 2015/9/22
  * @since 1.0
  */
-public class CargoOwnerListFunction extends BaseCodeListFunction<CargoOwner> {
+public class CargoOwnerListFunction extends BaseCodeListFunction<CargoOwner, Void> {
 
     /**
      * 构造函数
@@ -40,7 +40,7 @@ public class CargoOwnerListFunction extends BaseCodeListFunction<CargoOwner> {
     }
 
     @Override
-    protected void onLoadFromNetWork() {
+    protected void onLoadFromNetWork(Void parameter) {
         PullCargoOwnerList pullCargoOwnerList = new PullCargoOwnerList();
 
         pullCargoOwnerList.setWorkBackListener(new WorkBack<List<CargoOwner>>() {
@@ -50,7 +50,7 @@ public class CargoOwnerListFunction extends BaseCodeListFunction<CargoOwner> {
             }
         });
 
-        pullCargoOwnerList.beginExecute();
+        pullCargoOwnerList.execute();
     }
 
     @Override

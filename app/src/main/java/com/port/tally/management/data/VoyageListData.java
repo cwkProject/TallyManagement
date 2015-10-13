@@ -75,14 +75,14 @@ public class VoyageListData extends JsonDataModel {
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
-                JSONArray jsonCargo = jsonArray.getJSONArray(i);
+                JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-                if (jsonCargo.length() > 2) {
+                if (jsonRow.length() > 2) {
                     // 一条数据
                     Voyage voyage = new Voyage();
-                    voyage.setId(jsonCargo.getString(0));
-                    voyage.setName(jsonCargo.getString(1));
-                    voyage.setShortCode(jsonCargo.getString(2));
+                    voyage.setId(jsonRow.getString(0));
+                    voyage.setName(jsonRow.getString(1));
+                    voyage.setShortCode(jsonRow.getString(2));
 
                     // 加入列表
                     voyageList.add(voyage);

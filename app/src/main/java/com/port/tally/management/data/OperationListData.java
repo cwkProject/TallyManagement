@@ -75,14 +75,14 @@ public class OperationListData extends JsonDataModel {
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
-                JSONArray jsonCargo = jsonArray.getJSONArray(i);
+                JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-                if (jsonCargo.length() > 2) {
+                if (jsonRow.length() > 2) {
                     // 一条数据
                     Operation operation = new Operation();
-                    operation.setId(jsonCargo.getString(0));
-                    operation.setName(jsonCargo.getString(1));
-                    operation.setShortCode(jsonCargo.getString(2));
+                    operation.setId(jsonRow.getString(0));
+                    operation.setName(jsonRow.getString(1));
+                    operation.setShortCode(jsonRow.getString(2));
 
                     // 加入列表
                     operationList.add(operation);
