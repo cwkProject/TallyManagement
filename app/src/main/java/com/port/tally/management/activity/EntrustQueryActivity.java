@@ -15,7 +15,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -45,6 +44,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * 委托查询Activity
@@ -264,6 +265,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private void initFilter() {
         // 抽屉布局
         viewHolder.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         viewHolder.drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -282,10 +284,18 @@ public class EntrustQueryActivity extends AppCompatActivity {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
-                // 获得焦点
-                EditText editText = getFocus();
-
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                // 延迟抢夺焦点
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getFocus();
+                            }
+                        });
+                    }
+                }, 200);
 
                 // 弹出软键盘
                 // 得到InputMethodManager的实例
@@ -293,8 +303,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
                         .INPUT_METHOD_SERVICE);
 
                 Log.i(LOG_TAG + "initFilter", "open soft input");
-                imm.toggleSoftInputFromWindow(editText.getWindowToken(), 0, InputMethodManager
-                        .SHOW_FORCED);
+                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
             }
         });
 
@@ -338,15 +347,14 @@ public class EntrustQueryActivity extends AppCompatActivity {
                 } else {
                     // 第一次点击
                     clearSelect();
-                    // 先关闭抽屉
-                    closeDrawer();
                     // 替换内容片段
                     showFragment(tag);
                     // 设置操作状态
                     editText.setTag(true);
-                    getFocus();
                     // 打开抽屉
                     viewHolder.drawerLayout.openDrawer(Gravity.LEFT);
+                    // 获得焦点
+                    getFocus();
                 }
             }
         });

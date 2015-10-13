@@ -47,14 +47,10 @@
         <activity android:name=".activity.TrunkActivity"/>
         <activity android:name=".activity.StartWork"/>
         <activity android:name=".activity.EndWork"/>
-        <activity
-            android:name=".activity.EntrustQueryActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateAlwaysHidden"/>
+        <activity android:name=".activity.EntrustQueryActivity"/>
         <activity android:name=".activity.EntrustContentActivity"/>
 
-        <activity
-            android:name=".activity.StockQueryActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateAlwaysHidden"/>
+        <activity android:name=".activity.StockQueryActivity"/>
         <activity android:name=".activity.StockContentActivity"/>
 
     </application>
