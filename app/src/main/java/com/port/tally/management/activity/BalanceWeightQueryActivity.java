@@ -19,21 +19,20 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.port.tally.management.R;
-import com.port.tally.management.adapter.EntrustRecyclerViewAdapter;
-import com.port.tally.management.bean.Entrust;
+import com.port.tally.management.adapter.BalanceWeightRecyclerViewAdapter;
+import com.port.tally.management.bean.BalanceWeight;
 import com.port.tally.management.fragment.BaseCodeListFragment;
-import com.port.tally.management.fragment.CargoOwnerFragment;
-import com.port.tally.management.fragment.CargoTypeFragment;
-import com.port.tally.management.fragment.OperationFragment;
-import com.port.tally.management.fragment.VoyageFragment;
-import com.port.tally.management.holder.EntrustItemViewHolder;
+import com.port.tally.management.fragment.CompanyFragment;
+import com.port.tally.management.holder.BalanceWeightItemViewHolder;
 import com.port.tally.management.util.StaticValue;
-import com.port.tally.management.work.PullEntrustList;
+import com.port.tally.management.work.PullBalanceWeightList;
 
 import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.DataChangeObserver;
@@ -48,18 +47,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 委托查询Activity
+ * 衡重查询Activity
  *
  * @author 超悟空
- * @version 1.0 2015/9/19
+ * @version 1.0 2015/10/15
  * @since 1.0
  */
-public class EntrustQueryActivity extends AppCompatActivity {
+public class BalanceWeightQueryActivity extends AppCompatActivity {
 
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "EntrustQueryActivity.";
+    private static final String LOG_TAG = "BalanceWeightQueryActivity.";
 
     /**
      * 一次性加载的数据行数
@@ -72,9 +71,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private class LocalViewHolder {
 
         /**
-         * 委托列表数据适配器
+         * 衡重列表数据适配器
          */
-        public EntrustRecyclerViewAdapter recyclerViewAdapter = null;
+        public BalanceWeightRecyclerViewAdapter recyclerViewAdapter = null;
 
         /**
          * 侧滑抽屉
@@ -82,24 +81,19 @@ public class EntrustQueryActivity extends AppCompatActivity {
         public DrawerLayout drawerLayout = null;
 
         /**
-         * 货物类别编辑框
+         * 公司编辑框
          */
-        public EditText cargoTypeEditText = null;
+        public EditText companyEditText = null;
 
         /**
-         * 货主编辑框
+         * 缓存原公司名称
          */
-        public EditText cargoOwnerEditText = null;
+        public String oldCompanyName = null;
 
         /**
-         * 航次编辑框
+         * 当前选中的公司编码
          */
-        public EditText voyageEditText = null;
-
-        /**
-         * 作业过程编辑框
-         */
-        public EditText operationEditText = null;
+        public String companyCode = null;
 
         /**
          * 保留上次查询数据
@@ -107,14 +101,14 @@ public class EntrustQueryActivity extends AppCompatActivity {
         public String oldParameter = null;
 
         /**
-         * 开始日期
+         * 当班日期
          */
-        public TextView startDateTextView = null;
+        public TextView dutyDateTextView = null;
 
         /**
-         * 结束日期
+         * 白夜班
          */
-        public TextView endDateTextView = null;
+        public Spinner dayNightSpinner = null;
     }
 
     /**
@@ -125,7 +119,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entrust_query);
+        setContentView(R.layout.activity_balance_weight_query);
 
         // 初始化控件引用
         initViewHolder();
@@ -147,26 +141,20 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private void initViewHolder() {
         viewHolder = new LocalViewHolder();
 
-        // 委托列表适配器
-        viewHolder.recyclerViewAdapter = new EntrustRecyclerViewAdapter();
+        // 衡重列表适配器
+        viewHolder.recyclerViewAdapter = new BalanceWeightRecyclerViewAdapter();
 
         // 侧滑栏
         viewHolder.drawerLayout = (DrawerLayout) findViewById(R.id
-                .activity_entrust_query_drawer_layout);
+                .activity_balance_weight_query_drawer_layout);
 
-        viewHolder.cargoTypeEditText = (EditText) findViewById(R.id.cargo_edit_editText);
+        viewHolder.companyEditText = (EditText) findViewById(R.id.company_edit_editText);
 
-        viewHolder.cargoOwnerEditText = (EditText) findViewById(R.id.cargo_owner_edit_editText);
+        viewHolder.dutyDateTextView = (TextView) findViewById(R.id
+                .balance_weight_query_filter_date_textView);
 
-        viewHolder.voyageEditText = (EditText) findViewById(R.id.voyage_edit_editText);
-
-        viewHolder.operationEditText = (EditText) findViewById(R.id.operation_edit_editText);
-
-        viewHolder.startDateTextView = (TextView) findViewById(R.id
-                .region_date_select_text_start_date_textView);
-
-        viewHolder.endDateTextView = (TextView) findViewById(R.id
-                .region_date_select_text_end_date_textView);
+        viewHolder.dayNightSpinner = (Spinner) findViewById(R.id
+                .balance_weight_query_filter_dayNight_spinner);
     }
 
     /**
@@ -175,13 +163,32 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private void initView() {
         // 初始化Toolbar
         initToolbar();
-        setTitle(R.string.entrust_query);
+        setTitle(R.string.balance_weight_query);
         // 初始化列表
         initListView();
         // 初始化过滤器
         initFilter();
         // 初始化日期控件
         initDate();
+        // 初始化白夜班控件
+        initSpinner();
+    }
+
+    /**
+     * 初始化选择列表控件
+     */
+    private void initSpinner() {
+        viewHolder.dayNightSpinner.setOnItemSelectedListener(new AdapterView
+                .OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                resetData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     /**
@@ -193,10 +200,10 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         String nowDate = format.format(calendar.getTime());
 
-        viewHolder.endDateTextView.setText(nowDate);
+        viewHolder.dutyDateTextView.setText(nowDate);
 
-        final DatePickerDialog endDialog = new DatePickerDialog(EntrustQueryActivity.this, new
-                DatePickerDialog.OnDateSetListener() {
+        final DatePickerDialog dutyDateDialog = new DatePickerDialog(BalanceWeightQueryActivity
+                .this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
@@ -204,10 +211,10 @@ public class EntrustQueryActivity extends AppCompatActivity {
                         dayOfMonth;
 
                 try {
-                    viewHolder.endDateTextView.setText(format.format(format.parse(date)));
+                    viewHolder.dutyDateTextView.setText(format.format(format.parse(date)));
                 } catch (ParseException e) {
                     Log.e(LOG_TAG + "initDate", "onDateSet ParseException is " + e.getMessage());
-                    viewHolder.endDateTextView.setText(date);
+                    viewHolder.dutyDateTextView.setText(date);
                 }
 
                 resetData();
@@ -216,49 +223,13 @@ public class EntrustQueryActivity extends AppCompatActivity {
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar
                 .DAY_OF_MONTH));
 
-        viewHolder.endDateTextView.setOnClickListener(new View.OnClickListener() {
+        viewHolder.dutyDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clearSelect();
                 closeDrawer();
-                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
-                endDialog.show();
-            }
-        });
-
-        calendar.add(Calendar.DAY_OF_YEAR, -30);
-        String beforeDate = format.format(calendar.getTime());
-
-        viewHolder.startDateTextView.setText(beforeDate);
-
-        final DatePickerDialog startDialog = new DatePickerDialog(EntrustQueryActivity.this, new
-                DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                String date = year + "-" + (monthOfYear + 1) + "-" +
-                        dayOfMonth;
-
-                try {
-                    viewHolder.startDateTextView.setText(format.format(format.parse(date)));
-                } catch (ParseException e) {
-                    Log.e(LOG_TAG + "initDate", "onDateSet ParseException is " + e.getMessage());
-                    viewHolder.startDateTextView.setText(date);
-                }
-
-                resetData();
-
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar
-                .DAY_OF_MONTH));
-
-        viewHolder.startDateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearSelect();
-                closeDrawer();
-                InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
-                startDialog.show();
+                InputMethodController.CloseInputMethod(BalanceWeightQueryActivity.this);
+                dutyDateDialog.show();
             }
         });
     }
@@ -276,10 +247,13 @@ public class EntrustQueryActivity extends AppCompatActivity {
                 super.onDrawerClosed(drawerView);
                 if (isSelecting()) {
                     // 选择结束
-                    resetData();
+                    if (!resetData()) {
+                        // 数据未变化，表示未选择公司，还原公司名称
+                        viewHolder.companyEditText.setText(viewHolder.oldCompanyName);
+                    }
                     // 关闭软键盘
                     Log.i(LOG_TAG + "initFilter", "close soft input");
-                    InputMethodController.CloseInputMethod(EntrustQueryActivity.this);
+                    InputMethodController.CloseInputMethod(BalanceWeightQueryActivity.this);
                     clearSelect();
                 }
             }
@@ -314,18 +288,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
         // 清除编辑框焦点
         clearFocus();
 
-        // 初始化cargoType
-        initFilterFragment(new CargoTypeFragment(), viewHolder.cargoTypeEditText, StaticValue
-                .CodeListTag.CARGO_TYPE_LIST);
-        // 初始化cargoOwner
-        initFilterFragment(new CargoOwnerFragment(), viewHolder.cargoOwnerEditText, StaticValue
-                .CodeListTag.CARGO_OWNER_LIST);
-        // 初始化voyage
-        initFilterFragment(new VoyageFragment(), viewHolder.voyageEditText, StaticValue
-                .CodeListTag.VOYAGE_LIST);
-        // 初始化operation
-        initFilterFragment(new OperationFragment(), viewHolder.operationEditText, StaticValue
-                .CodeListTag.OPERATION_LIST);
+        // 初始化company
+        initFilterFragment(new CompanyFragment(), viewHolder.companyEditText, StaticValue
+                .CodeListTag.COMPANY_LIST);
     }
 
     /**
@@ -340,7 +305,6 @@ public class EntrustQueryActivity extends AppCompatActivity {
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editText.setText("");
 
                 boolean flag = (boolean) editText.getTag();
 
@@ -350,6 +314,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
                     closeDrawer();
                 } else {
                     // 第一次点击
+                    // 缓存原值
+                    viewHolder.oldCompanyName = editText.getText().toString();
+                    editText.setText("");
                     clearSelect();
                     // 替换内容片段
                     showFragment(tag);
@@ -366,8 +333,8 @@ public class EntrustQueryActivity extends AppCompatActivity {
         fragment.setSelectedListener(new DataChangeObserver<String>() {
             @Override
             public void notifyDataChange(String data) {
-                // 文本框赋值
-                editText.setText(data);
+                // 公司编码赋值
+                viewHolder.companyCode = data;
                 // 关闭抽屉
                 closeDrawer();
             }
@@ -375,7 +342,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 加入布局管理器
         getSupportFragmentManager().beginTransaction().add(R.id
-                .activity_entrust_query_frameLayout, fragment, tag).hide(fragment).commit();
+                .activity_balance_weight_query_frameLayout, fragment, tag).hide(fragment).commit();
     }
 
     /**
@@ -433,13 +400,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private boolean isSelecting() {
 
         // 获取状态
-        boolean cargoTypeUse = (boolean) viewHolder.cargoTypeEditText.getTag();
-        boolean cargoOwnerUse = (boolean) viewHolder.cargoOwnerEditText.getTag();
-        boolean voyageUse = (boolean) viewHolder.voyageEditText.getTag();
-        boolean operationUse = (boolean) viewHolder.operationEditText.getTag();
+        boolean companyUse = (boolean) viewHolder.companyEditText.getTag();
 
-        return cargoTypeUse || cargoOwnerUse || voyageUse ||
-                operationUse;
+        return companyUse;
     }
 
     /**
@@ -451,25 +414,10 @@ public class EntrustQueryActivity extends AppCompatActivity {
         EditText editText = null;
 
         // 获取状态
-        boolean cargoTypeUse = (boolean) viewHolder.cargoTypeEditText.getTag();
-        boolean cargoOwnerUse = (boolean) viewHolder.cargoOwnerEditText.getTag();
-        boolean voyageUse = (boolean) viewHolder.voyageEditText.getTag();
-        boolean operationUse = (boolean) viewHolder.operationEditText.getTag();
+        boolean companyUse = (boolean) viewHolder.companyEditText.getTag();
 
-        if (cargoTypeUse) {
-            editText = viewHolder.cargoTypeEditText;
-        }
-
-        if (cargoOwnerUse) {
-            editText = viewHolder.cargoOwnerEditText;
-        }
-
-        if (voyageUse) {
-            editText = viewHolder.voyageEditText;
-        }
-
-        if (operationUse) {
-            editText = viewHolder.operationEditText;
+        if (companyUse) {
+            editText = viewHolder.companyEditText;
         }
 
         if (editText != null) {
@@ -486,10 +434,8 @@ public class EntrustQueryActivity extends AppCompatActivity {
      */
     private void clearSelect() {
         Log.i(LOG_TAG + "clearSelect", "clear select");
-        viewHolder.cargoTypeEditText.setTag(false);
-        viewHolder.cargoOwnerEditText.setTag(false);
-        viewHolder.voyageEditText.setTag(false);
-        viewHolder.operationEditText.setTag(false);
+        viewHolder.companyEditText.setTag(false);
+
         clearFocus();
     }
 
@@ -497,10 +443,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
      * 清除焦点
      */
     private void clearFocus() {
-        viewHolder.cargoTypeEditText.setFocusable(false);
-        viewHolder.cargoOwnerEditText.setFocusable(false);
-        viewHolder.voyageEditText.setFocusable(false);
-        viewHolder.operationEditText.setFocusable(false);
+        viewHolder.companyEditText.setFocusable(false);
     }
 
     /**
@@ -537,7 +480,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // RecyclerView列表对象
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id
-                .activity_entrust_query_recyclerView);
+                .activity_balance_weight_query_recyclerView);
 
         // 设置item动画
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -549,20 +492,35 @@ public class EntrustQueryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // 设置点击事件
-        viewHolder.recyclerViewAdapter.setOnItemClickListener(new OnItemClickListenerForRecyclerViewItem<List<Entrust>, EntrustItemViewHolder>() {
+        viewHolder.recyclerViewAdapter.setOnItemClickListener(new OnItemClickListenerForRecyclerViewItem<List<BalanceWeight>, BalanceWeightItemViewHolder>() {
             @Override
-            public void onClick(List<Entrust> entrusts, EntrustItemViewHolder
-                    entrustItemViewHolder) {
-                Entrust entrust = entrusts.get(entrustItemViewHolder.getAdapterPosition());
+            public void onClick(List<BalanceWeight> balanceWeights, BalanceWeightItemViewHolder
+                    balanceWeightItemViewHolder) {
+                BalanceWeight balanceWeight = balanceWeights.get(balanceWeightItemViewHolder
+                        .getAdapterPosition());
 
                 // 委托编号
-                String entrustId = entrust.getId();
+                String entrustNumber = balanceWeight.getEntrustNumber();
+                // 公司编号
+                String companyCode = balanceWeight.getCompanyCode();
+                // 班组日期
+                String dutyDate = balanceWeight.getDate();
+                // 白夜班
+                String dayNight = balanceWeight.getDayNight();
 
                 // 跳转意图
-                Intent intent = new Intent(EntrustQueryActivity.this, EntrustContentActivity.class);
+                Intent intent = new Intent(BalanceWeightQueryActivity.this,
+                        BalanceWeightContentActivity.class);
+
 
                 // 加入委托编号
-                intent.putExtra(StaticValue.IntentTag.ENTRUST_ID_TAG, entrustId);
+                intent.putExtra(StaticValue.IntentTag.ENTRUST_ID_TAG, entrustNumber);
+                // 加入公司编号
+                intent.putExtra(StaticValue.IntentTag.COMPANY_CODE_TAG, companyCode);
+                // 加入班组日期
+                intent.putExtra(StaticValue.IntentTag.DATE_TAG, dutyDate);
+                // 加入白夜班
+                intent.putExtra(StaticValue.IntentTag.DAY_NIGHT_TAG, dayNight);
 
                 // 跳转到详情页面
                 startActivity(intent);
@@ -575,20 +533,22 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
     /**
      * 尝试重置数据
+     *
+     * @return true表示数据发生了改变并且执行了数据重载
      */
-    private void resetData() {
+    private boolean resetData() {
 
         // 新参数
-        String newParameter = viewHolder.cargoTypeEditText.getText().toString() + viewHolder
-                .cargoOwnerEditText.getText().toString() +
-                viewHolder.voyageEditText.getText().toString() +
-                viewHolder.operationEditText.getText().toString() + viewHolder.startDateTextView
-                .getText().toString() + viewHolder.endDateTextView.getText().toString();
+        String newParameter = viewHolder.companyCode +
+                viewHolder.dutyDateTextView.getText().toString() + viewHolder.dayNightSpinner
+                .getSelectedItem().toString();
 
         if (viewHolder.oldParameter == null || !viewHolder.oldParameter.equals(newParameter)) {
             initData();
             viewHolder.oldParameter = newParameter;
+            return true;
         }
+        return false;
     }
 
     /**
@@ -610,12 +570,12 @@ public class EntrustQueryActivity extends AppCompatActivity {
             return;
         }
 
-        // 委托列表任务
-        PullEntrustList pullEntrustList = new PullEntrustList();
+        // 衡重列表任务
+        PullBalanceWeightList pullBalanceWeightList = new PullBalanceWeightList();
 
-        pullEntrustList.setWorkBackListener(new WorkBack<List<Entrust>>() {
+        pullBalanceWeightList.setWorkBackListener(new WorkBack<List<BalanceWeight>>() {
             @Override
-            public void doEndWork(boolean state, List<Entrust> data) {
+            public void doEndWork(boolean state, List<BalanceWeight> data) {
                 if (state) {
                     if (start > 0) {
                         // 插入新数据
@@ -634,11 +594,9 @@ public class EntrustQueryActivity extends AppCompatActivity {
         });
 
         // 执行任务
-        pullEntrustList.beginExecute("14", String.valueOf(start), String.valueOf(count),
-                viewHolder.startDateTextView.getText().toString(), viewHolder.endDateTextView
-                        .getText().toString(), viewHolder.cargoTypeEditText.getText().toString(),
-                viewHolder.cargoOwnerEditText.getText().toString(), viewHolder.voyageEditText
-                        .getText().toString(), viewHolder.operationEditText.getText().toString());
+        pullBalanceWeightList.beginExecute(String.valueOf(start), String.valueOf(count),
+                viewHolder.companyCode, viewHolder.dutyDateTextView.getText().toString(),
+                viewHolder.dayNightSpinner.getSelectedItem().toString());
     }
 
     /**

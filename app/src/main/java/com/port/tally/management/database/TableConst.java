@@ -17,7 +17,8 @@ public interface TableConst {
      */
     String[] CREATE_TABLE_SQL_ARRAY = {CargoType.CREATE_TABLE_SQL , CargoOwner.CREATE_TABLE_SQL ,
                                        Voyage.CREATE_TABLE_SQL , Operation.CREATE_TABLE_SQL ,
-                                       Forwarder.CREATE_TABLE_SQL , Storage.CREATE_TABLE_SQL};
+                                       Forwarder.CREATE_TABLE_SQL , Storage.CREATE_TABLE_SQL ,
+                                       Company.CREATE_TABLE_SQL};
 
     /**
      * 货物类别
@@ -118,5 +119,22 @@ public interface TableConst {
                 "PRIMARY" + " KEY, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT, %s TEXT)" +
                 "", TABLE_NAME, CommonConst._ID, CommonConst.CODE, CommonConst.NAME, CommonConst
                 .COMPANY_CODE, CommonConst.SHORT_CODE);
+    }
+
+    /**
+     * 公司
+     */
+    interface Company {
+        /**
+         * 表名
+         */
+        String TABLE_NAME = "tb_company";
+
+        /**
+         * 建表语句
+         */
+        String CREATE_TABLE_SQL = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
+                "PRIMARY" + " KEY, %s TEXT NOT NULL,  %s TEXT)", TABLE_NAME, CommonConst._ID,
+                CommonConst.CODE, CommonConst.NAME);
     }
 }

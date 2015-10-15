@@ -12,7 +12,7 @@ import android.widget.SimpleAdapter;
 
 import com.port.tally.management.R;
 import com.port.tally.management.util.StaticValue;
-import com.port.tally.management.work.PullEntrustContent;
+import com.port.tally.management.work.PullBalanceWeightContent;
 
 import org.mobile.library.model.work.WorkBack;
 
@@ -22,18 +22,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 委托内容Activity
+ * 衡重内容Activity
  *
  * @author 超悟空
- * @version 1.0 2015/9/25
+ * @version 1.0 2015/10/15
  * @since 1.0
  */
-public class EntrustContentActivity extends AppCompatActivity {
+public class BalanceWeightContentActivity extends AppCompatActivity {
 
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "EntrustContentActivity.";
+    private static final String LOG_TAG = "BalanceWeightContentActivity.";
 
     /**
      * 名称取值标签
@@ -58,7 +58,7 @@ public class EntrustContentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entrust_content);
+        setContentView(R.layout.activity_balance_weight_content);
 
         // 加载界面
         initView();
@@ -70,7 +70,7 @@ public class EntrustContentActivity extends AppCompatActivity {
     private void initView() {
         // 初始化Toolbar
         initToolbar();
-        setTitle(R.string.entrust_content);
+        setTitle(R.string.balance_weight_content);
         // 初始化列表
         initListView();
     }
@@ -115,7 +115,7 @@ public class EntrustContentActivity extends AppCompatActivity {
      */
     private void initListView() {
 
-        ListView listView = (ListView) findViewById(R.id.activity_entrust_content_listView);
+        ListView listView = (ListView) findViewById(R.id.activity_balance_weight_content_listView);
 
         adapter = new SimpleAdapter(this, dataList, R.layout.content_list_item, new
                 String[]{NAME_TAG , VALUE_TAG}, new int[]{R.id.content_list_item_name_textView ,
@@ -130,12 +130,18 @@ public class EntrustContentActivity extends AppCompatActivity {
     private void loadData() {
         // 获取委托编号
         String entrustId = getIntent().getStringExtra(StaticValue.IntentTag.ENTRUST_ID_TAG);
+        // 获取公司编号
+        String companyCode = getIntent().getStringExtra(StaticValue.IntentTag.COMPANY_CODE_TAG);
+        // 获取班组日期
+        String dutyDate = getIntent().getStringExtra(StaticValue.IntentTag.DATE_TAG);
+        // 获取白夜班
+        String dayNight = getIntent().getStringExtra(StaticValue.IntentTag.DAY_NIGHT_TAG);
 
-        if (entrustId != null) {
+        if (entrustId != null && companyCode != null && dutyDate != null && dayNight != null) {
             // 拉取数据
-            PullEntrustContent pullEntrustContent = new PullEntrustContent();
+            PullBalanceWeightContent pullBalanceWeightContent = new PullBalanceWeightContent();
 
-            pullEntrustContent.setWorkBackListener(new WorkBack<Map<String, String>>() {
+            pullBalanceWeightContent.setWorkBackListener(new WorkBack<Map<String, String>>() {
                 @Override
                 public void doEndWork(boolean state, Map<String, String> data) {
                     if (state) {
@@ -144,7 +150,7 @@ public class EntrustContentActivity extends AppCompatActivity {
                 }
             });
 
-            pullEntrustContent.beginExecute(entrustId);
+            pullBalanceWeightContent.beginExecute(entrustId, companyCode, dutyDate, dayNight);
         }
     }
 

@@ -98,6 +98,8 @@ public class ForwarderListData extends JsonDataModel {
                     forwarder.setId(jsonRow.getString(0));
                     forwarder.setName(jsonRow.getString(1));
                     forwarder.setShortCode(jsonRow.getString(2));
+
+                    // 填充请求数据
                     forwarder.setCompany(company);
 
                     // 加入列表

@@ -26,6 +26,21 @@ public interface StaticValue {
         String ENTRUST_ID_TAG = "entrust_id_tag";
 
         /**
+         * 公司编码取值标签
+         */
+        String COMPANY_CODE_TAG = "company_code_tag";
+
+        /**
+         * 日期取值标签
+         */
+        String DATE_TAG = "date_tag";
+
+        /**
+         * 白夜班取值标签
+         */
+        String DAY_NIGHT_TAG = "day_night_tag";
+
+        /**
          * 堆存编码取值标签
          */
         String STOCK_ID_TAG = "stock_id_tag";
@@ -64,6 +79,11 @@ public interface StaticValue {
          * 货场
          */
         String STORAGE_LIST = "storage_list";
+
+        /**
+         * 公司
+         */
+        String COMPANY_LIST = "company_list";
 
     }
 
@@ -139,6 +159,23 @@ public interface StaticValue {
      * 获取堆存详情的请求地址
      */
     String STOCK_CONTENT_URL = "http://218.92.115.55/M_Lhgl/Service/Stock/GetStockDetail.aspx";
+
+    /**
+     * 获取公司列表的请求地址
+     */
+    String COMPANY_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetDepartment.aspx";
+
+    /**
+     * 获取衡重列表的请求地址
+     */
+    String BALANCE_WEIGHT_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Weighing/GetWeighting"
+            + ".aspx";
+
+    /**
+     * 获取衡重详情的请求地址
+     */
+    String BALANCE_WEIGHT_CONTENT_URL = "http://218.92.115" +
+            ".55/M_Lhgl/Service/Weighing/GetWeightingDetail.aspx";
 
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";

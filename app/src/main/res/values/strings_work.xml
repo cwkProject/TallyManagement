@@ -8,7 +8,10 @@
     <string name="edit_hint_work">作业</string>
     <string name="edit_hint_forwarder">货代</string>
     <string name="edit_hint_storage">货场</string>
+    <string name="edit_hint_company">公司</string>
 
     <string name="splice_plan_amount">计划量：</string>
+    <string name="splice_plan_weight">计划量：</string>
+    <string name="splice_duty_weight">当班量：</string>
 
 </resources>

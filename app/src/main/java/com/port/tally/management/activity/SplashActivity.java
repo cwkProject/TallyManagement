@@ -16,6 +16,7 @@ import com.port.tally.management.R;
 import com.port.tally.management.function.CargoOwnerListFunction;
 import com.port.tally.management.function.CargoTypeListFunction;
 import com.port.tally.management.function.CodeListManager;
+import com.port.tally.management.function.CompanyListFunction;
 import com.port.tally.management.function.ForwarderListFunction;
 import com.port.tally.management.function.OperationListFunction;
 import com.port.tally.management.function.StorageListFunction;
@@ -89,6 +90,7 @@ public class SplashActivity extends Activity {
         CodeListManager.put(StaticValue.CodeListTag.VOYAGE_LIST, new VoyageListFunction(this));
         CodeListManager.put(StaticValue.CodeListTag.OPERATION_LIST, new OperationListFunction
                 (this));
+        CodeListManager.put(StaticValue.CodeListTag.COMPANY_LIST, new CompanyListFunction(this));
     }
 
     /**
@@ -174,7 +176,7 @@ public class SplashActivity extends Activity {
          * 初始时为注册的动作数量，
          * 当减少到0时表示数据加载完毕
          */
-        private volatile int actionSemaphore = 7;
+        private volatile int actionSemaphore = 8;
 
         /**
          * 得到本接收者监听的动作集合
@@ -193,6 +195,7 @@ public class SplashActivity extends Activity {
             filter.addAction(StaticValue.CodeListTag.OPERATION_LIST);
             filter.addAction(StaticValue.CodeListTag.FORWARDER_LIST);
             filter.addAction(StaticValue.CodeListTag.STORAGE_LIST);
+            filter.addAction(StaticValue.CodeListTag.COMPANY_LIST);
             return filter;
         }
 
@@ -224,6 +227,7 @@ public class SplashActivity extends Activity {
                 case StaticValue.CodeListTag.OPERATION_LIST:
                 case StaticValue.CodeListTag.FORWARDER_LIST:
                 case StaticValue.CodeListTag.STORAGE_LIST:
+                case StaticValue.CodeListTag.COMPANY_LIST:
                     // 完成一个动作信号量减1
                     actionSemaphore--;
                     Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");

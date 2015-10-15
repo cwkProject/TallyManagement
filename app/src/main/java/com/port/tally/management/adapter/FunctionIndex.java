@@ -6,6 +6,7 @@ package com.port.tally.management.adapter;
 import android.content.Context;
 import android.content.Intent;
 
+import com.port.tally.management.activity.BalanceWeightQueryActivity;
 import com.port.tally.management.activity.DianZiMap;
 import com.port.tally.management.activity.EntrustQueryActivity;
 import com.port.tally.management.activity.PushMessage;
@@ -42,7 +43,7 @@ public class FunctionIndex {
                 break;
             case 1:
                 // 衡重
-                intent = new Intent(context, TrunkActivity.class);
+                intent = new Intent(context, BalanceWeightQueryActivity.class);
                 break;
             case 2:
                 // 委托查询

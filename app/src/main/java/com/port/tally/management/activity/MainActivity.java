@@ -40,7 +40,7 @@ import static com.port.tally.management.adapter.FunctionIndex.toFunction;
  * @version 1.0 2015/9/7
  * @since 1.0
  */
-public class MainActivity extends AppCompatActivity implements XListView.IXListViewListener{
+public class MainActivity extends AppCompatActivity implements XListView.IXListViewListener {
     private TextView moreTv;
     private XListView listView;
     private ArrayAdapter<String> mAdapter;
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements XListView.IXListV
 
         // 初始化功能布局
         initGridView();
-        moreTv = (TextView)findViewById(R.id.tv_more);
+        moreTv = (TextView) findViewById(R.id.tv_more);
         // 执行检查更新
         checkUpdate();
     }
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements XListView.IXListV
 
         // 关联ActionBar
         setSupportActionBar(toolbar);
-//        toolbar.setLogo(R.mipmap.ic_launcher);
+        toolbar.setLogo(R.mipmap.ic_launcher);
 
         // 取消原actionBar标题
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -243,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements XListView.IXListV
         startActivity(intent);
         finish();
     }
+
     private void geneItems() {
         for (int i = 0; i != 20; ++i) {
             items.add("消息" + (++start));
@@ -282,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements XListView.IXListV
             }
         }, 2000);
     }
+
     private void Init() {
         geneItems();
         listView = (XListView) findViewById(R.id.xListView);
@@ -295,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements XListView.IXListV
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
                 Intent intent = new Intent();
-                intent = new Intent(MainActivity.this,TallyDetail.class);
+                intent = new Intent(MainActivity.this, TallyDetail.class);
 
                 startActivity(intent);
 

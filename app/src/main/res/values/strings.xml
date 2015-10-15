@@ -4,6 +4,8 @@
     <string name="entrust_content">委托详情</string>
     <string name="forwarder_query">堆存查询</string>
     <string name="forwarder_content">堆存详情</string>
+    <string name="balance_weight_query">衡重查询</string>
+    <string name="balance_weight_content">衡重详情</string>
 
     <string name="search_hit"> </string>
     <string name="search_text">搜索</string>

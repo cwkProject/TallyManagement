@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 堆存查询过滤器布局 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              app:layout_scrollFlags="scroll|enterAlways">
+
+    <include layout="@layout/company_edit"/>
+
+    <TextView
+        android:id="@+id/balance_weight_query_filter_date_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="班组日期"
+        android:textColor="@android:color/black"/>
+
+    <Spinner
+        android:id="@+id/balance_weight_query_filter_dayNight_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:entries="@array/work"/>
+
+</LinearLayout>

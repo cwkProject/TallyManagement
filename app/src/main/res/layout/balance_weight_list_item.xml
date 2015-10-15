@@ -28,26 +28,25 @@
             android:paddingRight="@dimen/default_padding_small">
 
             <TextView
-                android:id="@+id/entrust_list_item_voyage_textView"
+                android:id="@+id/balance_weight_list_item_ship_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin_small"
                 android:gravity="center_vertical"
-                android:text="航次"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/entrust_list_item_cargo_owner_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin_small"
-                android:gravity="center_vertical"
-                android:text="货主名称"
+                android:text="船名"
                 android:textColor="@android:color/black"/>
 
             <TextView
-                android:id="@+id/entrust_list_item_cargo_textView"
+                android:id="@+id/balance_weight_list_item_entrust_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_small"
+                android:gravity="center_vertical"
+                android:text="委托人"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/balance_weight_list_item_cargo_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin_small"
@@ -67,7 +66,6 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/default_margin_small"
             android:layout_weight="5"
             android:orientation="vertical"
@@ -75,7 +73,7 @@
             android:paddingRight="@dimen/default_padding_small">
 
             <TextView
-                android:id="@+id/entrust_list_item_entrust_textView"
+                android:id="@+id/balance_weight_list_item_entrust_number_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin_small"
@@ -85,15 +83,51 @@
                 android:textSize="@dimen/text_view_default_text_size_large"
                 android:textStyle="bold|italic"/>
 
-            <TextView
-                android:id="@+id/entrust_list_item_work_attributes_textView"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin_small"
-                android:gravity="center_vertical"
-                android:text="作业过程，计划数量"
-                android:textColor="@android:color/black"/>
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/splice_plan_weight"
+                    android:textColor="@android:color/black"/>
+
+                <TextView
+                    android:id="@+id/balance_weight_list_item_plan_weight_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="1500000000"
+                    android:textColor="@android:color/black"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_small"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/splice_duty_weight"
+                    android:textColor="@android:color/black"/>
+
+                <TextView
+                    android:id="@+id/balance_weight_list_item_duty_weight_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="1234567"
+                    android:textColor="@android:color/black"/>
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

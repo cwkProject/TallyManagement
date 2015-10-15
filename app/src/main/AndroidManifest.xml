@@ -29,12 +29,7 @@
         <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.TallyActivity"/>
-        <activity android:name=".activity.LiHuoDetail"/>
-        <activity android:name=".activity.WorkPlanQuery"/>
-        <activity android:name=".activity.WeiTuoQuery"/>
 
-        <activity android:name=".activity.DuiCunQuery"/>
-        <activity android:name=".activity.HenZhongQuery"/>
         <activity
             android:name=".activity.DianZiMap"
             android:configChanges="orientation|keyboardHidden"
@@ -52,6 +47,9 @@
 
         <activity android:name=".activity.StockQueryActivity"/>
         <activity android:name=".activity.StockContentActivity"/>
+
+        <activity android:name=".activity.BalanceWeightQueryActivity"/>
+        <activity android:name=".activity.BalanceWeightContentActivity"/>
 
     </application>
 
