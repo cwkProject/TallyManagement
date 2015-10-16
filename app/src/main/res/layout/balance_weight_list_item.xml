@@ -3,8 +3,8 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
                                     android:foreground="?attr/selectableItemBackground"
-                                    android:translationZ="2dp"
                                     app:cardBackgroundColor="@android:color/white"
                                     app:cardCornerRadius="2dp"
                                     app:cardElevation="2dp"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/default_margin_small"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:orientation="vertical"
             android:paddingLeft="@dimen/default_padding_small"
             android:paddingRight="@dimen/default_padding_small">

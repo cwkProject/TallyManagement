@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.port.tally.management.R;
 import com.port.tally.management.bean.CargoOwner;
@@ -96,9 +95,8 @@ public class CargoOwnerFragment extends BaseCodeListFragment<CargoOwner, String>
     @Override
     protected String itemClick(AdapterView parent, View view, int position, long id) {
 
-        // 名称文本框
-        TextView name = (TextView) view.findViewById(R.id.two_row_text_item_top_textView);
+        Map<String, String> map = (Map<String, String>) parent.getItemAtPosition(position);
 
-        return name.getText().toString();
+        return map.get(NAME_TAG);
     }
 }

@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 import com.port.tally.management.R;
 import com.port.tally.management.bean.Company;
@@ -101,14 +100,11 @@ public class CompanyFragment extends BaseCodeListFragment<Company, String> {
     @Override
     protected String itemClick(AdapterView parent, View view, int position, long id) {
 
-        // 名称文本框
-        TextView name = (TextView) view.findViewById(R.id.only_text_item_textView);
-        // 编码文本框
-        TextView code = (TextView) view.findViewById(R.id.only_text_item_hide_textView);
+        Map<String, String> map = (Map<String, String>) parent.getItemAtPosition(position);
 
         // 文本框赋值
-        editText.setText(name.getText().toString());
+        editText.setText(map.get(NAME_TAG));
 
-        return code.getText().toString();
+        return map.get(COMPANY_CODE_TAG);
     }
 }
