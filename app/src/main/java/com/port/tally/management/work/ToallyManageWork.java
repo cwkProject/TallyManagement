@@ -44,7 +44,8 @@ public class ToallyManageWork extends DefaultWorkModel<String, List<Map<String, 
         tallyManageData.setCompanyCode(parameters[1]);
         tallyManageData.setStartCount(parameters[2]);
         tallyManageData.setEndCount(parameters[0]);
-
+        tallyManageData.setCargo(parameters[3]);
+        tallyManageData.setTaskNo(parameters[4]);
         return tallyManageData;
     }
 }

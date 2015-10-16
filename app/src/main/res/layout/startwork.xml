@@ -1,24 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
     <include
         android:id="@+id/header"
-        layout="@layout/header"/>
-    <ScrollView
-        android:id="@+id/container"
+        layout="@layout/header"
+      />
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/header"
+        android:layout_height="wrap_content"
+        android:id="@+id/container"
+        android:gravity="center"
+        android:layout_below="@+id/header"
+        android:layout_above ="@+id/LinearLayout1"
+
+
+        >
+    <ScrollView
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+
         android:scrollbars="none">
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/header"
+
             android:isScrollContainer="true"
             android:orientation="vertical"
-            android:paddingBottom="10.0dip">
+            >
             <LinearLayout
 
                 android:layout_width="fill_parent"
@@ -568,17 +581,28 @@
                     android:textSize="14dip">
                 </EditText>
             </LinearLayout>
-            <Button
-                android:id="@+id/startWork_btn"
-                android:layout_width="140dip"
-                android:layout_height="40.0dip"
-                android:layout_gravity="center"
-                android:background="@drawable/darkblue_btn_bg"
-                android:text="开工"
-                android:gravity="center"
-                android:layout_marginLeft="5.0dip"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:id="@+id/LinearLayout1"
+
+
+        >
+        <Button
+            android:id="@+id/startWork_btn"
+            android:layout_width="140dip"
+            android:layout_height="40.0dip"
+
+            android:background="@drawable/darkblue_btn_bg"
+            android:text="开工"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+</RelativeLayout>

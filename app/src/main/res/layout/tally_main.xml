@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/header"
+        />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@color/main_bg"
+        android:orientation="horizontal">
+
+        <AutoCompleteTextView
+
+            android:id="@+id/at_cargo"
+            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:layout_width="0dip"
+            android:dropDownWidth="350dp"
+            android:hint="货物"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="18.0sp" >
+        </AutoCompleteTextView>
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="#66CCFF"
+            />
+        <EditText
+            android:id="@+id/et_weituo"
+            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:layout_width="0dip"
+
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:hint="委托号"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="18.0sp" />
+        <Button
+            android:id="@+id/mBut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_search_background"
+            android:text="查询"/>
+    </LinearLayout>
+
+    <com.port.tally.management.xlistview.XListView
+        android:id="@+id/xListView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="#D3D3D3"
+        android:dividerHeight="4px"
+        android:background="@color/lightgray"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+
+        android:scrollbarStyle="outsideOverlay">
+    </com.port.tally.management.xlistview.XListView>
+
+</LinearLayout>

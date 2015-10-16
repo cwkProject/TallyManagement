@@ -10,6 +10,7 @@ import com.port.tally.management.activity.BalanceWeightQueryActivity;
 import com.port.tally.management.activity.DianZiMap;
 import com.port.tally.management.activity.EntrustQueryActivity;
 import com.port.tally.management.activity.PushMessage;
+import com.port.tally.management.activity.ShiftDuty;
 import com.port.tally.management.activity.StockQueryActivity;
 import com.port.tally.management.activity.TallyActivity;
 import com.port.tally.management.activity.TrunkActivity;
@@ -67,8 +68,9 @@ public class FunctionIndex {
                 break;
             case 7:
                 // 交接班
-
+                intent = new Intent(context,ShiftDuty.class);
                 break;
+
 
             case 8:
                 // 电子场图

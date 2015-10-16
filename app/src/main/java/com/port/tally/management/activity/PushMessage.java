@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -11,13 +12,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.MessgaePushAdapter;
+import com.port.tally.management.adapter.PushMessageAdapter;
+import com.port.tally.management.work.ToallyManageWork;
 import com.port.tally.management.xlistview.XListView;
 
+import org.mobile.library.model.work.WorkBack;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by song on 2015/9/28.
@@ -26,43 +34,23 @@ public class PushMessage extends Activity implements XListView.IXListViewListene
     private ListView listPush;
     private TextView tv_title;
     private ImageView imgLeft;
-    //
     private XListView listView;
-    private ArrayAdapter<String> mAdapter;
-    private MessgaePushAdapter adapter;
-    private List<String> items = new ArrayList<String>();
-
+    private PushMessageAdapter pushMessageAdapter;
+    private List<Map<String, Object>> dataList = null;
     private Handler mHandler;
-    private int start = 0;
-    private static int refreshCnt = 0;
+    int flag = 1;
+    private Toast mToast;
     //
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.messagepush);
         initView();
-        Init();
-//        listPush = (ListView) findViewById(R.id.listView_push);
-//        String[] strings = {"title","time","detail"};//Map的key集合数组
-//        int[] ids = {R.id.tv_title,R.id.tv_time,R.id.tv_detail};//对应布局文件的id
-//        SimpleAdapter simpleAdapter = new SimpleAdapter(this,
-//                getData(), R.layout.push_item, strings, ids);
-//        listPush.setAdapter(simpleAdapter);//绑定适配器
-}
-//    // 初始化一个List
-//    private List<HashMap<String, Object>> getData() {
-//        // 新建一个集合类，用于存放多条数据
-//        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-//        HashMap<String, Object> map = null;
-//        for (int i = 1; i <= 40; i++) {
-//            map = new HashMap<String, Object>();
-//            map.put("title", "系统消息" + i);
-//            map.put("time", "4-02" +i + "日");
-//            map.put("detail", "我通过了你的好友验证请求，现在我们可以开始对话啦");
-//            list.add(map);
-//        }
-//        return list;
-//    }
+        initListView();
+    }
+
+
+
     private void initView(){
         tv_title =(TextView)findViewById(R.id.title);
         imgLeft = (ImageView) findViewById(R.id.left);
@@ -76,67 +64,133 @@ public class PushMessage extends Activity implements XListView.IXListViewListene
             }
         });
     }
-    private void geneItems() {
-        for (int i = 0; i != 20; ++i) {
-            items.add("消息" + (++start));
-        }
-    }
-
-    private void onLoad() {
-        listView.stopRefresh();
-        listView.stopLoadMore();
-        listView.setRefreshTime("上拉刷新");
-    }
-
-    @Override
-    public void onRefresh() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                start = ++refreshCnt;
-                items.clear();
-                geneItems();
-                // mAdapter.notifyDataSetChanged();
-                mAdapter = new ArrayAdapter<String>(PushMessage.this, R.layout.push_item, items);
-                listView.setAdapter(adapter);
-                onLoad();
-            }
-        }, 2000);
+    //显示数据
+    private void showData(String key, String type, String company,String cargo,String trustno) {
+        key = "3";
+        type = "1";
+        company = "14";
+        loadValue(key, type, company, cargo, trustno);
     }
 
     @Override
     public void onLoadMore() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                geneItems();
-                adapter.notifyDataSetChanged();
+        String count = "5";
+        String stratcount = String.valueOf(flag);
+        String company = "14";
+        String cargo=null;
+        String trustno =null;
+        loadValue(count, stratcount, company, cargo, trustno);
+    }
+
+    private void onLoad() {
+
+        listView.stopRefresh();
+        listView.stopLoadMore();
+        listView.setRefreshTime("刚刚");
+    }
+
+    public void onRefresh() {
+//        showData();
+    }
+
+    //给个控件赋值
+    private void loadValue(String key, final String type, String company,String cargo,String trustno) {
+
+        //实例化，传入参数
+        ToallyManageWork toallyManageWork = new ToallyManageWork();
+
+        toallyManageWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
+
+            public void doEndWork(boolean b, List<Map<String, Object>> data) {
+
+                if ("1".equals(type)) {
+                    dataList.clear();
+
+                    flag = 1;
+                }
+
+                if (b && data != null) {
+
+                    flag += data.size();
+                    listView.setPullLoadEnable(true);
+                    dataList.addAll(data);
+                    pushMessageAdapter.notifyDataSetChanged();
+                } else {
+                    //清空操作
+//                    listView.setPullLoadEnable(false);
+//                    for(int i =0;i<1;i++){
+                    showToast("无相关信息");
+//                        tallyManageAdapter.notifyDataSetChanged();
+//                    }
+
+
+
+                }
+
+                pushMessageAdapter.notifyDataSetChanged();
                 onLoad();
             }
-        }, 2000);
+        });
+        toallyManageWork.beginExecute(key, company, type, cargo, trustno);
     }
-    private void Init() {
-        geneItems();
+
+    private void initListView() {
+
         listView = (XListView) findViewById(R.id.xListView);
+        dataList = new ArrayList<>();
+        showData(null, null, null, null, null);
         listView.setPullLoadEnable(true);
-        adapter = new MessgaePushAdapter(PushMessage.this, items);
-        listView.setAdapter(adapter);
+        pushMessageAdapter = new PushMessageAdapter(PushMessage.this, dataList);
+
+        pushMessageAdapter.notifyDataSetChanged();
+        listView.setAdapter(pushMessageAdapter);
+
         listView.setXListViewListener(this);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
+//                String cgno = "14";
+//                Bundle b = new Bundle();
+//                Intent intent = new Intent();
+//                //                b.putStringArray("Cgno", cgno);
+//                b.putString("Cgno", cgno);
+//                intent = new Intent(TallyActivity.this, TallyDetail.class);
+//                intent.putExtras(b);
+//                startActivity(intent);
+                HashMap map = (HashMap) arg0.getItemAtPosition(arg2);
+//                派工编码
+//                委托编码
+//                票货编码
+                String[] strings = new String[]{
+                        map.get("pmno").toString(),
+                        map.get("tv_Entrust").toString(),
+                        map.get("gbno").toString()
+                };
+                Bundle b = new Bundle();
                 Intent intent = new Intent();
-                intent = new Intent(PushMessage.this, WorkPlanDetail.class);
+                b.putStringArray("detailString", strings);
 
+                Log.i("valuedetailString的值是", strings[0] + "" + strings[1] + "" + strings[2] + "");
+                intent = new Intent(PushMessage.this, TallyDetail.class);
+                intent.putExtras(b);
                 startActivity(intent);
 
 
             }
 
         });
-        mHandler = new Handler();
+    }
+    private void showToast(String msg) {
+        if (mToast == null) {
+            mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
 
+        } else {
+            mToast.setText(msg);
+
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.show();
     }
 }

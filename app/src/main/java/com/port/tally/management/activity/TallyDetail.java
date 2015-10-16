@@ -41,6 +41,7 @@ public class TallyDetail extends TabActivity {
     RadioGroup radiogroup;
     RadioButton radio1,radio2,radio3;
     EditText et_count;
+    String[] value=null;
     //
     TabHost mTabHost = null;
     TabWidget mTabWidget = null;
@@ -49,6 +50,10 @@ public class TallyDetail extends TabActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tallydetail);
         init();
+
+        Bundle b=getIntent().getExtras();
+        value=b.getStringArray("detailString");
+        Log.i("value1的值是",value[0]+""+value[1]+""+value[2]+"");
         initShipment();
         radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
@@ -90,6 +95,7 @@ public class TallyDetail extends TabActivity {
             @Override
             public void doEndWork(boolean b, String s) {
                 if (b) {
+
                     tv_shipment.setText(s);
                     Log.i("S的值",s );
                 }else{
@@ -99,7 +105,7 @@ public class TallyDetail extends TabActivity {
             }
 
         });
-        tallyDetailwork.beginExecute( cargo);
+        tallyDetailwork.beginExecute(value[0], value[1], value[2]);
     }
     private void init() {
         title = (TextView) findViewById(R.id.title);
@@ -114,8 +120,10 @@ public class TallyDetail extends TabActivity {
         title.setText("作业票生成");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
-        Intent intent =getIntent();
-         cargo = intent.getStringExtra("Cgno");
+
+
+
+
         weiTuoSp = (Spinner) findViewById(R.id.weituo_spinner1);
 //
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);

@@ -79,9 +79,9 @@ public class UpdataStartData extends JsonDataModel {
      */
     @Override
     protected String onRequestMessage(boolean b, JSONObject jsonObject) throws JSONException {
-        return b ? null : jsonObject.getString("Message");
+        return jsonObject.getString("Message");
     }
-    /**
+    /*
      * 提取服务反馈的结果数据，
      * 在服务请求成功后调用，
      * 即{@link #onRequestResult(JSONObject)}返回值为true时，

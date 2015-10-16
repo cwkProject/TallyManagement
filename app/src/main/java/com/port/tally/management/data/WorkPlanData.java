@@ -2,8 +2,6 @@ package com.port.tally.management.data;
 
 import android.util.Log;
 
-import com.port.tally.management.bean.Entrust;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,14 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/3.
+ * Created by song on 2015/10/14.
  */
-public class TallyManageData extends JsonDataModel {
+public class WorkPlanData extends JsonDataModel {
 
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "TallyManageData.";
+    private static final String LOG_TAG = "WorkPlanData.";
 
     /**
      * 服务请求传入参数  起始行+行数+公司编码
@@ -93,37 +91,32 @@ public class TallyManageData extends JsonDataModel {
 
                 JSONArray jsonEntrust = jsonArray.getJSONArray(i);
 
-                if (jsonEntrust.length() > 12) {
+                Log.i(LOG_TAG + "onRequestSuccess", "JSONArray is " + jsonEntrust);
+                if (jsonEntrust.length() > 5) {
                     // 一条委托数据
+                    Log.i(LOG_TAG + "onRequestSuccess", "now is " + i);
                     Map<String,Object> map = new HashMap<String,Object>() ;
-//                    派工编码
-                    map.put("pmno", jsonEntrust.getString(0));
-//                    委托编码
-                    map.put("tv_Entrust", jsonEntrust.getString(1));
-//                    票货编码
-                    map.put("gbno", jsonEntrust.getString(2));
-//                    委托人
-                    map.put("tv_consignor", jsonEntrust.getString(3));
-//                  委托号
-                    map.put("taskno", jsonEntrust.getString(4));
-//                    货物
-                    map.put("tv_cargo", jsonEntrust.getString(5));
-//                    计划作业量
-                    map.put("tv_planwork",jsonEntrust.getString(7));
-//                    源载体
-                    map.put("tv_sourcevector", jsonEntrust.getString(10));
-//                    源票货
-                    map.put("tv_sourcecargo", jsonEntrust.getString(12));
-//                    目的票货
-                    map.put("tv_purposecargo", jsonEntrust.getString(13));
-//                    作业过程
-                    map.put("tv_operationprocess", jsonEntrust.getString(6));
-//                    开始时间
-                    map.put("tv_starttime", jsonEntrust.getString(8));
-//                    结束时间
-                    map.put("tv_terminaltime", jsonEntrust.getString(9));
-//                    目的载体
-                    map.put("tv_destinationvector", jsonEntrust.getString(11));
+                    map.put("tv_cargoname", jsonEntrust.getString(5));
+                    map.put("tv_starttime", jsonEntrust.getString(3));
+                    map.put("tv_end", jsonEntrust.getString(4));
+                    map.put("tv_trustno", jsonEntrust.getString(0));
+                    map.put("tv_bowei", jsonEntrust.getString(1));
+                    map.put("tv_process", jsonEntrust.getString(2));
+//                    map.put("tv_cargo", jsonEntrust.getString(0));
+//                    map.put("cgno", jsonEntrust.getString(1));
+//                    map.put("gbno", jsonEntrust.getString(2));
+//                    map.put("tv_purposecargo", jsonEntrust.getString(3));
+//                    map.put("tv_operationprocess", jsonEntrust.getString(4));
+//                    map.put("tv_starttime", jsonEntrust.getString(5));
+//                    map.put("tv_terminaltime", jsonEntrust.getString(6));
+//                    map.put("tv_destinationvector", jsonEntrust.getString(7));
+//                    map.put("tv_terminaltime", jsonEntrust.getString(8));
+//                    map.put("tv_sourcecargo", jsonEntrust.getString(9));
+//                    map.put("tv_planwork",jsonEntrust.getString(10));
+//                    map.put("tv_sourcevector", jsonEntrust.getString(11));
+//                    map.put("client", jsonEntrust.getString(12));
+//                    map.put("taskno", jsonEntrust.getString());
+
                     // 添加到列表
                     all.add(map);
                 }

@@ -9,6 +9,24 @@ public class StartWorkBean {
     private String forwarder; //货代
     private  String cargo;//货物
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private  String id;
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    private  String message;
     public String getPlace() {
         return place;
     }

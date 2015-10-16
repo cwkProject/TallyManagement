@@ -91,8 +91,10 @@ public interface StaticValue {
     /**
      * 派工计划模块ip
      */
+    //派工货物提示框IP
+    String HTTP_GET_CagoAuto_URL ="http://218.92.115.55/M_Lhgl/Service/Base/GetCargo.aspx";
     //派工计划第一页IP
-    String HTTP_GET_TASKONE_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionPlan.aspx";
+    String HTTP_GET_TASKONE_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionCommand.aspx";
     //详细派工页
     String HTTP_GET_TASKDETAIL_URL = "http://218.92.115" + "" +
             ".55/M_Lhgl/Service/Slip/GetMissionPlanDetail.aspx";
@@ -186,8 +188,12 @@ public interface StaticValue {
     //   完工
     String HTTP_GET_ENDWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetWork.aspx";
     //提交开工时间
-    String HTTP_GET_UPDATSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetStartWork" +
+    String HTTP_GET_UPDATSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/StartWork" +
             ".aspx";
     //提交完工时间
-    String HTTP_GET_UPDATEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetStartWork.aspx";
+    String HTTP_GET_UPDATEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/EndWork.aspx";
+// 作业计划第一页
+    String HTTP_GET_WORKPLAN_URL = "http://218.92.115.55/M_Lhgl/Service/Plan/GetOperationPlan.aspx";
+    // 作业计划详情页
+    String HTTP_GET_WORKPLANDETAIL_URL = "http://218.92.115.55/M_Lhgl/Service/Plan/GetOperationPlanDetail.aspx";
 }

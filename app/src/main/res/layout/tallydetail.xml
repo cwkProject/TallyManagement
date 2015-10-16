@@ -55,43 +55,8 @@
         android:layout_width="fill_parent"
         android:layout_height="1.0px"
         android:background="@drawable/shape_line"/>
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:minHeight="30.0dip"
-        android:id="@+id/weituo"
-        android:layout_below="@+id/text1"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
-            android:layout_weight="1.0"
-            android:text="委托"
-            android:textColor="@color/black"
-            android:textSize="@dimen/BasicTextSize"/>
 
 
-
-        <Spinner
-            android:id="@+id/weituo_spinner1"
-            android:layout_width="0dip"
-            android:layout_height="40.0dip"
-            android:layout_marginRight="10.0dip"
-
-            android:layout_weight="7.0"
-            android:textColor="@color/black"
-
-            />
-    </LinearLayout>
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1.0px"
-        android:background="@drawable/shape_line"/>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -394,21 +359,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
             </TabWidget>
-        <ScrollView
-            android:id="@+id/container"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:scrollbars="none"
-            >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:isScrollContainer="true"
 
-            android:orientation="vertical"
-          >
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_height="wrap_content"
@@ -461,6 +413,110 @@
                             />
                         <TextView
                             android:id="@+id/tv_count"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:text="数量"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/activity_prepare_test_layout_e1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:background="@drawable/machine_choose_bg"
+                        android:padding="8dp" >
+
+
+                        <TextView
+                            android:id="@+id/tv_mac1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginLeft="12dp"
+                            android:text="机械号"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_start1"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="起"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+                            android:id="@+id/tv_end1"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="止"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+                            android:id="@+id/tv_count1"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:text="数量"
+                            android:textSize="16sp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/activity_prepare_test_layout_e2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:background="@drawable/machine_choose_bg"
+                        android:padding="8dp" >
+
+
+                        <TextView
+                            android:id="@+id/tv_mac2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_marginLeft="12dp"
+                            android:text="机械号"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_start2"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="起"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+                            android:id="@+id/tv_end2"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:text="止"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            />
+                        <TextView
+                            android:id="@+id/tv_count2"
                             android:gravity="center"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
@@ -559,13 +615,45 @@
                 </LinearLayout>
 
             </FrameLayout>
-        </LinearLayout>
-        </ScrollView>
+
         </LinearLayout>
     </TabHost>
     </LinearLayout>
+        <LinearLayout
+            android:id="@+id/table_start"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="30.0dip"
+            android:weightSum="1"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_start"
+                android:layout_width="140dip"
+                android:layout_height="40.0dip"
+                android:layout_gravity="center"
+                android:background="@drawable/darkblue_btn_bg"
+                android:text="开工"
+                android:gravity="center"
+                android:layout_marginLeft="5.0dip"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+            <Button
+                android:id="@+id/btn_end"
+                android:layout_width="140dip"
+                android:layout_height="40.0dip"
+                android:layout_gravity="center"
+                android:background="@drawable/darkblue_btn_bg"
+                android:text="完工"
+                android:gravity="center"
+                android:layout_marginLeft="5.0dip"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
     </LinearLayout>
     </ScrollView>
+
     <View
         android:layout_width="fill_parent"
         android:layout_height="1.0px"

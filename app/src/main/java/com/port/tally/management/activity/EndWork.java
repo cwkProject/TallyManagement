@@ -35,6 +35,7 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.EndWorkTeamAutoAdapter;
@@ -45,6 +46,7 @@ import com.port.tally.management.work.StartWorkWork;
 import com.port.tally.management.work.UploadEndWork;
 
 import org.mobile.library.model.work.WorkBack;
+import org.mobile.library.util.LoginStatus;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -62,14 +64,15 @@ public class EndWork extends Activity {
     private AutoCompleteTextView teamAuto;
     EndWorkTeamAutoAdapter endWorkTeamAutoAdapter;
     private  List<Map<String, Object>> dataList=null;
-
+    private String ID;
+    private Toast mToast;
     private TextView tv_vehiclenum, tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task;
-    private EditText tongxin_edt,et_count;
+    private EditText tongxin_edt,et_count,tv_note;
     private Button tongxing_search_btn, endWork_btn;
     private TextView tv_entime;
     private TextView title;
     private ImageView imgLeft;
-    private Spinner spinner_over,spinner_note;
+    private Spinner spinner_over ;
     private String spinner_overText;
     private PopupWindow startPopupWindow;
     // 定义5个记录当前时间的变量
@@ -116,6 +119,7 @@ public class EndWork extends Activity {
         tv_loader=(TextView)findViewById(R.id.tv_loader);
         tv_task =(TextView)findViewById(R.id.tv_task);
         et_count = (EditText) findViewById(R.id.et_count);
+        tv_note =(EditText) findViewById(R.id.tv_note);
         teamAuto =(AutoCompleteTextView)findViewById(R.id.et_group);
         dataList = new ArrayList<>();
         spinner_over =(Spinner)findViewById(R.id.spinner_over);
@@ -171,7 +175,9 @@ public class EndWork extends Activity {
             @Override
             public void onClick(View v) {
                 spinner_overText = spinner_over.getSelectedItem().toString();
-                uploadValue(spinner_overText, teamAuto.getText().toString(),et_count.getText().toString(),"","","");
+                long sysTime = System.currentTimeMillis();
+                CharSequence sysTimeStr = DateFormat.format("hh:mm:ss", sysTime);
+                uploadValue(spinner_overText, teamAuto.getText().toString(),et_count.getText().toString(),sysTimeStr.toString(),ID, LoginStatus.getLoginStatus().getNickname());
 
             }
         });
@@ -183,7 +189,7 @@ public class EndWork extends Activity {
 
                 if (validate(tongxingKey,v)) {
                     String type ="CARD";
-                    String company= "777";
+                    String company= "77";
                     initValue(tongxingKey,type,company);
                 };
 
@@ -240,7 +246,7 @@ public class EndWork extends Activity {
                 String tongxingKey = tv_cardnum.getText().toString();
                 if (validate(tongxingKey,v)) {
                     String type ="NFC";
-                    String company= "777";
+                    String company= "77";
                     initValue(tongxingKey,type,company);
                 };
             }
@@ -388,8 +394,11 @@ public class EndWork extends Activity {
                 Parcelable tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 Tag tag1 = (Tag) tag;
                 byte[] id1 = tag1.getId();
-                tv_cardnum.setText(getHex(id1));
 
+                tv_cardnum.setText(getHex(id1).toUpperCase());
+                String type ="NFC";
+                String company= "77";
+                initValue(getHex(id1).toUpperCase(), type, company);
             }
 
 
@@ -434,6 +443,8 @@ public class EndWork extends Activity {
                     tv_port.setText(startWorkBean.getSetport());
                     tv_loader.setText(startWorkBean.getLoader());
                     tv_task.setText(startWorkBean.getTask());
+                    ID =startWorkBean.getId().toString();
+                    Log.i("idzhi", "" + startWorkBean.getId());
                     //如果开始时间值不为空，记录人也不为空，则设置记录人为不可编辑状态
 //                    tv_startTime.setText(startWorkBean.getStartTime());
 //                    et_noteperson.setText(startWorkBean.getNotePerson());
@@ -450,8 +461,7 @@ public class EndWork extends Activity {
                     tv_loader.setText("");
                     tv_task.setText("");
                     clearEnd();
-
-                    showDialog("信息不存在");
+                    showToast(startWorkBean.getMessage());
                 }
             }
         });
@@ -544,6 +554,17 @@ public class EndWork extends Activity {
                         }).create();//创建按钮
 
         dialog.show();
+    }
+    private void showToast(String msg) {
+        if (mToast == null) {
+            mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+
+        } else {
+            mToast.setText(msg);
+
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.show();
     }
 }
 

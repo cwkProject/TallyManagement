@@ -65,7 +65,7 @@ public class StartWorkWork extends DefaultWorkModel<String, StartWorkBean, Start
      */
     @Override
     protected StartWorkBean onRequestFailedSetResult(StartWorkData data) {
-        return null;
+        return data.getStartWorkBean();
     }
 
     /**

@@ -33,7 +33,7 @@ protected boolean onCheckParameters(String... parameters) {
  */
 @Override
 protected String onTaskUri() {
-        return StaticValue.HTTP_GET_STARTWORK_URL;
+        return StaticValue.HTTP_GET_UPDATSTART_URL;
         }
 
 /**
@@ -49,7 +49,7 @@ protected String onTaskUri() {
  */
 @Override
 protected String onRequestSuccessSetResult(UpdataStartData data) {
-        return data.getResult();
+        return data.getMessage();
         }
 
 /**
@@ -65,7 +65,7 @@ protected String onRequestSuccessSetResult(UpdataStartData data) {
  */
 @Override
 protected String onRequestFailedSetResult(UpdataStartData data) {
-        return null;
+        return data.getMessage();
         }
 
 /**
@@ -79,9 +79,10 @@ protected String onRequestFailedSetResult(UpdataStartData data) {
 @Override
 protected UpdataStartData onCreateDataModel(String... parameters) {
         UpdataStartData updataStartData  = new UpdataStartData();
-
-         updataStartData.setId(parameters[0]);
-         updataStartData.setNotperson(parameters[1]);
+//    String(msg.getBytes("ISO-8859-1"),"UTF-8")
+//    updataStartData.setId(new String(getBytes("ISO-8859-1"), "UTF-8")parameters[0]);
+           updataStartData.setId(parameters[0]);
+            updataStartData.setNotperson(parameters[1]);
          updataStartData.setTime(parameters[2]);
         return updataStartData;
         }

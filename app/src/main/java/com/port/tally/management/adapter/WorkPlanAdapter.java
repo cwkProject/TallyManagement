@@ -1,6 +1,7 @@
 package com.port.tally.management.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,43 +57,46 @@ public class WorkPlanAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         Map<String, Object> item = getItem(position);
+
         final int mPosition = position;
         final Hand hand;
         if (convertView == null) {
             hand = new Hand();
-            convertView = inflater.inflate(R.layout.plan_item, null);
-            hand.tv_entrust = (TextView) convertView.findViewById(R.id.tv_entrust);
-            hand.bowei2 = (TextView) convertView.findViewById(R.id.bowei_2);
-            hand.tv_process = (TextView) convertView.findViewById(R.id.tv_process);
-            hand.tv_start = (TextView) convertView.findViewById(R.id.tv_start);
-            hand.tv_end = (TextView) convertView.findViewById(R.id.tv_end);
+            convertView = inflater.inflate(R.layout.workplan_item, null);
             hand.tv_cargoname = (TextView) convertView.findViewById(R.id.tv_cargoname);
+            hand.tv_starttime = (TextView) convertView.findViewById(R.id.tv_starttime);
+            hand.tv_end = (TextView) convertView.findViewById(R.id.tv_end);
+            hand.tv_process = (TextView) convertView.findViewById(R.id.tv_process);
+            hand.tv_trustno = (TextView) convertView.findViewById(R.id.tv_trustno);
+            hand.tv_bowei = (TextView) convertView.findViewById(R.id.tv_bowei);
 
 
         } else {
             hand = (Hand) convertView.getTag();
         }
-        if(!item.get("entrust").equals("")){
-            hand.tv_entrust.setText((CharSequence)item.get("entrust"));}
-        if(!item.get("bowei").equals("")){
-            hand.bowei2.setText((CharSequence) item.get("bowei"));
+        if(!item.get("tv_cargoname").equals("")){
+            hand.tv_cargoname.setText((CharSequence)item.get("tv_cargoname"));}
+        if(!item.get("tv_starttime").equals("")){
+            hand.tv_starttime.setText((CharSequence) item.get("tv_starttime"));
         }
-        if(!item.get("process").equals("")){
-            hand.tv_process.setText((CharSequence) item.get("process"));}
-        if(!item.get("start").equals("")){
-            hand.tv_start.setText((CharSequence) item.get("start"));}
-        if(!item.get("end").equals("")){
-            hand.tv_end.setText((CharSequence) item.get("end"));}
-        if(!item.get("cargoname").equals("")){
-            hand.tv_cargoname.setText((CharSequence) item.get("cargoname"));}
+
+        if(!item.get("tv_cargoname").equals("")){
+            hand.tv_cargoname.setText((CharSequence) item.get("tv_cargoname"));}
+        if(!item.get("tv_trustno").equals("")){
+            hand.tv_trustno.setText((CharSequence) item.get("tv_trustno"));}
+        if(!item.get("tv_starttime").equals("")){
+            hand.tv_trustno.setText((CharSequence) item.get("tv_starttime"));}
+        if(!item.get("tv_end").equals("")){
+            hand.tv_end.setText((CharSequence) item.get("tv_end"));}
+        if(!item.get("tv_bowei").equals("")){
+            hand.tv_bowei.setText((CharSequence) item.get("tv_bowei"));}
         convertView.setTag(hand);
         return convertView;
     }
 
     private class Hand {
 
-        // 锟斤拷锟斤拷锟斤拷坪徒锟斤拷锟斤拷谋锟�
-        TextView tv_entrust,bowei2, tv_process, tv_start,tv_end, tv_cargoname;
+        TextView tv_cargoname,tv_starttime, tv_process, tv_trustno,tv_end, tv_bowei;
 
     }
 }

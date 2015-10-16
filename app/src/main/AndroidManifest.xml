@@ -36,8 +36,8 @@
             android:screenOrientation="sensor"/>
         <activity android:name=".activity.JiaoJieQuery"/>
         <activity android:name=".activity.TrunkQuery"/>
-
-
+        <activity android:name=".activity.TallyDetail"/>
+        <activity android:name=".activity.ShiftDuty"/>
         <activity android:name=".activity.PushMessage"/>
         <activity android:name=".activity.TrunkActivity"/>
         <activity android:name=".activity.StartWork"/>

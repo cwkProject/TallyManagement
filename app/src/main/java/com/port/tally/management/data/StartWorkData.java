@@ -1,5 +1,7 @@
 package com.port.tally.management.data;
 
+import android.util.Log;
+
 import com.port.tally.management.bean.StartWorkBean;
 
 import org.json.JSONException;
@@ -42,9 +44,11 @@ public class StartWorkData extends JsonDataModel {
     protected void onFillRequestParameters(Map<String, String> map) {
         // 传入请求参数
         //通行证
-        map.put("NO", searchContent);
+
         map.put("CodeCompany",company);
         map.put("RecognizeMethod",type);
+        map.put("NO", searchContent);
+
     }
     /**
      * 提取服务执行结果
@@ -94,6 +98,7 @@ public class StartWorkData extends JsonDataModel {
         JSONObject jsonObject=jsonResult.getJSONObject("Data");
 
         startWorkBean=new StartWorkBean();
+        startWorkBean.setId(jsonObject.getString("ID"));
         startWorkBean.setVehicleNum(jsonObject.getString("车号"));
         startWorkBean.setBoatName(jsonObject.getString("船名"));
         startWorkBean.setForwarder(jsonObject.getString("货代"));
@@ -103,7 +108,15 @@ public class StartWorkData extends JsonDataModel {
         startWorkBean.setSetport(jsonObject.getString("集疏港"));
         startWorkBean.setLoader(jsonObject.getString("装卸车"));
         startWorkBean.setTask(jsonObject.getString("任务号"));
+        startWorkBean.setMessage(getMessage());
+          Log.i("getMessage()", "" + getMessage());
+        Log.i("ID",""+jsonObject.getString("ID"));
+    }
 
+    @Override
+    protected void onRequestFailed(JSONObject jsonResult) throws JSONException {
+        startWorkBean=new StartWorkBean();
 
+        startWorkBean.setMessage(getMessage());
     }
 }

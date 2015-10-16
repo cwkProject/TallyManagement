@@ -1,16 +1,18 @@
 package com.port.tally.management.work;
 
-import com.port.tally.management.bean.TrunkQueryBean;
-import com.port.tally.management.data.TallyDetailData;
-import com.port.tally.management.data.TrunkQueryData;
+import com.port.tally.management.data.EndWorkAutoTeamData;
+import com.port.tally.management.data.TallyCagoAtoData;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- * Created by song on 2015/10/10.
+ * Created by song on 2015/10/14.
  */
-public class ToallyDetailWork extends DefaultWorkModel<String, String, TallyDetailData> {
+public class TallyCagoAtoWork extends DefaultWorkModel<String, List<Map<String, Object>>, TallyCagoAtoData> {
 
     /**
      * 参数合法性检测，
@@ -24,7 +26,7 @@ public class ToallyDetailWork extends DefaultWorkModel<String, String, TallyDeta
 
     protected boolean onCheckParameters(String... parameters) {
         // 需要至少两个传入参数
-        return !(parameters == null || parameters.length < 1);
+        return true;
     }
 
     /**
@@ -34,7 +36,7 @@ public class ToallyDetailWork extends DefaultWorkModel<String, String, TallyDeta
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_TASKDETAIL_URL;
+        return StaticValue.HTTP_GET_CagoAuto_URL;
     }
 
     /**
@@ -49,8 +51,8 @@ public class ToallyDetailWork extends DefaultWorkModel<String, String, TallyDeta
      * @return 任务返回数据
      */
     @Override
-    protected String onRequestSuccessSetResult(TallyDetailData data) {
-        return data.getDetailTitle();
+    protected List<Map<String, Object>> onRequestSuccessSetResult(TallyCagoAtoData data) {
+        return data.getAll();
     }
 
     /**
@@ -65,7 +67,7 @@ public class ToallyDetailWork extends DefaultWorkModel<String, String, TallyDeta
      * @return 任务返回数据
      */
     @Override
-    protected String onRequestFailedSetResult(TallyDetailData data) {
+    protected List<Map<String, Object>> onRequestFailedSetResult(TallyCagoAtoData data) {
         return null;
     }
 
@@ -77,13 +79,10 @@ public class ToallyDetailWork extends DefaultWorkModel<String, String, TallyDeta
      *
      * @return 参数设置完毕后的数据模型对象
      */
+    @Override
+    protected TallyCagoAtoData onCreateDataModel(String... parameters) {
 
-    protected TallyDetailData onCreateDataModel(String... parameters) {
-        TallyDetailData tallyDetailData = new TallyDetailData();
-
-        tallyDetailData.setSearchContent(parameters[0]);
-        tallyDetailData.setSearchContent1(parameters[1]);
-        tallyDetailData.setSearchContent2(parameters[2]);
-        return tallyDetailData;
+        return new TallyCagoAtoData();
     }
 }
+

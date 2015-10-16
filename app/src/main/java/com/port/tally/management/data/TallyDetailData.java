@@ -24,6 +24,17 @@ public class TallyDetailData extends JsonDataModel {
      */
     private String searchContent = null;
 
+    public void setSearchContent1(String searchContent1) {
+        this.searchContent1 = searchContent1;
+    }
+
+    private String searchContent1 = null;
+
+    public void setSearchContent2(String searchContent2) {
+        this.searchContent2 = searchContent2;
+    }
+
+    private String searchContent2 = null;
     public String getDetailTitle() {
         return detailTitle;
     }
@@ -46,7 +57,9 @@ public class TallyDetailData extends JsonDataModel {
     @Override
     protected void onFillRequestParameters(Map<String, String> dataMap) {
         // 传入请求参数
-        dataMap.put("Cgno", searchContent);
+        dataMap.put("Pmno", searchContent);
+        dataMap.put("Cgno", searchContent1);
+        dataMap.put("Gbno", searchContent2);
         Log.i(LOG_TAG + "onFillRequestParameters", "Cgno is " + searchContent);
     }
 
@@ -98,7 +111,7 @@ public class TallyDetailData extends JsonDataModel {
     protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
 
         JSONObject jsonObject=jsonResult.getJSONObject("Data");
-        detailTitle =jsonObject.getString("销账票货");
+        detailTitle =jsonObject.getString("指令概要");
 
 
 

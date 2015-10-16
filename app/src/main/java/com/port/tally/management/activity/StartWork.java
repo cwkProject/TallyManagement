@@ -21,6 +21,7 @@ import android.os.Message;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.port.tally.management.R;
 import com.port.tally.management.bean.StartWorkBean;
@@ -42,6 +44,7 @@ import com.port.tally.management.work.UploadEndWork;
 import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.LoginStatus;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Locale;
@@ -52,7 +55,8 @@ import java.util.Locale;
  */
 public class StartWork extends Activity {
     private static final int msgKey1 = 1;
-
+    private Toast mToast;
+    private String ID;
     private TextView tv_vehiclenum, tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task;
     private EditText tongxin_edt, et_noteperson;
     private Button tongxing_search_btn, startWork_btn;
@@ -146,8 +150,10 @@ public class StartWork extends Activity {
 
                 if (validate(tongxingKey,v)) {
                     String type ="CARD";
-                    String company= "777";
-                    initValue(tongxingKey,type,company);
+                    String company= "77";
+                    Log.i("initValue(tongxingKey,type,company)",""+tongxingKey+type+company);
+                    initValue(tongxingKey, type, company);
+
                 };
 
             }
@@ -155,15 +161,23 @@ public class StartWork extends Activity {
         startWork_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String key = et_noteperson.getText().toString();
-                if (validate(key,v)) {
+
+//                if (validate(key,v)) {
                     String type ="CARD";
-                    String company= "777";
+                    String company= "77";
                     long sysTime = System.currentTimeMillis();
                     CharSequence sysTimeStr = DateFormat.format("hh:mm:ss", sysTime);
                     tv_startTime.setText(sysTimeStr);
-                    uploadValue(key,sysTimeStr.toString(),LoginStatus.getLoginStatus().getNickname());
-                };
+//                    String msg = request.getParameter("message");
+//                    String str=new String(msg.getBytes("ISO-8859-1"),"UTF-8");
+                    uploadValue(ID,LoginStatus.getLoginStatus().getNickname(),sysTimeStr.toString());
+//                    try {
+//                        Log.i("key的编码是",getEncoding(key)+"sysTimeStr.toString()"+getEncoding(sysTimeStr.toString())+"LoginStatus.getLoginStatus().getNickname()"+getEncoding(LoginStatus.getLoginStatus().getNickname()));
+//                        uploadValue(new String(key.getBytes("GB2312"), "UTF-8"), new String(sysTimeStr.toString().getBytes("GB2312"), "UTF-8"), new String(LoginStatus.getLoginStatus().getNickname().getBytes("GB2312"),"GBK"));
+//                    } catch (UnsupportedEncodingException e) {
+//                        e.printStackTrace();
+//                    }
+//                };
             }
         });
         // 为TimePicker指定监听器
@@ -216,7 +230,7 @@ public class StartWork extends Activity {
                 String tongxingKey = tv_cardnum.getText().toString();
                 if (validate(tongxingKey,v)) {
                     String type ="NFC";
-                    String company= "777";
+                    String company= "77";
                     initValue(tongxingKey,type,company);
                 };
             }
@@ -234,7 +248,41 @@ public class StartWork extends Activity {
         mDialog.setMessage(getText(message));
         mDialog.show();
     }
-
+    public static String getEncoding(String str) {
+        String encode = "GB2312";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {
+                String s = encode;
+                return s;
+            }
+        } catch (Exception exception) {
+        }
+        encode = "ISO-8859-1";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {
+                String s1 = encode;
+                return s1;
+            }
+        } catch (Exception exception1) {
+        }
+        encode = "UTF-8";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {
+                String s2 = encode;
+                return s2;
+            }
+        } catch (Exception exception2) {
+        }
+        encode = "GBK";
+        try {
+            if (str.equals(new String(str.getBytes(encode), encode))) {
+                String s3 = encode;
+                return s3;
+            }
+        } catch (Exception exception3) {
+        }
+        return "";
+    }
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private NdefRecord newTextRecord(String text, Locale locale, boolean encodeInUtf8) {
         byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
@@ -312,7 +360,10 @@ public class StartWork extends Activity {
                 Parcelable tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 Tag tag1 = (Tag) tag;
                 byte[] id1 = tag1.getId();
-                tv_cardnum.setText(getHex(id1));
+                tv_cardnum.setText(getHex(id1).toUpperCase());
+                String type ="NFC";
+                String company= "77";
+                initValue(getHex(id1).toUpperCase(), type, company);
 
             }
 
@@ -358,6 +409,8 @@ public class StartWork extends Activity {
                     tv_port.setText(startWorkBean.getSetport());
                     tv_loader.setText(startWorkBean.getLoader());
                     tv_task.setText(startWorkBean.getTask());
+                      ID =startWorkBean.getId().toString();
+                    Log.i("idzhi",""+startWorkBean.getId());
                     //如果开始时间值不为空，记录人也不为空，则设置记录人为不可编辑状态
 //                    tv_startTime.setText(startWorkBean.getStartTime());
 //                    et_noteperson.setText(startWorkBean.getNotePerson());
@@ -374,8 +427,9 @@ public class StartWork extends Activity {
                     tv_loader.setText("");
                     tv_task.setText("");
                     clearStart();
-
-                    FloatTextToast.makeText(StartWork.this, tongxin_edt, "信息不存在", FloatTextToast.LENGTH_SHORT).show();
+                    if(!startWorkBean.getMessage().equals(""))
+                      showToast(startWorkBean.getMessage());
+//                    FloatTextToast.makeText(StartWork.this, tongxin_edt, "信息不存在", FloatTextToast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -391,7 +445,7 @@ public class StartWork extends Activity {
         updataStartWork.setWorkBackListener(new WorkBack<String>() {
             @Override
             public void doEndWork(boolean b, String s) {
-                if (b && s.equals("Yes")) {
+                if (b) {
                     showDialog("提交成功");
 
                 } else {
@@ -412,8 +466,8 @@ public class StartWork extends Activity {
     private boolean validate(String Keycontent, View view) {
 
         if (Keycontent == null || Keycontent.equals("")) {
+            showDialog("请输入卡号");
 
-            FloatTextToast.makeText(StartWork.this, view, "请输入卡号", FloatTextToast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -463,5 +517,16 @@ public class StartWork extends Activity {
                         }).create();//创建按钮
 
         dialog.show();
+    }
+    private void showToast(String msg) {
+        if (mToast == null) {
+            mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+
+        } else {
+            mToast.setText(msg);
+
+            mToast.setDuration(Toast.LENGTH_SHORT);
+        }
+        mToast.show();
     }
 }
