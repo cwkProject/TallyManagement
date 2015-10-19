@@ -51,7 +51,7 @@ public class StorageListFunction extends BaseCodeListFunction<Storage, String> {
 
         PullStorageList pullStorageList = new PullStorageList();
 
-        pullStorageList.setWorkBackListener(new WorkBack<List<Storage>>() {
+        pullStorageList.setWorkEndListener(new WorkBack<List<Storage>>() {
             @Override
             public void doEndWork(boolean state, List<Storage> data) {
                 netWorkEndSetData(state, data);

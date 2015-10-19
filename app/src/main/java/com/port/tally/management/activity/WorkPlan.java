@@ -136,7 +136,7 @@ public class WorkPlan extends Activity implements XListView.IXListViewListener {
         //实例化，传入参数
         WorkPlanWork toallyManageWork = new  WorkPlanWork();
 
-        toallyManageWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
+        toallyManageWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
 

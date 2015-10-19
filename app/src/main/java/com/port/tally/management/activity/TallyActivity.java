@@ -145,7 +145,7 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
         //实例化，传入参数
         EndWorkAutoTeamWork endWorkAutoTeamWork = new EndWorkAutoTeamWork();
 
-        endWorkAutoTeamWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
+        endWorkAutoTeamWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
 
@@ -182,7 +182,7 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
         //实例化，传入参数
         TallyCagoAtoWork tallyCagoAtoWork= new TallyCagoAtoWork();
 
-        tallyCagoAtoWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
+        tallyCagoAtoWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
 
@@ -247,7 +247,7 @@ public class TallyActivity extends Activity implements XListView.IXListViewListe
         //实例化，传入参数
         ToallyManageWork toallyManageWork = new ToallyManageWork();
 
-        toallyManageWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
+        toallyManageWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
 

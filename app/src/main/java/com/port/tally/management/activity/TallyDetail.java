@@ -91,7 +91,7 @@ public class TallyDetail extends TabActivity {
 
     private void initShipment(){
         ToallyDetailWork tallyDetailwork = new ToallyDetailWork();
-        tallyDetailwork.setWorkBackListener(new WorkBack<String>() {
+        tallyDetailwork.setWorkEndListener(new WorkBack<String>() {
             @Override
             public void doEndWork(boolean b, String s) {
                 if (b) {

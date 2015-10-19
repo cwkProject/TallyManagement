@@ -613,7 +613,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
         // 委托列表任务
         PullEntrustList pullEntrustList = new PullEntrustList();
 
-        pullEntrustList.setWorkBackListener(new WorkBack<List<Entrust>>() {
+        pullEntrustList.setWorkEndListener(new WorkBack<List<Entrust>>() {
             @Override
             public void doEndWork(boolean state, List<Entrust> data) {
                 if (state) {

@@ -43,7 +43,7 @@ public class OperationListFunction extends BaseCodeListFunction<Operation, Void>
     protected void onLoadFromNetWork(Void parameter) {
         PullOperationList pullOperationList = new PullOperationList();
 
-        pullOperationList.setWorkBackListener(new WorkBack<List<Operation>>() {
+        pullOperationList.setWorkEndListener(new WorkBack<List<Operation>>() {
             @Override
             public void doEndWork(boolean state, List<Operation> data) {
                 netWorkEndSetData(state, data);

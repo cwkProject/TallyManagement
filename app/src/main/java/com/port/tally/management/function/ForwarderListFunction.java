@@ -51,7 +51,7 @@ public class ForwarderListFunction extends BaseCodeListFunction<Forwarder, Strin
 
         PullForwarderList pullForwarderList = new PullForwarderList();
 
-        pullForwarderList.setWorkBackListener(new WorkBack<List<Forwarder>>() {
+        pullForwarderList.setWorkEndListener(new WorkBack<List<Forwarder>>() {
             @Override
             public void doEndWork(boolean state, List<Forwarder> data) {
                 netWorkEndSetData(state, data);

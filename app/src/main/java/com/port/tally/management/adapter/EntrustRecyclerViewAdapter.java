@@ -80,6 +80,15 @@ public class EntrustRecyclerViewAdapter extends RecyclerView.Adapter<EntrustItem
     }
 
     /**
+     * 清空数据
+     */
+    public void clear() {
+        int count = dataList.size();
+        this.dataList.clear();
+        notifyItemRangeRemoved(0, count);
+    }
+
+    /**
      * 设置Item点击事件监听器
      *
      * @param onItemClickListener 监听器

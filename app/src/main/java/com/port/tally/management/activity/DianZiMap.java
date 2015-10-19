@@ -281,7 +281,7 @@ public class DianZiMap extends Activity {
     public void onLoadFromNetWork() {
         MapWork mapWork = new MapWork();
 
-        mapWork.setWorkBackListener(new WorkBack<List<MapBean>>() {
+        mapWork.setWorkEndListener(new WorkBack<List<MapBean>>() {
 
             public void doEndWork(boolean state, List<MapBean> data) {
                 //经度集合

@@ -36,7 +36,7 @@ public class WorkPlanDetail extends Activity {
 
     private void initData(){
         WorkPlanDetailWork workPlanDetailWork = new WorkPlanDetailWork();
-        workPlanDetailWork.setWorkBackListener(new WorkBack<WorkPlanDetailBean>() {
+        workPlanDetailWork.setWorkEndListener(new WorkBack<WorkPlanDetailBean>() {
             @Override
             public void doEndWork(boolean b, WorkPlanDetailBean workPlanDetailBean) {
                 if(b){

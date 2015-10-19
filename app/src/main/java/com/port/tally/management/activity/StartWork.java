@@ -396,7 +396,7 @@ public class StartWork extends Activity {
         //实例化，传入参数
        StartWorkWork startWorkWork = new StartWorkWork();
 
-        startWorkWork.setWorkBackListener(new WorkBack<StartWorkBean>() {
+        startWorkWork.setWorkEndListener(new WorkBack<StartWorkBean>() {
 
             public void doEndWork(boolean b, StartWorkBean startWorkBean) {
                 if (b) {
@@ -442,7 +442,7 @@ public class StartWork extends Activity {
 
         //实例化，传入参数
         UpDateStartWork updataStartWork = new UpDateStartWork();
-        updataStartWork.setWorkBackListener(new WorkBack<String>() {
+        updataStartWork.setWorkEndListener(new WorkBack<String>() {
             @Override
             public void doEndWork(boolean b, String s) {
                 if (b) {
