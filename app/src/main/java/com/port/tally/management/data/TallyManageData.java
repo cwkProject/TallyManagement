@@ -93,7 +93,7 @@ public class TallyManageData extends JsonDataModel {
 
                 JSONArray jsonEntrust = jsonArray.getJSONArray(i);
 
-                if (jsonEntrust.length() > 12) {
+                if (jsonEntrust.length() > 11) {
                     // 一条委托数据
                     Map<String,Object> map = new HashMap<String,Object>() ;
 //                    派工编码

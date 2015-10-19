@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-
+              android:focusable="true"
+              android:focusableInTouchMode="true"
               android:orientation="vertical">
 
     <include
@@ -15,19 +16,17 @@
         android:layout_centerVertical="true"
         android:background="@color/main_bg"
         android:orientation="horizontal">
-
-        <AutoCompleteTextView
-
+        <com.port.tally.management.util.InstantAutoComplete
             android:id="@+id/at_cargo"
             android:layout_weight="1.0"
             android:layout_height="wrap_content"
             android:layout_width="0dip"
             android:dropDownWidth="350dp"
-            android:hint="货物"
             android:gravity="center"
+            android:hint="货物"
             android:textColor="@color/black"
-            android:textSize="18.0sp" >
-        </AutoCompleteTextView>
+            android:textSize="18.0sp"
+        />
         <View
             android:layout_width="1dip"
             android:layout_height="match_parent"
@@ -64,7 +63,7 @@
         android:background="@color/lightgray"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-
+        android:descendantFocusability="afterDescendants"
         android:scrollbarStyle="outsideOverlay">
     </com.port.tally.management.xlistview.XListView>
 

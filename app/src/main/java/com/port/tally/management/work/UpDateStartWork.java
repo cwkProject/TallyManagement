@@ -79,8 +79,6 @@ protected String onRequestFailedSetResult(UpdataStartData data) {
 @Override
 protected UpdataStartData onCreateDataModel(String... parameters) {
         UpdataStartData updataStartData  = new UpdataStartData();
-//    String(msg.getBytes("ISO-8859-1"),"UTF-8")
-//    updataStartData.setId(new String(getBytes("ISO-8859-1"), "UTF-8")parameters[0]);
            updataStartData.setId(parameters[0]);
             updataStartData.setNotperson(parameters[1]);
          updataStartData.setTime(parameters[2]);

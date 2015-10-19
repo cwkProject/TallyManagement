@@ -36,7 +36,7 @@ public class TallyDetail extends TabActivity {
     private String cargo;
     private ImageView imgLeft;
     private TextView title,tv_shipment;
-    private Spinner weiTuoSp;
+
     private Toast mToast;
     RadioGroup radiogroup;
     RadioButton radio1,radio2,radio3;
@@ -45,7 +45,7 @@ public class TallyDetail extends TabActivity {
     //
     TabHost mTabHost = null;
     TabWidget mTabWidget = null;
-    Button btnVisiable, btnStrip;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tallydetail);
@@ -95,16 +95,20 @@ public class TallyDetail extends TabActivity {
             @Override
             public void doEndWork(boolean b, String s) {
                 if (b) {
+                    if (!s.equals("")){
+                    tv_shipment.setText(s);}
+                    else{
+                        showToast("数据为空");
+                    }
 
-                    tv_shipment.setText(s);
-                    Log.i("S的值",s );
                 }else{
-                    showToast("销账票货不存在");
+                    showToast(s);
                 }
 
             }
 
         });
+        Log.i("value2的值是", value[0] + "" + value[1] + "" + value[2] + "");
         tallyDetailwork.beginExecute(value[0], value[1], value[2]);
     }
     private void init() {
@@ -120,12 +124,6 @@ public class TallyDetail extends TabActivity {
         title.setText("作业票生成");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
-
-
-
-
-        weiTuoSp = (Spinner) findViewById(R.id.weituo_spinner1);
-//
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
         mTabWidget = mTabHost.getTabWidget();
@@ -133,22 +131,6 @@ public class TallyDetail extends TabActivity {
                 R.id.LinearLayout001).setIndicator("机械"));
         mTabHost.addTab(mTabHost.newTabSpec("班组").setContent(
                 R.id.LinearLayout002).setIndicator("班组"));
-
-
-        // mTabHost.setCurrentTab(1);
-
-
-        //
-//        // 建立数据源
-//        List<LiHuoWeiTuo> persons = new ArrayList<LiHuoWeiTuo>();
-//        persons.add(new LiHuoWeiTuo("张三", "上海 "));
-//        persons.add(new LiHuoWeiTuo("李四", "上海 "));
-//        persons.add(new LiHuoWeiTuo("王五", "北京"));
-//        persons.add(new LiHuoWeiTuo("赵六", "广州 "));
-//        //  建立Adapter绑定数据源
-//        LiHuoWeiTuoAdapter LiHuoWeiTuoAdapter = new LiHuoWeiTuoAdapter(this, persons);
-//        //绑定Adapter
-//        weiTuoSp.setAdapter(LiHuoWeiTuoAdapter);
         imgLeft.setOnClickListener(new View.OnClickListener() {
 
             //			@Override

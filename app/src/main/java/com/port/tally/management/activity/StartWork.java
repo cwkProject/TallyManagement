@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.text.InputType;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -57,8 +58,8 @@ public class StartWork extends Activity {
     private static final int msgKey1 = 1;
     private Toast mToast;
     private String ID;
-    private TextView tv_vehiclenum, tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task;
-    private EditText tongxin_edt, et_noteperson;
+    private TextView tv_vehiclenum, et_noteperson,tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task,tv_balanceweight,tv_subtime;
+    private EditText tongxin_edt;
     private Button tongxing_search_btn, startWork_btn;
     private TextView tv_startTime;
     private TextView title;
@@ -93,6 +94,7 @@ public class StartWork extends Activity {
         tv_startTime = (TextView) findViewById(R.id.tv_starttime);
         tongxing_search_btn = (Button) findViewById(R.id.search_btn);
         tongxin_edt = (EditText) findViewById(R.id.tongxin_edt);
+        tongxin_edt.setInputType(InputType.TYPE_CLASS_NUMBER);
         card_btn = (Button) findViewById(R.id.card_btn);
         tv_cardnum = (TextView) findViewById(R.id.tv_cardnum);
         tv_vehiclenum = (TextView) findViewById(R.id.tv_vehiclenum);
@@ -104,7 +106,7 @@ public class StartWork extends Activity {
         tv_port=(TextView) findViewById(R.id.tv_port);
         tv_loader=(TextView)findViewById(R.id.tv_loader);
         tv_task =(TextView)findViewById(R.id.tv_task);
-        et_noteperson = (EditText) findViewById(R.id.et_noteperson);
+        et_noteperson = (TextView) findViewById(R.id.et_noteperson);
         startWork_btn = (Button) findViewById(R.id.startWork_btn);
         title.setText("开工");
         et_noteperson.setText(LoginStatus.getLoginStatus().getNickname());
@@ -168,16 +170,7 @@ public class StartWork extends Activity {
                     long sysTime = System.currentTimeMillis();
                     CharSequence sysTimeStr = DateFormat.format("hh:mm:ss", sysTime);
                     tv_startTime.setText(sysTimeStr);
-//                    String msg = request.getParameter("message");
-//                    String str=new String(msg.getBytes("ISO-8859-1"),"UTF-8");
                     uploadValue(ID,LoginStatus.getLoginStatus().getNickname(),sysTimeStr.toString());
-//                    try {
-//                        Log.i("key的编码是",getEncoding(key)+"sysTimeStr.toString()"+getEncoding(sysTimeStr.toString())+"LoginStatus.getLoginStatus().getNickname()"+getEncoding(LoginStatus.getLoginStatus().getNickname()));
-//                        uploadValue(new String(key.getBytes("GB2312"), "UTF-8"), new String(sysTimeStr.toString().getBytes("GB2312"), "UTF-8"), new String(LoginStatus.getLoginStatus().getNickname().getBytes("GB2312"),"GBK"));
-//                    } catch (UnsupportedEncodingException e) {
-//                        e.printStackTrace();
-//                    }
-//                };
             }
         });
         // 为TimePicker指定监听器
@@ -247,41 +240,6 @@ public class StartWork extends Activity {
         mDialog.setTitle(title);
         mDialog.setMessage(getText(message));
         mDialog.show();
-    }
-    public static String getEncoding(String str) {
-        String encode = "GB2312";
-        try {
-            if (str.equals(new String(str.getBytes(encode), encode))) {
-                String s = encode;
-                return s;
-            }
-        } catch (Exception exception) {
-        }
-        encode = "ISO-8859-1";
-        try {
-            if (str.equals(new String(str.getBytes(encode), encode))) {
-                String s1 = encode;
-                return s1;
-            }
-        } catch (Exception exception1) {
-        }
-        encode = "UTF-8";
-        try {
-            if (str.equals(new String(str.getBytes(encode), encode))) {
-                String s2 = encode;
-                return s2;
-            }
-        } catch (Exception exception2) {
-        }
-        encode = "GBK";
-        try {
-            if (str.equals(new String(str.getBytes(encode), encode))) {
-                String s3 = encode;
-                return s3;
-            }
-        } catch (Exception exception3) {
-        }
-        return "";
     }
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private NdefRecord newTextRecord(String text, Locale locale, boolean encodeInUtf8) {
@@ -391,7 +349,7 @@ public class StartWork extends Activity {
     }
 
     //给个控件赋值
-    private void initValue(String key,String type,String company) {
+    private void initValue(String key, final String type,String company) {
 
         //实例化，传入参数
        StartWorkWork startWorkWork = new StartWorkWork();
@@ -409,7 +367,10 @@ public class StartWork extends Activity {
                     tv_port.setText(startWorkBean.getSetport());
                     tv_loader.setText(startWorkBean.getLoader());
                     tv_task.setText(startWorkBean.getTask());
-                      ID =startWorkBean.getId().toString();
+                    tv_balanceweight.setText(startWorkBean.getStrWeight());
+                    tv_subtime.setText(startWorkBean.getStrSubmittime());
+                    if (type.equals("NFC")) tongxin_edt.setText(startWorkBean.getCardNo());
+                    ID =startWorkBean.getId().toString();
                     Log.i("idzhi",""+startWorkBean.getId());
                     //如果开始时间值不为空，记录人也不为空，则设置记录人为不可编辑状态
 //                    tv_startTime.setText(startWorkBean.getStartTime());
@@ -423,13 +384,14 @@ public class StartWork extends Activity {
                     tv_place.setText("");
                     tv_huowei.setText("");
                     tv_port.setText("");
-
                     tv_loader.setText("");
                     tv_task.setText("");
+                    if (type.equals("NFC")) tongxin_edt.setText("");
                     clearStart();
                     if(!startWorkBean.getMessage().equals(""))
-                      showToast(startWorkBean.getMessage());
-//                    FloatTextToast.makeText(StartWork.this, tongxin_edt, "信息不存在", FloatTextToast.LENGTH_SHORT).show();
+                        showDialog(startWorkBean.getMessage());
+
+
                 }
             }
         });
@@ -446,10 +408,10 @@ public class StartWork extends Activity {
             @Override
             public void doEndWork(boolean b, String s) {
                 if (b) {
-                    showDialog("提交成功");
+                    showDialog(s);
 
                 } else {
-                    showDialog("提交失败");
+                    showDialog(s);
                 }
             }
         });

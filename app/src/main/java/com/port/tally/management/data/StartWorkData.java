@@ -108,6 +108,9 @@ public class StartWorkData extends JsonDataModel {
         startWorkBean.setSetport(jsonObject.getString("集疏港"));
         startWorkBean.setLoader(jsonObject.getString("装卸车"));
         startWorkBean.setTask(jsonObject.getString("任务号"));
+        startWorkBean.setCardNo(jsonObject.getString("通行证号"));
+        startWorkBean.setStrSubmittime(jsonObject.getString("申报时间"));
+        startWorkBean.setStrWeight(jsonObject.getString("衡重"));
         startWorkBean.setMessage(getMessage());
           Log.i("getMessage()", "" + getMessage());
         Log.i("ID",""+jsonObject.getString("ID"));

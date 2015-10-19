@@ -65,6 +65,7 @@ public class TallyCagoAtoAdapter extends BaseAdapter implements Filterable {
             view = convertView;
             holder = (ViewHolder) view.getTag();
         }
+        Log.i("itemcago",""+item);
         if(!item.get("tv1").equals("")){
             holder.tv_1.setText((CharSequence)item.get("tv1"));
             Log.i("tv1的值", item.get("tv1").toString());}

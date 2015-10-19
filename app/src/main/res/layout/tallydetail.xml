@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10.0dip"
             android:layout_weight="1.0"
-            android:text="武钢资源/铁矿砂/散/0吨进口/内贸/德勤118_1520/巴西金粉/0/7709"
+            android:text=" "
             android:ellipsize="marquee"
             android:focusable="true"
             android:id="@+id/tv_shipment"

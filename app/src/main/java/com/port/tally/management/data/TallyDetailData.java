@@ -2,6 +2,7 @@ package com.port.tally.management.data;
 
 import android.util.Log;
 
+import com.port.tally.management.bean.StartWorkBean;
 import com.port.tally.management.bean.TrunkQueryBean;
 
 import org.json.JSONException;
@@ -111,10 +112,16 @@ public class TallyDetailData extends JsonDataModel {
     protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
 
         JSONObject jsonObject=jsonResult.getJSONObject("Data");
+        Log.i("jsonResult的值",""+jsonResult);
         detailTitle =jsonObject.getString("指令概要");
 
 
 
     }
+    @Override
+    protected void onRequestFailed(JSONObject jsonResult) throws JSONException {
+        detailTitle =getMessage();
 
+
+    }
 }

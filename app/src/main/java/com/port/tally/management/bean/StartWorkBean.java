@@ -123,4 +123,32 @@ public class StartWorkBean {
     private String task;//任务号
     private String startTime;//开始时间
     private String notePerson;//记录人
+    private String cardNo;//通行证号
+
+    public String getStrSubmittime() {
+        return strSubmittime;
+    }
+
+    public void setStrSubmittime(String strSubmittime) {
+        this.strSubmittime = strSubmittime;
+    }
+
+    public String getStrWeight() {
+        return strWeight;
+    }
+
+    public void setStrWeight(String strWeight) {
+        this.strWeight = strWeight;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
+    private String strSubmittime;//申报时间
+    private String strWeight;//衡重
 }

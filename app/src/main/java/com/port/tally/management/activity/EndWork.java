@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.text.InputType;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +42,7 @@ import com.port.tally.management.R;
 import com.port.tally.management.adapter.EndWorkTeamAutoAdapter;
 import com.port.tally.management.bean.StartWorkBean;
 import com.port.tally.management.util.FloatTextToast;
+import com.port.tally.management.util.InstantAutoComplete;
 import com.port.tally.management.work.EndWorkAutoTeamWork;
 import com.port.tally.management.work.StartWorkWork;
 import com.port.tally.management.work.UploadEndWork;
@@ -61,13 +63,13 @@ import java.util.Map;
  */
 public class EndWork extends Activity {
     private static final int msgKey1 = 1;
-    private AutoCompleteTextView teamAuto;
+    private InstantAutoComplete teamAuto;
     EndWorkTeamAutoAdapter endWorkTeamAutoAdapter;
     private  List<Map<String, Object>> dataList=null;
     private String ID;
     private Toast mToast;
-    private TextView tv_vehiclenum, tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task;
-    private EditText tongxin_edt,et_count,tv_note;
+    private TextView tv_vehiclenum, tv_note,tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task,tv_balanceweight,tv_subtime;
+    private EditText tongxin_edt,et_count;
     private Button tongxing_search_btn, endWork_btn;
     private TextView tv_entime;
     private TextView title;
@@ -88,8 +90,6 @@ public class EndWork extends Activity {
     private NdefMessage mNdefPushMessage;
     private AlertDialog mDialog;
     private Button card_btn;
-    private static final String[] COUNTRIES = {"China","Russia","Germany",
-            "Ukraine","Belarus","USA","China1","China2","USA1"};
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -107,6 +107,7 @@ public class EndWork extends Activity {
         tv_entime = (TextView) findViewById(R.id.tv_entime);
         tongxing_search_btn = (Button) findViewById(R.id.search_btn);
         tongxin_edt = (EditText) findViewById(R.id.tongxin_edt);
+        tongxin_edt.setInputType(InputType.TYPE_CLASS_NUMBER);
         card_btn = (Button) findViewById(R.id.card_btn);
         tv_cardnum = (TextView) findViewById(R.id.tv_cardnum);
         tv_vehiclenum = (TextView) findViewById(R.id.tv_vehiclenum);
@@ -119,23 +120,16 @@ public class EndWork extends Activity {
         tv_loader=(TextView)findViewById(R.id.tv_loader);
         tv_task =(TextView)findViewById(R.id.tv_task);
         et_count = (EditText) findViewById(R.id.et_count);
-        tv_note =(EditText) findViewById(R.id.tv_note);
-        teamAuto =(AutoCompleteTextView)findViewById(R.id.et_group);
+        tv_note =(TextView) findViewById(R.id.tv_note);
+        tv_balanceweight=(TextView) findViewById(R.id.tv_balanceweight);
+        tv_subtime=(TextView) findViewById(R.id.tv_subtime);
+        tv_note.setText(LoginStatus.getLoginStatus().getNickname());
+        teamAuto =(InstantAutoComplete)findViewById(R.id.et_group);
         dataList = new ArrayList<>();
         spinner_over =(Spinner)findViewById(R.id.spinner_over);
 
           loadValue("010111");
         Log.i("dataList的值",dataList.toString());
-//        endWorkTeamAutoAdapter = new EndWorkTeamAutoAdapter( dataList, getApplicationContext());
-//        teamAuto.setAdapter(endWorkTeamAutoAdapter);
-//        teamAuto.setThreshold(1);  //设置输入一个字符 提示，默认为2
-//        teamAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Map<String, Object> pc =dataList.get(position);
-//                teamAuto.setText(pc.get("tv1") + " " + pc.get("tv2"));
-//            }
-//        });
         endWork_btn = (Button) findViewById(R.id.save_btn);
         title.setText("完工");
         tv_entime.setText("选择时间");
@@ -257,21 +251,7 @@ public class EndWork extends Activity {
     private void showDate(int year, int month, int day, int hour, int minute) {
         tv_entime.setText(+year + "年" + (month + 1) + "月" + day + "日" + hour + "时" + minute + "分");
     }
-//文本提示框
-    private void initAutodata(){
-//        loadValue("010111");
-//        Log.i("dataList的值",dataList.toString());
-//        endWorkTeamAutoAdapter = new EndWorkTeamAutoAdapter( dataList, getApplicationContext());
-//        teamAuto.setAdapter(endWorkTeamAutoAdapter);
-//        teamAuto.setThreshold(1);  //设置输入一个字符 提示，默认为2
-//        teamAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Map<String, Object> pc =dataList.get(position);
-//                teamAuto.setText(pc.get("tv1") + " " + pc.get("tv2"));
-//            }
-//        });
-    }
+
 
 
     //给个控件赋值
@@ -292,7 +272,7 @@ public class EndWork extends Activity {
                     Log.i("data的值", data.toString());
                     endWorkTeamAutoAdapter = new EndWorkTeamAutoAdapter( dataList, EndWork.this.getApplicationContext());
                     teamAuto.setAdapter(endWorkTeamAutoAdapter);
-                    teamAuto.setThreshold(1);  //设置输入一个字符 提示，默认为2
+                    teamAuto.setThreshold(0);  //设置输入一个字符 提示，默认为2
                     teamAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -300,6 +280,14 @@ public class EndWork extends Activity {
                             teamAuto.setText(pc.get("tv1") + " " + pc.get("tv2"));
                         }
                     });
+
+                    // Clear autocomplete
+                    teamAuto.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View view) {
+                           teamAuto.setText("");
+                       }
+                   });
                 } else {
 
 
@@ -425,7 +413,7 @@ public class EndWork extends Activity {
     }
 
     //给个控件赋值
-    private void initValue(String key,String type,String company) {
+    private void initValue(String key, final String type,String company) {
 
         //实例化，传入参数
         StartWorkWork startWorkWork = new StartWorkWork();
@@ -444,6 +432,9 @@ public class EndWork extends Activity {
                     tv_loader.setText(startWorkBean.getLoader());
                     tv_task.setText(startWorkBean.getTask());
                     ID =startWorkBean.getId().toString();
+                    tv_balanceweight.setText(startWorkBean.getStrWeight());
+                    tv_subtime.setText(startWorkBean.getStrSubmittime());
+                    if (type.equals("NFC")) tongxin_edt.setText(startWorkBean.getCardNo());
                     Log.i("idzhi", "" + startWorkBean.getId());
                     //如果开始时间值不为空，记录人也不为空，则设置记录人为不可编辑状态
 //                    tv_startTime.setText(startWorkBean.getStartTime());
@@ -457,7 +448,7 @@ public class EndWork extends Activity {
                     tv_place.setText("");
                     tv_huowei.setText("");
                     tv_port.setText("");
-
+                    if (type.equals("NFC")) tongxin_edt.setText("");
                     tv_loader.setText("");
                     tv_task.setText("");
                     clearEnd();
@@ -504,7 +495,7 @@ public class EndWork extends Activity {
 
         if (Keycontent == null || Keycontent.equals("")) {
 
-            FloatTextToast.makeText(EndWork.this, view, "请输入关键字", FloatTextToast.LENGTH_SHORT).show();
+            showDialog("请输入通行证号");
             return false;
         }
         return true;
@@ -520,7 +511,6 @@ public class EndWork extends Activity {
                     CharSequence sysTimeStr = DateFormat.format("hh:mm:ss", sysTime);
                     tv_entime.setText(sysTimeStr);
                     break;
-
                 default:
                     break;
             }

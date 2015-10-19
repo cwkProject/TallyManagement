@@ -454,6 +454,84 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:gravity="center_vertical"
+                android:minHeight="30.0dip"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10.0dip"
+                    android:layout_weight="1.0"
+                    android:text="衡重"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"
+                    />
+
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#66CCFF"
+                    />
+
+                <TextView
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10.0dip"
+                    android:layout_weight="3.0"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"
+                    android:id="@+id/tv_balanceweight"/>
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#66CCFF"
+                    />
+                <TextView
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10.0dip"
+                    android:layout_weight="1.0"
+                    android:text="申报时间"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"
+                    />
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#66CCFF"
+                    />
+
+                <TextView
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10.0dip"
+                    android:layout_weight="3.0"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"
+                    android:id="@+id/tv_subtime"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_gravity="center_horizontal"
+                android:background="#66CCFF"
+                />
+            <LinearLayout
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
 
                 android:gravity="center_vertical"
                 android:minHeight="30.0dip"
@@ -570,18 +648,18 @@
                     android:layout_gravity="center_horizontal"
                     android:background="#66CCFF"
                     />
-                <AutoCompleteTextView
+                <com.port.tally.management.util.InstantAutoComplete
 
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10.0dip"
                     android:layout_weight="3.0"
-                    android:hint="输入"
+
                     android:textSize="@dimen/BasicTextSize"
                     android:dropDownWidth="350dp"
-                    android:id="@+id/et_group">
+                    android:id="@+id/et_group"
 
-                </AutoCompleteTextView>
+                />
           >
             </LinearLayout>
             <View
@@ -619,7 +697,7 @@
                     android:background="#66CCFF"
                     />
 
-                <EditText
+                <TextView
                     android:id="@+id/tv_note"
                     android:layout_width="0dip"
                     android:layout_height="40.0dip"

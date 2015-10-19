@@ -93,8 +93,12 @@ public class UpdataStartData extends JsonDataModel {
      */
     @Override
     protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
-        result=jsonResult.getString("IsSuccess");
+        result=jsonResult.getString("Message");
 
+
+    }
+    protected void onRequestFailed(JSONObject jsonResult) throws JSONException {
+        result=jsonResult.getString("Message");
 
     }
 }

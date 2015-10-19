@@ -96,8 +96,7 @@ public interface StaticValue {
     //派工计划第一页IP
     String HTTP_GET_TASKONE_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionCommand.aspx";
     //详细派工页
-    String HTTP_GET_TASKDETAIL_URL = "http://218.92.115" + "" +
-            ".55/M_Lhgl/Service/Slip/GetMissionPlanDetail.aspx";
+    String HTTP_GET_TASKDETAIL_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionCommandSummary.aspx";
     //派工获取委托查询数据
     String HTTP_GET_ENTRUST_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetConsign.aspx";
     //获取子过程标志列表数据

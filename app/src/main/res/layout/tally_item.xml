@@ -188,7 +188,8 @@
                 android:focusableInTouchMode="false"
                 android:text="源票货:"
                 android:textColor="@color/black"
-                android:textSize="@dimen/BasicTextSize"/>
+                android:textSize="@dimen/BasicTextSize"
+                 />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
