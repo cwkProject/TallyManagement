@@ -35,7 +35,7 @@ public class SampleFragment extends Fragment {
         SampleWork sampleWork = new SampleWork();
 
         // 设置执行回调
-        sampleWork.setWorkBackListener(new WorkBack<String>() {
+        sampleWork.setWorkEndListener(new WorkBack<String>() {
             @Override
             public void doEndWork(boolean state, String data) {
                 if (state) {

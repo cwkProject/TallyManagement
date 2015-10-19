@@ -43,7 +43,7 @@ public class CompanyListFunction extends BaseCodeListFunction<Company, Void> {
     protected void onLoadFromNetWork(Void parameter) {
         PullCompanyList pullCompanyList = new PullCompanyList();
 
-        pullCompanyList.setWorkBackListener(new WorkBack<List<Company>>() {
+        pullCompanyList.setWorkEndListener(new WorkBack<List<Company>>() {
             @Override
             public void doEndWork(boolean state, List<Company> data) {
                 netWorkEndSetData(state, data);

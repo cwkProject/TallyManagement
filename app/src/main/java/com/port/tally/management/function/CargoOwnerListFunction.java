@@ -43,7 +43,7 @@ public class CargoOwnerListFunction extends BaseCodeListFunction<CargoOwner, Voi
     protected void onLoadFromNetWork(Void parameter) {
         PullCargoOwnerList pullCargoOwnerList = new PullCargoOwnerList();
 
-        pullCargoOwnerList.setWorkBackListener(new WorkBack<List<CargoOwner>>() {
+        pullCargoOwnerList.setWorkEndListener(new WorkBack<List<CargoOwner>>() {
             @Override
             public void doEndWork(boolean state, List<CargoOwner> data) {
                 netWorkEndSetData(state, data);

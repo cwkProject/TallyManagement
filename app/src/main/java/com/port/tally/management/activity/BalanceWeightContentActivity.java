@@ -141,7 +141,7 @@ public class BalanceWeightContentActivity extends AppCompatActivity {
             // 拉取数据
             PullBalanceWeightContent pullBalanceWeightContent = new PullBalanceWeightContent();
 
-            pullBalanceWeightContent.setWorkBackListener(new WorkBack<Map<String, String>>() {
+            pullBalanceWeightContent.setWorkEndListener(new WorkBack<Map<String, String>>() {
                 @Override
                 public void doEndWork(boolean state, Map<String, String> data) {
                     if (state) {

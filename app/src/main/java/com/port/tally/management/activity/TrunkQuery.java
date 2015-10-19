@@ -49,7 +49,7 @@ public class TrunkQuery extends Activity {
                     //实例化，传入参数
                     TrunkQueryWork trunkQueryWork = new TrunkQueryWork();
 
-                    trunkQueryWork.setWorkBackListener(new WorkBack<TrunkQueryBean>() {
+                    trunkQueryWork.setWorkEndListener(new WorkBack<TrunkQueryBean>() {
                         @Override
                         public void doEndWork(boolean b, TrunkQueryBean trunkQueryBean) {
                             if (b) {

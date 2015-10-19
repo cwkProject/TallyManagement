@@ -507,7 +507,7 @@ public class StockQueryActivity extends AppCompatActivity {
         // 堆存列表任务
         PullStockList pullStockList = new PullStockList();
 
-        pullStockList.setWorkBackListener(new WorkBack<List<Stock>>() {
+        pullStockList.setWorkEndListener(new WorkBack<List<Stock>>() {
             @Override
             public void doEndWork(boolean state, List<Stock> data) {
                 if (state) {

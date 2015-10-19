@@ -43,7 +43,7 @@ public class CargoTypeListFunction extends BaseCodeListFunction<CargoType, Void>
     protected void onLoadFromNetWork(Void parameter) {
         PullCargoTypeList pullCargoTypeList = new PullCargoTypeList();
 
-        pullCargoTypeList.setWorkBackListener(new WorkBack<List<CargoType>>() {
+        pullCargoTypeList.setWorkEndListener(new WorkBack<List<CargoType>>() {
             @Override
             public void doEndWork(boolean state, List<CargoType> data) {
                 netWorkEndSetData(state, data);

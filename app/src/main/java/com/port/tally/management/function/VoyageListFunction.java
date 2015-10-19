@@ -43,7 +43,7 @@ public class VoyageListFunction extends BaseCodeListFunction<Voyage, Void> {
     protected void onLoadFromNetWork(Void parameter) {
         PullVoyageList pullVoyageList = new PullVoyageList();
 
-        pullVoyageList.setWorkBackListener(new WorkBack<List<Voyage>>() {
+        pullVoyageList.setWorkEndListener(new WorkBack<List<Voyage>>() {
             @Override
             public void doEndWork(boolean state, List<Voyage> data) {
                 netWorkEndSetData(state, data);

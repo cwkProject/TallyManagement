@@ -260,7 +260,7 @@ public class EndWork extends Activity {
         //实例化，传入参数
         EndWorkAutoTeamWork endWorkAutoTeamWork = new EndWorkAutoTeamWork();
 
-        endWorkAutoTeamWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
+        endWorkAutoTeamWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
 
@@ -418,7 +418,7 @@ public class EndWork extends Activity {
         //实例化，传入参数
         StartWorkWork startWorkWork = new StartWorkWork();
 
-        startWorkWork.setWorkBackListener(new WorkBack<StartWorkBean>() {
+        startWorkWork.setWorkEndListener(new WorkBack<StartWorkBean>() {
 
             public void doEndWork(boolean b, StartWorkBean startWorkBean) {
                 if (b) {
@@ -466,7 +466,7 @@ public class EndWork extends Activity {
 
         //实例化，传入参数
         UploadEndWork uploadEndWork = new UploadEndWork();
-        uploadEndWork.setWorkBackListener(new WorkBack<String>() {
+        uploadEndWork.setWorkEndListener(new WorkBack<String>() {
             @Override
             public void doEndWork(boolean b, String s) {
                 if(b&& s.equals("IsSuccess")){

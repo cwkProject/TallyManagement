@@ -41,6 +41,7 @@
         <activity android:name=".activity.PushMessage"/>
         <activity android:name=".activity.TrunkActivity"/>
         <activity android:name=".activity.StartWork"/>
+        <activity android:name=".activity.WorkPlan"/>
         <activity android:name=".activity.EndWork"/>
         <activity android:name=".activity.EntrustQueryActivity"/>
         <activity android:name=".activity.EntrustContentActivity"/>

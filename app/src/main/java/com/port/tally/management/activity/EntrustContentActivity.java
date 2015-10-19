@@ -135,7 +135,7 @@ public class EntrustContentActivity extends AppCompatActivity {
             // 拉取数据
             PullEntrustContent pullEntrustContent = new PullEntrustContent();
 
-            pullEntrustContent.setWorkBackListener(new WorkBack<Map<String, String>>() {
+            pullEntrustContent.setWorkEndListener(new WorkBack<Map<String, String>>() {
                 @Override
                 public void doEndWork(boolean state, Map<String, String> data) {
                     if (state) {

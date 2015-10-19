@@ -570,25 +570,21 @@ public class BalanceWeightQueryActivity extends AppCompatActivity {
             return;
         }
 
+        if (start <= 0) {
+            // 属于重新加载数据，清空原数据
+            viewHolder.recyclerViewAdapter.clear();
+        }
+
         // 衡重列表任务
         PullBalanceWeightList pullBalanceWeightList = new PullBalanceWeightList();
 
-        pullBalanceWeightList.setWorkBackListener(new WorkBack<List<BalanceWeight>>() {
+        pullBalanceWeightList.setWorkEndListener(new WorkBack<List<BalanceWeight>>() {
             @Override
             public void doEndWork(boolean state, List<BalanceWeight> data) {
                 if (state) {
-                    if (start > 0) {
-                        // 插入新数据
-                        viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
-                                .getItemCount(), data);
-
-                    } else {
-                        // 重置数据
-                        viewHolder.recyclerViewAdapter.reset(data);
-                    }
-                } else {
-                    // 获取失败清空列表
-                    viewHolder.recyclerViewAdapter.reset(null);
+                    // 插入新数据
+                    viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
+                            .getItemCount(), data);
                 }
             }
         });
