@@ -38,6 +38,7 @@ import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.DataChangeObserver;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 import org.mobile.library.model.work.WorkBack;
+import org.mobile.library.model.work.WorkModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,6 +67,11 @@ public class BalanceWeightQueryActivity extends AppCompatActivity {
     private static final int ROW_COUNT = 30;
 
     /**
+     * 加载更多数据的触发剩余行数
+     */
+    private static final int LAST_ROW_COUNT = 15;
+
+    /**
      * 控件集
      */
     private class LocalViewHolder {
@@ -74,6 +80,21 @@ public class BalanceWeightQueryActivity extends AppCompatActivity {
          * 衡重列表数据适配器
          */
         public BalanceWeightRecyclerViewAdapter recyclerViewAdapter = null;
+
+        /**
+         * 上一个执行的加载任务
+         */
+        public volatile WorkModel beforeLoadWork = null;
+
+        /**
+         * 表示是否还有更多数据
+         */
+        public volatile boolean hasMoreData = false;
+
+        /**
+         * 表示是否正在加载
+         */
+        public volatile boolean loading = false;
 
         /**
          * 侧滑抽屉
@@ -529,6 +550,23 @@ public class BalanceWeightQueryActivity extends AppCompatActivity {
 
         // 设置列表适配器
         recyclerView.setAdapter(viewHolder.recyclerViewAdapter);
+
+        // 设置加载更多
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int lastCount = recyclerView.getAdapter().getItemCount() - recyclerView
+                        .getChildAdapterPosition(recyclerView.getChildAt(0)) - recyclerView
+                        .getChildCount();
+                Log.i(LOG_TAG + "initListView", "onScrolled lastCount is " + lastCount);
+                if (dy > 0 && !viewHolder.loading && viewHolder.hasMoreData && lastCount <=
+                        LAST_ROW_COUNT) {
+                    // 有必要加载更多
+                    Log.i(LOG_TAG + "initListView", "onScrolled now load more");
+                    loadData(false);
+                }
+            }
+        });
     }
 
     /**
@@ -555,24 +593,24 @@ public class BalanceWeightQueryActivity extends AppCompatActivity {
      * 初始化数据
      */
     private void initData() {
-        loadData(0, ROW_COUNT);
+        loadData(true);
     }
 
     /**
      * 加载数据
      *
-     * @param start 起始位置
-     * @param count 加载数量
+     * @param reload 表示是否为全新加载，true表示为全新加载
      */
-    private void loadData(final int start, int count) {
+    private void loadData(boolean reload) {
+        Log.i(LOG_TAG + "loadData", "reload tag is " + reload);
 
-        if (count < 0 || start < 0) {
-            return;
-        }
-
-        if (start <= 0) {
-            // 属于重新加载数据，清空原数据
+        if (reload) {
+            // 属于全新加载数据，清空原数据
             viewHolder.recyclerViewAdapter.clear();
+            // 中断上次请求
+            if (viewHolder.beforeLoadWork != null) {
+                viewHolder.beforeLoadWork.cancel();
+            }
         }
 
         // 衡重列表任务
@@ -581,18 +619,35 @@ public class BalanceWeightQueryActivity extends AppCompatActivity {
         pullBalanceWeightList.setWorkEndListener(new WorkBack<List<BalanceWeight>>() {
             @Override
             public void doEndWork(boolean state, List<BalanceWeight> data) {
-                if (state) {
+                if (state && data != null) {
                     // 插入新数据
                     viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
                             .getItemCount(), data);
+
+                    if (data.size() == ROW_COUNT) {
+                        // 取到了预期条数的数据
+                        viewHolder.hasMoreData = true;
+                    }
                 }
+
+                // 改变请求状态
+                viewHolder.loading = false;
             }
         });
 
+        // 改变请求状态
+        viewHolder.loading = true;
+        // 初始化更多预期
+        viewHolder.hasMoreData = false;
+
         // 执行任务
-        pullBalanceWeightList.beginExecute(String.valueOf(start), String.valueOf(count),
-                viewHolder.companyCode, viewHolder.dutyDateTextView.getText().toString(),
-                viewHolder.dayNightSpinner.getSelectedItem().toString());
+        pullBalanceWeightList.beginExecute(String.valueOf(viewHolder.recyclerViewAdapter
+                .getItemCount()), String.valueOf(ROW_COUNT), viewHolder.companyCode, viewHolder
+                .dutyDateTextView.getText().toString(), viewHolder.dayNightSpinner
+                .getSelectedItem().toString());
+
+        // 保存新的加载任务对象
+        viewHolder.beforeLoadWork = pullBalanceWeightList;
     }
 
     /**

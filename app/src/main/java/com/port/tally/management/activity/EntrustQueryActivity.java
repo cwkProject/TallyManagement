@@ -39,6 +39,7 @@ import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.DataChangeObserver;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 import org.mobile.library.model.work.WorkBack;
+import org.mobile.library.model.work.WorkModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -67,6 +68,11 @@ public class EntrustQueryActivity extends AppCompatActivity {
     private static final int ROW_COUNT = 30;
 
     /**
+     * 加载更多数据的触发剩余行数
+     */
+    private static final int LAST_ROW_COUNT = 15;
+
+    /**
      * 控件集
      */
     private class LocalViewHolder {
@@ -75,6 +81,21 @@ public class EntrustQueryActivity extends AppCompatActivity {
          * 委托列表数据适配器
          */
         public EntrustRecyclerViewAdapter recyclerViewAdapter = null;
+
+        /**
+         * 上一个执行的加载任务
+         */
+        public volatile WorkModel beforeLoadWork = null;
+
+        /**
+         * 表示是否还有更多数据
+         */
+        public volatile boolean hasMoreData = false;
+
+        /**
+         * 表示是否正在加载
+         */
+        public volatile boolean loading = false;
 
         /**
          * 侧滑抽屉
@@ -571,6 +592,24 @@ public class EntrustQueryActivity extends AppCompatActivity {
 
         // 设置列表适配器
         recyclerView.setAdapter(viewHolder.recyclerViewAdapter);
+
+        // 设置加载更多
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                int lastCount = recyclerView.getAdapter().getItemCount() - recyclerView
+                        .getChildAdapterPosition(recyclerView.getChildAt(0)) - recyclerView
+                        .getChildCount();
+                Log.i(LOG_TAG + "initListView", "onScrolled lastCount is " + lastCount);
+                if (dy > 0 && !viewHolder.loading && viewHolder.hasMoreData && lastCount <=
+                        LAST_ROW_COUNT) {
+                    // 有必要加载更多
+                    Log.i(LOG_TAG + "initListView", "onScrolled now load more");
+                    loadData(false);
+                }
+            }
+
+        });
     }
 
     /**
@@ -595,19 +634,24 @@ public class EntrustQueryActivity extends AppCompatActivity {
      * 初始化数据
      */
     private void initData() {
-        loadData(0, ROW_COUNT);
+        loadData(true);
     }
 
     /**
      * 加载数据
      *
-     * @param start 起始位置
-     * @param count 加载数量
+     * @param reload 表示是否为全新加载，true表示为全新加载
      */
-    private void loadData(final int start, int count) {
+    private void loadData(boolean reload) {
+        Log.i(LOG_TAG + "loadData", "reload tag is " + reload);
 
-        if (count < 0 || start < 0) {
-            return;
+        if (reload) {
+            // 属于全新加载数据，清空原数据
+            viewHolder.recyclerViewAdapter.clear();
+            // 中断上次请求
+            if (viewHolder.beforeLoadWork != null) {
+                viewHolder.beforeLoadWork.cancel();
+            }
         }
 
         // 委托列表任务
@@ -616,29 +660,37 @@ public class EntrustQueryActivity extends AppCompatActivity {
         pullEntrustList.setWorkEndListener(new WorkBack<List<Entrust>>() {
             @Override
             public void doEndWork(boolean state, List<Entrust> data) {
-                if (state) {
-                    if (start > 0) {
-                        // 插入新数据
-                        viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
-                                .getItemCount(), data);
+                if (state && data != null) {
+                    // 插入新数据
+                    viewHolder.recyclerViewAdapter.addData(viewHolder.recyclerViewAdapter
+                            .getItemCount(), data);
 
-                    } else {
-                        // 重置数据
-                        viewHolder.recyclerViewAdapter.reset(data);
+                    if (data.size() == ROW_COUNT) {
+                        // 取到了预期条数的数据
+                        viewHolder.hasMoreData = true;
                     }
-                } else {
-                    // 获取失败清空列表
-                    viewHolder.recyclerViewAdapter.reset(null);
                 }
+
+                // 改变请求状态
+                viewHolder.loading = false;
             }
         });
 
+        // 改变请求状态
+        viewHolder.loading = true;
+        // 初始化更多预期
+        viewHolder.hasMoreData = false;
+
         // 执行任务
-        pullEntrustList.beginExecute("14", String.valueOf(start), String.valueOf(count),
-                viewHolder.startDateTextView.getText().toString(), viewHolder.endDateTextView
-                        .getText().toString(), viewHolder.cargoTypeEditText.getText().toString(),
-                viewHolder.cargoOwnerEditText.getText().toString(), viewHolder.voyageEditText
-                        .getText().toString(), viewHolder.operationEditText.getText().toString());
+        pullEntrustList.beginExecute("14", String.valueOf(viewHolder.recyclerViewAdapter
+                .getItemCount()), String.valueOf(ROW_COUNT), viewHolder.startDateTextView.getText
+                ().toString(), viewHolder.endDateTextView.getText().toString(), viewHolder
+                .cargoTypeEditText.getText().toString(), viewHolder.cargoOwnerEditText.getText()
+                .toString(), viewHolder.voyageEditText.getText().toString(), viewHolder
+                .operationEditText.getText().toString());
+
+        // 保存新的加载任务对象
+        viewHolder.beforeLoadWork = pullEntrustList;
     }
 
     /**
