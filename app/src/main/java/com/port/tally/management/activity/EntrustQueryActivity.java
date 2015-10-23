@@ -159,7 +159,7 @@ public class EntrustQueryActivity extends AppCompatActivity {
         super.onResume();
 
         // 初始化数据
-        initData();
+        resetData();
     }
 
     /**

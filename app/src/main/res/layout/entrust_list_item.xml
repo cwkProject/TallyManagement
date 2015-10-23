@@ -15,14 +15,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/default_margin_small"
             android:layout_weight="2"
+            android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="@dimen/default_padding_small"
             android:paddingRight="@dimen/default_padding_small">
@@ -67,9 +68,9 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/default_margin_small"
             android:layout_weight="5"
+            android:gravity="center_vertical"
             android:orientation="vertical"
             android:paddingLeft="@dimen/default_padding_small"
             android:paddingRight="@dimen/default_padding_small">

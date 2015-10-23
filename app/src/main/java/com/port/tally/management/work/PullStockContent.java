@@ -20,7 +20,7 @@ import java.util.Map;
 public class PullStockContent extends DefaultWorkModel<String, Map<String, String>, StockData> {
     @Override
     protected boolean onCheckParameters(String... parameters) {
-        return parameters != null && parameters.length > 0;
+        return parameters != null && parameters.length > 2;
     }
 
     @Override
@@ -43,6 +43,8 @@ public class PullStockContent extends DefaultWorkModel<String, Map<String, Strin
         StockData data = new StockData();
 
         data.setStockId(parameters[0]);
+        data.setStorageCode(parameters[1]);
+        data.setPositionCode(parameters[2]);
 
         return data;
     }

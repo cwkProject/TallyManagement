@@ -188,7 +188,7 @@ public class StockListData extends JsonDataModel {
 
                 JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-                if (jsonRow.length() > 6) {
+                if (jsonRow.length() > 8) {
                     // 一条委托数据
                     Stock stock = new Stock();
 
@@ -199,6 +199,8 @@ public class StockListData extends JsonDataModel {
                     stock.setForwarder(jsonRow.getString(4));
                     stock.setStorage(jsonRow.getString(5));
                     stock.setWeight(jsonRow.getString(6));
+                    stock.setStorageCode(jsonRow.getString(7));
+                    stock.setPositionCode(jsonRow.getString(8));
 
                     // 添加到列表
                     stockList.add(stock);

@@ -36,19 +36,14 @@ import android.widget.Toast;
 
 import com.port.tally.management.R;
 import com.port.tally.management.bean.StartWorkBean;
-import com.port.tally.management.data.UpdataStartData;
-import com.port.tally.management.util.FloatTextToast;
 import com.port.tally.management.work.StartWorkWork;
 import com.port.tally.management.work.UpDateStartWork;
-import com.port.tally.management.work.UploadEndWork;
 import com.port.tally.management.work.VerifyStartWork;
 import com.port.tally.management.work.VerifyVehicleWork;
 
-import org.mobile.library.model.work.IWorkEndListener;
 import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.LoginStatus;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Locale;
@@ -213,7 +208,7 @@ public class StartWork extends Activity {
             finish();
             return;
         }
-        ;
+
         mPendingIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         mNdefPushMessage = new NdefMessage(new NdefRecord[]{newTextRecord(
@@ -355,18 +350,16 @@ public class StartWork extends Activity {
         setIntent(intent);
         resolveIntent(intent);
     }
-//校验车辆是否黑名单
-//给个控件赋值
-private void verifyvehicle( final String key, final String type, final String company) {
+    //给个控件赋值
+    private void verifyvehicle( final String key, final String type, final String company) {
 
-    //实例化，传入参数
-    VerifyVehicleWork verifyVehicleWork = new VerifyVehicleWork();
+        //实例化，传入参数
+        VerifyVehicleWork verifyVehicleWork = new VerifyVehicleWork();
 
-    verifyVehicleWork.setWorkEndListener(new WorkBack<StartWorkBean>() {
+        verifyVehicleWork.setWorkEndListener(new WorkBack<StartWorkBean>() {
 
-        public void doEndWork(boolean b, StartWorkBean startWorkBean) {
-            if (b) {
-                if (startWorkBean.getMessage() != null || !"".equals(startWorkBean.getMessage()) || !startWorkBean.getMessage().equals("null")) {
+            public void doEndWork(boolean b, StartWorkBean startWorkBean) {
+                if (b) {
                     Dialog dialog = new AlertDialog.Builder(StartWork.this)
                             .setTitle("提示")
                             .setMessage(startWorkBean.getMessage())
@@ -378,23 +371,15 @@ private void verifyvehicle( final String key, final String type, final String co
                                     }).create();//创建按钮
 
                     dialog.show();
-                }
-                ;
 
-                Log.i("verifyvehicle1", "" + startWorkBean.getMessage());
+                } else {
 
-
-            } else {
-                if (!"".equals(startWorkBean.getMessage())) {
                     showDialog(startWorkBean.getMessage());
-                    Log.i("verifyvehicle2", "" + startWorkBean.getMessage());
                 }
-
             }
-        }
-    });
-    verifyVehicleWork.beginExecute(key, company, type);
-}
+        });
+        verifyVehicleWork.beginExecute(key, company, type);
+    }
     //校验开工
 
     private void verifyStart( final String key, final String type, final String company) {
@@ -580,19 +565,6 @@ private void verifyvehicle( final String key, final String type, final String co
         }
     }
     private void showDialog(String str){
-        Dialog dialog = new AlertDialog.Builder(StartWork.this)
-                .setTitle("提示")
-                .setMessage(str)
-                .setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.cancel();
-                            }
-                        }).create();//创建按钮
-
-        dialog.show();
-    }
-    private void showDialog1(String str){
         Dialog dialog = new AlertDialog.Builder(StartWork.this)
                 .setTitle("提示")
                 .setMessage(str)
