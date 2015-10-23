@@ -12,7 +12,7 @@
         android:id="@+id/container1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/lightgray"
         android:scrollbars="none"
         android:layout_below="@+id/header"
         >
@@ -23,46 +23,55 @@
         android:isScrollContainer="true"
         android:orientation="vertical"
         >
-    <LinearLayout
+
+        <LinearLayout
         android:layout_below="@+id/header"
         android:layout_width="fill_parent"
         android:id="@+id/text1"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:gravity="center_vertical"
-        android:minHeight="40.0dip"
+
         android:orientation="horizontal"
-        android:padding="8.0dip">
+        >
         <TextView
-
-
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
+            android:minHeight="40.0dip"
             android:layout_weight="1.0"
             android:text=" "
+            android:layout_marginTop="3dp"
+            android:background="@drawable/shape"
             android:ellipsize="marquee"
             android:focusable="true"
             android:id="@+id/tv_shipment"
             android:focusableInTouchMode="true"
+            android:gravity="center"
 
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"
             />
 
-    </LinearLayout>
-    <View
+        </LinearLayout>
+        <View
         android:layout_width="fill_parent"
         android:layout_height="1.0px"
         android:background="@drawable/shape_line"/>
 
-
-    <LinearLayout
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:isScrollContainer="true"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/shape"
+            android:orientation="vertical"
+            >
+        <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:minHeight="30.0dip"
         android:id="@+id/entrust1"
+
         android:layout_below="@+id/weituo"
         android:orientation="horizontal"
         >
@@ -84,22 +93,23 @@
             android:id="@+id/entrust1_spinner"
             android:layout_width="0dip"
             android:layout_height="40.0dip"
+            android:background="@drawable/edittext_search"
             android:layout_marginRight="10.0dip"
-
-            android:layout_weight="7.0"
+            android:layout_weight="3.0"
             android:textColor="@color/black"
 
             />
-    </LinearLayout>
-    <View
+        </LinearLayout>
+     <View
         android:layout_width="fill_parent"
         android:layout_height="1.0px"
         android:background="@drawable/shape_line"/>
-    <LinearLayout
+        <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:minHeight="30.0dip"
+        android:minHeight="40.0dip"
+
         android:id="@+id/entrust2"
         android:layout_below="@+id/entrust1"
         android:orientation="horizontal"
@@ -119,37 +129,33 @@
 
 
         <Spinner
-            android:id="@+id/entrust2_spinner1"
+            android:id="@+id/entrust2_spinner"
             android:layout_width="0dip"
+            android:background="@drawable/edittext_search"
             android:layout_height="40.0dip"
             android:layout_marginRight="10.0dip"
 
-            android:layout_weight="7.0"
+            android:layout_weight="3.0"
             android:textColor="@color/black"
 
             />
-    </LinearLayout>
+     </LinearLayout>
 
-    <View
+     <View
         android:layout_width="fill_parent"
         android:layout_height="1.0px"
         android:background="@drawable/shape_line"/>
-    <LinearLayout
+        <LinearLayout
         android:id="@+id/table_6"
         android:layout_below="@+id/entrust2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:gravity="center_vertical"
-        android:minHeight="30.0dip"
+        android:minHeight="40.0dip"
         android:orientation="horizontal"
-
-
         >
 
         <TextView
-
-
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10.0dip"
@@ -158,36 +164,34 @@
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"/>
 
-        <View
-            android:layout_width="1dip"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:background="#66CCFF"
-            />
 
-        <EditText
-            android:id="@+id/bowei_8"
+
+        <TextView
+            android:id="@+id/start"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10.0dip"
             android:layout_weight="3.0"
+            android:hint="请选择时间"
+            android:gravity="center"
+            android:background="@drawable/edittext_search"
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"/>
-    </LinearLayout>
+        </LinearLayout>
 
-    <View
+         <View
         android:layout_width="fill_parent"
         android:layout_height="1.0px"
         android:background="@drawable/shape_line"/>
 
-    <LinearLayout
+        <LinearLayout
         android:id="@+id/table_7"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_below="@+id/table_6"
+        android:layout_marginTop="3dp"
+
         android:gravity="center_vertical"
-        android:minHeight="30.0dip"
+        android:minHeight="40.0dip"
         android:orientation="horizontal"
 
 
@@ -203,30 +207,33 @@
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"/>
 
-        <View
-            android:layout_width="1dip"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:background="#66CCFF"
-            />
 
-        <EditText
-            android:id="@+id/bowei_10"
+
+        <TextView
+            android:id="@+id/end"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginRight="10.0dip"
             android:layout_weight="3.0"
+            android:hint="请选择时间"
+            android:gravity="center"
+            android:background="@drawable/edittext_search"
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"/>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/table_8"
+        </LinearLayout>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0px"
+                android:background="@drawable/shape_line"/>
+        <LinearLayout
+
         android:layout_below="@+id/table_7"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
+        android:layout_marginTop="3dp"
+
         android:gravity="center_vertical"
-        android:minHeight="30.0dip"
+        android:minHeight="40.0dip"
         android:orientation="horizontal"
 
 
@@ -243,22 +250,23 @@
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"/>
 
-        <View
-            android:layout_width="1dip"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:background="#66CCFF"
-            />
 
-        <EditText
-            android:id="@+id/flag_edt"
+
+        <Spinner
+            android:id="@+id/flag_spinner"
             android:layout_width="0dip"
-            android:layout_height="wrap_content"
+
+            android:layout_height="40.0dip"
             android:layout_marginRight="10.0dip"
             android:layout_weight="3.0"
+            android:background="@drawable/edittext_search"
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"/>
     </LinearLayout>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0px"
+                android:background="@drawable/shape_line"/>
     <LinearLayout
 
         android:layout_width="fill_parent"
@@ -267,7 +275,9 @@
         android:id="@+id/count"
         android:layout_below="@+id/table_8"
         android:gravity="center_vertical"
-        android:minHeight="30.0dip"
+        android:layout_marginTop="3dp"
+
+        android:minHeight="40.0dip"
         android:orientation="horizontal"
         >
 
@@ -332,6 +342,7 @@
             </RadioGroup>
         </LinearLayout>
     </LinearLayout>
+    </LinearLayout>
     <View
         android:layout_width="fill_parent"
         android:layout_height="1.0px"
@@ -341,14 +352,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/count"
+        android:background="@drawable/shape"
         android:gravity="center_vertical"
+
         android:orientation="vertical"
         android:layout_marginBottom="40dp"
         >
     <TabHost
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
-
+             android:background="@drawable/shape"
              android:id="@android:id/tabhost">
         <LinearLayout
             android:layout_width="fill_parent"
@@ -364,6 +377,7 @@
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/shape"
                 android:layout_width="fill_parent">
                 <LinearLayout
                     android:id="@+id/LinearLayout001"
@@ -422,119 +436,20 @@
                             android:textSize="16sp"
                             />
                     </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/activity_prepare_test_layout_e1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:background="@drawable/machine_choose_bg"
-                        android:padding="8dp" >
 
-
-                        <TextView
-                            android:id="@+id/tv_mac1"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:text="机械号"
-                            android:layout_weight="1"
-                            android:textSize="16sp"
-                            />
-
-                        <TextView
-                            android:id="@+id/tv_start1"
-                            android:gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:text="起"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:textSize="16sp"
-                            />
-                        <TextView
-                            android:id="@+id/tv_end1"
-                            android:gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:text="止"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:textSize="16sp"
-                            />
-                        <TextView
-                            android:id="@+id/tv_count1"
-                            android:gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:text="数量"
-                            android:textSize="16sp"
-                            />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/activity_prepare_test_layout_e2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:background="@drawable/machine_choose_bg"
-                        android:padding="8dp" >
-
-
-                        <TextView
-                            android:id="@+id/tv_mac2"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:layout_marginLeft="12dp"
-                            android:text="机械号"
-                            android:layout_weight="1"
-                            android:textSize="16sp"
-                            />
-
-                        <TextView
-                            android:id="@+id/tv_start2"
-                            android:gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:text="起"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:textSize="16sp"
-                            />
-                        <TextView
-                            android:id="@+id/tv_end2"
-                            android:gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:text="止"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:textSize="16sp"
-                            />
-                        <TextView
-                            android:id="@+id/tv_count2"
-                            android:gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:text="数量"
-                            android:textSize="16sp"
-                            />
-                    </LinearLayout>
-                    <include
-
-                        layout="@layout/machine_item"/>
-                    <include
-
-                        layout="@layout/machine_item"/>
-                    <include
-
-                        layout="@layout/machine_item"/>
+                    <com.port.tally.management.xlistview.XListView
+                        android:id="@+id/xListView"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:cacheColorHint="#00000000"
+                        android:divider="#D3D3D3"
+                        android:dividerHeight="4px"
+                        android:background="@color/lightgray"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:descendantFocusability="afterDescendants"
+                        android:scrollbarStyle="outsideOverlay">
+                    </com.port.tally.management.xlistview.XListView>
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="vertical"
@@ -619,38 +534,7 @@
         </LinearLayout>
     </TabHost>
     </LinearLayout>
-        <LinearLayout
-            android:id="@+id/table_start"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="30.0dip"
-            android:weightSum="1"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/btn_start"
-                android:layout_width="140dip"
-                android:layout_height="40.0dip"
-                android:layout_gravity="center"
-                android:background="@drawable/darkblue_btn_bg"
-                android:text="开工"
-                android:gravity="center"
-                android:layout_marginLeft="5.0dip"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-            <Button
-                android:id="@+id/btn_end"
-                android:layout_width="140dip"
-                android:layout_height="40.0dip"
-                android:layout_gravity="center"
-                android:background="@drawable/darkblue_btn_bg"
-                android:text="完工"
-                android:gravity="center"
-                android:layout_marginLeft="5.0dip"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </LinearLayout>
+
     </LinearLayout>
     </ScrollView>
 

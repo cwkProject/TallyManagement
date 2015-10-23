@@ -140,6 +140,116 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+
+                android:gravity="center_vertical"
+                android:minHeight="30.0dip"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10.0dip"
+                    android:layout_weight="1.0"
+                    android:text="任务号"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"
+                    />
+
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="2dip"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#66CCFF"
+                    />
+
+                <TextView
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10.0dip"
+                    android:layout_weight="8.0"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"
+                    android:id="@+id/tv_task"/>
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#66CCFF"
+                    />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_gravity="center_horizontal"
+                android:background="#66CCFF"
+                />
+            <LinearLayout
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+
+                android:gravity="center_vertical"
+                android:minHeight="30.0dip"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10.0dip"
+                    android:layout_weight="1.0"
+                    android:text="过磅时间"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"
+                    />
+
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="2dip"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#66CCFF"
+                    />
+
+                <TextView
+
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10.0dip"
+                    android:layout_weight="8.0"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"
+                    android:id="@+id/tv_Recordtime"/>
+
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#66CCFF"
+                    />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_gravity="center_horizontal"
+                android:background="#66CCFF"
+                />
+            <LinearLayout
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
                 android:gravity="center_vertical"
                 android:minHeight="30.0dip"
                 android:orientation="horizontal"
@@ -527,55 +637,7 @@
                 android:layout_gravity="center_horizontal"
                 android:background="#66CCFF"
                 />
-            <LinearLayout
 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-
-                android:gravity="center_vertical"
-                android:minHeight="30.0dip"
-                android:orientation="horizontal"
-                >
-
-                <TextView
-
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10.0dip"
-                    android:layout_weight="1.0"
-                    android:text="任务号"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/BasicTextSize"
-                    />
-
-
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="2dip"
-                    android:layout_gravity="center_horizontal"
-                    android:background="#66CCFF"
-                    />
-
-                <TextView
-
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10.0dip"
-                    android:layout_weight="8.0"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/BasicTextSize"
-                    android:id="@+id/tv_task"/>
-
-                <View
-                    android:layout_width="1dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    android:background="#66CCFF"
-                    />
-
-            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -654,7 +716,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10.0dip"
                     android:layout_weight="3.0"
-
+                    android:gravity="center"
                     android:textSize="@dimen/BasicTextSize"
                     android:dropDownWidth="350dp"
                     android:id="@+id/et_group"
@@ -684,7 +746,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10.0dip"
                     android:layout_weight="1.0"
-                    android:text="记录"
+                    android:text="记录人"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"
                     />
@@ -702,12 +764,12 @@
                     android:layout_width="0dip"
                     android:layout_height="40.0dip"
                     android:layout_marginRight="5.0dip"
-
+                    android:gravity="center"
                     android:layout_weight="3.0"
                     android:textColor="@color/black"
                     />
                 <TextView
-
+                    android:gravity="center"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10.0dip"
@@ -725,7 +787,7 @@
                     />
 
                 <EditText
-
+                    android:gravity="center"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10.0dip"
@@ -782,38 +844,24 @@
         </LinearLayout>
     </ScrollView>
     </LinearLayout>
-            <LinearLayout
-                android:id="@+id/LinearLayout1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10.0dip"
-                android:layout_marginRight="10.0dip"
-                android:layout_alignParentBottom="true"
-                >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:id="@+id/LinearLayout1"
 
-                <Button
 
-                    android:id="@+id/clear_endbtn"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40.0dip"
-                    android:layout_weight="1.0"
-                    android:background="@drawable/darkblue_btn_bg"
-                    android:text="删除完工"
-                    android:gravity="center"
-                    android:visibility="gone"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+        >
+        <Button
+            android:id="@+id/save_btn"
+            android:layout_width="140dip"
+            android:layout_height="40.0dip"
 
-                <Button
-                    android:id="@+id/save_btn"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40.0dip"
-                    android:layout_weight="1.0"
-                    android:background="@drawable/darkblue_btn_bg"
-                    android:text="完工"
-                    android:gravity="center"
-                    android:layout_marginLeft="5.0dip"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-            </LinearLayout>
+            android:background="@drawable/darkblue_btn_bg"
+            android:text="完工"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
     </RelativeLayout>

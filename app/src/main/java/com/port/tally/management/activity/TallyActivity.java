@@ -41,15 +41,17 @@ public class TallyActivity extends Activity {
     private InstantAutoComplete cagoAuto;
     private ImageView imgLeft;
     private TextView title;
-    private XListView listView;
+
     private Button mBut =null;
     private EditText et_trust;
     private TallyManageAdapter tallyManageAdapter;
     private TallyCagoAtoAdapter tallyCagoAtoAdapter;
-    private List<Map<String, Object>> dataList = null;
+
     private List<Map<String, Object>> dataListCago = null;
     private Toast mToast;
     private int flag = 1;
+    private List<Map<String, Object>> dataList = null;
+    private XListView listView;
     Intent intent;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -152,7 +154,7 @@ public class TallyActivity extends Activity {
         //实例化，传入参数
         TallyCagoAtoWork tallyCagoAtoWork= new TallyCagoAtoWork();
 
-        tallyCagoAtoWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
+        tallyCagoAtoWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
 
@@ -216,7 +218,7 @@ public class TallyActivity extends Activity {
         //实例化，传入参数
         ToallyManageWork toallyManageWork = new ToallyManageWork();
 
-        toallyManageWork.setWorkBackListener(new WorkBack<List<Map<String, Object>>>() {
+        toallyManageWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
 

@@ -125,6 +125,15 @@ public class StartWorkBean {
     private String notePerson;//记录人
     private String cardNo;//通行证号
 
+    public String getStrRecordtime() {
+        return StrRecordtime;
+    }
+
+    public void setStrRecordtime(String strRecordtime) {
+        StrRecordtime = strRecordtime;
+    }
+
+    private String StrRecordtime;
     public String getStrSubmittime() {
         return strSubmittime;
     }

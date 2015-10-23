@@ -182,10 +182,16 @@ public interface StaticValue {
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";
     //地图数据请求地址
     String HTTP_GET_MAP_URL = "http://218.92.115.55/M_Lhgl/Service/Map/GetMassCoord.aspx";
+    //    校验车辆是否黑名单
+    String HTTP_GET_VERIFYVEHICLE_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyVehicleBlackList.aspx";
+    //    校验开工状态
+    String HTTP_GET_VERIFYSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyStartWork.aspx";
+    //    校验完工状态
+    String HTTP_GET_VERIFYEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyEndWork.aspx";
     //   开工
-    String HTTP_GET_STARTWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetWork.aspx";
+    String HTTP_GET_STARTWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetStartWork.aspx";
     //   完工
-    String HTTP_GET_ENDWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetWork.aspx";
+    String HTTP_GET_ENDWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetEndWork.aspx";
     //提交开工时间
     String HTTP_GET_UPDATSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/StartWork" +
             ".aspx";

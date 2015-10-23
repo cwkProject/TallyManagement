@@ -60,10 +60,10 @@ public class UploadEndWorkData extends JsonDataModel {
         // 传入请求参数
         map.put("Id", id);
         map.put("DayNight",endwork);
-        map.put("CodeWorkTeam", team);
-        map.put("Count", count);
+        map.put("CodeWorkTeam",team);
+        map.put("Count",count);
         map.put("EndTime",time);
-        map.put("startUserName",notperson);
+        map.put("EndUserName",notperson);
     }
     /**
      * 提取服务执行结果
@@ -96,7 +96,7 @@ public class UploadEndWorkData extends JsonDataModel {
      */
     @Override
     protected String onRequestMessage(boolean b, JSONObject jsonObject) throws JSONException {
-        return b ? null : jsonObject.getString("Message");
+        return jsonObject.getString("Message");
     }
     /**
      * 提取服务反馈的结果数据，
@@ -111,7 +111,11 @@ public class UploadEndWorkData extends JsonDataModel {
     @Override
     protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
 
-        result =jsonResult.getString("IsSuccess");
+        result =jsonResult.getString("Message");
+
+    }
+    protected void onRequestFailed(JSONObject jsonResult) throws JSONException {
+        result=jsonResult.getString("Message");
 
     }
 }

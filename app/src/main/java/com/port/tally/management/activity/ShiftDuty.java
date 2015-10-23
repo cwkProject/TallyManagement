@@ -308,10 +308,8 @@ public class ShiftDuty extends Activity{
     private void stopRecording(){
         if(null != audioRecord){
             isRecording = false;
-
             audioRecord.stop();
             audioRecord.release();
-
             audioRecord = null;
             recordingThread = null;
         }

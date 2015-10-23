@@ -1,16 +1,18 @@
 package com.port.tally.management.work;
 
-import com.port.tally.management.bean.StartWorkBean;
-import com.port.tally.management.data.StartWorkData;
-import com.port.tally.management.data.UploadEndWorkData;
+import com.port.tally.management.data.SubprocessesFlagData;
+
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- * Created by song on 2015/10/12.
+ * Created by song on 2015/10/21.
  */
-public class UploadEndWork extends DefaultWorkModel<String, String, UploadEndWorkData> {
+public class SubprocessesFlagWork extends DefaultWorkModel<String, List<Map<String, Object>>, SubprocessesFlagData> {
 
     /**
      * 参数合法性检测，
@@ -24,7 +26,7 @@ public class UploadEndWork extends DefaultWorkModel<String, String, UploadEndWor
 
     protected boolean onCheckParameters(String... parameters) {
         // 需要至少两个传入参数
-        return !(parameters == null || parameters.length < 1);
+        return true;
     }
 
     /**
@@ -34,7 +36,7 @@ public class UploadEndWork extends DefaultWorkModel<String, String, UploadEndWor
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_UPDATEND_URL;
+        return StaticValue.HTTP_GET_SUBPROCESS_URL;
     }
 
     /**
@@ -49,8 +51,8 @@ public class UploadEndWork extends DefaultWorkModel<String, String, UploadEndWor
      * @return 任务返回数据
      */
     @Override
-    protected String onRequestSuccessSetResult(UploadEndWorkData data) {
-        return data.getMessage();
+    protected List<Map<String, Object>> onRequestSuccessSetResult(SubprocessesFlagData data) {
+        return data.getAll();
     }
 
     /**
@@ -65,8 +67,8 @@ public class UploadEndWork extends DefaultWorkModel<String, String, UploadEndWor
      * @return 任务返回数据
      */
     @Override
-    protected String onRequestFailedSetResult(UploadEndWorkData data) {
-        return data.getMessage();
+    protected List<Map<String, Object>> onRequestFailedSetResult(SubprocessesFlagData data) {
+        return null;
     }
 
     /**
@@ -78,18 +80,9 @@ public class UploadEndWork extends DefaultWorkModel<String, String, UploadEndWor
      * @return 参数设置完毕后的数据模型对象
      */
     @Override
-    protected UploadEndWorkData onCreateDataModel(String... parameters) {
+    protected SubprocessesFlagData onCreateDataModel(String... parameters) {
 
-
-        UploadEndWorkData  uploadEndWorkData  = new UploadEndWorkData();
-
-        uploadEndWorkData.setId(parameters[0]);
-        uploadEndWorkData.setNotperson(parameters[1]);
-        uploadEndWorkData.setTime(parameters[2]);
-        uploadEndWorkData.setCount(parameters[3]);
-        uploadEndWorkData.setTeam(parameters[4]);
-        uploadEndWorkData.setEndwork(parameters[5]);
-        return uploadEndWorkData;
+        return new SubprocessesFlagData();
     }
 }
 

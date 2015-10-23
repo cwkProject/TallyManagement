@@ -46,6 +46,8 @@ import com.port.tally.management.util.InstantAutoComplete;
 import com.port.tally.management.work.EndWorkAutoTeamWork;
 import com.port.tally.management.work.StartWorkWork;
 import com.port.tally.management.work.UploadEndWork;
+import com.port.tally.management.work.VerifyEndWork;
+import com.port.tally.management.work.VerifyVehicleWork;
 
 import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.LoginStatus;
@@ -68,7 +70,7 @@ public class EndWork extends Activity {
     private  List<Map<String, Object>> dataList=null;
     private String ID;
     private Toast mToast;
-    private TextView tv_vehiclenum, tv_note,tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task,tv_balanceweight,tv_subtime;
+    private TextView tv_vehiclenum,tv_Recordtime, tv_note,tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task,tv_balanceweight,tv_subtime;
     private EditText tongxin_edt,et_count;
     private Button tongxing_search_btn, endWork_btn;
     private TextView tv_entime;
@@ -77,6 +79,8 @@ public class EndWork extends Activity {
     private Spinner spinner_over ;
     private String spinner_overText;
     private PopupWindow startPopupWindow;
+    private String company;
+    private String team;
     // 定义5个记录当前时间的变量
     private int year;
     private int month;
@@ -119,7 +123,9 @@ public class EndWork extends Activity {
         tv_port=(TextView) findViewById(R.id.tv_port);
         tv_loader=(TextView)findViewById(R.id.tv_loader);
         tv_task =(TextView)findViewById(R.id.tv_task);
+        tv_Recordtime =(TextView)findViewById(R.id.tv_Recordtime);
         et_count = (EditText) findViewById(R.id.et_count);
+        et_count.setInputType(InputType.TYPE_CLASS_NUMBER);
         tv_note =(TextView) findViewById(R.id.tv_note);
         tv_balanceweight=(TextView) findViewById(R.id.tv_balanceweight);
         tv_subtime=(TextView) findViewById(R.id.tv_subtime);
@@ -127,8 +133,8 @@ public class EndWork extends Activity {
         teamAuto =(InstantAutoComplete)findViewById(R.id.et_group);
         dataList = new ArrayList<>();
         spinner_over =(Spinner)findViewById(R.id.spinner_over);
-
-          loadValue("010111");
+        company= LoginStatus.getLoginStatus().getCodeCompany();
+        loadValue(company);
         Log.i("dataList的值",dataList.toString());
         endWork_btn = (Button) findViewById(R.id.save_btn);
         title.setText("完工");
@@ -168,10 +174,12 @@ public class EndWork extends Activity {
         endWork_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spinner_overText = spinner_over.getSelectedItem().toString();
+                String type ="CARD";
+                String company= "77";
                 long sysTime = System.currentTimeMillis();
                 CharSequence sysTimeStr = DateFormat.format("hh:mm:ss", sysTime);
-                uploadValue(spinner_overText, teamAuto.getText().toString(),et_count.getText().toString(),sysTimeStr.toString(),ID, LoginStatus.getLoginStatus().getNickname());
+
+               verifyEnd(ID,LoginStatus.getLoginStatus().getNickname(),sysTimeStr.toString());
 
             }
         });
@@ -183,7 +191,7 @@ public class EndWork extends Activity {
 
                 if (validate(tongxingKey,v)) {
                     String type ="CARD";
-                    String company= "77";
+
                     initValue(tongxingKey,type,company);
                 };
 
@@ -241,7 +249,7 @@ public class EndWork extends Activity {
                 if (validate(tongxingKey,v)) {
                     String type ="NFC";
                     String company= "77";
-                    initValue(tongxingKey,type,company);
+                    verifyvehicle(tongxingKey, type, company);
                 };
             }
         });
@@ -277,7 +285,8 @@ public class EndWork extends Activity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             Map<String, Object> pc = dataList.get(position);
-                            teamAuto.setText(pc.get("tv1") + " " + pc.get("tv2"));
+                            teamAuto.setText(" " + pc.get("tv2"));
+                            team = pc.get("tv1").toString();
                         }
                     });
 
@@ -385,8 +394,9 @@ public class EndWork extends Activity {
 
                 tv_cardnum.setText(getHex(id1).toUpperCase());
                 String type ="NFC";
-                String company= "77";
-                initValue(getHex(id1).toUpperCase(), type, company);
+                String company = "77";
+                verifyvehicle(getHex(id1).toUpperCase(), type, company);
+
             }
 
 
@@ -422,6 +432,7 @@ public class EndWork extends Activity {
 
             public void doEndWork(boolean b, StartWorkBean startWorkBean) {
                 if (b) {
+                    clearEnd();
                     tv_vehiclenum.setText(startWorkBean.getVehicleNum());
                     tv_boatname.setText(startWorkBean.getBoatName());
                     tv_huodai.setText(startWorkBean.getForwarder());
@@ -431,8 +442,9 @@ public class EndWork extends Activity {
                     tv_port.setText(startWorkBean.getSetport());
                     tv_loader.setText(startWorkBean.getLoader());
                     tv_task.setText(startWorkBean.getTask());
-                    ID =startWorkBean.getId().toString();
+                    ID = startWorkBean.getId().toString();
                     tv_balanceweight.setText(startWorkBean.getStrWeight());
+                    tv_Recordtime.setText(startWorkBean.getStrRecordtime());
                     tv_subtime.setText(startWorkBean.getStrSubmittime());
                     if (type.equals("NFC")) tongxin_edt.setText(startWorkBean.getCardNo());
                     Log.i("idzhi", "" + startWorkBean.getId());
@@ -441,18 +453,33 @@ public class EndWork extends Activity {
 //                    et_noteperson.setText(startWorkBean.getNotePerson());
 
                 } else {
-                    tv_vehiclenum.setText("");
-                    tv_boatname.setText("");
-                    tv_huodai.setText("");
-                    tv_huowu.setText("");
-                    tv_place.setText("");
-                    tv_huowei.setText("");
-                    tv_port.setText("");
-                    if (type.equals("NFC")) tongxin_edt.setText("");
-                    tv_loader.setText("");
-                    tv_task.setText("");
                     clearEnd();
-                    showToast(startWorkBean.getMessage());
+                    if (!"".equals(startWorkBean.getVehicleNum()))
+                        tv_vehiclenum.setText(startWorkBean.getVehicleNum());
+                    if (!"".equals(startWorkBean.getBoatName()))
+                        tv_boatname.setText(startWorkBean.getBoatName());
+                    if (!"".equals(startWorkBean.getForwarder()))
+                        tv_huodai.setText(startWorkBean.getForwarder());
+                    if (!"".equals(startWorkBean.getCargo()))
+                        tv_huowu.setText(startWorkBean.getCargo());
+                    if (!"".equals(startWorkBean.getPlace()))
+                        tv_place.setText(startWorkBean.getPlace());
+                    if (!"".equals(startWorkBean.getAllocation()))
+                        tv_huowei.setText(startWorkBean.getAllocation());
+                    if (!"".equals(startWorkBean.getAllocation()))
+                        tv_port.setText(startWorkBean.getAllocation());
+                    if (!"".equals(startWorkBean.getLoader()))
+                        tv_loader.setText(startWorkBean.getLoader());
+                    if (!"".equals(startWorkBean.getTask()))
+                        tv_task.setText(startWorkBean.getTask());
+                    if (!"".equals(startWorkBean.getStrWeight()))
+                        tv_balanceweight.setText(startWorkBean.getStrWeight());
+                    if (!"".equals(startWorkBean.getStrSubmittime()))
+                        tv_subtime.setText(startWorkBean.getStrSubmittime());
+                    if (!"".equals(startWorkBean.getMessage()))
+                        showDialog(startWorkBean.getMessage());
+
+                    showToast(startWorkBean.getMessage().toString());
                 }
             }
         });
@@ -460,7 +487,75 @@ public class EndWork extends Activity {
 
 //公司、
     }
+    //校验车辆是否黑名单
+//给个控件赋值
+    private void verifyvehicle( final String key, final String type, final String company) {
 
+        //实例化，传入参数
+        VerifyVehicleWork verifyVehicleWork = new VerifyVehicleWork();
+
+        verifyVehicleWork.setWorkEndListener(new WorkBack<StartWorkBean>() {
+
+            public void doEndWork(boolean b, StartWorkBean startWorkBean) {
+                if (b) {
+                    Dialog dialog = new AlertDialog.Builder(EndWork.this)
+                            .setTitle("提示")
+                            .setMessage(startWorkBean.getMessage())
+                            .setPositiveButton("确定",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            initValue(key, type, company);
+                                        }
+                                    }).create();//创建按钮
+
+                    dialog.show();
+
+                } else {
+
+                    showDialog(startWorkBean.getMessage());
+                }
+            }
+        });
+        verifyVehicleWork.beginExecute(key, company, type);
+    }
+    //校验完工
+
+    private void verifyEnd( final String key, final String type, final String company) {
+
+        //实例化，传入参数
+        VerifyEndWork verifyEndWork = new VerifyEndWork();
+
+        verifyEndWork.setWorkEndListener(new WorkBack<StartWorkBean>() {
+
+            public void doEndWork(boolean b, StartWorkBean startWorkBean) {
+                if (b) {
+                    Dialog dialog = new AlertDialog.Builder(EndWork.this)
+                            .setTitle("提示")
+                            .setMessage(startWorkBean.getMessage())
+                            .setPositiveButton("确定",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            spinner_overText = spinner_over.getSelectedItem().toString();
+                                            long sysTime = System.currentTimeMillis();
+                                            CharSequence sysTimeStr = DateFormat.format("hh:mm:ss", sysTime);
+                                            uploadValue(ID, LoginStatus.getLoginStatus().getNickname(),sysTimeStr.toString(),et_count.getText().toString(),team,spinner_overText);
+                                        }
+                                    }).create();//创建按钮
+
+                    dialog.show();
+
+//                if(et_count.getText().toString().equals(""))showDialog("请输入件数");
+//                if(team.equals(""))showDialog("请选择班组");
+                    showToast(startWorkBean.getMessage());
+
+                } else {
+
+                    showToast(startWorkBean.getMessage());
+                }
+            }
+        });
+        verifyEndWork.beginExecute(key, company, type);
+    }
     //给个控件赋值
     private void uploadValue(String key,String company,String count,String time,String team,String teamwork) {
 
@@ -469,12 +564,11 @@ public class EndWork extends Activity {
         uploadEndWork.setWorkEndListener(new WorkBack<String>() {
             @Override
             public void doEndWork(boolean b, String s) {
-                if(b&& s.equals("IsSuccess")){
-                    showDialog("提交成功");
+                if (b) {
+                    showDialog(s);
 
-                }
-                else {
-                    showDialog("提交失败");
+                } else {
+                    showDialog(s);
                 }
             }
         });
@@ -483,9 +577,23 @@ public class EndWork extends Activity {
 
 
     }
+
     private void clearEnd() {
         tv_entime.setText("请选择时间");
         teamAuto.setText("");
+        tv_vehiclenum.setText("");
+        tv_boatname.setText("");
+        tv_huodai.setText("");
+        tv_huowu.setText("");
+        tv_place.setText("");
+        tv_huowei.setText("");
+        tv_port.setText("");
+        tv_loader.setText("");
+        tv_task.setText("");
+        tv_balanceweight.setText("");
+        tv_subtime.setText("");
+        tv_Recordtime.setText("");
+
     }
 
 
