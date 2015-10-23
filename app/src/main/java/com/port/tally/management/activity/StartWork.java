@@ -366,7 +366,7 @@ private void verifyvehicle( final String key, final String type, final String co
 
         public void doEndWork(boolean b, StartWorkBean startWorkBean) {
             if (b) {
-                if (startWorkBean.getMessage()!= null || !"".equals(startWorkBean.getMessage())|| !startWorkBean.getMessage().equals("null")) {
+                if (startWorkBean.getMessage() != null || !"".equals(startWorkBean.getMessage()) || !startWorkBean.getMessage().equals("null")) {
                     Dialog dialog = new AlertDialog.Builder(StartWork.this)
                             .setTitle("提示")
                             .setMessage(startWorkBean.getMessage())
@@ -378,16 +378,18 @@ private void verifyvehicle( final String key, final String type, final String co
                                     }).create();//创建按钮
 
                     dialog.show();
-                };
+                }
+                ;
 
                 Log.i("verifyvehicle1", "" + startWorkBean.getMessage());
 
 
-
             } else {
-                if (startWorkBean.getMessage() != null)
+                if (!"".equals(startWorkBean.getMessage())) {
                     showDialog(startWorkBean.getMessage());
-                Log.i("verifyvehicle2", "" + startWorkBean.getMessage());
+                    Log.i("verifyvehicle2", "" + startWorkBean.getMessage());
+                }
+
             }
         }
     });

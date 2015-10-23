@@ -95,19 +95,51 @@ public class VerifyVehicleData extends JsonDataModel {
      */
     @Override
     protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
-        startWorkBean=new StartWorkBean();
+        JSONObject jsonObject=jsonResult.getJSONObject("Data");
 
+        startWorkBean=new StartWorkBean();
+        startWorkBean.setId(jsonObject.getString("ID"));
+        startWorkBean.setVehicleNum(jsonObject.getString("车号"));
+        startWorkBean.setBoatName(jsonObject.getString("船名"));
+        startWorkBean.setForwarder(jsonObject.getString("货代"));
+        startWorkBean.setCargo(jsonObject.getString("货物"));
+        startWorkBean.setPlace(jsonObject.getString("场地"));
+        startWorkBean.setAllocation(jsonObject.getString("货位"));
+        startWorkBean.setSetport(jsonObject.getString("集疏港"));
+        startWorkBean.setLoader(jsonObject.getString("装卸车"));
+        startWorkBean.setTask(jsonObject.getString("任务号"));
+        startWorkBean.setCardNo(jsonObject.getString("通行证号"));
+        startWorkBean.setStrSubmittime(jsonObject.getString("申报时间"));
+        startWorkBean.setStrWeight(jsonObject.getString("衡重"));
+        startWorkBean.setStrRecordtime(jsonObject.getString("过磅时间"));
         startWorkBean.setMessage(getMessage());
         Log.i("getMessage()", "" + getMessage());
+        Log.i("ID",""+jsonObject.getString("ID"));
 
     }
 
     @Override
     protected void onRequestFailed(JSONObject jsonResult) throws JSONException {
-
+        Object object=jsonResult.get("Data");
         startWorkBean=new StartWorkBean();
-
+        if (object instanceof JSONObject){
+            JSONObject jsonObject= (JSONObject) object;
+            startWorkBean.setId(jsonObject.getString("ID"));
+            startWorkBean.setVehicleNum(jsonObject.getString("车号"));
+            startWorkBean.setBoatName(jsonObject.getString("船名"));
+            startWorkBean.setForwarder(jsonObject.getString("货代"));
+            startWorkBean.setCargo(jsonObject.getString("货物"));
+            startWorkBean.setPlace(jsonObject.getString("场地"));
+            startWorkBean.setAllocation(jsonObject.getString("货位"));
+            startWorkBean.setSetport(jsonObject.getString("集疏港"));
+            startWorkBean.setLoader(jsonObject.getString("装卸车"));
+            startWorkBean.setTask(jsonObject.getString("任务号"));
+            startWorkBean.setCardNo(jsonObject.getString("通行证号"));
+            startWorkBean.setStrSubmittime(jsonObject.getString("申报时间"));
+            startWorkBean.setStrWeight(jsonObject.getString("衡重"));
+            startWorkBean.setStrRecordtime(jsonObject.getString("过磅时间"));}
         startWorkBean.setMessage(getMessage());
+        Log.i("getMessage()", "" + getMessage());
         Log.i("getMessage()", "" + getMessage());
     }
 }
