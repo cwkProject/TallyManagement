@@ -378,8 +378,7 @@ private void verifyvehicle( final String key, final String type, final String co
                                     }).create();//创建按钮
 
                     dialog.show();
-                }
-                ;
+                };
 
                 Log.i("verifyvehicle1", "" + startWorkBean.getMessage());
 
@@ -580,19 +579,6 @@ private void verifyvehicle( final String key, final String type, final String co
         }
     }
     private void showDialog(String str){
-        Dialog dialog = new AlertDialog.Builder(StartWork.this)
-                .setTitle("提示")
-                .setMessage(str)
-                .setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.cancel();
-                            }
-                        }).create();//创建按钮
-
-        dialog.show();
-    }
-    private void showDialog1(String str){
         Dialog dialog = new AlertDialog.Builder(StartWork.this)
                 .setTitle("提示")
                 .setMessage(str)
