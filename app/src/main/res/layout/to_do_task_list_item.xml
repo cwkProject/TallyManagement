@@ -4,10 +4,10 @@
               android:layout_height="wrap_content"
               android:layout_marginLeft="@dimen/list_item_horizontal_margin"
               android:layout_marginRight="@dimen/list_item_horizontal_margin"
-              android:layout_weight="1"
               android:background="@drawable/to_do_task_shape"
               android:gravity="center"
-              android:orientation="vertical">
+              android:orientation="vertical"
+              android:padding="@dimen/default_padding_small">
 
     <TextView
         android:id="@+id/to_do_task_list_item_title_textView"

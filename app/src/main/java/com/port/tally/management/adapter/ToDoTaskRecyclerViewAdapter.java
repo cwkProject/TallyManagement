@@ -4,45 +4,44 @@ package com.port.tally.management.adapter;
  */
 
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.port.tally.management.R;
-import com.port.tally.management.bean.Entrust;
-import com.port.tally.management.holder.EntrustItemViewHolder;
+import com.port.tally.management.holder.ToDoTaskItemViewHolder;
 
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * 委托查询结果列表数据适配器
+ * 今日待办列表数据适配器
  *
  * @author 超悟空
- * @version 1.0 2015/9/19
+ * @version 1.0 2015/10/24
  * @since 1.0
  */
-public class EntrustRecyclerViewAdapter extends RecyclerView.Adapter<EntrustItemViewHolder> {
+public class ToDoTaskRecyclerViewAdapter extends RecyclerView.Adapter<ToDoTaskItemViewHolder> {
 
     /**
      * 数据源
      */
-    private List<Entrust> dataList = null;
+    private List<Map<String, Object>> dataList = null;
 
     /**
      * item点击事件监听器
      */
-    private OnItemClickListenerForRecyclerViewItem<List<Entrust>, EntrustItemViewHolder>
-            onItemClickListener = null;
+    private OnItemClickListenerForRecyclerViewItem<List<Map<String, Object>>,
+            ToDoTaskItemViewHolder> onItemClickListener = null;
 
     /**
      * 构造函数
      */
-    public EntrustRecyclerViewAdapter() {
+    public ToDoTaskRecyclerViewAdapter() {
         this.dataList = new ArrayList<>();
     }
 
@@ -51,7 +50,7 @@ public class EntrustRecyclerViewAdapter extends RecyclerView.Adapter<EntrustItem
      *
      * @param dataList 初始数据源
      */
-    public EntrustRecyclerViewAdapter(List<Entrust> dataList) {
+    public ToDoTaskRecyclerViewAdapter(List<Map<String, Object>> dataList) {
         this.dataList = dataList;
     }
 
@@ -61,7 +60,7 @@ public class EntrustRecyclerViewAdapter extends RecyclerView.Adapter<EntrustItem
      * @param position 添加位置
      * @param data     数组
      */
-    public void addData(int position, List<Entrust> data) {
+    public void addData(int position, List<Map<String, Object>> data) {
         this.dataList.addAll(position, data);
         notifyItemRangeInserted(position, data.size());
     }
@@ -71,7 +70,7 @@ public class EntrustRecyclerViewAdapter extends RecyclerView.Adapter<EntrustItem
      *
      * @param data 新数据
      */
-    public void reset(List<Entrust> data) {
+    public void reset(List<Map<String, Object>> data) {
         this.dataList.clear();
         if (data != null) {
             this.dataList.addAll(data);
@@ -95,41 +94,35 @@ public class EntrustRecyclerViewAdapter extends RecyclerView.Adapter<EntrustItem
      *
      * @param onItemClickListener 监听器
      */
-    public void setOnItemClickListener(OnItemClickListenerForRecyclerViewItem<List<Entrust>,
-            EntrustItemViewHolder> onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListenerForRecyclerViewItem<List<Map<String,
+            Object>>, ToDoTaskItemViewHolder> onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
     @Override
-    public EntrustItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ToDoTaskItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 创建Item根布局
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout
-                .entrust_list_item, parent, false);
+                .to_do_task_list_item, parent, false);
 
         // 创建Item布局管理器
-        return new EntrustItemViewHolder(itemView);
+        return new ToDoTaskItemViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final EntrustItemViewHolder holder, int position) {
+    public void onBindViewHolder(final ToDoTaskItemViewHolder holder, int position) {
 
         // 数据绑定
-        Entrust entrust = this.dataList.get(position);
+        Map<String, Object> data = this.dataList.get(position);
 
-        holder.cargoTextView.setText(entrust.getCargo());
-        holder.cargoOwnerTextView.setText(entrust.getCargoOwner());
-        holder.voyageTextView.setText(entrust.getVoyage());
-        holder.entrustTextView.setText(entrust.getEntrustNumber());
+        if (data != null) {
 
-        // 各类属性字符串
-        String[] attributes = new String[2];
-
-        attributes[0] = entrust.getWork().length() == 0 ? null : entrust.getWork();
-        attributes[1] = entrust.getPlanAmount().trim().length() == 0 && entrust.getPlanWeight()
-                .trim().length() == 0 ? null : holder.itemView.getContext().getString(R.string
-                .splice_plan_amount) + entrust.getPlanAmount() + "/" + entrust.getPlanWeight();
-
-        holder.attributesTextView.setText(TextUtils.join(" , ", attributes));
+            holder.titleTextView.setText("作业票");
+            holder.numberTextView.setText(data.get("taskno").toString());
+            holder.contentTextView.setText(String.format("%s/%s/%s/%s", data.get("tv_cargo")
+                    .toString(), data.get("tv_planwork").toString(), data.get("tv_sourcevector")
+                    .toString(), data.get("tv_destinationvector").toString()));
+        }
 
         // 绑定监听事件
         if (onItemClickListener != null) {

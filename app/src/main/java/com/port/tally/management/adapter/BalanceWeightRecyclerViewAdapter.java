@@ -83,9 +83,11 @@ public class BalanceWeightRecyclerViewAdapter extends RecyclerView
      * 清空数据
      */
     public void clear() {
-        int count = dataList.size();
-        this.dataList.clear();
-        notifyItemRangeRemoved(0, count);
+        if (dataList.size() > 0) {
+            int count = dataList.size();
+            dataList.clear();
+            notifyItemRangeRemoved(0, count);
+        }
     }
 
     /**
