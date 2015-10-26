@@ -6,16 +6,14 @@ package com.port.tally.management.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.port.tally.management.R;
-import com.port.tally.management.adapter.ToDoTaskRecyclerViewAdapter;
+import com.port.tally.management.adapter.ToDoTaskPagerAdapter;
 import com.port.tally.management.work.ToallyManageWork;
 
 import org.mobile.library.model.work.WorkBack;
@@ -40,7 +38,12 @@ public class ToDoTaskFragment extends Fragment {
     /**
      * 列表数据适配器
      */
-    private ToDoTaskRecyclerViewAdapter adapter = new ToDoTaskRecyclerViewAdapter();
+    //private ToDoTaskRecyclerViewAdapter adapter = new ToDoTaskRecyclerViewAdapter();
+
+    /**
+     * 列表数据适配器
+     */
+    private ToDoTaskPagerAdapter adapter = null;
 
     @Nullable
     @Override
@@ -70,34 +73,45 @@ public class ToDoTaskFragment extends Fragment {
      */
     private void initView(View rootView) {
 
-        // RecyclerView列表对象
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id
-                .fragment_to_do_task_recyclerView);
+        //        // RecyclerView列表对象
+        //        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id
+        //                .fragment_to_do_task_recyclerView);
+        //
+        //        // 设置item动画
+        //        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        //
+        //        // 创建布局管理器
+        //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(),
+        //                LinearLayoutManager.HORIZONTAL, false);
+        //
+        //        // 设置布局管理器
+        //        recyclerView.setLayoutManager(layoutManager);
+        //
+        //        // 列表布局参数
+        //        ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
+        //
+        //        // 给列表固定高度
+        //        layoutParams.height = getItemHeight(recyclerView);
+        //
+        //        Log.i(LOG_TAG + "initView", "layoutParams height is " + layoutParams.height);
+        //
+        //        recyclerView.setLayoutParams(layoutParams);
+        //
+        //        recyclerView.setHasFixedSize(true);
+        //
+        //        // 设置数据适配器
+        //        recyclerView.setAdapter(adapter);
 
-        // 设置item动画
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        // 创建布局管理器
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(),
-                LinearLayoutManager.HORIZONTAL, false);
-
-        // 设置布局管理器
-        recyclerView.setLayoutManager(layoutManager);
-
+        ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.fragment_to_do_task_viewPager);
         // 列表布局参数
-        ViewGroup.LayoutParams layoutParams = recyclerView.getLayoutParams();
-
+        ViewGroup.LayoutParams layoutParams = viewPager.getLayoutParams();
         // 给列表固定高度
-        layoutParams.height = getItemHeight(recyclerView);
+        layoutParams.height = getItemHeight(viewPager);
+        viewPager.setLayoutParams(layoutParams);
 
-        Log.i(LOG_TAG + "initView", "layoutParams height is " + layoutParams.height);
+        adapter = new ToDoTaskPagerAdapter(getActivity());
 
-        recyclerView.setLayoutParams(layoutParams);
-
-        recyclerView.setHasFixedSize(true);
-
-        // 设置数据适配器
-        recyclerView.setAdapter(adapter);
+        viewPager.setAdapter(adapter);
     }
 
     /**
@@ -112,8 +126,7 @@ public class ToDoTaskFragment extends Fragment {
             public void doEndWork(boolean state, List<Map<String, Object>> data) {
 
                 if (state && data != null) {
-                    adapter.clear();
-                    adapter.addData(0, data);
+                    adapter.reset(data);
                 }
             }
         });
