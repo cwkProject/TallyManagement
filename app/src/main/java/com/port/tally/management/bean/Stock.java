@@ -43,6 +43,11 @@ public class Stock {
     private String storage = null;
 
     /**
+     * 货场编码
+     */
+    private String storageCode = null;
+
+    /**
      * 重量
      */
     private String weight = null;
@@ -86,6 +91,11 @@ public class Stock {
      * 货位
      */
     private String position = null;
+
+    /**
+     * 货位编码
+     */
+    private String positionCode = null;
 
     /**
      * 公司
@@ -378,5 +388,41 @@ public class Stock {
      */
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    /**
+     * 获取货场编码
+     *
+     * @return 货场编码
+     */
+    public String getStorageCode() {
+        return storageCode;
+    }
+
+    /**
+     * 设置货场编码
+     *
+     * @param storageCode 货场编码
+     */
+    public void setStorageCode(String storageCode) {
+        this.storageCode = storageCode;
+    }
+
+    /**
+     * 获取货位编码
+     *
+     * @return 货位编码
+     */
+    public String getPositionCode() {
+        return positionCode;
+    }
+
+    /**
+     * 设置货位编码
+     *
+     * @param positionCode 货位编码
+     */
+    public void setPositionCode(String positionCode) {
+        this.positionCode = positionCode;
     }
 }

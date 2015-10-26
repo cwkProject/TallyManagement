@@ -2,8 +2,6 @@ package com.port.tally.management.data;
 
 import android.util.Log;
 
-import com.port.tally.management.bean.Entrust;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -104,7 +102,7 @@ public class TallyManageData extends JsonDataModel {
                     map.put("gbno", jsonEntrust.getString(2));
 //                    委托人
                     map.put("tv_consignor", jsonEntrust.getString(3));
-//                  委托号
+//                    委托号
                     map.put("taskno", jsonEntrust.getString(4));
 //                    货物
                     map.put("tv_cargo", jsonEntrust.getString(5));

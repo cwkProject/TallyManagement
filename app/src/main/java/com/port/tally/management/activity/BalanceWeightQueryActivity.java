@@ -153,7 +153,7 @@ public class BalanceWeightQueryActivity extends AppCompatActivity {
         super.onResume();
 
         // 初始化数据
-        initData();
+        resetData();
     }
 
     /**

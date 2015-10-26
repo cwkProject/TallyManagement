@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/list_item_horizontal_margin"
+              android:layout_marginRight="@dimen/list_item_horizontal_margin"
+              android:background="@drawable/to_do_task_shape"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:padding="@dimen/default_padding_small">
+
+    <TextView
+        android:id="@+id/to_do_task_list_item_title_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin_small"
+        android:gravity="center"
+        android:text="任务标题"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/to_do_task_list_item_number_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin_small"
+        android:gravity="center"
+        android:text="工作编号"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/to_do_task_list_item_content_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin_small"
+        android:gravity="center"
+        android:text="工作内容"
+        android:textColor="@android:color/black"/>
+
+</LinearLayout>

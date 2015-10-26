@@ -37,12 +37,40 @@ public class StockData extends JsonDataModel {
     private String stockId = null;
 
     /**
+     * 货场编码
+     */
+    private String storageCode = null;
+
+    /**
+     * 货位编码
+     */
+    private String positionCode = null;
+
+    /**
      * 设置堆存编码
      *
      * @param stockId 堆存编码
      */
     public void setStockId(String stockId) {
         this.stockId = stockId;
+    }
+
+    /**
+     * 设置货场编码
+     *
+     * @param storageCode 货场编码
+     */
+    public void setStorageCode(String storageCode) {
+        this.storageCode = storageCode;
+    }
+
+    /**
+     * 设置货位编码
+     *
+     * @param positionCode 货位编码
+     */
+    public void setPositionCode(String positionCode) {
+        this.positionCode = positionCode;
     }
 
     /**
@@ -58,6 +86,10 @@ public class StockData extends JsonDataModel {
     protected void onFillRequestParameters(Map<String, String> map) {
         map.put("gbno", stockId);
         Log.i(LOG_TAG + "onFillRequestParameters", "gbno is " + stockId);
+        map.put("CodeStorage", storageCode);
+        Log.i(LOG_TAG + "onFillRequestParameters", "CodeStorage is " + storageCode);
+        map.put("CodeBooth", positionCode);
+        Log.i(LOG_TAG + "onFillRequestParameters", "CodeBooth is " + positionCode);
     }
 
     @Override

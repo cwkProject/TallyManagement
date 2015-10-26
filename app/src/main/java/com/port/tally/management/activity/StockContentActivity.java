@@ -130,6 +130,10 @@ public class StockContentActivity extends AppCompatActivity {
     private void loadData() {
         // 获取堆存编号
         String stockId = getIntent().getStringExtra(StaticValue.IntentTag.STOCK_ID_TAG);
+        // 获取货场编号
+        String storageCode = getIntent().getStringExtra(StaticValue.IntentTag.STORAGE_CODE_TAG);
+        // 获取货位编号
+        String positionCode = getIntent().getStringExtra(StaticValue.IntentTag.POSITION_CODE_TAG);
 
         if (stockId != null) {
             // 拉取数据
@@ -144,7 +148,7 @@ public class StockContentActivity extends AppCompatActivity {
                 }
             });
 
-            pullStockContent.beginExecute(stockId);
+            pullStockContent.beginExecute(stockId, storageCode, positionCode);
         }
     }
 

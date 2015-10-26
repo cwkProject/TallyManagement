@@ -143,7 +143,7 @@ public class StockQueryActivity extends AppCompatActivity {
         super.onResume();
 
         // 初始化数据
-        initData();
+        resetData();
     }
 
     /**
@@ -470,14 +470,15 @@ public class StockQueryActivity extends AppCompatActivity {
             public void onClick(List<Stock> stocks, StockItemViewHolder stockItemViewHolder) {
                 Stock stock = stocks.get(stockItemViewHolder.getAdapterPosition());
 
-                // 堆存编号
-                String stockId = stock.getId();
-
                 // 跳转意图
                 Intent intent = new Intent(StockQueryActivity.this, StockContentActivity.class);
 
                 // 加入堆存编号
-                intent.putExtra(StaticValue.IntentTag.STOCK_ID_TAG, stockId);
+                intent.putExtra(StaticValue.IntentTag.STOCK_ID_TAG, stock.getId());
+                // 加入货场编号
+                intent.putExtra(StaticValue.IntentTag.STORAGE_CODE_TAG, stock.getStorageCode());
+                // 加入货位编号
+                intent.putExtra(StaticValue.IntentTag.POSITION_CODE_TAG, stock.getPositionCode());
 
                 // 跳转到详情页面
                 startActivity(intent);
