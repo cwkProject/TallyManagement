@@ -3,6 +3,7 @@ package com.port.tally.management.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,7 +47,7 @@ public class TallyActivity extends Activity {
     private EditText et_trust;
     private TallyManageAdapter tallyManageAdapter;
     private TallyCagoAtoAdapter tallyCagoAtoAdapter;
-
+    private ProgressDialog progressDialog;
     private List<Map<String, Object>> dataListCago = null;
     private Toast mToast;
     private int flag = 1;
@@ -57,6 +58,7 @@ public class TallyActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tally_main);
+        showProgressDialog();
         Init();
         initListView();
         loadCagoValue();
@@ -184,11 +186,12 @@ public class TallyActivity extends Activity {
                             cagoAuto.setText("");
                         }
                     });
+                    tallyCagoAtoAdapter.notifyDataSetChanged();
                 } else {
-
+                    showToast("无相关信息");
 
                 }
-                tallyCagoAtoAdapter.notifyDataSetChanged();
+
             }
 
         });
@@ -233,13 +236,15 @@ public class TallyActivity extends Activity {
                     listView.setPullLoadEnable(true);
                     dataList.addAll(data);
                     tallyManageAdapter.notifyDataSetChanged();
+                    progressDialog.dismiss();
+
                 } else {
                     //清空操作
                     showToast("无相关信息");
 
                 }
 
-                tallyManageAdapter.notifyDataSetChanged();
+
                 onLoad();
             }
         });
@@ -279,5 +284,15 @@ public class TallyActivity extends Activity {
         }
         mToast.show();
     }
-
+    private void showProgressDialog(){
+        //创建ProgressDialog对象
+          progressDialog = new ProgressDialog(TallyActivity.this);
+        // 设置进度条风格，风格为圆形，旋转的
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("正在加载数据...");
+        // 设置ProgressDialog 是否可以按退回按键取消
+        progressDialog.setCancelable(true);
+        // 让ProgressDialog显示
+        progressDialog.show();
+    }
 }

@@ -53,10 +53,10 @@ public class TallyCagoAtoAdapter extends BaseAdapter implements Filterable {
         ViewHolder holder;
         Map<String, Object> item = getItem(position);
         if(convertView==null){
-            view = View.inflate(context, R.layout.endworkteam_item, null);
+            view = View.inflate(context, R.layout.tallycago_item, null);
 
             holder = new ViewHolder();
-            holder.tv_1 = (TextView) view.findViewById(R.id.tv_1);
+
             holder.tv_2 = (TextView) view.findViewById(R.id.tv_2);
             holder.tv_3 = (TextView) view.findViewById(R.id.tv_3);
 
@@ -66,9 +66,9 @@ public class TallyCagoAtoAdapter extends BaseAdapter implements Filterable {
             holder = (ViewHolder) view.getTag();
         }
         Log.i("itemcago",""+item);
-        if(!item.get("tv1").equals("")){
-            holder.tv_1.setText((CharSequence)item.get("tv1"));
-            Log.i("tv1的值", item.get("tv1").toString());}
+//        if(!item.get("tv1").equals("")){
+//            holder.tv_1.setText((CharSequence)item.get("tv1"));
+//            Log.i("tv1的值", item.get("tv1").toString());}
         if(!item.get("tv2").equals("")){
             holder.tv_2.setText((CharSequence)item.get("tv2"));}
         if(!item.get("tv3").equals("")){
@@ -78,7 +78,7 @@ public class TallyCagoAtoAdapter extends BaseAdapter implements Filterable {
     }
 
     static class ViewHolder{
-        public TextView tv_1;
+//        public TextView tv_1;
         public TextView tv_2;
         public TextView tv_3;
     }
@@ -117,8 +117,8 @@ public class TallyCagoAtoAdapter extends BaseAdapter implements Filterable {
                     Map<String, Object> pc = unfilteredValues.get(i);
                     if (pc != null) {
 
-                        if(pc.get("tv1")!=null && ((CharSequence)pc.get("tv1")).toString().startsWith(prefixString)){
-                            Log.i("tv1的值", pc.toString());
+                        if(pc.get("tv3")!=null && ((CharSequence)pc.get("tv3")).toString().startsWith(prefixString)){
+                            Log.i("tv3的值", pc.toString());
                             newValues.add(pc);
                         }else if(pc.get("tv2")!=null && ((CharSequence)pc.get("tv2")).toString().startsWith(prefixString)){
 

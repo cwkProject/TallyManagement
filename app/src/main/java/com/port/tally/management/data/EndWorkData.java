@@ -11,13 +11,13 @@ import org.mobile.library.model.data.base.JsonDataModel;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/22.
+ * Created by song on 2015/10/24.
  */
-public class VerifyStartData extends JsonDataModel {
+public class EndWorkData extends JsonDataModel {
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "VerifyStartData.";
+    private static final String LOG_TAG = "EndWorkData.";
 
     public void setType(String type) {
         this.type = type;
@@ -45,10 +45,9 @@ public class VerifyStartData extends JsonDataModel {
         // 传入请求参数
         //通行证
 
-//        map.put("CodeCompany",company);
-//        map.put("RecognizeMethod",type);
-//        map.put("", searchContent);
-        map.put("ID", searchContent);
+        map.put("CodeCompany",company);
+        map.put("RecognizeMethod",type);
+        map.put("NO", searchContent);
 
     }
     /**
@@ -82,6 +81,8 @@ public class VerifyStartData extends JsonDataModel {
      */
     @Override
     protected String onRequestMessage(boolean b, JSONObject jsonObject) throws JSONException {
+
+
         return jsonObject.getString("Message");
     }
     /**
@@ -99,7 +100,10 @@ public class VerifyStartData extends JsonDataModel {
         Object object=jsonResult.get("Data");
         startWorkBean=new StartWorkBean();
         if (object instanceof JSONObject){
+
             JSONObject jsonObject= (JSONObject) object;
+
+
             startWorkBean.setId(jsonObject.getString("ID"));
             startWorkBean.setVehicleNum(jsonObject.getString("车号"));
             startWorkBean.setBoatName(jsonObject.getString("船名"));
@@ -113,7 +117,10 @@ public class VerifyStartData extends JsonDataModel {
             startWorkBean.setCardNo(jsonObject.getString("通行证号"));
             startWorkBean.setStrSubmittime(jsonObject.getString("申报时间"));
             startWorkBean.setStrWeight(jsonObject.getString("衡重"));
-            startWorkBean.setStrRecordtime(jsonObject.getString("过磅时间"));}else{
+            startWorkBean.setStrRecordtime(jsonObject.getString("开工时间"));
+            Log.i("object", "object instanceof JSONObject" + startWorkBean.getVehicleNum());
+        }else{
+
             startWorkBean.setId("");
             startWorkBean.setVehicleNum("");
             startWorkBean.setBoatName("");
@@ -128,6 +135,7 @@ public class VerifyStartData extends JsonDataModel {
             startWorkBean.setStrSubmittime("");
             startWorkBean.setStrWeight("");
             startWorkBean.setStrRecordtime("");
+            Log.i("noobject", "no object instanceof JSONObject" + startWorkBean.getVehicleNum());
         }
         startWorkBean.setMessage(getMessage());
         Log.i("getMessage()", "" + getMessage());
@@ -153,7 +161,7 @@ public class VerifyStartData extends JsonDataModel {
             startWorkBean.setCardNo(jsonObject.getString("通行证号"));
             startWorkBean.setStrSubmittime(jsonObject.getString("申报时间"));
             startWorkBean.setStrWeight(jsonObject.getString("衡重"));
-            startWorkBean.setStrRecordtime(jsonObject.getString("过磅时间"));}else{
+            startWorkBean.setStrRecordtime(jsonObject.getString("开工时间"));}else{
             startWorkBean.setId("");
             startWorkBean.setVehicleNum("");
             startWorkBean.setBoatName("");

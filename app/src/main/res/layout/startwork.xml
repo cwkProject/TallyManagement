@@ -15,8 +15,6 @@
         android:gravity="center"
         android:layout_below="@+id/header"
         android:layout_above ="@+id/LinearLayout1"
-
-
         >
     <ScrollView
 
@@ -40,7 +38,7 @@
                 android:gravity="center_vertical"
                 android:minHeight="30.0dip"
                 android:orientation="horizontal"
-                android:padding="8.0dip"
+
 
                 >
                 <TextView
@@ -87,7 +85,7 @@
                 android:gravity="center_vertical"
                 android:minHeight="30.0dip"
                 android:orientation="horizontal"
-                android:padding="8.0dip"
+                android:layout_marginTop="4.0dip"
                 >
                 <TextView
 
@@ -125,16 +123,42 @@
                     android:textSize="@dimen/BasicTextSize"
                     android:id="@+id/card_btn"/>
             </LinearLayout>
+        <LinearLayout
 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:id="@+id/linear_show"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            >
             <TextView
 
-                android:layout_width="fill_parent"
+                android:layout_weight="1.0"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
-                android:text="查询到的信息:"
+                android:id="@+id/tv_cardstate"
+                android:layout_width="0dip"
                 android:textColor="@color/black"
                 android:textSize="18sp"
+                />
+            <TextView
 
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10.0dip"
+                android:layout_weight="1.0"
+                android:textColor="@color/black"
+                android:textSize="@dimen/BasicTextSize"
+
+                android:id="@+id/tv_messgae"
+                />
+        </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:layout_gravity="center_horizontal"
+                android:background="#66CCFF"
                 />
             <LinearLayout
 
@@ -224,7 +248,8 @@
                     android:layout_weight="8.0"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"
-                    android:id="@+id/tv_Recordtime"/>
+                    android:id="@+id/tv_subtime"
+                    />
 
                 <View
                     android:layout_width="1dip"
@@ -620,7 +645,7 @@
                     android:layout_weight="3.0"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"
-                    android:id="@+id/tv_subtime"/>
+                    android:id="@+id/tv_Recordtime"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -629,16 +654,7 @@
                 android:background="#66CCFF"
                 />
 
-            <TextView
 
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border"
-                android:text="开工："
-                android:textColor="@color/black"
-                android:textSize="18sp"
-
-                />
             <LinearLayout
 
                 android:layout_width="fill_parent"

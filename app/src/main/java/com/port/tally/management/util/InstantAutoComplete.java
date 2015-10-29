@@ -33,7 +33,7 @@ public class InstantAutoComplete extends AutoCompleteTextView {
                                   Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
         if (focused) {
-            Log.i("getText()", "" + getText());
+            Log.i("getText()", "" + getText().toString());
             if (!getText().equals(""))
             performFiltering(getText(), 0);
         }

@@ -11,6 +11,11 @@ package com.port.tally.management.util;
  * @since 1.0
  */
 public interface StaticValue {
+
+
+    /**
+     * 意图数据传递标签
+     */
     /**
      * 本应用编号
      */
@@ -102,18 +107,23 @@ public interface StaticValue {
      * 派工计划模块ip
      */
     //派工货物提示框IP
-    String HTTP_GET_CagoAuto_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetCargo.aspx";
+    String HTTP_GET_CagoAuto_URL ="http://218.92.115.55/M_Lhgl/Service/Base/GetCargo.aspx";
     //派工计划第一页IP
     String HTTP_GET_TASKONE_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionCommand.aspx";
     //详细派工页
-    String HTTP_GET_TASKDETAIL_URL = "http://218.92.115" + "" +
-            ".55/M_Lhgl/Service/Slip/GetMissionCommandSummary.aspx";
+    String HTTP_GET_TASKDETAIL_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionCommandSummary.aspx";
     //派工获取委托查询数据
     String HTTP_GET_ENTRUST_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetConsign.aspx";
     //获取子过程标志列表数据
     String HTTP_GET_SUBPROCESS_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetSpecialMark.aspx";
     //获取票货数据
     String HTTP_GET_SHIPMENTDATA_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetGoogsBill.aspx";
+//  获取载货工具编码（源、目的）
+    String HTTP_GET_CodeCarry_URL ="http://218.92.115.55/M_Lhgl/Service/Slip/GetCodeCarries.aspx";
+    //  获取载货工具编码（源、目的）
+    String HTTP_GET_AllCarry_URL ="http://218.92.115.55/M_Lhgl/Service/Slip/GetAllCarries.aspx";
+    //获取所有载体数据
+    String HTTP_GET_TRUSTSHIPMENTDATA_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetGoodsBill.aspx";
     //获取作业数据列表数据
     String HTTP_GET_OPERATDATA_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkingArea.aspx";
     //汽运查询地址
@@ -186,7 +196,7 @@ public interface StaticValue {
     /**
      * 获取衡重详情的请求地址
      */
-    String BALANCE_WEIGHT_CONTENT_URL = "http://218.92.115" + "" +
+    String BALANCE_WEIGHT_CONTENT_URL = "http://218.92.115" +
             ".55/M_Lhgl/Service/Weighing/GetWeightingDetail.aspx";
 
     //汽运作业班组请求地址
@@ -194,26 +204,24 @@ public interface StaticValue {
     //地图数据请求地址
     String HTTP_GET_MAP_URL = "http://218.92.115.55/M_Lhgl/Service/Map/GetMassCoord.aspx";
     //    校验车辆是否黑名单
-    String HTTP_GET_VERIFYVEHICLE_URL = "http://218.92.115" + "" +
-            ".55/M_Lhgl/Service/Vehicle/VerifyVehicleBlackList.aspx";
+    String HTTP_GET_VERIFYVEHICLE_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyVehicleBlackList.aspx";
     //    校验开工状态
-    String HTTP_GET_VERIFYSTART_URL = "http://218.92.115" + "" +
-            ".55/M_Lhgl/Service/Vehicle/VerifyStartWork.aspx";
+    String HTTP_GET_VERIFYSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyStartWork.aspx";
     //    校验完工状态
-    String HTTP_GET_VERIFYEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyEndWork" +
-            ".aspx";
+    String HTTP_GET_VERIFYEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyEndWork.aspx";
     //   开工
     String HTTP_GET_STARTWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetStartWork.aspx";
     //   完工
     String HTTP_GET_ENDWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetEndWork.aspx";
     //提交开工时间
-    String HTTP_GET_UPDATSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/StartWork" + "" +
+    String HTTP_GET_UPDATSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/StartWork" +
             ".aspx";
+    String HTTP_GET_Team_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetTeamWorker.aspx";
+    String HTTP_GET_Machine_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMachine.aspx";
     //提交完工时间
     String HTTP_GET_UPDATEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/EndWork.aspx";
-    // 作业计划第一页
+// 作业计划第一页
     String HTTP_GET_WORKPLAN_URL = "http://218.92.115.55/M_Lhgl/Service/Plan/GetOperationPlan.aspx";
     // 作业计划详情页
-    String HTTP_GET_WORKPLANDETAIL_URL = "http://218.92.115" + "" +
-            ".55/M_Lhgl/Service/Plan/GetOperationPlanDetail.aspx";
+    String HTTP_GET_WORKPLANDETAIL_URL = "http://218.92.115.55/M_Lhgl/Service/Plan/GetOperationPlanDetail.aspx";
 }

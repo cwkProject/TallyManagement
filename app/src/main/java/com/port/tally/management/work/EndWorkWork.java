@@ -1,18 +1,16 @@
 package com.port.tally.management.work;
 
-import com.port.tally.management.data.SubprocessesFlagData;
-import com.port.tally.management.data.Trust1Data;
+import com.port.tally.management.bean.StartWorkBean;
+import com.port.tally.management.data.EndWorkData;
+import com.port.tally.management.data.StartWorkData;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
 
-import java.util.List;
-import java.util.Map;
-
 /**
- * Created by song on 2015/10/21.
+ * Created by song on 2015/10/24.
  */
-public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object>>, Trust1Data> {
+public class EndWorkWork extends DefaultWorkModel<String, StartWorkBean, EndWorkData> {
 
     /**
      * 参数合法性检测，
@@ -36,7 +34,7 @@ public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_TRUSTSHIPMENTDATA_URL;
+        return StaticValue.HTTP_GET_ENDWORK_URL;
     }
 
     /**
@@ -51,8 +49,8 @@ public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestSuccessSetResult(Trust1Data data) {
-        return data.getAll();
+    protected StartWorkBean onRequestSuccessSetResult(EndWorkData data) {
+        return data.getStartWorkBean();
     }
 
     /**
@@ -67,8 +65,8 @@ public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestFailedSetResult(Trust1Data data) {
-        return null;
+    protected StartWorkBean onRequestFailedSetResult(EndWorkData data) {
+        return data.getStartWorkBean();
     }
 
     /**
@@ -80,14 +78,15 @@ public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object
      * @return 参数设置完毕后的数据模型对象
      */
     @Override
-    protected Trust1Data onCreateDataModel(String... parameters) {
-        Trust1Data trust1Data = new Trust1Data();
+    protected EndWorkData onCreateDataModel(String... parameters) {
+        EndWorkData startWorkData = new EndWorkData();
 
-        trust1Data.setSearchContent(parameters[0]);
-        trust1Data.setSearchContent1(parameters[1]);
-        return trust1Data;
-
+        startWorkData.setSearchContent(parameters[0]);
+        startWorkData.setCompany(parameters[1]);
+        startWorkData.setType(parameters[2]);
+        return startWorkData;
     }
-}
 
+
+}
 

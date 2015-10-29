@@ -81,6 +81,8 @@ public class StartWorkData extends JsonDataModel {
      */
     @Override
     protected String onRequestMessage(boolean b, JSONObject jsonObject) throws JSONException {
+
+
         return jsonObject.getString("Message");
     }
     /**
@@ -95,26 +97,49 @@ public class StartWorkData extends JsonDataModel {
      */
     @Override
     protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
-        JSONObject jsonObject=jsonResult.getJSONObject("Data");
-
+        Object object=jsonResult.get("Data");
         startWorkBean=new StartWorkBean();
-        startWorkBean.setId(jsonObject.getString("ID"));
-        startWorkBean.setVehicleNum(jsonObject.getString("车号"));
-        startWorkBean.setBoatName(jsonObject.getString("船名"));
-        startWorkBean.setForwarder(jsonObject.getString("货代"));
-        startWorkBean.setCargo(jsonObject.getString("货物"));
-        startWorkBean.setPlace(jsonObject.getString("场地"));
-        startWorkBean.setAllocation(jsonObject.getString("货位"));
-        startWorkBean.setSetport(jsonObject.getString("集疏港"));
-        startWorkBean.setLoader(jsonObject.getString("装卸车"));
-        startWorkBean.setTask(jsonObject.getString("任务号"));
-        startWorkBean.setCardNo(jsonObject.getString("通行证号"));
-        startWorkBean.setStrSubmittime(jsonObject.getString("申报时间"));
-        startWorkBean.setStrWeight(jsonObject.getString("衡重"));
-        startWorkBean.setStrRecordtime(jsonObject.getString("过磅时间"));
+        if (object instanceof JSONObject){
+
+            JSONObject jsonObject= (JSONObject) object;
+
+
+            startWorkBean.setId(jsonObject.getString("ID"));
+            startWorkBean.setVehicleNum(jsonObject.getString("车号"));
+            startWorkBean.setBoatName(jsonObject.getString("船名"));
+            startWorkBean.setForwarder(jsonObject.getString("货代"));
+            startWorkBean.setCargo(jsonObject.getString("货物"));
+            startWorkBean.setPlace(jsonObject.getString("场地"));
+            startWorkBean.setAllocation(jsonObject.getString("货位"));
+            startWorkBean.setSetport(jsonObject.getString("集疏港"));
+            startWorkBean.setLoader(jsonObject.getString("装卸车"));
+            startWorkBean.setTask(jsonObject.getString("任务号"));
+            startWorkBean.setCardNo(jsonObject.getString("通行证号"));
+            startWorkBean.setStrSubmittime(jsonObject.getString("申报时间"));
+            startWorkBean.setStrWeight(jsonObject.getString("衡重"));
+            startWorkBean.setStrRecordtime(jsonObject.getString("过磅时间"));
+            Log.i("object", "object instanceof JSONObject" + startWorkBean.getVehicleNum());
+        }else{
+
+            startWorkBean.setId("");
+            startWorkBean.setVehicleNum("");
+            startWorkBean.setBoatName("");
+            startWorkBean.setForwarder("");
+            startWorkBean.setCargo("");
+            startWorkBean.setPlace("");
+            startWorkBean.setAllocation("");
+            startWorkBean.setSetport("");
+            startWorkBean.setLoader("");
+            startWorkBean.setTask("");
+            startWorkBean.setCardNo("");
+            startWorkBean.setStrSubmittime("");
+            startWorkBean.setStrWeight("");
+            startWorkBean.setStrRecordtime("");
+            Log.i("noobject", "no object instanceof JSONObject" + startWorkBean.getVehicleNum());
+        }
         startWorkBean.setMessage(getMessage());
-          Log.i("getMessage()", "" + getMessage());
-        Log.i("ID",""+jsonObject.getString("ID"));
+        Log.i("getMessage()", "" + getMessage());
+
     }
 
     @Override
@@ -136,7 +161,22 @@ public class StartWorkData extends JsonDataModel {
         startWorkBean.setCardNo(jsonObject.getString("通行证号"));
         startWorkBean.setStrSubmittime(jsonObject.getString("申报时间"));
         startWorkBean.setStrWeight(jsonObject.getString("衡重"));
-            startWorkBean.setStrRecordtime(jsonObject.getString("过磅时间"));}
+            startWorkBean.setStrRecordtime(jsonObject.getString("过磅时间"));}else{
+            startWorkBean.setId("");
+            startWorkBean.setVehicleNum("");
+            startWorkBean.setBoatName("");
+            startWorkBean.setForwarder("");
+            startWorkBean.setCargo("");
+            startWorkBean.setPlace("");
+            startWorkBean.setAllocation("");
+            startWorkBean.setSetport("");
+            startWorkBean.setLoader("");
+            startWorkBean.setTask("");
+            startWorkBean.setCardNo("");
+            startWorkBean.setStrSubmittime("");
+            startWorkBean.setStrWeight("");
+            startWorkBean.setStrRecordtime("");
+        }
         startWorkBean.setMessage(getMessage());
         Log.i("getMessage()", "" + getMessage());
     }

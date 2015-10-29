@@ -7,18 +7,6 @@
 
 
         <TextView
-            android:id="@+id/tv_1"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:text="J17"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:textSize="16sp"
-            />
-
-        <TextView
             android:id="@+id/tv_2"
             android:layout_width="0dp"
             android:layout_weight="1"
