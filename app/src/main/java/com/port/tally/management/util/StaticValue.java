@@ -224,4 +224,12 @@ public interface StaticValue {
     String HTTP_GET_WORKPLAN_URL = "http://218.92.115.55/M_Lhgl/Service/Plan/GetOperationPlan.aspx";
     // 作业计划详情页
     String HTTP_GET_WORKPLANDETAIL_URL = "http://218.92.115.55/M_Lhgl/Service/Plan/GetOperationPlanDetail.aspx";
+//    获取配工机械数据接口
+    String HTTP_GET_DetailMachine_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionMachine.aspx";
+//   获取配工司机数据
+    String HTTP_GET_DetailName_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionDriver.aspx";
+//获取配工班组班别数据
+    String HTTP_GET_DetailTeam_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionWorkTeam.aspx";
+    //获取配工班组工人姓名数据
+    String HTTP_GET_DetailTeamName_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionWorkerName.aspx";
 }

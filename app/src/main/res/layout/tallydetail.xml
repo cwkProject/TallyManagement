@@ -64,6 +64,7 @@
         android:gravity="center_vertical"
         android:minHeight="30.0dip"
         android:id="@+id/entrust1"
+        android:visibility="gone"
         android:layout_marginTop="3dp"
         android:background="@drawable/shape"
         android:layout_below="@+id/weituo"
@@ -77,6 +78,7 @@
             android:layout_marginLeft="10.0dip"
             android:layout_weight="1.0"
             android:text="销账票货"
+
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"
             android:id="@+id/shipment"/>
@@ -110,7 +112,7 @@
         android:layout_marginTop="3dp"
         android:background="@drawable/shape"
         android:id="@+id/entrust2"
-
+        android:visibility="gone"
         android:layout_below="@+id/entrust1"
         android:orientation="horizontal"
 
@@ -125,6 +127,7 @@
             android:text="商务销账"
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"
+
             android:id="@+id/business"/>
 
 
@@ -132,11 +135,13 @@
         <Spinner
             android:id="@+id/entrust2_spinner"
             android:layout_width="0dip"
+            style="@style/spinner_style"
 
-            android:layout_height="40.0dip"
-            android:layout_marginRight="4.0dip"
-            android:gravity="center"
+            android:layout_marginRight="6.0dip"
+            android:layout_marginLeft="12.0dip"
             android:layout_weight="4.0"
+            android:layout_height="40.0dip"
+            android:gravity="center"
             android:textColor="@color/black"
 
             />
@@ -406,6 +411,7 @@
             android:background="@drawable/shape"
             android:gravity="center_vertical"
             android:orientation="vertical"
+            android:visibility="gone"
             android:padding="3dp"
             android:layout_marginTop="3dp"
             >
@@ -553,7 +559,7 @@
             <RadioGroup
                 android:id="@+id/radiogroup1"
                 android:layout_width="0dip"
-                android:layout_weight="2.0"
+                android:layout_weight="3.0"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
 
@@ -576,9 +582,9 @@
                     android:id="@+id/radiobutton3"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    android:text="重"
-                    />
+                    android:layout_weight="1.3"
+                    android:text="数量"
+                    android:checked="false"/>
 
             </RadioGroup>
         </LinearLayout>
@@ -678,7 +684,7 @@
                             android:layout_height="wrap_content"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:text="数量"
+                            android:text=" "
                             android:textSize="16sp"
                             />
                     </LinearLayout>
@@ -754,7 +760,7 @@
 
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:text="数量"
+                            android:text=" "
                             android:textSize="16sp"
                             />
                     </LinearLayout>

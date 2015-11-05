@@ -26,6 +26,7 @@ public class EndWorkTeamAutoAdapter extends BaseAdapter implements Filterable {
 
     public EndWorkTeamAutoAdapter(List<Map<String, Object>> mList, Context context) {
         this.mList = mList;
+        Log.i("筛选的mList值","筛选的mList值"+ this.mList);
         this.context = context;
     }
 
@@ -112,17 +113,14 @@ public class EndWorkTeamAutoAdapter extends BaseAdapter implements Filterable {
                 for (int i = 0; i < count; i++) {
                     Map<String, Object> pc = unfilteredValues.get(i);
                     if (pc != null) {
-
-                        if(pc.get("tv3")!=null && ((CharSequence)pc.get("tv3")).toString().startsWith(prefixString)){
+                        if(pc.get("tv3")!=null && ((CharSequence)pc.get("tv3")).toString().toLowerCase().startsWith(prefixString)){
                             Log.i("tv3的值",pc.toString());
                             newValues.add(pc);
-                        }else if(pc.get("tv2")!=null && ((CharSequence)pc.get("tv2")).toString().startsWith(prefixString)){
-
+                        }else if(pc.get("tv2")!=null && ((CharSequence)pc.get("tv2")).toString().toLowerCase().startsWith(prefixString)){
                             newValues.add(pc);
                         }
                     }
                 }
-
                 results.values = newValues;
                 results.count = newValues.size();
             }

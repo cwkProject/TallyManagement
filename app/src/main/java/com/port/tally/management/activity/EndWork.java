@@ -268,9 +268,6 @@ public class EndWork extends Activity {
     private void showDate(int year, int month, int day, int hour, int minute) {
         tv_entime.setText(+year + "年" + (month + 1) + "月" + day + "日" + hour + "时" + minute + "分");
     }
-
-
-
     //给个控件赋值
     private void loadValue( String company) {
 
@@ -284,7 +281,7 @@ public class EndWork extends Activity {
 
                 if (b) {
                     dataList.addAll(data);
-                    Log.i("dataList1的值", dataList.toString());
+                    Log.i(" EndWorkAutoTeamWork dataList1的值", dataList.toString());
                     Log.i("data的值", data.toString());
                     endWorkTeamAutoAdapter = new EndWorkTeamAutoAdapter(dataList, EndWork.this.getApplicationContext());
                     teamAuto.setAdapter(endWorkTeamAutoAdapter);
@@ -292,9 +289,12 @@ public class EndWork extends Activity {
                     teamAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Map<String, Object> pc = dataList.get(position);
-                            teamAuto.setText(" " + pc.get("tv2"));
+
+                            Map<String, Object> pc = (Map<String, Object>) parent.getItemAtPosition(position);;
+                            teamAuto.setText(pc.get("tv2").toString());
                             team = pc.get("tv1").toString();
+                            Log.i("EndWorkAutoTeamWorkshowData", "" + pc.get("tv2").toString());
+                            Log.i("EndWorkAutoTeamWorkshowDataPosition", "" +  position);
                         }
                     });
 

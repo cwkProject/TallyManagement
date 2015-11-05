@@ -14,7 +14,9 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -23,6 +25,11 @@ import android.widget.Toast;
 import com.port.tally.management.R;
 import com.port.tally.management.activity.TallyActivity;
 import com.port.tally.management.activity.TallyDetail;
+import com.port.tally.management.work.TallyDetailMachineNameWork;
+import com.port.tally.management.work.TallyDetailMachineWork;
+import com.port.tally.management.work.TallyDetail_teamWork;
+
+import org.mobile.library.model.work.WorkBack;
 
 import java.util.Calendar;
 import java.util.List;
@@ -36,6 +43,8 @@ public class TallyMachine1Adapter extends BaseAdapter{
     private List<Map<String, Object>> data;
     private Context context;
     private LayoutInflater inflater;
+    private String [] machineitem;//机械列表数据
+    private String [] machineNameitem;//司机列表数据
 //    修改后的值
     private List<Map<String, Object>> updata;
     private Map<String,String> upmap;
@@ -67,9 +76,9 @@ public class TallyMachine1Adapter extends BaseAdapter{
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
-        Map<String, Object> item = getItem(position);
+        final Map<String, Object> item = getItem(position);
 
-        Log.i("item的值", "" + item);
+//        Log.i("item的值", "" + item);
         final Hand hand;
         if (convertView == null) {
             hand = new Hand();
@@ -78,23 +87,24 @@ public class TallyMachine1Adapter extends BaseAdapter{
             hand.tv_mac = (TextView) convertView.findViewById(R.id.tv_mac);
             hand.tv_start = (TextView) convertView.findViewById(R.id.tv_start);
             hand.tv_end = (TextView) convertView.findViewById(R.id.tv_end);
-            hand.tv_count = (TextView) convertView.findViewById(R.id.tv_count);
+            hand.tv_count = (EditText) convertView.findViewById(R.id.tv_count);
             hand.tv_macpeo = (TextView) convertView.findViewById(R.id.tv_macpeo);
 
         } else {
             hand = (Hand) convertView.getTag();
         }
-        final CharSequence[] itemsname = {"杨洋", "陈小春", "山鸡"};
+
         hand.tv_macpeo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("请选择司机").setSingleChoiceItems(itemsname, 0, new DialogInterface.OnClickListener() {
+                builder.setTitle("请选择司机").setSingleChoiceItems(machineNameitem, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 //                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
-                        hand.tv_macpeo.setText(itemsname[which]);
+                        hand.tv_macpeo.setText(machineNameitem[which]);
+                        item.put("name", machineNameitem[which]);
                     }
                 }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -108,17 +118,19 @@ public class TallyMachine1Adapter extends BaseAdapter{
 
             }
         });
-        final CharSequence[] itemsmachine = {"机械1", "机械二", "机械三"};
+
+
         hand.tv_mac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("请选择司机").setSingleChoiceItems(itemsmachine, 0, new DialogInterface.OnClickListener() {
+                builder.setTitle("请选择机械").setSingleChoiceItems(machineitem, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 //                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
-                        hand.tv_mac.setText(itemsmachine[which]);
+                        hand.tv_mac.setText(machineitem[which]);
+                        item.put("machine",machineitem[which]);
                     }
                 }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -132,7 +144,16 @@ public class TallyMachine1Adapter extends BaseAdapter{
 
             }
         });
-
+        hand.tv_count.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.tv_count.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                builder.setTitle("请输入件数").setIcon( android.R.drawable.ic_dialog_info).setView()
+                if (!hand.tv_count.getText().toString().equals(""))
+                    item.put("amount", hand.tv_count.getText().toString());
+            }
+        });
         hand.tv_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,6 +176,7 @@ public class TallyMachine1Adapter extends BaseAdapter{
                         sb.append(timePicker.getCurrentHour())
                                 .append(":").append(timePicker.getCurrentMinute());
                         hand.tv_start.setText(sb);
+                        item.put("amount", sb);
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -214,31 +236,71 @@ public class TallyMachine1Adapter extends BaseAdapter{
             hand.ck_mac.setChecked(false);}
         if(!item.get("machine").equals("")){
             hand.tv_mac.setText((CharSequence) item.get("machine"));
-        } if(!item.get("name").equals("")){
-            hand.tv_macpeo.setText((CharSequence) item.get("name"));
         }
         if(!item.get("amount").equals("")){
             hand.tv_count.setText((CharSequence) item.get("amount"));
         }
+        if(!item.get("name").equals("")){
+            hand.tv_macpeo.setText((CharSequence) item.get("name"));
+        }
+        if(!"".equals(item.get("pmno"))){
+            initMachine(item.get("pmno").toString());
+            initMachineName(item.get("pmno").toString());
+        }
+
+//        if(!item.get("amount").equals("")){
+//            hand.tv_count.setText((CharSequence) item.get("amount"));
+//        }
         convertView.setTag(hand);
         return convertView;
     }
     private class Hand {
        CheckBox ck_mac;
-        TextView tv_mac,tv_start,tv_end,tv_count,tv_macpeo;
+        TextView tv_mac,tv_start,tv_end,tv_macpeo;
+        EditText tv_count;
     }
+    private void initMachine(String str){
+        TallyDetailMachineWork tallyDetailMachineWork = new TallyDetailMachineWork();
+        tallyDetailMachineWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+            @Override
+            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
+                if (b) {
+                    String [][] machinearry = new String[2][maps.size()];
+                     machineitem =new String[maps.size()];
+                    for(int i =0; i<maps.size();i++){
+                        machinearry[0][i]=(String)maps.get(i).get("code_machine");
+                        machinearry[1][i]=(String)maps.get(i).get("machine");
+                        machineitem[i]=(String)maps.get(i).get("machine");
+                    }
+                    Log.i("machineitem[i]","machineitem[i]的值"+machineitem.toString());
+                    Log.i("maps", "" + maps.toString());
 
-    private void showDialog(String str){
-        Dialog dialog = new AlertDialog.Builder(this.context)
-                .setTitle("提示")
-                .setMessage(str)
-                .setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.cancel();
-                            }
-                        }).create();//创建按钮
 
-        dialog.show();
+
+
+                }
+            }
+        });
+        tallyDetailMachineWork.beginExecute(str);
+    }
+    private void initMachineName(String str){
+        TallyDetailMachineNameWork tallyDetailMachineNameWork = new TallyDetailMachineNameWork();
+        tallyDetailMachineNameWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+            @Override
+            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
+                if (b) {
+                    String [][] machineNamearry = new String[2][maps.size()];
+                    machineNameitem =new String[maps.size()];
+                    for(int i =0; i<maps.size();i++){
+                        machineNamearry[0][i]=(String)maps.get(i).get("workno");
+                        machineNamearry[1][i]=(String)maps.get(i).get("name");
+                        machineNameitem[i]=(String)maps.get(i).get("name");
+                    }
+                    Log.i("machinenameitem[i]","machinenameitem[i]的值"+machineNameitem.toString());
+                    Log.i("maps", "" + maps.toString());
+                }
+            }
+        });
+        tallyDetailMachineNameWork.beginExecute(str);
     }
 }

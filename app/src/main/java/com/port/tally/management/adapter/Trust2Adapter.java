@@ -14,16 +14,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/21.
+ * Created by song on 2015/11/3.
  */
-public class Trust1Adapter extends BaseAdapter {
+public class Trust2Adapter extends BaseAdapter {
 
     private List<Map<String, Object>> data;
     private Context context;
     private LayoutInflater inflater;
 
 
-    public Trust1Adapter(List<Map<String,Object>> data, Context context) {
+    public Trust2Adapter(List<Map<String, Object>> data, Context context) {
         this.data = data;
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -38,7 +38,7 @@ public class Trust1Adapter extends BaseAdapter {
     }
 
     @Override
-    public Map<String,Object> getItem(int position) {
+    public Map<String, Object> getItem(int position) {
         if (data != null && data.size() != 0) {
             return data.get(position);
         }
@@ -54,20 +54,19 @@ public class Trust1Adapter extends BaseAdapter {
         View view;
         ViewHolder holder;
         Map<String, Object> item = getItem(position);
-        Log.i("Trust1Adapter的item值是","Trust1Adapter的item值是"+item);
+        Log.i("Trust2Adapter的item值是","Trust2Adapter的item值是"+item);
         if(convertView==null){
             view = View.inflate(context, R.layout.tallydetailtrust_item, null);
-
             holder = new ViewHolder();
             holder.tv_3 = (TextView) view.findViewById(R.id.tv_3);
-
             view.setTag(holder);
         }else{
             view = convertView;
             holder = (ViewHolder) view.getTag();
         }
-        if(!item.get("tv3").equals("")){
-            holder.tv_3.setText(item.get("tv3").toString());}
+        if(!item.get("tv5").equals("")){
+            holder.tv_3.setText(item.get("tv5").toString());}
+
         return view;
     }
     static class ViewHolder{

@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/24.
+ * Created by song on 2015/10/29.
  */
-public class TallyDetail_TeamData extends JsonDataModel {
+public class TallyDetailTeamNameData extends JsonDataModel {
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "TallyDetail_TeamData.";
+    private static final String LOG_TAG = "TallyDetailTeamNameData.";
 
     /**
      * 服务请求传入参数
@@ -29,17 +29,6 @@ public class TallyDetail_TeamData extends JsonDataModel {
     public List<Map<String, Object>> getAll() {
         return all;
     }
-    public void setSearchContent1(String searchContent1) {
-        this.searchContent1 = searchContent1;
-    }
-
-    private String searchContent1 = null;
-
-    public void setSearchContent2(String searchContent2) {
-        this.searchContent2 = searchContent2;
-    }
-
-    private String searchContent2 = null;
 
     public void setSearchContent(String searchContent) {
         this.searchContent = searchContent;
@@ -57,9 +46,8 @@ public class TallyDetail_TeamData extends JsonDataModel {
     protected void onFillRequestParameters(Map<String, String> dataMap) {
         // 传入请求参数
         dataMap.put("Pmno", searchContent);
-        dataMap.put("Cgno", searchContent1);
-        dataMap.put("Gbno", searchContent2);
-        Log.i(LOG_TAG + "onFillRequestParameters", "Cgno is " + searchContent);
+
+        Log.i(LOG_TAG + "onFillRequestParameters", "Pmno is " + searchContent);
     }
 
     /**
@@ -112,34 +100,27 @@ public class TallyDetail_TeamData extends JsonDataModel {
 
         if (jsonArray != null) {
 
-            Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetail_MachineData count is " + jsonArray.length());
+            Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetailTeamNameData count is " + jsonArray.length());
 
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONArray jsonMachine = jsonArray.getJSONArray(i);
-                Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetail_MachineData count is " + jsonMachine.length());
-                if (jsonMachine.length() > 8) {
+                Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetailTeamNameData count is " + jsonMachine.length());
+                if (jsonMachine.length() > 1) {
 //         复选框标志（0未选中1选中）+机械编号+司机编号+机械+司机+起始时间+终止时间+数量
                     Map<String,Object> map = new HashMap<String,Object>() ;
-                    map.put("select", jsonMachine.getString(0));
-                    map.put("code_machine", jsonMachine.getString(1));
-                    map.put("workno", jsonMachine.getString(7));
-                    map.put("machine", jsonMachine.getString(3));
-                    map.put("name", jsonMachine.getString(4));
-                    map.put("begintime",jsonMachine.getString(5));
-                    map.put("endtime",jsonMachine.getString(6));
-                    map.put("amount",jsonMachine.getString(2));
-                    map.put("pmno",jsonMachine.getString(8));
+                    map.put("workno", jsonMachine.getString(0));
+                    map.put("name", jsonMachine.getString(1));
 //
                     // 添加到列表
-                    Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_TeamData  map list count is " + map.toString());
+                    Log.i(LOG_TAG + "onRequestSuccess", "TallyDetailTeamNameData map list count is " + map.toString());
                     all.add(map);
-                    Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_TeamData  all list count is " + all.toString());
+                    Log.i(LOG_TAG + "onRequestSuccess", "TallyDetailTeamNameData  all list count is " + all.toString());
                 }
             }
 
-            Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_TeamData count list count is " + all.size());
+            Log.i(LOG_TAG + "onRequestSuccess", "TallyDetailTeamNameData count list count is " + all.size());
         }
     }
 

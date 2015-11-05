@@ -71,6 +71,7 @@ public class TallyActivity extends Activity {
         listView.setPullRefreshEnable(false);
         listView.setPullLoadEnable(true);
         listView.setItemsCanFocus(true);
+        listView.setLongClickable(true);
         tallyManageAdapter = new TallyManageAdapter(TallyActivity.this, dataList);
         tallyManageAdapter.notifyDataSetChanged();
         listView.setAdapter(tallyManageAdapter);
@@ -85,9 +86,9 @@ public class TallyActivity extends Activity {
                 String count = "5";
                 String stratcount = String.valueOf(flag);
                 String company = "14";
-                String cargo=null;
-                String trustno =null;
-                loadValue(count, stratcount, company,cargo,trustno);
+                String cargo = null;
+                String trustno = null;
+                loadValue(count, stratcount, company, cargo, trustno);
             }
         });
 
@@ -118,6 +119,19 @@ public class TallyActivity extends Activity {
 
             }
 
+
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            public boolean onItemLongClick(AdapterView<?> arg0, View v,
+                                           int index, long arg3) {
+                // TODO Auto-generated method stub
+
+                String str = listView.getItemAtPosition(index).toString();
+
+                Toast.makeText(TallyActivity.this, "listview 的点击" +arg0.getItemAtPosition(index), Toast.LENGTH_SHORT).show();
+                return true;
+            }
         });
     }
 
@@ -137,7 +151,7 @@ public class TallyActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-                    showData(null, null, null, cagoAuto.getText().toString(), et_trust.getText().toString());
+//                    showData(null, null, null, cagoAuto.getText().toString(), et_trust.getText().toString());
             }
         });
         imgLeft.setOnClickListener(new OnClickListener() {
@@ -162,9 +176,10 @@ public class TallyActivity extends Activity {
 
 
                 if (b) {
+                    if(!dataListCago.equals("") || dataListCago!=null)
+                    dataListCago.clear();
                     dataListCago.addAll(data);
                     Log.i("dataListCago的值", dataListCago.toString());
-
                     Log.i("data的值", data.toString());
                     tallyCagoAtoAdapter = new TallyCagoAtoAdapter(dataListCago, TallyActivity.this.getApplicationContext());
                     cagoAuto.setAdapter(tallyCagoAtoAdapter);
@@ -172,10 +187,12 @@ public class TallyActivity extends Activity {
                     cagoAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Map<String, Object> pccago = dataListCago.get(position);
-                            cagoAuto.setText("" + pccago.get("tv2"));
-                            showData(null, null, null, pccago.get("tv2").toString(), null);
+
+                            Map<String, Object> pccago = (Map<String, Object>) parent.getItemAtPosition(position);
+                            cagoAuto.setText(pccago.get("tv2").toString());
+                           showData(null, null, null, pccago.get("tv2").toString(), null);
                             Log.i("showData", "" + pccago.get("tv2").toString());
+                            Log.i("showDataPosition", "" +  position);
 
                         }
                     });
@@ -186,12 +203,12 @@ public class TallyActivity extends Activity {
                             cagoAuto.setText("");
                         }
                     });
-                    tallyCagoAtoAdapter.notifyDataSetChanged();
+
                 } else {
-                    showToast("无相关信息");
+//                    showToast("无相关信息");
 
                 }
-
+                tallyCagoAtoAdapter.notifyDataSetChanged();
             }
 
         });
@@ -224,14 +241,12 @@ public class TallyActivity extends Activity {
         toallyManageWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
-
+//        Log.i("TallyActivity的Data的值是","TallyActivity的Data的值是"+ data.size()+"/"+data);
                 if ("1".equals(type)) {
                     dataList.clear();
-
                     flag = 1;
                 }
                 if (b && data != null) {
-
                     flag += data.size();
                     listView.setPullLoadEnable(true);
                     dataList.addAll(data);
@@ -240,39 +255,29 @@ public class TallyActivity extends Activity {
 
                 } else {
                     //清空操作
-                    showToast("无相关信息");
+                    if(flag ==1){
+                        if(dataList!=null){
+                            dataList.clear();
+                            listView.setPullLoadEnable(true);
+                        }
+                    }else if(flag>1){
+                        if(dataList==null){
+                            listView.setPullLoadEnable(false);
+                            dataList.clear();
+                        }else {
+                            listView.setPullLoadEnable(true);
+                        }
 
+                    }
+
+                    showToast("无更多数据");
                 }
-
-
                 onLoad();
             }
         });
         toallyManageWork.beginExecute(key, company, type, cargo, trustno);
     }
-    //判断输入框是否为空
-    public boolean validate( String Keycontent){
 
-        if(Keycontent==null||Keycontent.equals("")){
-
-            showDialog("请输入委托号");
-            return false;
-        }
-        return true;
-    }
-    private void showDialog(String str){
-        Dialog dialog = new AlertDialog.Builder(TallyActivity.this)
-                .setTitle("提示")
-                .setMessage(str)
-                .setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.cancel();
-                            }
-                        }).create();//创建按钮
-
-        dialog.show();
-    }
     private void showToast(String msg) {
         if (mToast == null) {
             mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);

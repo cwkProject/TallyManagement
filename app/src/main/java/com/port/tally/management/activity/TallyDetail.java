@@ -35,11 +35,12 @@ import android.widget.Toast;
 
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.SubprocessesFlagWorkAdapter;
-import com.port.tally.management.adapter.TallyDetailTrustAdapter;
 import com.port.tally.management.adapter.TallyMachine1Adapter;
 
-import com.port.tally.management.adapter.TallytTeam1Adapter;
+import com.port.tally.management.adapter.TallyTeamAdapter;
+
 import com.port.tally.management.adapter.Trust1Adapter;
+import com.port.tally.management.adapter.Trust2Adapter;
 import com.port.tally.management.work.AllCarryWork;
 import com.port.tally.management.work.CodeCarryWork;
 import com.port.tally.management.work.SubprocessesFlagWork;
@@ -50,6 +51,9 @@ import com.port.tally.management.work.ToallyManageWork;
 import com.port.tally.management.work.Trust1Work;
 import com.port.tally.management.xlistview.XListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.ArrayList;
@@ -65,8 +69,7 @@ public class TallyDetail extends TabActivity {
     /**
      * @param args
      */
-    private int checkNum; // 记录选中的条目数量
-    private int flag = 1;
+    private Button btn_save,btn_upload;
     private List<Map<String, Object>> dataList = null;
     private List<Map<String, Object>> dataListMachine =null;
     private List<Map<String, Object>> dataListTeam =null;
@@ -74,11 +77,10 @@ public class TallyDetail extends TabActivity {
     private ImageView imgLeft;
     private ProgressDialog progressDialog;
     private TallyMachine1Adapter tallyMachineAdapter;
-    private TallytTeam1Adapter tallyTeamAdapter;
+    private TallyTeamAdapter tallyTeamAdapter;
     private LinearLayout shangwu_ly,xiaozhang_ly,linear_show;
     private TextView title,tv_shipment,start,end,shipment,business,tv_messgae,tv_cardstate,tv_boatname
-    ,tv_tvboatdetail,tv_changbie,tv_huowei,tv_huoweidetail,tv_dboatname
-            ,tv_dboatdetail,tv_dchangbie,tv_dhuowei,tv_dhuoweidetail;
+    ,tv_tvboatdetail,tv_changbie,tv_huowei,tv_huoweidetail,tv_dboatname,tv_dboatdetail,tv_dchangbie,tv_dhuowei,tv_dhuoweidetail;
     EditText tv_changbiedetail,tv_dchangbiedetail;
     private Spinner entrust1_spinner,entrust2_spinner,flag_spinner;
     private Toast mToast;
@@ -92,7 +94,6 @@ public class TallyDetail extends TabActivity {
     //
     TabHost mTabHost = null;
     TabWidget mTabWidget = null;
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tallydetail);
@@ -153,11 +154,55 @@ public class TallyDetail extends TabActivity {
                 public void doEndWork(boolean b, List<Map<String, Object>> maps) {
                     if (b) {
                         if (!maps.equals("")) {
-
-//绑定Adapter
+                            //绑定Adapter
                             SubprocessesFlagWorkAdapter subprocessesFlagWorkAdapter = new SubprocessesFlagWorkAdapter(maps, TallyDetail.this.getApplicationContext());
                             flag_spinner.setAdapter(subprocessesFlagWorkAdapter);
                             flag_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view,
+                                                           int position, long id) {
+                                    String str = parent.getItemAtPosition(position).toString();
+//                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
+                                }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+                                    // TODO Auto-generated method stub
+                                }
+                            });
+                        } else {
+                            showToast("数据为空");
+                        }
+                    } else {
+
+                    }
+                }
+            });
+
+            subprocessesFlagWork.beginExecute("");
+        }
+    //    加载票货数据
+    private void loadTrust1Data(){
+        Trust1Work trust1Work = new Trust1Work();
+        trust1Work.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+            @Override
+            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
+                if (b) {
+                    Log.i("loadTrust1Data加载的值是","TallyDetail的loadTrust1Data加载的值是"+b+maps);
+                    if (!maps.equals("")) {
+                            //绑定Adapter
+                        if (maps.get(0).get("amount2visible").toString().equals("1")) {
+                            linear_show.setVisibility(View.VISIBLE);
+                        } else {
+                            linear_show.setVisibility(View.GONE);
+                            tv_cardstate.setVisibility(View.GONE);
+                            tv_messgae.setVisibility(View.GONE);
+                        }
+                        Log.i("maps.get(0).get(\"tv3\").toString().length()","maps.get(0).get(\"tv3\").toString().length()"+maps.get(0).get("tv3").toString().length());
+                        if (!"".equals(maps.get(0).get("tv3").toString()) || maps.get(0).get("tv3").toString().length()!=1) {
+                            xiaozhang_ly.setVisibility(View.VISIBLE);
+                            Trust1Adapter trust1Adapter = new Trust1Adapter((List<Map<String, Object>>) maps.get(0).get("tv3"), TallyDetail.this.getApplicationContext());
+                            entrust1_spinner.setAdapter(trust1Adapter);
+                            entrust1_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view,
                                                            int position, long id) {
@@ -170,108 +215,35 @@ public class TallyDetail extends TabActivity {
                                     // TODO Auto-generated method stub
                                 }
                             });
-                        } else {
-                            showToast("数据为空");
                         }
-
-                    } else {
-
-                    }
-                }
-            });
-
-            subprocessesFlagWork.beginExecute("");
-        }
-    //    加载标志数据
-    private void loadTrust1Data(){
-        Trust1Work trust1Work = new Trust1Work();
-        trust1Work.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
-            @Override
-            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
-                if (b) {
-                    if (!maps.equals("")) {
-
-//绑定Adapter
-
-                        if (maps.get(0).get("amount2visible").toString().equals("1")) {
-
-                            linear_show.setVisibility(View.VISIBLE);
-                        } else {
-                            linear_show.setVisibility(View.GONE);
-                            tv_cardstate.setVisibility(View.GONE);
-                            tv_messgae.setVisibility(View.GONE);
-
-                        }
-                        if ("".equals(maps.get(0).get("tv3").toString()) || "null".equals((maps.get(0).get("tv3").toString()))) {
-                            xiaozhang_ly.setVisibility(View.GONE);
-
-                        }
-                        if ("".equals(maps.get(0).get("tv5").toString()) || "null".equals((maps.get(0).get("tv5").toString()))) {
-                            shangwu_ly.setVisibility(View.GONE);
-                        }
-                        Trust1Adapter trust1Adapter = new Trust1Adapter(maps, TallyDetail.this.getApplicationContext());
-                        entrust1_spinner.setAdapter(trust1Adapter);
-                        entrust1_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view,
-                                                       int position, long id) {
-                                String str = parent.getItemAtPosition(position).toString();
+                        if (!"".equals(maps.get(0).get("tv5"))) {
+                            shangwu_ly.setVisibility(View.VISIBLE);
+                            Trust2Adapter trust2Adapter = new Trust2Adapter((List<Map<String, Object>>) maps.get(0).get("tv5"), TallyDetail.this.getApplicationContext());
+                            entrust2_spinner.setAdapter(trust2Adapter);
+                            entrust2_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view,
+                                                           int position, long id) {
+                                    String str = parent.getItemAtPosition(position).toString();
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
-                            }
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-                                // TODO Auto-generated method stub
-                            }
-                        });
+                                }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+                                    // TODO Auto-generated method stub
+                                }
+                            });
+                        }
+                        Log.i("maps.get(0).get(\"tv3\")", "" +  maps.get(0).get("tv3"));
+                        Log.i("maps.get(0).get(\"tv5\")", "" + maps.get(0).get("tv5"));
                     } else {
                         showToast("数据为空");
                     }
-
                 } else {
-
                 }
             }
         });
-//        Log.i("value2的值是", value[0] + "" + value[1] + "" + value[2] + "");
         trust1Work.beginExecute(value[0],value[1]);
     }
-    //    加载标志数据
-//    private void loadTrust2Data(){
-//        Trust1Work trust1Work = new Trust1Work();
-//        trust1Work.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
-//            @Override
-//            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
-//                if (b) {
-//                    if (!maps.equals("")) {
-//
-////绑定Adapter
-//                        TallyDetailTrustAdapter tallyDetailTrustAdapter = new TallyDetailTrustAdapter(maps, TallyDetail.this.getApplicationContext());
-//                        entrust2_spinner.setAdapter(tallyDetailTrustAdapter);
-//                        entrust2_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                            @Override
-//                            public void onItemSelected(AdapterView<?> parent, View view,
-//                                                       int position, long id) {
-//                                String str = parent.getItemAtPosition(position).toString();
-////                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
-//                            }
-//
-//                            @Override
-//                            public void onNothingSelected(AdapterView<?> parent) {
-//                                // TODO Auto-generated method stub
-//                            }
-//                        });
-//                    } else {
-//                        showToast("数据为空");
-//                    }
-//
-//                } else {
-//
-//                }
-//            }
-//        });
-//
-//        trust1Work.beginExecute("");
-//    }
     private void initShipment(){
         ToallyDetailWork tallyDetailwork = new ToallyDetailWork();
         tallyDetailwork.setWorkEndListener(new WorkBack<String>() {
@@ -283,11 +255,9 @@ public class TallyDetail extends TabActivity {
                     } else {
                         showToast("数据为空");
                     }
-
                 } else {
                     showToast(s);
                 }
-
             }
 
         });
@@ -345,11 +315,9 @@ public class TallyDetail extends TabActivity {
                         tv_boatname.setVisibility(View.VISIBLE);
                         tv_tvboatdetail.setVisibility(View.VISIBLE);
                         tv_boatname.setText("车型");
-
                         tv_changbie.setVisibility(View.VISIBLE);
                         tv_changbiedetail.setVisibility(View.VISIBLE);
                         tv_changbie.setText("车号");
-
                         showToast(CodeCarriesS);
 
                     }else if(CodeCarriesS .equals("05")){
@@ -376,25 +344,21 @@ public class TallyDetail extends TabActivity {
                         showToast(CodeCarriesS);
                     }
 //                设置目的票货
-                    if(CodeCarriesS.equals("02")){
+                    if(CodeCarriesE.equals("02")){
 //                      表示  船
-                        showToast(CodeCarriesS);
+                        showToast(CodeCarriesE);
                         tv_boatname.setText("船舶航次");
                         tv_dchangbie.setText("车型");
-
-
-
-
-                    }else if(CodeCarriesS .equals("03")||CodeCarriesS .equals("04")||CodeCarriesS .equals("06")){
+                    }else if(CodeCarriesE.equals("03")||CodeCarriesE .equals("04")||CodeCarriesE .equals("06")){
 //                    03  、04、06  表示车、汽、集装箱
                         tv_dboatname.setText("车型");
                         tv_dchangbie.setText("车号");
-                        showToast(CodeCarriesS);
-                    }else if(CodeCarriesS .equals("05")){
+                        showToast(CodeCarriesE);
+                    }else if(CodeCarriesE.equals("05")){
 //                        表示  驳船
                         tv_dboatname.setText("船名");
                         tv_dchangbie.setText("描述");
-                        showToast(CodeCarriesS);
+                        showToast(CodeCarriesE);
                     }else{
 //                   表示  场地；
                         tv_dhuoweidetail.setVisibility(View.VISIBLE);
@@ -404,7 +368,7 @@ public class TallyDetail extends TabActivity {
                         tv_dchangbiedetail.setVisibility(View.VISIBLE);
                         tv_dchangbie.setText("桩角");
                         tv_dhuowei.setText("货位");
-                        showToast(CodeCarriesS);
+                        showToast(CodeCarriesE);
                     }
                     progressDialog.dismiss();
                 }else{
@@ -412,8 +376,6 @@ public class TallyDetail extends TabActivity {
                 }
             }
         });
-
-
         Log.i("value2的值是", value[0] + "" + value[1] + "" + value[2] + "");
         codeCarryWork.beginExecute(value[0]);
     }
@@ -425,11 +387,10 @@ public class TallyDetail extends TabActivity {
             public void doEndWork(boolean b, List<Map<String, Object>> maps) {
                 if (b) {
                     dataListMachine.addAll(maps);
-                    Log.i("dataListMachine", "" + dataListMachine.toString());
+                    Log.i("initMachinedata", "" + dataListMachine.toString());
                     Log.i("maps", "" + maps.toString());
                     listView1 = (ListView) findViewById(R.id.list1);
-                    Log.i("dataListMachine", "" + dataListMachine.toString());
-                    tallyMachineAdapter = new TallyMachine1Adapter(TallyDetail.this, maps);
+                    tallyMachineAdapter = new TallyMachine1Adapter(TallyDetail.this, dataListMachine);
                     listView1.setAdapter(tallyMachineAdapter);
 //                    listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //                        @Override
@@ -440,6 +401,8 @@ public class TallyDetail extends TabActivity {
 //                        }
 //                    });
                     setListViewHeightBasedOnChildren(listView1);
+                }else{
+
                 }
             }
         });
@@ -454,49 +417,27 @@ public class TallyDetail extends TabActivity {
             public void doEndWork(boolean b, List<Map<String, Object>> maps) {
                 if (b) {
                     dataListTeam.addAll(maps);
-                    Log.i("dataListMachine", "" + dataListTeam.toString());
+                    Log.i("dataListinitTeam", "" + dataListTeam.toString());
                     Log.i("maps", "" + maps.toString());
                     listView2 = (ListView) findViewById(R.id.list2);
-                    Log.i("dataListMachine", "" + dataListTeam.toString());
-                    tallyTeamAdapter = new TallytTeam1Adapter(TallyDetail.this, maps);
+                    Log.i("dataListinitTeam", "" + dataListTeam.toString());
+
+                    tallyTeamAdapter = new TallyTeamAdapter(TallyDetail.this, maps);
                     listView2.setAdapter(tallyTeamAdapter);
                     setListViewHeightBasedOnChildren(listView2);
-// 绑定listView的监听器
-                    listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                                long arg3) {
-
-                            // 取得ViewHolder对象，这样就省去了通过层层的findViewById去实例化我们需要的cb实例的步骤
-//                         RecyclerView.ViewHolder holder = (RecyclerView.ViewHolder) arg1.getTag();
-//                           // 改变CheckBox的状态
-//                           holder.cb.toggle();
-//                           // 将CheckBox的选中状况记录下来
-//                           TallyTeamAdapter.getIsSelected().put(arg2, holder.cb.isChecked());
-//                           // 调整选定条目
-//                           if (holder.cb.isChecked() == true) {
-//                               checkNum++;
-//                           } else {
-//                               checkNum--;
-//                           }
-                            // 用TextView显示
-//                           tv_show.setText("已选中" + checkNum + "项");
-
-                        }
-                    });
-
                 }
             }
         });
-
-        tallyDetail_TeamWork.beginExecute(value[0], value[1], value[2]);
+        tallyDetail_TeamWork.beginExecute("20151010000161", "d1bff20fa2d54a0b87e4385a5cb46914", "1facb087e4654ddead033fb25552e358");
+//        tallyDetail_TeamWork.beginExecute(value[0], value[1], value[2]);
     }
     private void init() {
         title = (TextView) findViewById(R.id.title);
         imgLeft = (ImageView) findViewById(R.id.left);
         start = (TextView)findViewById(R.id.start);
         end = (TextView)findViewById(R.id.end);
+        btn_save =(Button) findViewById(R.id.btn_save);
+        btn_upload = (Button)findViewById(R.id.btn_upload);
         tv_shipment =(TextView)findViewById(R.id.tv_shipment);
         radiogroup=(RadioGroup)findViewById(R.id.radiogroup1);
         radio1=(RadioButton)findViewById(R.id.radiobutton1);
@@ -592,7 +533,54 @@ public class TallyDetail extends TabActivity {
                 }).show();
             }
         });
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//               dataListMachine.clear();
+//                tallyMachineAdapter.notifyDataSetChanged();
+                Log.i("dataListMachine", "" + dataListMachine);
+//                Log.i("dataListMachine", "" + dataListMachine.get(0).get("name"));
+                Log.i("dataListMachine",""+dataListMachine.size());
+                String[] strings = new String[]{"name","machine","select"};
+                Log.i("getJsonString()",""+getJsonString(dataListMachine,strings));
+            }
+        });
+        btn_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+
+    }
+    /**
+     * List<Map<String, Object>> To JsonString
+     * @param list
+     * @return
+     */
+    private String getJsonString(List<Map<String, Object>> list, String[] keys) {
+        int len = list.size();
+        Log.i("Map<String, Object>>", ""+list);
+        JSONArray jsonArray = new JSONArray();
+
+        for (int i = 0; i < len; i++) {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                //Items in your list
+                for(int j = 0; j < keys.length; j++){
+
+                    jsonObject.put(keys[j], list.get(i).get(keys[j]));
+//                    name,zhi;
+                    jsonObject.put(keys[j], list.get(i).get(keys[j]));
+                    jsonObject.put(keys[j], list.get(i).get(keys[j]));
+                }
+                jsonArray.put(jsonObject);
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return  jsonArray.toString();
     }
 //    得到listview高度
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -614,6 +602,7 @@ public class TallyDetail extends TabActivity {
                 + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
+//    显示Toast提示框
     private void showToast(String msg) {
         if (mToast == null) {
             mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
@@ -622,7 +611,7 @@ public class TallyDetail extends TabActivity {
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
         mToast.show();    }
-
+//显示进度对话框
     private void showProgressDialog(){
         //创建ProgressDialog对象
         progressDialog = new ProgressDialog(TallyDetail.this);
@@ -634,12 +623,12 @@ public class TallyDetail extends TabActivity {
         // 让ProgressDialog显示
         progressDialog.show();
     }
+//    初始化时间控件
     private void initTime(String title){
         builder = new AlertDialog.Builder(TallyDetail.this);
         View view = View.inflate(TallyDetail.this, R.layout.time_dialog, null);
         timePicker = (android.widget.TimePicker) view.findViewById(R.id.time_picker);
         builder.setView(view);
-
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
         timePicker.setIs24HourView(true);
