@@ -11,8 +11,8 @@ import com.port.tally.management.function.ForwarderListFunction;
 import com.port.tally.management.function.StorageListFunction;
 import com.port.tally.management.util.StaticValue;
 
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.activity.BaseLoginActivity;
-import org.mobile.library.util.LoginStatus;
 
 
 /**
@@ -65,8 +65,8 @@ public class LoginActivity extends BaseLoginActivity {
      */
     private void onLoginLoadData() {
         CodeListManager.put(StaticValue.CodeListTag.FORWARDER_LIST, new ForwarderListFunction
-                (this, LoginStatus.getLoginStatus().getCodeCompany()), true);
+                (this, GlobalApplication.getGlobal().getLoginStatus().getCodeCompany()), true);
         CodeListManager.put(StaticValue.CodeListTag.STORAGE_LIST, new StorageListFunction(this,
-                LoginStatus.getLoginStatus().getCodeCompany()), true);
+                GlobalApplication.getGlobal().getLoginStatus().getCodeCompany()), true);
     }
 }

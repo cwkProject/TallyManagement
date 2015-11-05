@@ -41,8 +41,10 @@ import com.port.tally.management.bean.StartWorkBean;
 import com.port.tally.management.work.StartWorkWork;
 import com.port.tally.management.work.UpDateStartWork;
 import com.port.tally.management.work.VerifyVehicleWork;
+
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.work.WorkBack;
-import org.mobile.library.util.LoginStatus;
+
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -58,8 +60,10 @@ public class StartWork extends Activity {
     private Toast mToast;
     private LinearLayout linear_show;
     private String ID;
-    private Boolean br = false ;
-    private TextView tv_vehiclenum,tv_cardstate,tv_messgae, tv_Recordtime,et_noteperson,tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task,tv_balanceweight,tv_subtime;
+    private Boolean br = false;
+    private TextView tv_vehiclenum, tv_cardstate, tv_messgae, tv_Recordtime, et_noteperson,
+            tv_boatname, tv_huodai, tv_huowu, tv_place, tv_huowei, tv_port, tv_loader, tv_task,
+            tv_balanceweight, tv_subtime;
     private EditText tongxin_edt;
     private Button tongxing_search_btn, startWork_btn;
     private TextView tv_startTime;
@@ -96,8 +100,8 @@ public class StartWork extends Activity {
         tv_startTime = (TextView) findViewById(R.id.tv_starttime);
         tongxing_search_btn = (Button) findViewById(R.id.search_btn);
         tongxin_edt = (EditText) findViewById(R.id.tongxin_edt);
-        tv_cardstate =(TextView)findViewById(R.id.tv_cardstate);
-        tv_messgae =(TextView)findViewById(R.id.tv_messgae);
+        tv_cardstate = (TextView) findViewById(R.id.tv_cardstate);
+        tv_messgae = (TextView) findViewById(R.id.tv_messgae);
         tongxin_edt.setInputType(InputType.TYPE_CLASS_NUMBER);
         card_btn = (Button) findViewById(R.id.card_btn);
         tv_cardnum = (TextView) findViewById(R.id.tv_cardnum);
@@ -105,20 +109,20 @@ public class StartWork extends Activity {
         tv_boatname = (TextView) findViewById(R.id.tv_boatname);
         tv_huodai = (TextView) findViewById(R.id.tv_huodai);
         tv_huowu = (TextView) findViewById(R.id.tv_huowu);
-        tv_place =(TextView) findViewById(R.id.tv_place);
-        tv_huowei=(TextView) findViewById(R.id.tv_huowei);
-         linear_show =(LinearLayout)findViewById(R.id.linear_show);
-        tv_port=(TextView) findViewById(R.id.tv_port);
-        tv_loader=(TextView)findViewById(R.id.tv_loader);
-        tv_Recordtime =(TextView)findViewById(R.id.tv_Recordtime);
-        tv_task =(TextView)findViewById(R.id.tv_task);
-        tv_balanceweight=(TextView)findViewById(R.id.tv_balanceweight);
-        tv_subtime=(TextView)findViewById(R.id.tv_subtime);
+        tv_place = (TextView) findViewById(R.id.tv_place);
+        tv_huowei = (TextView) findViewById(R.id.tv_huowei);
+        linear_show = (LinearLayout) findViewById(R.id.linear_show);
+        tv_port = (TextView) findViewById(R.id.tv_port);
+        tv_loader = (TextView) findViewById(R.id.tv_loader);
+        tv_Recordtime = (TextView) findViewById(R.id.tv_Recordtime);
+        tv_task = (TextView) findViewById(R.id.tv_task);
+        tv_balanceweight = (TextView) findViewById(R.id.tv_balanceweight);
+        tv_subtime = (TextView) findViewById(R.id.tv_subtime);
         et_noteperson = (TextView) findViewById(R.id.et_noteperson);
         startWork_btn = (Button) findViewById(R.id.startWork_btn);
         title.setText("开工");
-            company =LoginStatus.getLoginStatus().getCodeCompany();
-        et_noteperson.setText(LoginStatus.getLoginStatus().getNickname());
+        company = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();
+        et_noteperson.setText(GlobalApplication.getGlobal().getLoginStatus().getNickname());
         tv_startTime.setText("选择时间");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
@@ -132,12 +136,12 @@ public class StartWork extends Activity {
         day = c.get(Calendar.DAY_OF_MONTH);
         hour = c.get(Calendar.HOUR);
         minute = c.get(Calendar.MINUTE);
-        startPopupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams
-                .WRAP_CONTENT, true);
+        startPopupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.WRAP_CONTENT, true);
         startPopupWindow.setTouchable(true);
         startPopupWindow.setOutsideTouchable(true);
         startPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-//        返回事件
+        //        返回事件
         imgLeft.setOnClickListener(new View.OnClickListener() {
 
             //				@Override
@@ -159,29 +163,31 @@ public class StartWork extends Activity {
             public void onClick(View v) {
                 String tongxingKey = tongxin_edt.getText().toString();
 
-                if (validate(tongxingKey,v)) {
-                    String type ="CARD";
-                    Log.i("initValue(tongxingKey,type,company)",""+tongxingKey+type+company);
+                if (validate(tongxingKey, v)) {
+                    String type = "CARD";
+                    Log.i("initValue(tongxingKey,type,company)", "" + tongxingKey + type + company);
                     verifyvehicle(tongxingKey, type, company);
 
-                };
+                }
+                ;
 
             }
         });
         startWork_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("br",""+br);
-                    if (br){
-                        startWork_btn.setClickable(false);
-                        startWork_btn.setBackgroundColor(Color.parseColor("#DCDCDC"));
-                    SimpleDateFormat formatter    =  new SimpleDateFormat("HH:mm:ss");
+                Log.i("br", "" + br);
+                if (br) {
+                    startWork_btn.setClickable(false);
+                    startWork_btn.setBackgroundColor(Color.parseColor("#DCDCDC"));
+                    SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
                     Date curDate = new Date(System.currentTimeMillis());//获取当前时间
                     String str = formatter.format(curDate);
-                    uploadValue(ID, LoginStatus.getLoginStatus().getNickname(), str);}
-                    else{
-                        showDialog("提交失败！");
-                    }
+                    uploadValue(ID, GlobalApplication.getGlobal().getLoginStatus().getNickname(),
+                            str);
+                } else {
+                    showDialog("提交失败！");
+                }
 
 
             }
@@ -190,8 +196,7 @@ public class StartWork extends Activity {
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
             @Override
-            public void onTimeChanged(TimePicker view
-                    , int hourOfDay, int minute) {
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 StartWork.this.hour = hourOfDay;
                 StartWork.this.minute = minute;
                 showDate(year, month, day, hour, minute);
@@ -201,8 +206,7 @@ public class StartWork extends Activity {
 
         // 初始化DatePicker组件，初始化时指定监听器
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
-            public void onDateChanged(DatePicker arg0, int year
-                    , int month, int day) {
+            public void onDateChanged(DatePicker arg0, int year, int month, int day) {
                 StartWork.this.year = year;
                 StartWork.this.month = month;
                 StartWork.this.day = day;
@@ -221,10 +225,10 @@ public class StartWork extends Activity {
             return;
         }
         ;
-        mPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        mNdefPushMessage = new NdefMessage(new NdefRecord[]{newTextRecord(
-                "Message from NFC Reader :-)", Locale.ENGLISH, true)});
+        mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags
+                (Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        mNdefPushMessage = new NdefMessage(new NdefRecord[]{newTextRecord("Message from NFC " +
+                "Reader :-)", Locale.ENGLISH, true)});
         card_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -232,20 +236,24 @@ public class StartWork extends Activity {
                     if (!mAdapter.isEnabled())
                         showWirelessSettingsDialog();
 
-                };
+                }
+                ;
                 String tongxingKey = tv_cardnum.getText().toString();
 
-                if (validate(tongxingKey,v)) {
-                    String type ="NFC";
+                if (validate(tongxingKey, v)) {
+                    String type = "NFC";
                     verifyvehicle(tongxingKey, type, company);
-                };
+                }
+                ;
             }
         });
         //NFC
     }
+
     // 定义在EditText中显示当前日期、时间的方法
     private void showDate(int year, int month, int day, int hour, int minute) {
-        tv_startTime.setText(+year + "年" + (month + 1) + "月" + day + "日" + hour + "时" + minute + "分");
+        tv_startTime.setText(+year + "年" + (month + 1) + "月" + day + "日" + hour + "时" + minute +
+                "分");
     }
 
     //NFC部分
@@ -254,6 +262,7 @@ public class StartWork extends Activity {
         mDialog.setMessage(getText(message));
         mDialog.show();
     }
+
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private NdefRecord newTextRecord(String text, Locale locale, boolean encodeInUtf8) {
         byte[] langBytes = locale.getLanguage().getBytes(Charset.forName("US-ASCII"));
@@ -317,9 +326,8 @@ public class StartWork extends Activity {
     @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     private void resolveIntent(Intent intent) {
         String action = intent.getAction();
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
-                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
-                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action) || NfcAdapter.ACTION_TECH_DISCOVERED
+                .equals(action) || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
             Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             NdefMessage[] msgs;
             if (rawMsgs != null) {
@@ -332,7 +340,7 @@ public class StartWork extends Activity {
                 Tag tag1 = (Tag) tag;
                 byte[] id1 = tag1.getId();
                 tv_cardnum.setText(getHex(id1).toUpperCase());
-                String type ="NFC";
+                String type = "NFC";
 
 
                 verifyvehicle(getHex(id1).toUpperCase(), type, company);
@@ -361,9 +369,10 @@ public class StartWork extends Activity {
         setIntent(intent);
         resolveIntent(intent);
     }
+
     //校验车辆是否黑名单
-//给个控件赋值
-    private void verifyvehicle( final String key, final String type, final String company) {
+    //给个控件赋值
+    private void verifyvehicle(final String key, final String type, final String company) {
 
         //实例化，传入参数
         VerifyVehicleWork verifyVehicleWork = new VerifyVehicleWork();
@@ -406,10 +415,10 @@ public class StartWork extends Activity {
     }
 
     //给个控件赋值
-    private void initValue(String key, final String type,String company) {
+    private void initValue(String key, final String type, String company) {
 
         //实例化，传入参数
-       StartWorkWork startWorkWork = new StartWorkWork();
+        StartWorkWork startWorkWork = new StartWorkWork();
 
         startWorkWork.setWorkEndListener(new WorkBack<StartWorkBean>() {
 
@@ -419,27 +428,39 @@ public class StartWork extends Activity {
                     clearStart();
                     startWork_btn.setClickable(true);
                     startWork_btn.setBackgroundColor(Color.parseColor("#1fb5e8"));
-                    if(!"null".equals(startWorkBean.getMessage())){
+                    if (!"null".equals(startWorkBean.getMessage())) {
                         linear_show.setVisibility(View.VISIBLE);
-                        tv_cardstate.setText(startWorkBean.getMessage());}
-                        Log.i("tongxin_edt", "" + startWorkBean.getCardNo());
+                        tv_cardstate.setText(startWorkBean.getMessage());
+                    }
+                    Log.i("tongxin_edt", "" + startWorkBean.getCardNo());
 
-                    if(!startWorkBean.getVehicleNum().equals("")) tv_vehiclenum.setText(startWorkBean.getVehicleNum());
-                    if(!startWorkBean.getBoatName().equals(""))tv_boatname.setText(startWorkBean.getBoatName());
-                    if(!startWorkBean.getForwarder().equals(""))tv_huodai.setText(startWorkBean.getForwarder());
-                    if(!startWorkBean.getCargo().equals(""))tv_huowu.setText(startWorkBean.getCargo());
-                    if(!startWorkBean.getPlace().equals(""))tv_place.setText(startWorkBean.getPlace());
-                    if(!startWorkBean.getAllocation().equals(""))tv_huowei.setText(startWorkBean.getAllocation());
-                    if(!startWorkBean.getSetport().equals(""))tv_port.setText(startWorkBean.getSetport());
-                    if(!startWorkBean.getLoader().equals(""))tv_loader.setText(startWorkBean.getLoader());
-                    if(!startWorkBean.getTask().equals(""))tv_task.setText(startWorkBean.getTask());
-                    if(!startWorkBean.getStrWeight().equals(""))tv_balanceweight.setText(startWorkBean.getStrWeight());
+                    if (!startWorkBean.getVehicleNum().equals(""))
+                        tv_vehiclenum.setText(startWorkBean.getVehicleNum());
+                    if (!startWorkBean.getBoatName().equals(""))
+                        tv_boatname.setText(startWorkBean.getBoatName());
+                    if (!startWorkBean.getForwarder().equals(""))
+                        tv_huodai.setText(startWorkBean.getForwarder());
+                    if (!startWorkBean.getCargo().equals(""))
+                        tv_huowu.setText(startWorkBean.getCargo());
+                    if (!startWorkBean.getPlace().equals(""))
+                        tv_place.setText(startWorkBean.getPlace());
+                    if (!startWorkBean.getAllocation().equals(""))
+                        tv_huowei.setText(startWorkBean.getAllocation());
+                    if (!startWorkBean.getSetport().equals(""))
+                        tv_port.setText(startWorkBean.getSetport());
+                    if (!startWorkBean.getLoader().equals(""))
+                        tv_loader.setText(startWorkBean.getLoader());
+                    if (!startWorkBean.getTask().equals(""))
+                        tv_task.setText(startWorkBean.getTask());
+                    if (!startWorkBean.getStrWeight().equals(""))
+                        tv_balanceweight.setText(startWorkBean.getStrWeight());
                     tv_subtime.setText(startWorkBean.getStrSubmittime());
-                   tv_Recordtime.setText(startWorkBean.getStrRecordtime());
+                    tv_Recordtime.setText(startWorkBean.getStrRecordtime());
                     tongxin_edt.setText(startWorkBean.getCardNo());
 
-                    if(!startWorkBean.getId().equals("")) ID =startWorkBean.getId().toString();
-                    Log.i("idzhi",""+startWorkBean.getId());
+                    if (!startWorkBean.getId().equals(""))
+                        ID = startWorkBean.getId().toString();
+                    Log.i("idzhi", "" + startWorkBean.getId());
 
                 } else {
                     br = false;
@@ -448,7 +469,7 @@ public class StartWork extends Activity {
                     startWork_btn.setBackgroundColor(Color.parseColor("#DCDCDC"));
                     linear_show.setVisibility(View.GONE);
                     tv_cardstate.setText(startWorkBean.getMessage());
-                    if(startWorkBean!=null) {
+                    if (startWorkBean != null) {
                         Log.i("tongxin_edt", "" + startWorkBean.getCardNo());
                         if (!"".equals(startWorkBean.getVehicleNum()))
                             Log.i("tv_vehiclenum", "" + startWorkBean.getVehicleNum());
@@ -473,14 +494,14 @@ public class StartWork extends Activity {
                             tv_balanceweight.setText(startWorkBean.getStrWeight());
                         if (!"".equals(startWorkBean.getStrSubmittime()))
                             tv_subtime.setText(startWorkBean.getStrSubmittime());
-                        if (!"".equals(startWorkBean.getMessage())){
+                        if (!"".equals(startWorkBean.getMessage())) {
                             linear_show.setVisibility(View.VISIBLE);
-                            tv_cardstate.setText(startWorkBean.getMessage());}
+                            tv_cardstate.setText(startWorkBean.getMessage());
+                        }
                         tv_Recordtime.setText(startWorkBean.getStrRecordtime());
                         tongxin_edt.setText(startWorkBean.getCardNo());
                         Log.i("initValuegetMessage", "" + startWorkBean.getMessage());
                     }
-
 
 
                 }
@@ -490,8 +511,9 @@ public class StartWork extends Activity {
 
 
     }
+
     //给个控件赋值
-    private void uploadValue(String key,String company,String count) {
+    private void uploadValue(String key, String company, String count) {
 
         //实例化，传入参数
         UpDateStartWork updataStartWork = new UpDateStartWork();
@@ -509,14 +531,15 @@ public class StartWork extends Activity {
                 }
             }
         });
-        updataStartWork .beginExecute(key, company, count);
+        updataStartWork.beginExecute(key, company, count);
     }
+
     private void clearStart() {
         tv_startTime.setText("请选择时间");
         tv_vehiclenum.setText("");
-       tv_boatname.setText("");
-       tv_huodai.setText("");
-       tv_huowu.setText("");
+        tv_boatname.setText("");
+        tv_huodai.setText("");
+        tv_huowu.setText("");
         tv_place.setText("");
         tv_huowei.setText("");
         tv_port.setText("");
@@ -530,7 +553,6 @@ public class StartWork extends Activity {
         tongxin_edt.setText("");
 
     }
-
 
 
     //判断输入框是否为空
@@ -576,19 +598,18 @@ public class StartWork extends Activity {
             } while (true);
         }
     }
-    private void showDialog(String str){
-        Dialog dialog = new AlertDialog.Builder(StartWork.this)
-                .setTitle("提示")
-                .setMessage(str)
-                .setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.cancel();
-                            }
-                        }).create();//创建按钮
+
+    private void showDialog(String str) {
+        Dialog dialog = new AlertDialog.Builder(StartWork.this).setTitle("提示").setMessage(str)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.cancel();
+                    }
+                }).create();//创建按钮
 
         dialog.show();
     }
+
     private void showToast(String msg) {
         if (mToast == null) {
             mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);

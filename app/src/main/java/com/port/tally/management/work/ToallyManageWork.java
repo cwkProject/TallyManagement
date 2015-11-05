@@ -1,6 +1,5 @@
 package com.port.tally.management.work;
 
-import com.port.tally.management.data.SampleData;
 import com.port.tally.management.data.TallyManageData;
 import com.port.tally.management.util.StaticValue;
 

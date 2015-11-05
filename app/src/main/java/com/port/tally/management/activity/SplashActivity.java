@@ -24,8 +24,8 @@ import com.port.tally.management.function.VoyageListFunction;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.common.function.AutoLogin;
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.util.BroadcastUtil;
-import org.mobile.library.util.LoginStatus;
 
 /**
  * 启动页
@@ -98,9 +98,9 @@ public class SplashActivity extends Activity {
      */
     private void onLoginLoadData() {
         CodeListManager.put(StaticValue.CodeListTag.FORWARDER_LIST, new ForwarderListFunction
-                (this, LoginStatus.getLoginStatus().getCodeCompany()), true);
+                (this, GlobalApplication.getGlobal().getLoginStatus().getCodeCompany()), true);
         CodeListManager.put(StaticValue.CodeListTag.STORAGE_LIST, new StorageListFunction(this,
-                LoginStatus.getLoginStatus().getCodeCompany()), true);
+                GlobalApplication.getGlobal().getLoginStatus().getCodeCompany()), true);
     }
 
     /**
@@ -209,7 +209,7 @@ public class SplashActivity extends Activity {
             switch (actionString) {
                 case BroadcastUtil.MEMORY_STATE_LOGIN:
                     // 登录执行完毕
-                    if (LoginStatus.getLoginStatus().isLogin()) {
+                    if (GlobalApplication.getGlobal().getLoginStatus().isLogin()) {
                         // 登录成功
                         // 加载数据
                         onLoginLoadData();
@@ -251,7 +251,7 @@ public class SplashActivity extends Activity {
     private void jump() {
         Log.i(LOG_TAG + "instantJump", "instantJump() is invoked");
 
-        if (LoginStatus.getLoginStatus().isLogin()) {
+        if (GlobalApplication.getGlobal().getLoginStatus().isLogin()) {
             // 已登录
             Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(mainIntent);

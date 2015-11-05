@@ -20,8 +20,8 @@ import com.port.tally.management.holder.MainFunctionItemViewHolder;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.common.function.CheckUpdate;
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
-import org.mobile.library.util.LoginStatus;
 
 import static com.port.tally.management.adapter.FunctionIndex.toFunction;
 
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 关联ActionBar
         setSupportActionBar(toolbar);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+        //toolbar.setLogo(R.mipmap.ic_launcher);
 
         // 取消原actionBar标题
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void onGridItemClick(int position) {
 
-        if (!LoginStatus.getLoginStatus().isLogin()) {
+        if (!GlobalApplication.getGlobal().getLoginStatus().isLogin()) {
             // 未登录
             // 新建意图,跳转到登录页面
             Intent intent = new Intent(this, LoginActivity.class);

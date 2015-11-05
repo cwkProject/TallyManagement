@@ -35,8 +35,8 @@ import com.port.tally.management.work.PullStockList;
 import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.DataChangeObserver;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
+import org.mobile.library.model.work.DefaultWorkModel;
 import org.mobile.library.model.work.WorkBack;
-import org.mobile.library.model.work.WorkModel;
 
 import java.util.List;
 import java.util.Timer;
@@ -79,7 +79,7 @@ public class StockQueryActivity extends AppCompatActivity {
         /**
          * 上一个执行的加载任务
          */
-        public volatile WorkModel beforeLoadWork = null;
+        public volatile DefaultWorkModel beforeLoadWork = null;
 
         /**
          * 表示是否还有更多数据

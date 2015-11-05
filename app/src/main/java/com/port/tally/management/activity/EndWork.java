@@ -27,8 +27,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,18 +37,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.EndWorkTeamAutoAdapter;
 import com.port.tally.management.bean.StartWorkBean;
-import com.port.tally.management.util.FloatTextToast;
 import com.port.tally.management.util.InstantAutoComplete;
 import com.port.tally.management.work.EndWorkAutoTeamWork;
 import com.port.tally.management.work.EndWorkWork;
-import com.port.tally.management.work.StartWorkWork;
 import com.port.tally.management.work.UploadEndWork;
 import com.port.tally.management.work.VerifyVehicleWork;
+
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.work.WorkBack;
-import org.mobile.library.util.LoginStatus;
+
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,6 +59,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 //
+
 /**
  * Created by song on 2015/9/29.
  */
@@ -67,18 +67,20 @@ public class EndWork extends Activity {
     private static final int msgKey1 = 1;
     private InstantAutoComplete teamAuto;
     private EndWorkTeamAutoAdapter endWorkTeamAutoAdapter;
-    private  List<Map<String, Object>> dataList=null;
+    private List<Map<String, Object>> dataList = null;
     private String ID;
-    private Boolean br = false ;
+    private Boolean br = false;
     private LinearLayout linear_show;
     private Toast mToast;
-    private TextView tv_vehiclenum, tv_cardstate,tv_messgae,tv_Recordtime, tv_note,tv_boatname, tv_huodai, tv_huowu ,tv_place,tv_huowei,tv_port,tv_loader,tv_task,tv_balanceweight,tv_subtime;
-    private EditText tongxin_edt,et_count;
+    private TextView tv_vehiclenum, tv_cardstate, tv_messgae, tv_Recordtime, tv_note,
+            tv_boatname, tv_huodai, tv_huowu, tv_place, tv_huowei, tv_port, tv_loader, tv_task,
+            tv_balanceweight, tv_subtime;
+    private EditText tongxin_edt, et_count;
     private Button tongxing_search_btn, endWork_btn;
     private TextView tv_entime;
     private TextView title;
     private ImageView imgLeft;
-    private Spinner spinner_over ;
+    private Spinner spinner_over;
     private String spinner_overText;
     private PopupWindow startPopupWindow;
     private String company;
@@ -96,6 +98,7 @@ public class EndWork extends Activity {
     private NdefMessage mNdefPushMessage;
     private AlertDialog mDialog;
     private Button card_btn;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -107,8 +110,8 @@ public class EndWork extends Activity {
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     private void init() {
-        tv_cardstate =(TextView)findViewById(R.id.tv_cardstate);
-        tv_messgae =(TextView)findViewById(R.id.tv_messgae);
+        tv_cardstate = (TextView) findViewById(R.id.tv_cardstate);
+        tv_messgae = (TextView) findViewById(R.id.tv_messgae);
         title = (TextView) findViewById(R.id.title);
         imgLeft = (ImageView) findViewById(R.id.left);
         tv_entime = (TextView) findViewById(R.id.tv_entime);
@@ -121,25 +124,25 @@ public class EndWork extends Activity {
         tv_boatname = (TextView) findViewById(R.id.tv_boatname);
         tv_huodai = (TextView) findViewById(R.id.tv_huodai);
         tv_huowu = (TextView) findViewById(R.id.tv_huowu);
-        tv_place =(TextView) findViewById(R.id.tv_place);
-        tv_huowei=(TextView) findViewById(R.id.tv_huowei);
-        tv_port=(TextView) findViewById(R.id.tv_port);
-        tv_loader=(TextView)findViewById(R.id.tv_loader);
-        linear_show =(LinearLayout)findViewById(R.id.linear_show);
-        tv_task =(TextView)findViewById(R.id.tv_task);
-        tv_Recordtime =(TextView)findViewById(R.id.tv_Recordtime);
+        tv_place = (TextView) findViewById(R.id.tv_place);
+        tv_huowei = (TextView) findViewById(R.id.tv_huowei);
+        tv_port = (TextView) findViewById(R.id.tv_port);
+        tv_loader = (TextView) findViewById(R.id.tv_loader);
+        linear_show = (LinearLayout) findViewById(R.id.linear_show);
+        tv_task = (TextView) findViewById(R.id.tv_task);
+        tv_Recordtime = (TextView) findViewById(R.id.tv_Recordtime);
         et_count = (EditText) findViewById(R.id.et_count);
         et_count.setInputType(InputType.TYPE_CLASS_NUMBER);
-        tv_note =(TextView) findViewById(R.id.tv_note);
-        tv_balanceweight=(TextView) findViewById(R.id.tv_balanceweight);
-        tv_subtime=(TextView) findViewById(R.id.tv_subtime);
-        tv_note.setText(LoginStatus.getLoginStatus().getNickname());
-        teamAuto =(InstantAutoComplete)findViewById(R.id.et_group);
+        tv_note = (TextView) findViewById(R.id.tv_note);
+        tv_balanceweight = (TextView) findViewById(R.id.tv_balanceweight);
+        tv_subtime = (TextView) findViewById(R.id.tv_subtime);
+        tv_note.setText(GlobalApplication.getGlobal().getLoginStatus().getNickname());
+        teamAuto = (InstantAutoComplete) findViewById(R.id.et_group);
         dataList = new ArrayList<>();
-        spinner_over =(Spinner)findViewById(R.id.spinner_over);
-        company= LoginStatus.getLoginStatus().getCodeCompany();
+        spinner_over = (Spinner) findViewById(R.id.spinner_over);
+        company = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();
         loadValue(company);
-        Log.i("dataList的值",dataList.toString());
+        Log.i("dataList的值", dataList.toString());
         endWork_btn = (Button) findViewById(R.id.save_btn);
         title.setText("完工");
         tv_entime.setText("选择时间");
@@ -155,12 +158,12 @@ public class EndWork extends Activity {
         day = c.get(Calendar.DAY_OF_MONTH);
         hour = c.get(Calendar.HOUR);
         minute = c.get(Calendar.MINUTE);
-        startPopupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams
-                .WRAP_CONTENT, true);
+        startPopupWindow = new PopupWindow(popupView, ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.WRAP_CONTENT, true);
         startPopupWindow.setTouchable(true);
         startPopupWindow.setOutsideTouchable(true);
         startPopupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-//        返回事件
+        //        返回事件
         imgLeft.setOnClickListener(new View.OnClickListener() {
 
             //				@Override
@@ -185,8 +188,9 @@ public class EndWork extends Activity {
                     SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
                     Date curDate = new Date(System.currentTimeMillis());//获取当前时间
                     String str = formatter.format(curDate);
-                    uploadValue(ID,LoginStatus.getLoginStatus().getNickname(), str, et_count.getText().toString(), team, spinner_overText);
-                }else{
+                    uploadValue(ID, GlobalApplication.getGlobal().getLoginStatus().getNickname(),
+                            str, et_count.getText().toString(), team, spinner_overText);
+                } else {
                     showDialog("提交失败！");
                 }
 
@@ -198,11 +202,12 @@ public class EndWork extends Activity {
             public void onClick(View v) {
                 String tongxingKey = tongxin_edt.getText().toString();
 
-                if (validate(tongxingKey,v)) {
-                    String type ="CARD";
+                if (validate(tongxingKey, v)) {
+                    String type = "CARD";
 
                     verifyvehicle(tongxingKey, type, company);
-                };
+                }
+                ;
 
             }
         });
@@ -211,8 +216,7 @@ public class EndWork extends Activity {
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
             @Override
-            public void onTimeChanged(TimePicker view
-                    , int hourOfDay, int minute) {
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 EndWork.this.hour = hourOfDay;
                 EndWork.this.minute = minute;
                 showDate(year, month, day, hour, minute);
@@ -222,8 +226,7 @@ public class EndWork extends Activity {
 
         // 初始化DatePicker组件，初始化时指定监听器
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
-            public void onDateChanged(DatePicker arg0, int year
-                    , int month, int day) {
+            public void onDateChanged(DatePicker arg0, int year, int month, int day) {
                 EndWork.this.year = year;
                 EndWork.this.month = month;
                 EndWork.this.day = day;
@@ -242,10 +245,10 @@ public class EndWork extends Activity {
             return;
         }
         ;
-        mPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        mNdefPushMessage = new NdefMessage(new NdefRecord[]{newTextRecord(
-                "Message from NFC Reader :-)", Locale.ENGLISH, true)});
+        mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags
+                (Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        mNdefPushMessage = new NdefMessage(new NdefRecord[]{newTextRecord("Message from NFC " +
+                "Reader :-)", Locale.ENGLISH, true)});
         card_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,23 +256,27 @@ public class EndWork extends Activity {
                     if (!mAdapter.isEnabled())
                         showWirelessSettingsDialog();
 
-                };
+                }
+                ;
                 String tongxingKey = tv_cardnum.getText().toString();
-                if (validate(tongxingKey,v)) {
-                    String type ="NFC";
+                if (validate(tongxingKey, v)) {
+                    String type = "NFC";
                     verifyvehicle(tongxingKey, type, company);
-                    Log.i("verifyvehicle(tongxingKey, type, company);","");
-                };
+                    Log.i("verifyvehicle(tongxingKey, type, company);", "");
+                }
+                ;
             }
         });
         //NFC
     }
+
     // 定义在EditText中显示当前日期、时间的方法
     private void showDate(int year, int month, int day, int hour, int minute) {
         tv_entime.setText(+year + "年" + (month + 1) + "月" + day + "日" + hour + "时" + minute + "分");
     }
+
     //给个控件赋值
-    private void loadValue( String company) {
+    private void loadValue(String company) {
 
         //实例化，传入参数
         EndWorkAutoTeamWork endWorkAutoTeamWork = new EndWorkAutoTeamWork();
@@ -283,18 +290,22 @@ public class EndWork extends Activity {
                     dataList.addAll(data);
                     Log.i(" EndWorkAutoTeamWork dataList1的值", dataList.toString());
                     Log.i("data的值", data.toString());
-                    endWorkTeamAutoAdapter = new EndWorkTeamAutoAdapter(dataList, EndWork.this.getApplicationContext());
+                    endWorkTeamAutoAdapter = new EndWorkTeamAutoAdapter(dataList, EndWork.this
+                            .getApplicationContext());
                     teamAuto.setAdapter(endWorkTeamAutoAdapter);
                     teamAuto.setThreshold(0);  //设置输入一个字符 提示，默认为2
                     teamAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                                long id) {
 
-                            Map<String, Object> pc = (Map<String, Object>) parent.getItemAtPosition(position);;
+                            Map<String, Object> pc = (Map<String, Object>) parent
+                                    .getItemAtPosition(position);
+                            ;
                             teamAuto.setText(pc.get("tv2").toString());
                             team = pc.get("tv1").toString();
                             Log.i("EndWorkAutoTeamWorkshowData", "" + pc.get("tv2").toString());
-                            Log.i("EndWorkAutoTeamWorkshowDataPosition", "" +  position);
+                            Log.i("EndWorkAutoTeamWorkshowDataPosition", "" + position);
                         }
                     });
 
@@ -316,6 +327,7 @@ public class EndWork extends Activity {
         });
         endWorkAutoTeamWork.beginExecute(company);
     }
+
     //NFC部分
     private void showMessage(int title, int message) {
         mDialog.setTitle(title);
@@ -386,9 +398,8 @@ public class EndWork extends Activity {
     @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
     private void resolveIntent(Intent intent) {
         String action = intent.getAction();
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
-                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
-                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action) || NfcAdapter.ACTION_TECH_DISCOVERED
+                .equals(action) || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
             Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             NdefMessage[] msgs;
             if (rawMsgs != null) {
@@ -402,10 +413,9 @@ public class EndWork extends Activity {
                 byte[] id1 = tag1.getId();
 
                 tv_cardnum.setText(getHex(id1).toUpperCase());
-                String type ="NFC";
+                String type = "NFC";
 
-                    verifyvehicle(getHex(id1).toUpperCase(), type, company);
-
+                verifyvehicle(getHex(id1).toUpperCase(), type, company);
 
 
             }
@@ -432,45 +442,59 @@ public class EndWork extends Activity {
         setIntent(intent);
         resolveIntent(intent);
     }
+
     //给个控件赋值
-    private void initValue(String key, final String type,String company) {
+    private void initValue(String key, final String type, String company) {
 
         //实例化，传入参数
-        EndWorkWork startWorkWork = new  EndWorkWork();
+        EndWorkWork startWorkWork = new EndWorkWork();
 
         startWorkWork.setWorkEndListener(new WorkBack<StartWorkBean>() {
 
             public void doEndWork(boolean b, StartWorkBean startWorkBean) {
                 if (b) {
-                        br = true;
+                    br = true;
                     clearEnd();
                     endWork_btn.setClickable(true);
                     endWork_btn.setBackgroundColor(Color.parseColor("#1fb5e8"));
-                    if(!"null".equals(startWorkBean.getMessage())){
+                    if (!"null".equals(startWorkBean.getMessage())) {
                         linear_show.setVisibility(View.VISIBLE);
-                        tv_cardstate.setText(startWorkBean.getMessage());}
-                    if(!startWorkBean.getVehicleNum().equals("")) tv_vehiclenum.setText(startWorkBean.getVehicleNum());
-                    if(!startWorkBean.getBoatName().equals(""))tv_boatname.setText(startWorkBean.getBoatName());
-                    if(!startWorkBean.getForwarder().equals(""))tv_huodai.setText(startWorkBean.getForwarder());
-                    if(!startWorkBean.getCargo().equals(""))tv_huowu.setText(startWorkBean.getCargo());
-                    if(!startWorkBean.getPlace().equals(""))tv_place.setText(startWorkBean.getPlace());
-                    if(!startWorkBean.getAllocation().equals(""))tv_huowei.setText(startWorkBean.getAllocation());
-                        tv_port.setText(startWorkBean.getSetport());
-                    if(!startWorkBean.getLoader().equals(""))tv_loader.setText(startWorkBean.getLoader());
-                    if(!startWorkBean.getTask().equals(""))tv_task.setText(startWorkBean.getTask());
-                    if(!startWorkBean.getStrWeight().equals(""))tv_balanceweight.setText(startWorkBean.getStrWeight());
-                    if(!startWorkBean.getStrSubmittime().equals(""))tv_subtime.setText(startWorkBean.getStrSubmittime());
+                        tv_cardstate.setText(startWorkBean.getMessage());
+                    }
+                    if (!startWorkBean.getVehicleNum().equals(""))
+                        tv_vehiclenum.setText(startWorkBean.getVehicleNum());
+                    if (!startWorkBean.getBoatName().equals(""))
+                        tv_boatname.setText(startWorkBean.getBoatName());
+                    if (!startWorkBean.getForwarder().equals(""))
+                        tv_huodai.setText(startWorkBean.getForwarder());
+                    if (!startWorkBean.getCargo().equals(""))
+                        tv_huowu.setText(startWorkBean.getCargo());
+                    if (!startWorkBean.getPlace().equals(""))
+                        tv_place.setText(startWorkBean.getPlace());
+                    if (!startWorkBean.getAllocation().equals(""))
+                        tv_huowei.setText(startWorkBean.getAllocation());
+                    tv_port.setText(startWorkBean.getSetport());
+                    if (!startWorkBean.getLoader().equals(""))
+                        tv_loader.setText(startWorkBean.getLoader());
+                    if (!startWorkBean.getTask().equals(""))
+                        tv_task.setText(startWorkBean.getTask());
+                    if (!startWorkBean.getStrWeight().equals(""))
+                        tv_balanceweight.setText(startWorkBean.getStrWeight());
+                    if (!startWorkBean.getStrSubmittime().equals(""))
+                        tv_subtime.setText(startWorkBean.getStrSubmittime());
                     tv_Recordtime.setText(startWorkBean.getStrRecordtime());
                     if (type.equals("NFC")) {
                         tongxin_edt.setText(startWorkBean.getCardNo());
-                        Log.i("tongxin_edt",""+startWorkBean.getCardNo());}
-                    if(!startWorkBean.getId().equals("")) ID =startWorkBean.getId().toString();
-                    Log.i("idzhi",""+startWorkBean.getId());
+                        Log.i("tongxin_edt", "" + startWorkBean.getCardNo());
+                    }
+                    if (!startWorkBean.getId().equals(""))
+                        ID = startWorkBean.getId().toString();
+                    Log.i("idzhi", "" + startWorkBean.getId());
 
                 } else {
                     br = false;
                     clearEnd();
-                    if(startWorkBean!=null) {
+                    if (startWorkBean != null) {
                         endWork_btn.setClickable(false);
                         endWork_btn.setBackgroundColor(Color.parseColor("#DCDCDC"));
                         if (!"".equals(startWorkBean.getVehicleNum()))
@@ -496,15 +520,15 @@ public class EndWork extends Activity {
                             tv_balanceweight.setText(startWorkBean.getStrWeight());
                         if (!"".equals(startWorkBean.getStrSubmittime()))
                             tv_subtime.setText(startWorkBean.getStrSubmittime());
-                        if (!"".equals(startWorkBean.getMessage())){
+                        if (!"".equals(startWorkBean.getMessage())) {
                             linear_show.setVisibility(View.VISIBLE);
-                            tv_cardstate.setText(startWorkBean.getMessage());}
+                            tv_cardstate.setText(startWorkBean.getMessage());
+                        }
                         if (!"".equals(startWorkBean.getStrSubmittime()))
-                        tv_Recordtime.setText(startWorkBean.getStrRecordtime());
+                            tv_Recordtime.setText(startWorkBean.getStrRecordtime());
                         tongxin_edt.setText(startWorkBean.getCardNo());
                         Log.i("initValuegetMessage", "" + startWorkBean.getMessage());
                     }
-
 
 
                 }
@@ -513,7 +537,7 @@ public class EndWork extends Activity {
         startWorkWork.beginExecute(key, company, type);
     }
 
-    private void verifyvehicle( final String key, final String type, final String company) {
+    private void verifyvehicle(final String key, final String type, final String company) {
 
         //实例化，传入参数
         VerifyVehicleWork verifyVehicleWork = new VerifyVehicleWork();
@@ -549,8 +573,10 @@ public class EndWork extends Activity {
         });
         verifyVehicleWork.beginExecute(key, company, type);
     }
+
     //给个控件赋值
-    private void uploadValue(String key,String company,String count,String time,String team,String teamwork) {
+    private void uploadValue(String key, String company, String count, String time, String team,
+                             String teamwork) {
 
         //实例化，传入参数
         UploadEndWork uploadEndWork = new UploadEndWork();
@@ -562,13 +588,14 @@ public class EndWork extends Activity {
                     showDialog(s);
 
                 } else {
-                    if(s!=null){
-                    showDialog(s);}
+                    if (s != null) {
+                        showDialog(s);
+                    }
                 }
             }
         });
 
-        uploadEndWork.beginExecute(key,company,count,time,team,teamwork);
+        uploadEndWork.beginExecute(key, company, count, time, team, teamwork);
 
 
     }
@@ -591,7 +618,6 @@ public class EndWork extends Activity {
         tongxin_edt.setText("");
 
     }
-
 
 
     //判断输入框是否为空
@@ -636,19 +662,18 @@ public class EndWork extends Activity {
             } while (true);
         }
     }
-    private void showDialog(String str){
-        Dialog dialog = new AlertDialog.Builder(EndWork.this)
-                .setTitle("提示")
-                .setMessage(str)
-                .setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.cancel();
-                            }
-                        }).create();//创建按钮
+
+    private void showDialog(String str) {
+        Dialog dialog = new AlertDialog.Builder(EndWork.this).setTitle("提示").setMessage(str)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        }).create();//创建按钮
 
         dialog.show();
     }
+
     private void showToast(String msg) {
         if (mToast == null) {
             mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
