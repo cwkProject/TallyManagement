@@ -211,7 +211,7 @@ public class TallyDetail extends TabActivity {
             }
         });
 
-        toAreaWork.beginExecute("20151021000241","02");
+        toAreaWork.beginExecute(value[0],value[1]);
     }
     //    加载源区域数据
     private void loadFromAreaData(){
@@ -247,7 +247,7 @@ public class TallyDetail extends TabActivity {
             }
         });
 
-        fromAreaWork.beginExecute("20151021000241","02");
+        fromAreaWork.beginExecute(value[0],value[1]);
     }
     //    加载票货数据
     private void loadTrust1Data(){
@@ -472,7 +472,7 @@ public class TallyDetail extends TabActivity {
             }
         });
 //        http://218.92.115.55/M_Lhgl/Service/Slip/GetMachine.aspx?Pmno=20151010000161&Cgno=d1bff20fa2d54a0b87e4385a5cb46914&Gbno=1facb087e4654ddead033fb25552e358
-        tallyDetail_MachineWork.beginExecute("20151010000161");
+        tallyDetail_MachineWork.beginExecute(value[0]);
 //        tallyDetail_MachineWork.beginExecute(value[0], value[1], value[2]);
     }
     private void initTeam(){
@@ -492,7 +492,7 @@ public class TallyDetail extends TabActivity {
                 }
             }
         });
-        tallyDetail_TeamWork.beginExecute("20151010000161");
+        tallyDetail_TeamWork.beginExecute(value[0]);
 //        tallyDetail_TeamWork.beginExecute(value[0], value[1], value[2]);
     }
     private void init() {
@@ -540,8 +540,6 @@ public class TallyDetail extends TabActivity {
         title.setText("作业票生成");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
-
-
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
         mTabWidget = mTabHost.getTabWidget();
@@ -587,12 +585,10 @@ public class TallyDetail extends TabActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         StringBuffer sb = new StringBuffer();
                         sb.append(timePicker.getCurrentHour())
                                 .append(":").append(timePicker.getCurrentMinute());
                         end.setText(sb);
-
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -617,7 +613,6 @@ public class TallyDetail extends TabActivity {
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 

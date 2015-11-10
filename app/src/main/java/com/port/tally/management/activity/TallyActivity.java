@@ -32,6 +32,7 @@ import com.port.tally.management.work.TallyCagoAtoWork;
 import com.port.tally.management.work.ToallyManageWork;
 import com.port.tally.management.xlistview.XListView;
 
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class TallyActivity extends Activity {
     private InstantAutoComplete cagoAuto;
     private ImageView imgLeft;
     private TextView title;
-
+    private String company =null;
     private Button mBut =null;
     private EditText et_trust;
     private TallyManageAdapter tallyManageAdapter;
@@ -58,6 +59,7 @@ public class TallyActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tally_main);
+        company = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();
         showProgressDialog();
         Init();
         initListView();
@@ -85,7 +87,7 @@ public class TallyActivity extends Activity {
             public void onLoadMore() {
                 String count = "5";
                 String stratcount = String.valueOf(flag);
-                String company = "14";
+
                 String cargo = null;
                 String trustno = null;
                 loadValue(count, stratcount, company, cargo, trustno);
@@ -189,7 +191,7 @@ public class TallyActivity extends Activity {
 
                             Map<String, Object> pccago = (Map<String, Object>) parent.getItemAtPosition(position);
                             cagoAuto.setText(pccago.get("tv2").toString());
-                            showData(null, null, null, pccago.get("tv2").toString(), null);
+                            showData(null, null, company, pccago.get("tv2").toString(), null);
                             Log.i("showData", "" + pccago.get("tv2").toString());
                             Log.i("showDataPosition", "" +  position);
 
@@ -218,7 +220,7 @@ public class TallyActivity extends Activity {
     private void showData(String key, String type, String company,String cargo,String trustno) {
         key = "3";
         type = "1";
-        company = "14";
+//        company = "14";
         loadValue(key, type, company, cargo, trustno);
     }
 

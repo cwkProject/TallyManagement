@@ -281,7 +281,7 @@ public class TallyDetailNew extends TabActivity {
             }
         });
 
-        toAreaWork.beginExecute("20151021000241","02");
+        toAreaWork.beginExecute(value[0],value[1]);
     }
     //    加载源区域数据
     private void loadFromAreaData(){
@@ -302,6 +302,7 @@ public class TallyDetailNew extends TabActivity {
                                 String str = parent.getItemAtPosition(position).toString();
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                             }
+
                             @Override
                             public void onNothingSelected(AdapterView<?> parent) {
                                 // TODO Auto-generated method stub
@@ -316,7 +317,8 @@ public class TallyDetailNew extends TabActivity {
             }
         });
 
-        fromAreaWork.beginExecute("20151021000241","02");
+//        fromAreaWork.beginExecute("20151021000241","02");
+        fromAreaWork.beginExecute(value[0],value[1]);
     }
     //    加载票货数据
     private void loadTrust1Data(){
@@ -539,7 +541,7 @@ public class TallyDetailNew extends TabActivity {
                 }
             }
         });
-        tallyDetail_MachineWork.beginExecute("20151010000161");
+        tallyDetail_MachineWork.beginExecute(value[0]);
 //        tallyDetail_MachineWork.beginExecute(value[0], value[1], value[2]);
     }
     private void initTeam(){
@@ -559,7 +561,7 @@ public class TallyDetailNew extends TabActivity {
                 }
             }
         });
-        tallyDetail_TeamWork.beginExecute("20151010000161");
+        tallyDetail_TeamWork.beginExecute(value[0]);
 //        tallyDetail_TeamWork.beginExecute(value[0], value[1], value[2]);
     }
     private void init() {
