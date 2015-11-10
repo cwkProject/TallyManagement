@@ -108,11 +108,10 @@ public class TallyActivity extends Activity {
 
                 };
                 Bundle b = new Bundle();
-                Intent intent = new Intent();
                 b.putStringArray("detailString", strings);
 
                 Log.i("valuedetailString的值是", strings[0] + "" + strings[1] + "" + strings[2] + "");
-                intent = new Intent(TallyActivity.this, TallyDetail.class);
+                intent = new Intent(TallyActivity.this, TallyManage.class);
                 intent.putExtras(b);
                 startActivity(intent);
 
@@ -121,18 +120,18 @@ public class TallyActivity extends Activity {
 
 
         });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            public boolean onItemLongClick(AdapterView<?> arg0, View v,
-                                           int index, long arg3) {
-                // TODO Auto-generated method stub
-
-                String str = listView.getItemAtPosition(index).toString();
-
-                Toast.makeText(TallyActivity.this, "listview 的点击" +arg0.getItemAtPosition(index), Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
+//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//
+//            public boolean onItemLongClick(AdapterView<?> arg0, View v,
+//                                           int index, long arg3) {
+//                // TODO Auto-generated method stub
+//
+//                String str = listView.getItemAtPosition(index).toString();
+//
+//                Toast.makeText(TallyActivity.this, "listview 的点击" +arg0.getItemAtPosition(index), Toast.LENGTH_SHORT).show();
+//                return true;
+//            }
+//        });
     }
 
     private void Init() {
@@ -151,7 +150,7 @@ public class TallyActivity extends Activity {
             @Override
             public void onClick(View v) {
 
-//                    showData(null, null, null, cagoAuto.getText().toString(), et_trust.getText().toString());
+                    showData(null, null, null, cagoAuto.getText().toString(), et_trust.getText().toString());
             }
         });
         imgLeft.setOnClickListener(new OnClickListener() {
@@ -164,7 +163,7 @@ public class TallyActivity extends Activity {
         dataListCago = new ArrayList<>();
     }
 
-  //给个控件赋值
+    //给个控件赋值
     private void loadCagoValue() {
 
         //实例化，传入参数
@@ -177,7 +176,7 @@ public class TallyActivity extends Activity {
 
                 if (b) {
                     if(!dataListCago.equals("") || dataListCago!=null)
-                    dataListCago.clear();
+                        dataListCago.clear();
                     dataListCago.addAll(data);
                     Log.i("dataListCago的值", dataListCago.toString());
                     Log.i("data的值", data.toString());
@@ -190,7 +189,7 @@ public class TallyActivity extends Activity {
 
                             Map<String, Object> pccago = (Map<String, Object>) parent.getItemAtPosition(position);
                             cagoAuto.setText(pccago.get("tv2").toString());
-                           showData(null, null, null, pccago.get("tv2").toString(), null);
+                            showData(null, null, null, pccago.get("tv2").toString(), null);
                             Log.i("showData", "" + pccago.get("tv2").toString());
                             Log.i("showDataPosition", "" +  position);
 
@@ -215,11 +214,11 @@ public class TallyActivity extends Activity {
         tallyCagoAtoWork.beginExecute("");
     }
 
-//    显示数据
+    //    显示数据
     private void showData(String key, String type, String company,String cargo,String trustno) {
-          key = "3";
-         type = "1";
-         company = "14";
+        key = "3";
+        type = "1";
+        company = "14";
         loadValue(key, type, company, cargo, trustno);
     }
 
@@ -291,7 +290,7 @@ public class TallyActivity extends Activity {
     }
     private void showProgressDialog(){
         //创建ProgressDialog对象
-          progressDialog = new ProgressDialog(TallyActivity.this);
+        progressDialog = new ProgressDialog(TallyActivity.this);
         // 设置进度条风格，风格为圆形，旋转的
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("正在加载数据...");

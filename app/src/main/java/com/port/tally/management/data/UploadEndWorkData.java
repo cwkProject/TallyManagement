@@ -14,8 +14,6 @@ public class UploadEndWorkData extends JsonDataModel {
      * 日志标签前缀
      */
     private static final String LOG_TAG = " UpdataEndData .";
-
-
     /**
      * 服务请求传入参数
      */
@@ -35,11 +33,9 @@ public class UploadEndWorkData extends JsonDataModel {
     public void setTime(String time) {
         this.time = time;
     }
-
     public void setNotperson(String notperson) {
         this.notperson = notperson;
     }
-
     public void setTeam(String team) {
         this.team = team;
     }
@@ -55,7 +51,6 @@ public class UploadEndWorkData extends JsonDataModel {
     private  String count =null;
     private String time = null;
     private String notperson = null;
-
     protected void onFillRequestParameters(Map<String, String> map) {
         // 传入请求参数
         map.put("Id", id);
@@ -78,9 +73,7 @@ public class UploadEndWorkData extends JsonDataModel {
     protected boolean onRequestResult(JSONObject jsonObject) throws JSONException {
         // 得到执行结果
         String resultState = jsonObject.getString("IsSuccess");
-
         return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-
     }
     /**
      * 提取服务返回的结果消息，
@@ -110,12 +103,9 @@ public class UploadEndWorkData extends JsonDataModel {
      */
     @Override
     protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
-
         result =jsonResult.getString("Message");
-
     }
     protected void onRequestFailed(JSONObject jsonResult) throws JSONException {
         result=jsonResult.getString("Message");
-
     }
 }

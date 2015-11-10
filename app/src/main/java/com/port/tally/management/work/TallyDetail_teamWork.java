@@ -84,8 +84,8 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
         TallyDetail_TeamData tallyDetail_TeamData = new TallyDetail_TeamData();
 
         tallyDetail_TeamData.setSearchContent(parameters[0]);
-        tallyDetail_TeamData.setSearchContent1(parameters[1]);
-        tallyDetail_TeamData.setSearchContent2(parameters[2]);
+//        tallyDetail_TeamData.setSearchContent1(parameters[1]);
+//        tallyDetail_TeamData.setSearchContent2(parameters[2]);
         return tallyDetail_TeamData;
     }
 }

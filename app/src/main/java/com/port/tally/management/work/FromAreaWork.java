@@ -1,7 +1,7 @@
 package com.port.tally.management.work;
 
-import com.port.tally.management.data.TallyDetailData;
-import com.port.tally.management.data.TallyDetail_MachineData;
+import com.port.tally.management.data.FromAreaData;
+import com.port.tally.management.data.SubprocessesFlagData;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/23.
+ * Created by song on 2015/11/7.
  */
-public class TallyDetail_MachineWork  extends DefaultWorkModel<String,List<Map<String, Object>>, TallyDetail_MachineData> {
+public class FromAreaWork extends DefaultWorkModel<String, List<Map<String, Object>>, FromAreaData> {
 
     /**
      * 参数合法性检测，
@@ -26,7 +26,7 @@ public class TallyDetail_MachineWork  extends DefaultWorkModel<String,List<Map<S
 
     protected boolean onCheckParameters(String... parameters) {
         // 需要至少两个传入参数
-        return !(parameters == null || parameters.length < 1);
+        return !(parameters == null);
     }
 
     /**
@@ -36,7 +36,7 @@ public class TallyDetail_MachineWork  extends DefaultWorkModel<String,List<Map<S
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_Machine_URL;
+        return StaticValue.HTTP_GET_DetailArea_URL;
     }
 
     /**
@@ -51,7 +51,7 @@ public class TallyDetail_MachineWork  extends DefaultWorkModel<String,List<Map<S
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestSuccessSetResult(TallyDetail_MachineData data) {
+    protected List<Map<String, Object>> onRequestSuccessSetResult(FromAreaData data) {
         return data.getAll();
     }
 
@@ -67,7 +67,7 @@ public class TallyDetail_MachineWork  extends DefaultWorkModel<String,List<Map<S
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestFailedSetResult(TallyDetail_MachineData data) {
+    protected List<Map<String, Object>> onRequestFailedSetResult( FromAreaData data) {
         return null;
     }
 
@@ -79,13 +79,15 @@ public class TallyDetail_MachineWork  extends DefaultWorkModel<String,List<Map<S
      *
      * @return 参数设置完毕后的数据模型对象
      */
+    @Override
+    protected  FromAreaData onCreateDataModel(String... parameters) {
 
-    protected TallyDetail_MachineData onCreateDataModel(String... parameters) {
-        TallyDetail_MachineData tallyDetail_MachineData = new TallyDetail_MachineData();
+        FromAreaData fromAreaData = new FromAreaData();
+        fromAreaData.setSearchContent1(parameters[0]);
+        fromAreaData.setSearchContent2(parameters[1]);
 
-        tallyDetail_MachineData.setSearchContent(parameters[0]);
-//        tallyDetail_MachineData.setSearchContent1(parameters[1]);
-//        tallyDetail_MachineData.setSearchContent2(parameters[2]);
-        return tallyDetail_MachineData;
+        return fromAreaData;
+
     }
 }
+

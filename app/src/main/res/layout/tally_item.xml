@@ -16,8 +16,6 @@
             android:orientation="vertical"
             >
             <TextView
-
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10.0dip"
@@ -25,7 +23,7 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text=""
+            android:text=" "
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"/>
             <TextView
@@ -35,39 +33,26 @@
                 android:layout_marginLeft="10.0dip"
                 android:layout_weight="1.0"
                 android:focusableInTouchMode="false"
-                android:text=""
+                android:text=" "
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
-
             <TextView
-
                 android:id="@+id/tv_planwork"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10.0dip"
-
                 android:clickable="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:text=""
+                android:text=" "
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-            <TextView
+                android:orientation="horizontal"
+                >
 
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10.0dip"
-                android:clickable="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="@dimen/BasicTextSize"/>
                 <TextView
 
                     android:id="@+id/tv_sourcevector"
@@ -76,6 +61,7 @@
                     android:layout_marginLeft="10.0dip"
                     android:clickable="false"
                     android:focusable="false"
+                    android:text=" "
                     android:focusableInTouchMode="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"/>
@@ -123,8 +109,6 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
             <TextView
-
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10.0dip"
@@ -141,17 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-                <TextView
-                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10.0dip"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/BasicTextSize"
-                      />
+
                 <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -195,7 +169,6 @@ android:visibility="gone"
             android:layout_weight="1.0"
             android:clickable="false"
             android:focusable="false"
-
             android:focusableInTouchMode="false"
             android:textColor="@color/black"
             android:textSize="@dimen/BasicTextSize"
@@ -216,12 +189,9 @@ android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
         <TextView
-
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10.0dip"
-
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"

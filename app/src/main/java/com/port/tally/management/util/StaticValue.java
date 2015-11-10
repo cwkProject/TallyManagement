@@ -232,4 +232,9 @@ public interface StaticValue {
     String HTTP_GET_DetailTeam_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionWorkTeam.aspx";
     //获取配工班组工人姓名数据
     String HTTP_GET_DetailTeamName_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionWorkerName.aspx";
+    //获取区域数据（理货作业票模块）
+    String HTTP_GET_DetailArea_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetArea.aspx";
+//    理货跳转的第二个listview
+String HTTP_GET_TALLYTWO_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetAllTallyBill.aspx";
+
 }

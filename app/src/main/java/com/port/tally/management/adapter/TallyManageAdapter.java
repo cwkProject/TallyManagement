@@ -26,13 +26,6 @@ public class TallyManageAdapter extends BaseAdapter {
         this.context = context;
         inflater = LayoutInflater.from(context);
     }
-
-    private boolean mBusy = false;
-
-    public void setFlagBusy(boolean busy) {
-        this.mBusy = busy;
-    }
-
     @Override
     public int getCount() {
         if (data != null) {

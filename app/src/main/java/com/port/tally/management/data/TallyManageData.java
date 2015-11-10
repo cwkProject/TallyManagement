@@ -58,7 +58,7 @@ public class TallyManageData extends JsonDataModel {
 
     List<Map<String,Object>> all = new ArrayList<Map<String,Object>>() ;
     protected void onFillRequestParameters(Map<String, String> map) {
-        map.put("CodeCompany", companyCode);
+        map.put("CodeUser", companyCode);
         map.put("startRow", startCount);
         map.put("count", endCount);
         map.put("Cargo", Cargo);

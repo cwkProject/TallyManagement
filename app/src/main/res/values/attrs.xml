@@ -2,7 +2,7 @@
 <resources>
 
     <string-array name="grid_item_function_name_list">
-        <item>作业票</item>
+        <item>理货作业</item>
         <item>衡重</item>
         <item>委托</item>
         <item>堆存</item>
@@ -12,12 +12,15 @@
         <item>交接班</item>
         <item>电子场图</item>
         <item>消息中心</item>
-
     </string-array>
     <string-array name="work"> //完工
         <item>白班</item>
         <item>夜班</item>
 
+    </string-array>
+    <string-array name="quanlity">
+        <item>合格</item>
+        <item>不合格</item>
     </string-array>
     <string-array name="trunkquery_city">
         <item>晋</item>

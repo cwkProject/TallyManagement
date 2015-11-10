@@ -63,7 +63,6 @@ public class StartWorkData extends JsonDataModel {
     protected boolean onRequestResult(JSONObject jsonObject) throws JSONException {
         // 得到执行结果
         String resultState = jsonObject.getString("IsSuccess");
-
         return resultState != null && "yes".equals(resultState.trim().toLowerCase());
 
     }

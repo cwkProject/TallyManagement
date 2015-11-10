@@ -1,33 +1,23 @@
 package com.port.tally.management.adapter;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.port.tally.management.R;
-import com.port.tally.management.activity.TallyActivity;
-import com.port.tally.management.activity.TallyDetail;
 import com.port.tally.management.work.TallyDetailMachineNameWork;
 import com.port.tally.management.work.TallyDetailMachineWork;
-import com.port.tally.management.work.TallyDetail_teamWork;
 
 import org.mobile.library.model.work.WorkBack;
 
@@ -82,12 +72,14 @@ public class TallyMachine1Adapter extends BaseAdapter{
         final Hand hand;
         if (convertView == null) {
             hand = new Hand();
-            convertView = inflater.inflate(R.layout.machine_item, null);
+            convertView = inflater.inflate(R.layout.machine_item1, null);
             hand.ck_mac = (CheckBox) convertView.findViewById(R.id.im_mac);
             hand.tv_mac = (TextView) convertView.findViewById(R.id.tv_mac);
             hand.tv_start = (TextView) convertView.findViewById(R.id.tv_start);
             hand.tv_end = (TextView) convertView.findViewById(R.id.tv_end);
-            hand.tv_count = (EditText) convertView.findViewById(R.id.tv_count);
+            hand.et_count1 = (EditText) convertView.findViewById(R.id.et_count1);
+            hand.et_count2 = (EditText) convertView.findViewById(R.id.et_count2);
+            hand.et_count3 = (EditText) convertView.findViewById(R.id.et_count3);
             hand.tv_macpeo = (TextView) convertView.findViewById(R.id.tv_macpeo);
 
         } else {
@@ -104,7 +96,7 @@ public class TallyMachine1Adapter extends BaseAdapter{
                     public void onClick(DialogInterface dialog, int which) {
 //                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
                         hand.tv_macpeo.setText(machineNameitem[which]);
-                        item.put("name", machineNameitem[which]);
+                        data.get(position).put("name", machineNameitem[which]);
                     }
                 }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -130,7 +122,7 @@ public class TallyMachine1Adapter extends BaseAdapter{
                     public void onClick(DialogInterface dialog, int which) {
 //                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
                         hand.tv_mac.setText(machineitem[which]);
-                        item.put("machine",machineitem[which]);
+                        data.get(position).put("machine", machineitem[which]);
                     }
                 }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -144,14 +136,33 @@ public class TallyMachine1Adapter extends BaseAdapter{
 
             }
         });
-        hand.tv_count.setInputType(InputType.TYPE_CLASS_NUMBER);
-        hand.tv_count.setOnClickListener(new View.OnClickListener() {
+
+        hand.et_count1.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.et_count1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 //                builder.setTitle("请输入件数").setIcon( android.R.drawable.ic_dialog_info).setView()
-                if (!hand.tv_count.getText().toString().equals(""))
-                    item.put("amount", hand.tv_count.getText().toString());
+                if (!hand.et_count1.getText().toString().equals(""))
+                    data.get(position).put("weight", hand.et_count1.getText().toString());
+            }
+        });
+        hand.et_count2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.et_count2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                builder.setTitle("请输入件数").setIcon( android.R.drawable.ic_dialog_info).setView()
+                if (!hand.et_count2.getText().toString().equals(""))
+                    data.get(position).put("amount", hand.et_count2.getText().toString());
+            }
+        });
+        hand.et_count3.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.et_count3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!hand.et_count3.getText().toString().equals(""))
+                    data.get(position).put("count", "数量3");
             }
         });
         hand.tv_start.setOnClickListener(new View.OnClickListener() {
@@ -171,13 +182,11 @@ public class TallyMachine1Adapter extends BaseAdapter{
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         StringBuffer sb = new StringBuffer();
                         sb.append(timePicker.getCurrentHour())
                                 .append(":").append(timePicker.getCurrentMinute());
                         hand.tv_start.setText(sb);
-                        item.put("amount", sb);
-
+                        data.get(position).put("begintime", sb);
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -204,11 +213,11 @@ public class TallyMachine1Adapter extends BaseAdapter{
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         StringBuffer sb = new StringBuffer();
                         sb.append(timePicker.getCurrentHour())
                                 .append(":").append(timePicker.getCurrentMinute());
                         hand.tv_end.setText(sb);
+                        data.get(position).put("endtime", sb);
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -230,15 +239,21 @@ public class TallyMachine1Adapter extends BaseAdapter{
                 }
             }
         });
-        if(item.get("select").equals("1")){
-            hand.ck_mac.setChecked(true);}
-        if(item.get("select").equals("0")){
-            hand.ck_mac.setChecked(false);}
+//        if(item.get("select").equals("1")){
+//            hand.ck_mac.setChecked(true);}
+//        if(item.get("select").equals("0")){
+//            hand.ck_mac.setChecked(false);}
         if(!item.get("machine").equals("")){
             hand.tv_mac.setText((CharSequence) item.get("machine"));
         }
         if(!item.get("amount").equals("")){
-            hand.tv_count.setText((CharSequence) item.get("amount"));
+            hand.et_count1.setText((CharSequence) item.get("amount"));
+        }
+        if(!item.get("weight").equals("")){
+            hand.et_count2.setText((CharSequence) item.get("weight"));
+        }
+        if(!item.get("count").equals("")){
+            hand.et_count3.setText((CharSequence) item.get("count"));
         }
         if(!item.get("name").equals("")){
             hand.tv_macpeo.setText((CharSequence) item.get("name"));
@@ -248,16 +263,13 @@ public class TallyMachine1Adapter extends BaseAdapter{
             initMachineName(item.get("pmno").toString());
         }
 
-//        if(!item.get("amount").equals("")){
-//            hand.tv_count.setText((CharSequence) item.get("amount"));
-//        }
         convertView.setTag(hand);
         return convertView;
     }
     private class Hand {
        CheckBox ck_mac;
         TextView tv_mac,tv_start,tv_end,tv_macpeo;
-        EditText tv_count;
+        EditText et_count1,et_count2,et_count3;
     }
     private void initMachine(String str){
         TallyDetailMachineWork tallyDetailMachineWork = new TallyDetailMachineWork();

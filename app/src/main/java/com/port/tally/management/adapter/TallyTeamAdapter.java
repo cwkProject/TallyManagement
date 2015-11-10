@@ -78,14 +78,15 @@ public class TallyTeamAdapter extends BaseAdapter{
         final Hand hand;
         if (convertView == null) {
             hand = new Hand();
-            convertView = inflater.inflate(R.layout.team_item, null);
+            convertView = inflater.inflate(R.layout.team_item1, null);
             hand.ck_mac = (CheckBox) convertView.findViewById(R.id.im_mac);
             hand.tv_mac = (TextView) convertView.findViewById(R.id.tv_mac);
             hand.tv_start = (TextView) convertView.findViewById(R.id.tv_start);
             hand.tv_end = (TextView) convertView.findViewById(R.id.tv_end);
-            hand.tv_count = (EditText) convertView.findViewById(R.id.tv_count);
+            hand.et_count1= (EditText) convertView.findViewById(R.id.et_count1);
+            hand.et_count2 = (EditText) convertView.findViewById(R.id.et_count2);
+            hand.et_count3 = (EditText) convertView.findViewById(R.id.et_count3);
             hand.tv_macpeo = (TextView) convertView.findViewById(R.id.tv_macpeo);
-
         } else {
             hand = (Hand) convertView.getTag();
         }
@@ -114,14 +115,34 @@ public class TallyTeamAdapter extends BaseAdapter{
 
             }
         });
-        hand.tv_count.setInputType(InputType.TYPE_CLASS_NUMBER);
-        hand.tv_count.setOnClickListener(new View.OnClickListener() {
+        hand.et_count1.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.et_count1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
 //                builder.setTitle("请输入件数").setIcon( android.R.drawable.ic_dialog_info).setView()
-                if(!hand.tv_count.getText().toString().equals(""))
-                  item.put("amount",hand.tv_count.getText().toString());
+                if(!hand.et_count1.getText().toString().equals(""))
+                  item.put("amount",hand.et_count1.getText().toString());
+            }
+        });
+        hand.et_count2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.et_count2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                builder.setTitle("请输入件数").setIcon( android.R.drawable.ic_dialog_info).setView()
+                if(!hand.et_count2.getText().toString().equals(""))
+                    item.put("amount",hand.et_count2.getText().toString());
+            }
+        });
+        hand.et_count3.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.et_count3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//                builder.setTitle("请输入件数").setIcon( android.R.drawable.ic_dialog_info).setView()
+                if(!hand.et_count3.getText().toString().equals(""))
+                    item.put("amount",hand.et_count3.getText().toString());
             }
         });
         hand.tv_mac.setOnClickListener(new View.OnClickListener() {
@@ -226,10 +247,10 @@ public class TallyTeamAdapter extends BaseAdapter{
                 }
             }
         });
-        if(item.get("select").equals("1")){
-            hand.ck_mac.setChecked(true);}
-        if(item.get("select").equals("0")){
-            hand.ck_mac.setChecked(false);}
+//        if(item.get("select").equals("1")){
+//            hand.ck_mac.setChecked(true);}
+//        if(item.get("select").equals("0")){
+//            hand.ck_mac.setChecked(false);}
         if(!item.get("machine").equals("")){
             hand.tv_mac.setText((CharSequence) item.get("machine"));
         }
@@ -237,7 +258,12 @@ public class TallyTeamAdapter extends BaseAdapter{
             hand.tv_macpeo.setText((CharSequence) item.get("name"));
         }
         if(!item.get("amount").equals("")){
-            hand.tv_count.setText((CharSequence) item.get("amount"));
+            hand.et_count1.setText((CharSequence) item.get("amount"));
+        }
+        if(!item.get("weight").equals("")){
+            hand.et_count2.setText((CharSequence) item.get("weight"));
+        } if(!item.get("count").equals("")){
+            hand.et_count3.setText((CharSequence) item.get("count"));
         }
         if(!item.get("pmno").equals("")){
             initMachine(item.get("pmno").toString());
@@ -253,7 +279,7 @@ public class TallyTeamAdapter extends BaseAdapter{
     private class Hand {
         CheckBox ck_mac;
         TextView tv_mac,tv_start,tv_end,tv_macpeo;
-        EditText tv_count;
+        EditText et_count1,et_count2,et_count3;
     }
 
     private void initMachine(String str){

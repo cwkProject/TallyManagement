@@ -50,6 +50,7 @@ public class EndWorkData extends JsonDataModel {
         map.put("NO", searchContent);
 
     }
+
     /**
      * 提取服务执行结果
      *
@@ -102,8 +103,6 @@ public class EndWorkData extends JsonDataModel {
         if (object instanceof JSONObject){
 
             JSONObject jsonObject= (JSONObject) object;
-
-
             startWorkBean.setId(jsonObject.getString("ID"));
             startWorkBean.setVehicleNum(jsonObject.getString("车号"));
             startWorkBean.setBoatName(jsonObject.getString("船名"));
