@@ -192,13 +192,11 @@ public interface StaticValue {
      */
     String BALANCE_WEIGHT_LIST_URL = "http://218.92.115.55/M_Lhgl/Service/Weighing/GetWeighting"
             + ".aspx";
-
     /**
      * 获取衡重详情的请求地址
      */
     String BALANCE_WEIGHT_CONTENT_URL = "http://218.92.115" +
             ".55/M_Lhgl/Service/Weighing/GetWeightingDetail.aspx";
-
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";
     //地图数据请求地址

@@ -166,7 +166,7 @@ public class TallyManage extends Activity {
 
 
         });
-        toallyManageWork.beginExecute("20151010000161","d1bff20fa2d54a0b87e4385a5cb46914");
+        toallyManageWork.beginExecute(value[0],value[1]);
     }
 
     private void showToast(String msg) {
