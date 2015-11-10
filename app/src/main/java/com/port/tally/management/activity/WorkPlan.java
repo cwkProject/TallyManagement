@@ -71,14 +71,14 @@ public class WorkPlan extends Activity implements XListView.IXListViewListener {
 
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 
-                String cgno = "14";
-                Bundle b = new Bundle();
-                Intent intent = new Intent();
-                //                b.putStringArray("Cgno", cgno);
-                b.putString("Cgno", cgno);
-                intent = new Intent(WorkPlan.this, WorkPlanDetail.class);
-                intent.putExtras(b);
-                startActivity(intent);
+//                String cgno = "14";
+//                Bundle b = new Bundle();
+//                Intent intent = new Intent();
+//                //                b.putStringArray("Cgno", cgno);
+//                b.putString("Cgno", cgno);
+//                intent = new Intent(WorkPlan.this, WorkPlanDetail.class);
+//                intent.putExtras(b);
+//                startActivity(intent);
             }
 
         });

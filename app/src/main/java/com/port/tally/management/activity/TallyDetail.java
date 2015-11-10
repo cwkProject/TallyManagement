@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TabWidget;
@@ -515,7 +516,6 @@ public class TallyDetail extends TabActivity {
         business = (TextView)findViewById(R.id.business);
         shangwu_ly  = (LinearLayout)findViewById(R.id.entrust2);
         tv_messgae = (TextView)findViewById(R.id.tv_messgae);
-//
         tv_boatname = (TextView)findViewById(R.id.tv_boatname);
         tv_tvboatdetail = (TextView)findViewById(R.id.tv_tvboatdetail);
         tv_changbie = (TextView)findViewById(R.id.tv_changbie);
@@ -529,11 +529,9 @@ public class TallyDetail extends TabActivity {
         tv_Ehuowei = (TextView)findViewById(R.id.tv_Ehuowei);
         tv_Ehuoweidetail = (TextView)findViewById(R.id.tv_Ehuoweidetail);
         quality_spinner = (Spinner) findViewById(R.id.quality_spinner);
-//
         tv_cardstate = (TextView)findViewById(R.id.tv_cardstate);
         xiaozhang_ly = (LinearLayout)findViewById(R.id.entrust1);
         linear_show= (LinearLayout)findViewById(R.id.linear_show);
-//        count_ly= (LinearLayout)findViewById(R.id.linear_show);
         et_count1.setInputType(InputType.TYPE_CLASS_NUMBER);
         et_count2.setInputType(InputType.TYPE_CLASS_NUMBER);
         et_count3.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -605,9 +603,9 @@ public class TallyDetail extends TabActivity {
 //                tallyMachineAdapter.notifyDataSetChanged();
                 Log.i("dataListMachine", "" + dataListMachine);
 //                Log.i("dataListMachine", "" + dataListMachine.get(0).get("name"));
-                Log.i("dataListMachine",""+dataListMachine.size());
+                Log.i("dataListMachine", "" + dataListMachine.size());
                 String[] strings = new String[]{"name","machine","select"};
-                Log.i("getJsonString()",""+getJsonString(dataListMachine,strings));
+                Log.i("getJsonString()", "" + getJsonString(dataListMachine, strings));
             }
         });
         btn_upload.setOnClickListener(new View.OnClickListener() {
@@ -616,6 +614,14 @@ public class TallyDetail extends TabActivity {
             }
         });
 
+        List<Map<String, Object>> qualitylist = new ArrayList<Map<String, Object>>();
+        Map<String, Object> qualitymap = new HashMap<String, Object>();
+        qualitymap.put("1", "合格");
+        qualitylist.add(qualitymap);
+        qualitymap.put("2", "不合格");
+        qualitylist.add(qualitymap);
+        SimpleAdapter qualityadapter = new SimpleAdapter(this,qualitylist, R.layout.quality_item, new String[] { "1",  "2" }, new int[] { R.id.tv_2 });
+        quality_spinner.setAdapter(qualityadapter);
     }
     /**
      * List<Map<String, Object>> To JsonString

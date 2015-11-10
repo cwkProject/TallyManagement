@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TabWidget;
@@ -47,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.mobile.library.model.work.WorkBack;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -640,7 +642,14 @@ public class TallyDetailNew extends TabActivity {
 
             }
         });
-
+        List<Map<String, Object>> qualitylist = new ArrayList<Map<String, Object>>();
+        Map<String, Object> qualitymap = new HashMap<String, Object>();
+        qualitymap.put("1", "合格");
+        qualitylist.add(qualitymap);
+        qualitymap.put("2", "不合格");
+        qualitylist.add(qualitymap);
+        SimpleAdapter qualityadapter = new SimpleAdapter(this,qualitylist, R.layout.quality_item, new String[] { "1",  "2" }, new int[] { R.id.tv_2 });
+        quality_spinner.setAdapter(qualityadapter);
     }
     private void saveData(){
         TallySaveWork tallySaveWork = new TallySaveWork();

@@ -57,12 +57,8 @@ public class SubprocessesFlagWorkAdapter extends BaseAdapter {
         Map<String, Object> item = getItem(position);
         if(convertView==null){
             view = View.inflate(context, R.layout.tallydetailflag_item, null);
-
             holder = new ViewHolder();
-//            holder.tv_1 = (TextView) view.findViewById(R.id.tv_1);
             holder.tv_2 = (TextView) view.findViewById(R.id.tv_2);
-            holder.tv_3 = (TextView) view.findViewById(R.id.tv_3);
-
             view.setTag(holder);
         }else{
             view = convertView;
@@ -74,15 +70,14 @@ public class SubprocessesFlagWorkAdapter extends BaseAdapter {
 //            Log.i("tv1的值", item.get("tv1").toString());}
         if(!item.get("tv2").equals("")){
             holder.tv_2.setText((CharSequence)item.get("tv2"));}
-        if(!item.get("tv3").equals("")){
-            holder.tv_3.setText((CharSequence)item.get("tv3"));}
+//        if(!item.get("tv3").equals("")){
+//            holder.tv_3.setText((CharSequence)item.get("tv3"));}
 
         return view;
     }
         static class ViewHolder{
-//            public TextView tv_1;
             public TextView tv_2;
-            public TextView tv_3;
+
 
     }
 }

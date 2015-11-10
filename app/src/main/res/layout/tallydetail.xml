@@ -540,9 +540,7 @@
                 android:layout_marginLeft="12.0dip"
                 android:layout_weight="4.0"
                 android:layout_marginTop="2dp"
-                android:paddingLeft="30dip"
                 android:gravity="center"
-                android:entries="@array/quanlity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
         </LinearLayout>
@@ -552,7 +550,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:background="@drawable/shape"
-
             android:orientation="vertical"
             >
         <LinearLayout
@@ -580,9 +577,7 @@
                 android:layout_marginRight="5.0dip"
                 android:layout_marginLeft="12.0dip"
                 android:layout_weight="4.0"
-
                 android:layout_marginTop="2dp"
-
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
         </LinearLayout>
@@ -612,7 +607,6 @@
                 android:layout_marginLeft="12.0dip"
                 android:layout_weight="4.0"
                 android:layout_marginTop="2dp"
-
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
         </LinearLayout>
@@ -630,10 +624,6 @@
         android:minHeight="40.0dip"
         android:orientation="horizontal"
         >
-
-
-
-
         <LinearLayout
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -680,7 +670,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:text=""
-
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"/>
@@ -710,7 +699,6 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"/>
                 <TextView
-
                     android:layout_height="wrap_content"
                     android:text="数量"
                     android:layout_width="0dip"
@@ -737,12 +725,11 @@
     <TabHost
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
-
+             android:background="@color/white"
              android:id="@android:id/tabhost">
         <LinearLayout
             android:layout_width="fill_parent"
             android:orientation="vertical"
-
             android:layout_height="fill_parent">
             <TabWidget
                 android:id="@android:id/tabs"
