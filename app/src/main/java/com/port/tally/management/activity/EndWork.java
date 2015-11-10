@@ -201,10 +201,8 @@ public class EndWork extends Activity {
 
             public void onClick(View v) {
                 String tongxingKey = tongxin_edt.getText().toString();
-
                 if (validate(tongxingKey, v)) {
                     String type = "CARD";
-
                     verifyvehicle(tongxingKey, type, company);
                 }
                 ;

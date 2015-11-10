@@ -650,7 +650,7 @@
                 android:minHeight="30.0dip"
                 android:orientation="horizontal">
                 <EditText
-                    android:id="@+id/et_count1"
+                    android:id="@+id/et_count2"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
@@ -662,7 +662,7 @@
                     android:layout_width="0dip"
                     android:layout_weight="1.0"
                     android:layout_height="wrap_content"
-                    android:text="吨"
+                    android:text="件"
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"/>
@@ -675,7 +675,7 @@
                 android:minHeight="30.0dip"
                 android:orientation="horizontal">
                 <EditText
-                    android:id="@+id/et_count2"
+                    android:id="@+id/et_count1"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
@@ -688,7 +688,7 @@
                     android:layout_width="0dip"
                     android:layout_weight="1.0"
                     android:layout_height="wrap_content"
-                    android:text="件"
+                    android:text="吨"
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"/>
@@ -807,7 +807,7 @@
             android:layout_height="40.0dip"
             android:layout_gravity="center"
             android:background="@drawable/darkblue_btn_bg"
-            android:text="保存"
+            android:text="暂存"
             android:gravity="center"
             android:layout_marginLeft="5.0dip"
             android:textColor="@color/white"

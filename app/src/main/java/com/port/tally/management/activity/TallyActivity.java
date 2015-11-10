@@ -65,8 +65,6 @@ public class TallyActivity extends Activity {
         initListView();
         loadCagoValue();
         showData(null, null, null, null, null);
-
-
     }
 
     private void initListView() {
@@ -107,11 +105,9 @@ public class TallyActivity extends Activity {
                         map.get("pmno").toString(),
                         map.get("tv_Entrust").toString(),
                         map.get("gbno").toString()
-
                 };
                 Bundle b = new Bundle();
                 b.putStringArray("detailString", strings);
-
                 Log.i("valuedetailString的值是", strings[0] + "" + strings[1] + "" + strings[2] + "");
                 intent = new Intent(TallyActivity.this, TallyManage.class);
                 intent.putExtras(b);
