@@ -233,6 +233,8 @@ public interface StaticValue {
     //获取区域数据（理货作业票模块）
     String HTTP_GET_DetailArea_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetArea.aspx";
 //    理货跳转的第二个listview
-String HTTP_GET_TALLYTWO_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetAllTallyBill.aspx";
+String HTTP_GET_TALLYTWO_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetAllTallyBill.aspx";
+//    保存接口
+String HTTP_POST_TALLYSAVE_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/SaveTallyBill.aspx";
 
 }

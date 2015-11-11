@@ -37,7 +37,7 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_ENDWORK_URL;
+        return StaticValue.HTTP_POST_TALLYSAVE_URL;
     }
 
     /**
@@ -126,8 +126,9 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
         tallySaveData.setAmount2(parameters[39]);
         tallySaveData.setWeight2(parameters[40]);
         tallySaveData.setCount2(parameters[41]);
-//       tallySaveData.setMachine(parameters[42]);
-//       tallySaveData.setWorkTeam(parameters[43]);
+        tallySaveData.setMachine(parameters[42]);
+        tallySaveData.setWorkTeam(parameters[43]);
+        tallySaveData.setTrainNum(parameters[44]);
         return tallySaveData;
     }
 

@@ -1,7 +1,10 @@
 package com.port.tally.management.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,9 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.TallyManageTwoAdapter;
+import com.port.tally.management.work.TallyDeletWork;
 import com.port.tally.management.work.TallyManageWork;
 import com.port.tally.management.xlistview.XListView;
 import org.mobile.library.model.work.WorkBack;
@@ -42,12 +45,11 @@ public class TallyManage extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tallymanage);
-        showProgressDialog();
         b1=getIntent().getExtras();
         value=b1.getStringArray("detailString");
         Init();
         initListView();
-        showData();
+//        showData();
     }
     private void initListView() {
         listView.setPullRefreshEnable(false);
@@ -79,28 +81,78 @@ public class TallyManage extends Activity {
 //                委托编码
 //                票货编码
 //                提交标志
-
-                Bundle b=getIntent().getExtras();
-                value=b.getStringArray("detailString");
-                String[] valueflag= new String[4];
-                valueflag[0] =value[0];
-                valueflag[1] =value[1];
+                Bundle b = getIntent().getExtras();
+                value = b.getStringArray("detailString");
+                String[] valueflag = new String[4];
+                valueflag[0] = value[0];
+                valueflag[1] = value[1];
                 valueflag[2] = value[2];
-                valueflag[3] =map.get("MarkFinish").toString();
+                valueflag[3] = map.get("MarkFinish").toString();
                 b.putStringArray("detailString", valueflag);
 //                Log.i("bflag的值是", map.get("MarkFinish").toString());
-                Log.i("valuedetailString的值是", value[0] + "" + value[1] + "" + value[2] +""+ valueflag[3]+"");
+                Log.i("valuedetailString的值是", value[0] + "" + value[1] + "" + value[2] + "" + valueflag[3] + "");
                 intent = new Intent(TallyManage.this, TallyDetail.class);
                 intent.putExtras(b);
                 startActivity(intent);
-
-
             }
 
 
         });
-    }
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
+            public boolean onItemLongClick(final AdapterView<?> arg0, View v,
+                                           final int index, long arg3) {
+                // TODO Auto-generated method stub
+                final HashMap map1 = (HashMap) arg0.getItemAtPosition(index);
+                Dialog dialog = new AlertDialog.Builder(TallyManage.this).setTitle("提示").setMessage("确定删除吗？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if (map1.get("MarkFinish").toString().equals("1")) {
+                                    showToast("已提交，不可删除");
+                                } else {
+                                    dataList.remove(index - 1);
+                                    String tbno = map1.get("Tbno").toString();
+                                    deletListData(value[0], value[1], tbno);
+                                    tallyManageAdapter.notifyDataSetChanged();
+                                }
+
+                            }
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        }).create();//创建按钮
+
+                dialog.show();
+
+                showDialog("确定删除吗？");
+                return true;
+            }
+        });
+    }
+//    显示对话框
+    private void showDialog(String str) {
+
+    }
+    private void deletListData(String par1,String par2, String par3){
+        //实例化，传入参数
+        TallyDeletWork tallyDeletWork = new TallyDeletWork();
+
+        tallyDeletWork.setWorkEndListener(new WorkBack<String>() {
+
+            @Override
+            public void doEndWork(boolean b, String s) {
+                if(b){
+                    showToast("删除成功");
+                    showToast(s);
+                } else{
+                    showToast("删除失败");
+                    showToast(s);
+                }
+            }
+        });
+          tallyDeletWork.beginExecute(par1,par2,par3);
+    }
     private void Init() {
         // TODO Auto-generated method stub
         title = (TextView) findViewById(R.id.title);
@@ -133,10 +185,10 @@ public class TallyManage extends Activity {
 
     }
 
-    //    显示数据
-    private void showData() {
-        loadValue();
-    }
+//    //    显示数据
+//    private void showData() {
+//        loadValue();
+//    }
     private void onLoad() {
         listView.stopRefresh();
         listView.stopLoadMore();
@@ -144,29 +196,30 @@ public class TallyManage extends Activity {
     }
     //给个控件赋值
     private void loadValue() {
-
         //实例化，传入参数
         TallyManageWork toallyManageWork = new TallyManageWork();
 
         toallyManageWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
-//        Log.i("TallyActivity的Data的值是","TallyActivity的Data的值是"+ data.size()+"/"+data);
+//                Log.i("TallyActivity的Data的值是", "TallyActivity的Data的值是" + data.size() + "/" + data);
 
                 if (b && data != null) {
-                    dataList.addAll(data);
-                    tallyManageAdapter.notifyDataSetChanged();
+                    if (data != null) {
+                        dataList.addAll(data);
+                        tallyManageAdapter.notifyDataSetChanged();
+                    }
                     progressDialog.dismiss();
-                } else{
+                } else {
                     progressDialog.dismiss();
                     showToast("无更多数据");
                 }
 //
-                }
+            }
 
 
         });
-        toallyManageWork.beginExecute(value[0],value[1]);
+        toallyManageWork.beginExecute(value[0], value[1]);
     }
 
     private void showToast(String msg) {
@@ -191,5 +244,16 @@ public class TallyManage extends Activity {
         progressDialog.setCancelable(true);
         // 让ProgressDialog显示
         progressDialog.show();
+    }
+    protected void onResume(){
+        super.onResume();
+        showProgressDialog();
+        loadValue();
+    }
+    protected void onPause(){
+        super.onPause();
+        if(dataList!=null)
+        dataList.clear();
+        tallyManageAdapter.notifyDataSetChanged();
     }
 }

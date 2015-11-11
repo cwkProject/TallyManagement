@@ -285,6 +285,12 @@ public class TallySaveData extends JsonDataModel {
     private String Machine= null;
 
     private String WorkTeam= null;
+
+    public void setTrainNum(String trainNum) {
+        TrainNum = trainNum;
+    }
+
+    private String TrainNum= null;
     @Override
     protected void onFillRequestParameters(Map<String, String> map) {
         // 传入请求参数
@@ -333,6 +339,7 @@ public class TallySaveData extends JsonDataModel {
         map.put("Count2",Count2);
         map.put("Machine",Machine);
         map.put("WorkTeam",WorkTeam);
+        map.put("TrainNum",TrainNum);
         Log.i("TallySaveData的map值",""+map);
 
 
@@ -381,12 +388,13 @@ public class TallySaveData extends JsonDataModel {
     @Override
     protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
         Object object=jsonResult.get("Data");
-
+         Log.i("TallySaveData",""+object);
     }
 
     @Override
     protected void onRequestFailed(JSONObject jsonResult) throws JSONException {
-
+        Object object=jsonResult.get("Data");
+        Log.i("TallySaveData",""+object);
 
     }
 }

@@ -73,46 +73,28 @@ public class TallyManageTwoAdapter extends BaseAdapter {
         if(!item.get("Gbdisplay").equals("")){
 //            TextPaint tp = hand.tv_yuantrust.getPaint();
 //            tp.setFakeBoldText(true);
-            hand.tv_yuantrust.setText(ToDBC(item.get("Gbdisplay").toString()));}
+            hand.tv_yuantrust.setText(item.get("Gbdisplay").toString());}
         if(!item.get("GbdisplayLast").equals("")){
 //            TextPaint tp =  hand.tv_muditrust.getPaint();
 //            tp.setFakeBoldText(true);
-            hand.tv_muditrust.setText(ToDBC(item.get("GbdisplayLast").toString()));}
+            hand.tv_muditrust.setText(item.get("GbdisplayLast").toString());}
         if(!item.get("Carrier1").equals("")){
 //            TextPaint tp =  hand.tv_yuanzaiti.getPaint();
 //            tp.setFakeBoldText(true);
-            hand.tv_yuanzaiti.setText(ToDBC(item.get("Carrier1").toString()));
+            hand.tv_yuanzaiti.setText(item.get("Carrier1").toString());
         }
         if(!item.get("Taskno").equals("")){
 //            TextPaint tp =   hand.tv_trustno.getPaint();
 //            tp.setFakeBoldText(true);
-            hand.tv_trustno.setText(ToDBC(item.get("Taskno").toString()));}
+            hand.tv_trustno.setText(item.get("Taskno").toString());}
         if(!item.get("Carrier2").equals("")){
-            hand.tv_mudizaiti.setText(ToDBC(item.get("Carrier2").toString()));}
+            hand.tv_mudizaiti.setText(item.get("Carrier2").toString());}
         if(!item.get("Count").equals("")){
 //            TextPaint tp =   hand.tv_count.getPaint();
 //            tp.setFakeBoldText(true);
-            hand.tv_count.setText(ToDBC(item.get("Count").toString()));}
+            hand.tv_count.setText(item.get("Count").toString());}
         convertView.setTag(hand);
         return convertView;
-    }
-    /**
-     * 半角转换为全角
-     *
-     * @param input
-     * @return
-     */
-    public static String ToDBC(String input) {
-        char[] c = input.toCharArray();
-        for (int i = 0; i < c.length; i++) {
-            if (c[i] == 12288) {
-                c[i] = (char) 32;
-                continue;
-            }
-            if (c[i] > 65280 && c[i] < 65375)
-                c[i] = (char) (c[i] - 65248);
-        }
-        return new String(c);
     }
     private class Hand {
         TextView tv_waitflag,tv_yuantrust,tv_muditrust,tv_yuanzaiti,tv_trustno,tv_mudizaiti,

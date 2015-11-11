@@ -85,13 +85,11 @@ public class TallyActivity extends Activity {
             public void onLoadMore() {
                 String count = "5";
                 String stratcount = String.valueOf(flag);
-
                 String cargo = null;
                 String trustno = null;
                 loadValue(count, stratcount, company, cargo, trustno);
             }
         });
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 
@@ -118,18 +116,7 @@ public class TallyActivity extends Activity {
 
 
         });
-//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//
-//            public boolean onItemLongClick(AdapterView<?> arg0, View v,
-//                                           int index, long arg3) {
-//                // TODO Auto-generated method stub
-//
-//                String str = listView.getItemAtPosition(index).toString();
-//
-//                Toast.makeText(TallyActivity.this, "listview 的点击" +arg0.getItemAtPosition(index), Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//        });
+
     }
 
     private void Init() {

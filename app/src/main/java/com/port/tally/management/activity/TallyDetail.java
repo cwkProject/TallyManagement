@@ -104,7 +104,6 @@ public class TallyDetail extends TabActivity {
         init();
         showProgressDialog();
          loadFlagData();
-//        loadTrust2Data();
         Bundle b=getIntent().getExtras();
         value=b.getStringArray("detailString");
         Log.i("value1的值是", value[0] + "" + value[1] + "" + value[2] + "");
@@ -125,24 +124,7 @@ public class TallyDetail extends TabActivity {
             btn_upload.setClickable(false);
             btn_upload.setBackgroundColor(Color.parseColor("#DCDCDC"));
         }
-        //标签切换事件处理，setOnTabChangedListener
-        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            // TODO Auto-generated method stub
-            @Override
-            public void onTabChanged(String tabId) {
-//                Dialog dialog = new AlertDialog.Builder(TallyDetail.this)
-//                        .setTitle("提示")
-//                        .setMessage("当前选中：" + tabId + "标签")
-//                        .setPositiveButton("确定",
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int whichButton) {
-//                                        dialog.cancel();
-//                                    }
-//                                }).create();//创建按钮
-//
-//                dialog.show();
-            }
-        });
+
     }
 //    加载标志数据
         private void loadFlagData(){
@@ -679,7 +661,7 @@ public class TallyDetail extends TabActivity {
             mToast.setText(msg);
             mToast.setDuration(Toast.LENGTH_SHORT);
         }
-        mToast.show();    }
+        mToast.show(); }
 //显示进度对话框
     private void showProgressDialog(){
         //创建ProgressDialog对象
