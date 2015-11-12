@@ -138,33 +138,17 @@ public class TallyMachine1Adapter extends BaseAdapter{
         });
 
         hand.et_count1.setInputType(InputType.TYPE_CLASS_NUMBER);
-        hand.et_count1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                builder.setTitle("请输入件数").setIcon( android.R.drawable.ic_dialog_info).setView()
-                if (!hand.et_count1.getText().toString().equals(""))
-                    data.get(position).put("weight", hand.et_count1.getText().toString());
-            }
-        });
         hand.et_count2.setInputType(InputType.TYPE_CLASS_NUMBER);
-        hand.et_count2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                builder.setTitle("请输入件数").setIcon( android.R.drawable.ic_dialog_info).setView()
-                if (!hand.et_count2.getText().toString().equals(""))
-                    data.get(position).put("amount", hand.et_count2.getText().toString());
-            }
-        });
         hand.et_count3.setInputType(InputType.TYPE_CLASS_NUMBER);
-        hand.et_count3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!hand.et_count3.getText().toString().equals(""))
-                    data.get(position).put("count", "数量3");
-            }
-        });
+        if(!hand.et_count1.getText().toString().equals("")){
+            item.put("amount",hand.et_count1.getText().toString());
+        }
+        if(!hand.et_count2.getText().toString().equals("")){
+            item.put("weight",hand.et_count2.getText().toString());
+        }
+        if(!hand.et_count3.getText().toString().equals("")){
+            item.put("count",hand.et_count3.getText().toString());
+        }
         hand.tv_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -53,7 +53,7 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
      */
     @Override
     protected String onRequestSuccessSetResult(TallySaveData data) {
-        return data.getMessage();
+        return data.getObjectdata();
     }
 
     /**
@@ -69,7 +69,7 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
      */
     @Override
     protected String onRequestFailedSetResult(TallySaveData data) {
-        return data.getMessage();
+        return data.getObjectdata();
     }
 
     /**
@@ -129,6 +129,8 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
         tallySaveData.setMachine(parameters[42]);
         tallySaveData.setWorkTeam(parameters[43]);
         tallySaveData.setTrainNum(parameters[44]);
+        tallySaveData.setWorkTeam(parameters[45]);
+        tallySaveData.setTrainNum(parameters[46]);
         return tallySaveData;
     }
 

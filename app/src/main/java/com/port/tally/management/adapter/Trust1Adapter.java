@@ -57,10 +57,8 @@ public class Trust1Adapter extends BaseAdapter {
         Log.i("Trust1Adapter的item值是","Trust1Adapter的item值是"+item);
         if(convertView==null){
             view = View.inflate(context, R.layout.tallydetailtrust_item, null);
-
             holder = new ViewHolder();
             holder.tv_3 = (TextView) view.findViewById(R.id.tv_3);
-
             view.setTag(holder);
         }else{
             view = convertView;

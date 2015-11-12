@@ -1,7 +1,9 @@
 package com.port.tally.management.activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -146,6 +148,9 @@ public class TallyDetailNew extends TabActivity {
     private String WorkTeam= null;
     //45 车数
     private String TrainNum= null;
+    //
+    private String Tbno= null;
+    private String MarkFinish= null;
     private Button btn_save,btn_upload;
     private List<Map<String, Object>> dataList = null;
     private List<Map<String, Object>> dataListMachine =null;
@@ -207,13 +212,15 @@ public class TallyDetailNew extends TabActivity {
                 if (b) {
                     if (!maps.equals("")) {
                         //绑定Adapter
+
                         SubprocessesFlagWorkAdapter subprocessesFlagWorkAdapter = new SubprocessesFlagWorkAdapter(maps, TallyDetailNew.this.getApplicationContext());
                         flag_spinner.setAdapter(subprocessesFlagWorkAdapter);
                         flag_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view,
                                                        int position, long id) {
-                                CodeSpecialMark = parent.getItemAtPosition(position).toString();
+                                HashMap map = (HashMap) parent.getItemAtPosition(position);
+                                CodeSpecialMark =  map.get("tv2").toString();
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                             }
                             @Override
@@ -248,7 +255,8 @@ public class TallyDetailNew extends TabActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view,
                                                        int position, long id) {
-                                CodeWorkingArea = parent.getItemAtPosition(position).toString();
+                                HashMap map = (HashMap) parent.getItemAtPosition(position);
+                                CodeWorkingArea =map.get("tv2").toString();;
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                             }
                             @Override
@@ -282,8 +290,8 @@ public class TallyDetailNew extends TabActivity {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view,
                                                        int position, long id) {
-                                CodeWorkingAreaLast = parent.getItemAtPosition(position).toString();
-
+                                HashMap map = (HashMap) parent.getItemAtPosition(position);
+                                CodeWorkingAreaLast =map.get("tv2").toString();
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                             }
 
@@ -328,10 +336,12 @@ public class TallyDetailNew extends TabActivity {
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view,
                                                            int position, long id) {
+                                    HashMap map = (HashMap) parent.getItemAtPosition(position);
+                                    CodeGoodsBill =map.get("tv2").toString();
+                                    GoodsBillDisplay =map.get("tv3").toString();
                                     String str = parent.getItemAtPosition(position).toString();
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                                 }
-
                                 @Override
                                 public void onNothingSelected(AdapterView<?> parent) {
                                     // TODO Auto-generated method stub
@@ -346,7 +356,9 @@ public class TallyDetailNew extends TabActivity {
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view,
                                                            int position, long id) {
-                                    String str = parent.getItemAtPosition(position).toString();
+                                    HashMap map = (HashMap) parent.getItemAtPosition(position);
+                                    CodeGbBusiness =map.get("tv4").toString();
+                                    GbBusinessDisplay =map.get("tv5").toString();
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                                 }
 
@@ -394,10 +406,11 @@ public class TallyDetailNew extends TabActivity {
             public void doEndWork(boolean b,  Map<String, Object> stringObjectMap) {
                 if (b) {
 //                  showToast(stringObjectMap.toString());
-                    Log.i("initAllCarrer()","stringObjectMap的值是"+stringObjectMap);
+                    Log.i("initAllCarrer()", "stringObjectMap的值是" + stringObjectMap);
                     if(!"".equals(stringObjectMap.get("Vgno"))){
                         Vgno =stringObjectMap.get("Vgno").toString();
                         VgnoLast=stringObjectMap.get("Vgno").toString();
+                        Carrier1=stringObjectMap.get("Vgno").toString();
                     }
                     if(!"".equals(stringObjectMap.get("VgDisplay")))
                         tv_tvboatdetail.setText(stringObjectMap.get("VgDisplay").toString());
@@ -405,6 +418,7 @@ public class TallyDetailNew extends TabActivity {
                     if(!"".equals(stringObjectMap.get("Cabin")))
                         tv_changbiedetail.setText(stringObjectMap.get("Cabin").toString());
                         Cabin =stringObjectMap.get("Cabin").toString();
+                         Carrier1Num =stringObjectMap.get("Cabin").toString();
                         CabinLast =stringObjectMap.get("Cabin").toString();
                         tv_Echangbiedetail.setText(stringObjectMap.get("Cabin").toString());
                     if(!"".equals(stringObjectMap.get("CodeCarrier")))
@@ -412,11 +426,14 @@ public class TallyDetailNew extends TabActivity {
                         tv_Echangbiedetail.setText(stringObjectMap.get("CodeCarrier").toString());
                         CodeCarrier =stringObjectMap.get("CodeCarrier").toString();
                         CodeCarrierLast =stringObjectMap.get("CodeCarrier").toString();
+
                     if(!"".equals(stringObjectMap.get("Storage")))
                         tv_tvboatdetail.setText(stringObjectMap.get("Storage").toString());
                         tv_Eboatdetail.setText(stringObjectMap.get("Storage").toString());
                         CodeStorage =stringObjectMap.get("CodeStorage").toString();
                         CodeStorageLast =stringObjectMap.get("CodeStorage").toString();
+                        Carrier2num=stringObjectMap.get("CodeStorage").toString();
+                        Carrier2 =stringObjectMap.get("CodeStorage").toString();
                     if(!"".equals(stringObjectMap.get("Nvessel")))
                         tv_tvboatdetail.setText(stringObjectMap.get("Nvessel").toString());
                         tv_Eboatdetail.setText(stringObjectMap.get("Nvessel").toString());
@@ -632,6 +649,7 @@ public class TallyDetailNew extends TabActivity {
                 Weight2 = et_count22.getText().toString();
                 Count2 =  et_count23.getText().toString();
                 TrainNum =et_vehicle.getText().toString();
+                MarkFinish = "0";
                 CodeWorkingAreaLast = fromarea_spinner.getSelectedItem().toString();
                 CodeWorkingArea =toarea_spinner.getSelectedItem().toString();
                 Log.i("Machine", "" + Machine);
@@ -644,25 +662,40 @@ public class TallyDetailNew extends TabActivity {
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                    MarkFinish = "1";
             }
         });
+
         List<Map<String, Object>> qualitylist = new ArrayList<Map<String, Object>>();
-        Map<String, Object> qualitymap = new HashMap<String, Object>();
-        qualitymap.put("1", "合格");
-        qualitylist.add(qualitymap);
-        qualitymap.put("2", "不合格");
-        qualitylist.add(qualitymap);
-        SimpleAdapter qualityadapter = new SimpleAdapter(this,qualitylist, R.layout.quality_item, new String[] { "1",  "2" }, new int[] { R.id.tv_2 });
+        Map<String, Object> qualitymap1 = new HashMap<String, Object>();
+        qualitymap1.put("1", "合格");
+        qualitylist.add(qualitymap1);
+        Map<String, Object> qualitymap2 = new HashMap<String, Object>();
+        qualitymap2.put("1", "不合格");
+        qualitylist.add(qualitymap2);
+        SimpleAdapter qualityadapter = new SimpleAdapter(this,qualitylist, R.layout.quality_item, new String[] { "1",  "1" }, new int[] { R.id.tv_2 });
          quality_spinner.setAdapter(qualityadapter);
-         Quality = quality_spinner.getSelectedItem().toString();
+
+        quality_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                HashMap map = (HashMap) parent.getItemAtPosition(position);
+                Quality =map.get("1").toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
     }
     private void saveData(){
         TallySaveWork tallySaveWork = new TallySaveWork();
         tallySaveWork.setWorkEndListener(new WorkBack<String>() {
             @Override
             public void doEndWork(boolean b, String s) {
-
+                showDialog(s);
             }
         });
         tallySaveWork.beginExecute(CodeCompany, CodeDepartment,Cgno,Pmno,CodeTallyman,Tallyman,Vgno,Cabin,
@@ -670,7 +703,7 @@ public class TallyDetailNew extends TabActivity {
                 CodeBooth,CodeAllocation,Carrier1,Carrier1Num,VgnoLast,CabinLast,CodeCarrierLast,CarrierNumLast,
                 CodeNvesselLast,BargeproLast,CodeStorageLast,CodeBoothLast,CodeAllocationLast,Carrier2,Carrier2num,
                 CodeGoodsBill,GoodsBillDisplay,CodeGbBusiness,GbBusinessDisplay,CodeSpecialMark,
-                CodeWorkingArea,CodeWorkingAreaLast,Quality,Amount,Weight,Count,Amount2,Weight2,Count2,Machine,WorkTeam,TrainNum
+                CodeWorkingArea,CodeWorkingAreaLast,Quality,Amount,Weight,Count,Amount2,Weight2,Count2,Machine,WorkTeam,TrainNum,Tbno,MarkFinish
         );
     }
     private void updateData(){
@@ -681,6 +714,16 @@ public class TallyDetailNew extends TabActivity {
 //     * @param list
      * @return
      */
+    private void showDialog(String str) {
+        Dialog dialog = new AlertDialog.Builder(TallyDetailNew.this).setTitle("提示").setMessage(str)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.cancel();
+                    }
+                }).create();//创建按钮
+
+        dialog.show();
+    }
     public String listmap_to_json_string(List<Map<String, Object>> list)
     {
         JSONArray json_arr=new JSONArray();

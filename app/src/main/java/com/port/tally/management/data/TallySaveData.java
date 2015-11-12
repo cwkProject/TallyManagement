@@ -1,6 +1,11 @@
 package com.port.tally.management.data;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.util.Log;
+
+import com.port.tally.management.work.TallySaveWork;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -291,6 +296,23 @@ public class TallySaveData extends JsonDataModel {
     }
 
     private String TrainNum= null;
+
+    public void setTbno(String tbno) {
+        Tbno = tbno;
+    }
+
+    public void setMarkFinish(String markFinish) {
+        MarkFinish = markFinish;
+    }
+
+    private String Tbno= null;
+    private String MarkFinish= null;
+
+    public String getObjectdata() {
+        return objectdata;
+    }
+
+    private String objectdata =null;
     @Override
     protected void onFillRequestParameters(Map<String, String> map) {
         // 传入请求参数
@@ -340,6 +362,8 @@ public class TallySaveData extends JsonDataModel {
         map.put("Machine",Machine);
         map.put("WorkTeam",WorkTeam);
         map.put("TrainNum",TrainNum);
+        map.put("Tbno",Tbno);
+        map.put("MarkFinish",MarkFinish);
         Log.i("TallySaveData的map值",""+map);
 
 
@@ -387,15 +411,17 @@ public class TallySaveData extends JsonDataModel {
      */
     @Override
     protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
-        Object object=jsonResult.get("Data");
-         Log.i("TallySaveData",""+object);
+        objectdata =jsonResult.get("Data").toString();
+
+         Log.i("TallySaveData1",""+objectdata.toString());
     }
 
     @Override
     protected void onRequestFailed(JSONObject jsonResult) throws JSONException {
-        Object object=jsonResult.get("Data");
-        Log.i("TallySaveData",""+object);
+        objectdata =jsonResult.get("Data").toString();
+        Log.i("TallySaveData1", "" + objectdata);
 
     }
+
 }
 
