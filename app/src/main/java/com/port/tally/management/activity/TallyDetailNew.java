@@ -649,7 +649,7 @@ public class TallyDetailNew extends TabActivity {
                 Weight2 = et_count22.getText().toString();
                 Count2 =  et_count23.getText().toString();
                 TrainNum =et_vehicle.getText().toString();
-                MarkFinish = "0";
+//                MarkFinish = "0";
                 CodeWorkingAreaLast = fromarea_spinner.getSelectedItem().toString();
                 CodeWorkingArea =toarea_spinner.getSelectedItem().toString();
                 Log.i("Machine", "" + Machine);
@@ -662,7 +662,7 @@ public class TallyDetailNew extends TabActivity {
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    MarkFinish = "1";
+//                    MarkFinish = "1";
             }
         });
 
