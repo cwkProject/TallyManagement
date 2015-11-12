@@ -885,6 +885,7 @@
                     android:id="@+id/LinearLayout001"
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
+                    android:layout_marginBottom="20dp"
                     android:layout_height="wrap_content">
 
                     <ListView
@@ -898,6 +899,7 @@
                     android:orientation="vertical"
                     android:id="@+id/LinearLayout002"
                     android:layout_width="fill_parent"
+                    android:layout_marginBottom="20dp"
                     android:layout_height="fill_parent">
 
                     <ListView
