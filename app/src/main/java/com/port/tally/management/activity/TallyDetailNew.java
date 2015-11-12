@@ -703,8 +703,7 @@ public class TallyDetailNew extends TabActivity {
                 CodeBooth,CodeAllocation,Carrier1,Carrier1Num,VgnoLast,CabinLast,CodeCarrierLast,CarrierNumLast,
                 CodeNvesselLast,BargeproLast,CodeStorageLast,CodeBoothLast,CodeAllocationLast,Carrier2,Carrier2num,
                 CodeGoodsBill,GoodsBillDisplay,CodeGbBusiness,GbBusinessDisplay,CodeSpecialMark,
-                CodeWorkingArea,CodeWorkingAreaLast,Quality,Amount,Weight,Count,Amount2,Weight2,Count2,Machine,WorkTeam,TrainNum,Tbno,MarkFinish
-        );
+                CodeWorkingArea,CodeWorkingAreaLast,Quality,Amount,Weight,Count,Amount2,Weight2,Count2,Machine,WorkTeam,TrainNum,Tbno,MarkFinish);
     }
     private void updateData(){
 

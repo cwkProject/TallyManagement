@@ -84,6 +84,7 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
     protected TallySaveData onCreateDataModel(String... parameters) {
         TallySaveData tallySaveData = new TallySaveData();
         Log.i("TallySaveWork", "" + parameters.length);
+
         tallySaveData.setCodeCompany(parameters[0]);
         tallySaveData.setCodeDepartment(parameters[1]);
         tallySaveData.setCgno(parameters[2]);
@@ -129,8 +130,10 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
         tallySaveData.setMachine(parameters[42]);
         tallySaveData.setWorkTeam(parameters[43]);
         tallySaveData.setTrainNum(parameters[44]);
-        tallySaveData.setWorkTeam(parameters[45]);
-        tallySaveData.setTrainNum(parameters[46]);
+        tallySaveData.setTbno(parameters[45]);
+        tallySaveData.setMarkFinish(parameters[46]);
+        Log.i("TallySaveWork", "" + tallySaveData.toString());
+        Log.i("TallySaveWork", "" +tallySaveData);
         return tallySaveData;
     }
 
