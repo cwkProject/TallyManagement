@@ -53,7 +53,7 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
      */
     @Override
     protected String onRequestSuccessSetResult(TallySaveData data) {
-        return data.getObjectdata();
+        return data.getMessage();
     }
 
     /**
@@ -69,7 +69,7 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
      */
     @Override
     protected String onRequestFailedSetResult(TallySaveData data) {
-        return data.getObjectdata();
+        return data.getMessage();
     }
 
     /**

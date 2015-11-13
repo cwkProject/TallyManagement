@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/23.
+ * Created by song on 2015/11/13.
  */
-public class TallyDetail_MachineData extends JsonDataModel {
+public class TallyDetail_NewTeamData extends JsonDataModel {
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "TallyDetail_MachineData.";
+    private static final String LOG_TAG = "TallyDetail_NewTeamData.";
 
     /**
      * 服务请求传入参数
@@ -57,7 +57,7 @@ public class TallyDetail_MachineData extends JsonDataModel {
     protected void onFillRequestParameters(Map<String, String> dataMap) {
         // 传入请求参数
         dataMap.put("Pmno", searchContent);
-        dataMap.put("Tbno", searchContent1);
+//        dataMap.put("Cgno", searchContent1);
 //        dataMap.put("Gbno", searchContent2);
         Log.i(LOG_TAG + "onFillRequestParameters", "Cgno is " + searchContent);
     }
@@ -102,7 +102,7 @@ public class TallyDetail_MachineData extends JsonDataModel {
      * 即{@link #onRequestResult(JSONObject)}返回值为true时，
      * 在{@link #onRequestMessage(boolean , JSONObject)}之后被调用，
      *
-     * @param jsonResult Json结果集
+     * @param //jsonResult Json结果集
      *
      * @throws JSONException 解析过程中出现错误
      */
@@ -112,36 +112,35 @@ public class TallyDetail_MachineData extends JsonDataModel {
 
         if (jsonArray != null) {
 
-            Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetail_MachineData count is " + jsonArray.length());
+            Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetail_NewTeamData count is " + jsonArray.length());
 
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONArray jsonMachine = jsonArray.getJSONArray(i);
-                Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetail_MachineData count is " + jsonMachine.length());
-                if (jsonMachine.length() > 10) {
+                Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetail_NewTeamData count is " + jsonMachine.length());
+                if (jsonMachine.length() > 9) {
 //         复选框标志（0未选中1选中）+机械编号+司机编号+机械+司机+起始时间+终止时间+数量
                     Map<String,Object> map = new HashMap<String,Object>() ;
-                    map.put("select", jsonMachine.getString(0));//是否选中
-                    map.put("code_machine", jsonMachine.getString(1));
-                    map.put("workno", jsonMachine.getString(2));
-                    map.put("machine", jsonMachine.getString(3));
-                    map.put("name", jsonMachine.getString(4));
-                    map.put("begintime", jsonMachine.getString(5));
-                    map.put("endtime",jsonMachine.getString(6));
-                    map.put("amount",jsonMachine.getString(7));//件数
-                    map.put("pmno",jsonMachine.getString(8));
-                    map.put("weight",jsonMachine.getString(9));
-                    map.put("count",jsonMachine.getString(10));//数量
-
+//                    map.put("select", jsonMachine.getString(0));//是否选中
+                    map.put("code_workteam", jsonMachine.getString(0));
+                    map.put("workno", jsonMachine.getString(1));
+                    map.put("machine", jsonMachine.getString(2));
+                    map.put("name", jsonMachine.getString(3));
+                    map.put("begintime", jsonMachine.getString(4));
+                    map.put("endtime",jsonMachine.getString(5));
+                    map.put("amount",jsonMachine.getString(6));//件数
+                    map.put("pmno",jsonMachine.getString(7));
+                    map.put("weight",jsonMachine.getString(8));
+                    map.put("count",jsonMachine.getString(9));//数量
                     // 添加到列表
-                    Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_MachineData  map list count is " + map);
+                    Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_NewTeamData  map list count is " + map.toString());
                     all.add(map);
-                    Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_MachineData  all list count is " + all.toString());
+                    Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_NewTeamData  all list count is " + all.toString());
                 }
             }
 
-            Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_MachineData count list count is " + all.size());
+            Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_NewTeamData count list count is " + all.size());
         }
     }
 

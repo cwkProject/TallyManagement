@@ -16,8 +16,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.port.tally.management.R;
-import com.port.tally.management.work.TallyDetailMachineNameWork;
-import com.port.tally.management.work.TallyDetailMachineWork;
+
 
 import org.mobile.library.model.work.WorkBack;
 
@@ -223,10 +222,10 @@ public class TallyMachine1Adapter extends BaseAdapter{
                 }
             }
         });
-//        if(item.get("select").equals("1")){
-//            hand.ck_mac.setChecked(true);}
-//        if(item.get("select").equals("0")){
-//            hand.ck_mac.setChecked(false);}
+        if(item.get("select").equals("1")){
+            hand.ck_mac.setChecked(true);}
+        if(item.get("select").equals("0")){
+            hand.ck_mac.setChecked(false);}
         if(!item.get("machine").equals("")){
             hand.tv_mac.setText((CharSequence) item.get("machine"));
         }
@@ -243,8 +242,8 @@ public class TallyMachine1Adapter extends BaseAdapter{
             hand.tv_macpeo.setText((CharSequence) item.get("name"));
         }
         if(!"".equals(item.get("pmno"))){
-            initMachine(item.get("pmno").toString());
-            initMachineName(item.get("pmno").toString());
+//            initMachine(item.get("pmno").toString());
+//            initMachineName(item.get("pmno").toString());
         }
 
         convertView.setTag(hand);
@@ -255,48 +254,48 @@ public class TallyMachine1Adapter extends BaseAdapter{
         TextView tv_mac,tv_start,tv_end,tv_macpeo;
         EditText et_count1,et_count2,et_count3;
     }
-    private void initMachine(String str){
-        TallyDetailMachineWork tallyDetailMachineWork = new TallyDetailMachineWork();
-        tallyDetailMachineWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
-            @Override
-            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
-                if (b) {
-                    String [][] machinearry = new String[2][maps.size()];
-                     machineitem =new String[maps.size()];
-                    for(int i =0; i<maps.size();i++){
-                        machinearry[0][i]=(String)maps.get(i).get("code_machine");
-                        machinearry[1][i]=(String)maps.get(i).get("machine");
-                        machineitem[i]=(String)maps.get(i).get("machine");
-                    }
-                    Log.i("machineitem[i]","machineitem[i]的值"+machineitem.toString());
-                    Log.i("maps", "" + maps.toString());
-
-
-
-
-                }
-            }
-        });
-        tallyDetailMachineWork.beginExecute(str);
-    }
-    private void initMachineName(String str){
-        TallyDetailMachineNameWork tallyDetailMachineNameWork = new TallyDetailMachineNameWork();
-        tallyDetailMachineNameWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
-            @Override
-            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
-                if (b) {
-                    String [][] machineNamearry = new String[2][maps.size()];
-                    machineNameitem =new String[maps.size()];
-                    for(int i =0; i<maps.size();i++){
-                        machineNamearry[0][i]=(String)maps.get(i).get("workno");
-                        machineNamearry[1][i]=(String)maps.get(i).get("name");
-                        machineNameitem[i]=(String)maps.get(i).get("name");
-                    }
-                    Log.i("machinenameitem[i]","machinenameitem[i]的值"+machineNameitem.toString());
-                    Log.i("maps", "" + maps.toString());
-                }
-            }
-        });
-        tallyDetailMachineNameWork.beginExecute(str);
-    }
+//    private void initMachine(String str){
+//        TallyDetailMachineWork tallyDetailMachineWork = new TallyDetailMachineWork();
+//        tallyDetailMachineWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+//            @Override
+//            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
+//                if (b) {
+//                    String [][] machinearry = new String[2][maps.size()];
+//                     machineitem =new String[maps.size()];
+//                    for(int i =0; i<maps.size();i++){
+//                        machinearry[0][i]=(String)maps.get(i).get("code_machine");
+//                        machinearry[1][i]=(String)maps.get(i).get("machine");
+//                        machineitem[i]=(String)maps.get(i).get("machine");
+//                    }
+//                    Log.i("machineitem[i]","machineitem[i]的值"+machineitem.toString());
+//                    Log.i("maps", "" + maps.toString());
+//
+//
+//
+//
+//                }
+//            }
+//        });
+//        tallyDetailMachineWork.beginExecute(str);
+//    }
+//    private void initMachineName(String str){
+//        TallyDetailMachineNameWork tallyDetailMachineNameWork = new TallyDetailMachineNameWork();
+//        tallyDetailMachineNameWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+//            @Override
+//            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
+//                if (b) {
+//                    String [][] machineNamearry = new String[2][maps.size()];
+//                    machineNameitem =new String[maps.size()];
+//                    for(int i =0; i<maps.size();i++){
+//                        machineNamearry[0][i]=(String)maps.get(i).get("workno");
+//                        machineNamearry[1][i]=(String)maps.get(i).get("name");
+//                        machineNameitem[i]=(String)maps.get(i).get("name");
+//                    }
+//                    Log.i("machinenameitem[i]","machinenameitem[i]的值"+machineNameitem.toString());
+//                    Log.i("maps", "" + maps.toString());
+//                }
+//            }
+//        });
+//        tallyDetailMachineNameWork.beginExecute(str);
+//    }
 }

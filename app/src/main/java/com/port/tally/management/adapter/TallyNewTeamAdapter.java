@@ -1,12 +1,9 @@
 package com.port.tally.management.adapter;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,21 +11,19 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.port.tally.management.R;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/23.
+ * Created by song on 2015/11/13.
  */
-public class TallyTeamAdapter extends BaseAdapter{
+public class TallyNewTeamAdapter extends BaseAdapter {
 
     private List<Map<String, Object>> data;
     private Context context;
@@ -38,7 +33,7 @@ public class TallyTeamAdapter extends BaseAdapter{
     //    修改后的值
     private List<Map<String, Object>> updata;
     private Map<String,String> upmap;
-    public TallyTeamAdapter(Context context, List<Map<String, Object>> data) {
+    public TallyNewTeamAdapter(Context context, List<Map<String, Object>> data) {
         this.data = data;
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -125,29 +120,29 @@ public class TallyTeamAdapter extends BaseAdapter{
             item.put("count",hand.et_count3.getText().toString());
         }
         hand.tv_mac.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                                           @Override
+                                           public void onClick(View v) {
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("请选择机械").setSingleChoiceItems(machineitem, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                                               final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                               builder.setTitle("请选择机械").setSingleChoiceItems(machineitem, 0, new DialogInterface.OnClickListener() {
+                                                   @Override
+                                                   public void onClick(DialogInterface dialog, int which) {
 //                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
-                        hand.tv_mac.setText(machineitem[which]);
-                        item.put("machine",machineitem[which]);
-                    }
-                }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                }).show();
+                                                       hand.tv_mac.setText(machineitem[which]);
+                                                       item.put("machine",machineitem[which]);
+                                                   }
+                                               }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                   public void onClick(DialogInterface dialog, int whichButton) {
+                                                       dialog.dismiss();
+                                                   }
+                                               }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                   public void onClick(DialogInterface dialog, int whichButton) {
+                                                       dialog.dismiss();
+                                                   }
+                                               }).show();
 
-            }
-        }
+                                           }
+                                       }
         );
 
         hand.tv_start.setOnClickListener(new View.OnClickListener() {
@@ -226,10 +221,10 @@ public class TallyTeamAdapter extends BaseAdapter{
                 }
             }
         });
-        if(item.get("select").equals("1")){
-            hand.ck_mac.setChecked(true);}
-        if(item.get("select").equals("0")){
-            hand.ck_mac.setChecked(false);}
+//        if(item.get("select").equals("1")){
+//            hand.ck_mac.setChecked(true);}
+//        if(item.get("select").equals("0")){
+//            hand.ck_mac.setChecked(false);}
         if(!item.get("machine").equals("")){
             hand.tv_mac.setText((CharSequence) item.get("machine"));
         }

@@ -144,41 +144,7 @@
 
             />
      </LinearLayout>
-        <LinearLayout
 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:id="@+id/linear_show"
-            android:background="@drawable/shape"
-            android:visibility="gone"
-            android:layout_marginTop="3dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            >
-            <TextView
-
-                android:layout_weight="1.0"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_cardstate"
-                android:layout_width="0dip"
-                android:layout_marginLeft="10.0dip"
-                android:textColor="@color/black"
-                android:text="件数"
-                android:textSize="@dimen/BasicTextSize"
-                />
-            <TextView
-
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10.0dip"
-                android:layout_weight="3.0"
-                android:textColor="@color/black"
-                android:textSize="@dimen/BasicTextSize"
-                android:background="@drawable/edittext_search"
-                android:id="@+id/tv_messgae"
-                />
-        </LinearLayout>
         <LinearLayout
 
             android:layout_width="fill_parent"
@@ -754,10 +720,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:id="@+id/count2"
+                android:id="@+id/linear_show"
                 android:layout_below="@+id/table_8"
                 android:gravity="center_vertical"
                 android:layout_marginTop="3dp"
+                android:visibility="gone"
                 android:background="@drawable/shape"
                 android:minHeight="40.0dip"
                 android:orientation="horizontal"

@@ -119,19 +119,20 @@ public class TallyDetail_TeamData extends JsonDataModel {
 
                 JSONArray jsonMachine = jsonArray.getJSONArray(i);
                 Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetail_MachineData count is " + jsonMachine.length());
-                if (jsonMachine.length() > 9) {
+                if (jsonMachine.length() > 10) {
 //         复选框标志（0未选中1选中）+机械编号+司机编号+机械+司机+起始时间+终止时间+数量
                     Map<String,Object> map = new HashMap<String,Object>() ;
-                    map.put("code_workteam", jsonMachine.getString(0));
-                    map.put("workno", jsonMachine.getString(1));
-                    map.put("machine", jsonMachine.getString(2));
-                    map.put("name", jsonMachine.getString(3));
-                    map.put("begintime", jsonMachine.getString(4));
-                    map.put("endtime",jsonMachine.getString(5));
-                    map.put("amount",jsonMachine.getString(6));//件数
-                    map.put("pmno",jsonMachine.getString(7));
-                    map.put("weight",jsonMachine.getString(8));
-                    map.put("count",jsonMachine.getString(9));//数量
+                    map.put("select", jsonMachine.getString(0));//是否选中
+                    map.put("code_workteam", jsonMachine.getString(1));
+                    map.put("workno", jsonMachine.getString(2));
+                    map.put("machine", jsonMachine.getString(3));
+                    map.put("name", jsonMachine.getString(4));
+                    map.put("begintime", jsonMachine.getString(5));
+                    map.put("endtime",jsonMachine.getString(6));
+                    map.put("amount",jsonMachine.getString(7));//件数
+                    map.put("pmno",jsonMachine.getString(8));
+                    map.put("weight",jsonMachine.getString(9));
+                    map.put("count",jsonMachine.getString(10));//数量
                     // 添加到列表
                     Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_TeamData  map list count is " + map.toString());
                     all.add(map);

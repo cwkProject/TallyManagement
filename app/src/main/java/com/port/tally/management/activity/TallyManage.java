@@ -83,11 +83,12 @@ public class TallyManage extends Activity {
 //                提交标志
                 Bundle b = getIntent().getExtras();
                 value = b.getStringArray("detailString");
-                String[] valueflag = new String[4];
+                String[] valueflag = new String[5];
                 valueflag[0] = value[0];
                 valueflag[1] = value[1];
                 valueflag[2] = value[2];
                 valueflag[3] = map.get("MarkFinish").toString();
+                valueflag[4] = map.get("Tbno").toString();
                 b.putStringArray("detailString", valueflag);
 //                Log.i("bflag的值是", map.get("MarkFinish").toString());
                 Log.i("valuedetailString的值是", value[0] + "" + value[1] + "" + value[2] + "" + valueflag[3] + "");
@@ -125,15 +126,12 @@ public class TallyManage extends Activity {
 
                 dialog.show();
 
-                showDialog("确定删除吗？");
+
                 return true;
             }
         });
     }
-//    显示对话框
-    private void showDialog(String str) {
 
-    }
     private void deletListData(String par1,String par2, String par3){
         //实例化，传入参数
         TallyDeletWork tallyDeletWork = new TallyDeletWork();

@@ -1,12 +1,9 @@
 package com.port.tally.management.adapter;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,31 +11,29 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.port.tally.management.R;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/23.
+ * Created by song on 2015/11/13.
  */
-public class TallyTeamAdapter extends BaseAdapter{
+public class TallyNewMachineAdapter extends BaseAdapter {
 
     private List<Map<String, Object>> data;
     private Context context;
     private LayoutInflater inflater;
-    private String [] machineitem;//班组列表数据
+    private String [] machineitem;//机械列表数据
     private String [] machineNameitem;//司机列表数据
     //    修改后的值
     private List<Map<String, Object>> updata;
     private Map<String,String> upmap;
-    public TallyTeamAdapter(Context context, List<Map<String, Object>> data) {
+    public TallyNewMachineAdapter(Context context, List<Map<String, Object>> data) {
         this.data = data;
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -72,15 +67,16 @@ public class TallyTeamAdapter extends BaseAdapter{
         final Hand hand;
         if (convertView == null) {
             hand = new Hand();
-            convertView = inflater.inflate(R.layout.team_item1, null);
+            convertView = inflater.inflate(R.layout.machine_item1, null);
             hand.ck_mac = (CheckBox) convertView.findViewById(R.id.im_mac);
             hand.tv_mac = (TextView) convertView.findViewById(R.id.tv_mac);
             hand.tv_start = (TextView) convertView.findViewById(R.id.tv_start);
             hand.tv_end = (TextView) convertView.findViewById(R.id.tv_end);
-            hand.et_count1= (EditText) convertView.findViewById(R.id.et_count1);
+            hand.et_count1 = (EditText) convertView.findViewById(R.id.et_count1);
             hand.et_count2 = (EditText) convertView.findViewById(R.id.et_count2);
             hand.et_count3 = (EditText) convertView.findViewById(R.id.et_count3);
             hand.tv_macpeo = (TextView) convertView.findViewById(R.id.tv_macpeo);
+
         } else {
             hand = (Hand) convertView.getTag();
         }
@@ -95,7 +91,7 @@ public class TallyTeamAdapter extends BaseAdapter{
                     public void onClick(DialogInterface dialog, int which) {
 //                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
                         hand.tv_macpeo.setText(machineNameitem[which]);
-                        item.put("name", machineNameitem[which]);
+                        data.get(position).put("name", machineNameitem[which]);
                     }
                 }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -109,21 +105,8 @@ public class TallyTeamAdapter extends BaseAdapter{
 
             }
         });
-        hand.et_count1.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        hand.et_count2.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        hand.et_count3.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        if(!hand.et_count1.getText().toString().equals("")){
-            item.put("amount",hand.et_count1.getText().toString());
-        }
-        if(!hand.et_count2.getText().toString().equals("")){
-            item.put("weight",hand.et_count2.getText().toString());
-        }
-        if(!hand.et_count3.getText().toString().equals("")){
-            item.put("count",hand.et_count3.getText().toString());
-        }
         hand.tv_mac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,7 +117,7 @@ public class TallyTeamAdapter extends BaseAdapter{
                     public void onClick(DialogInterface dialog, int which) {
 //                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
                         hand.tv_mac.setText(machineitem[which]);
-                        item.put("machine",machineitem[which]);
+                        data.get(position).put("machine", machineitem[which]);
                     }
                 }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -147,9 +130,20 @@ public class TallyTeamAdapter extends BaseAdapter{
                 }).show();
 
             }
-        }
-        );
+        });
 
+        hand.et_count1.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.et_count2.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.et_count3.setInputType(InputType.TYPE_CLASS_NUMBER);
+        if(!hand.et_count1.getText().toString().equals("")){
+            item.put("amount",hand.et_count1.getText().toString());
+        }
+        if(!hand.et_count2.getText().toString().equals("")){
+            item.put("weight",hand.et_count2.getText().toString());
+        }
+        if(!hand.et_count3.getText().toString().equals("")){
+            item.put("count",hand.et_count3.getText().toString());
+        }
         hand.tv_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,13 +161,11 @@ public class TallyTeamAdapter extends BaseAdapter{
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         StringBuffer sb = new StringBuffer();
                         sb.append(timePicker.getCurrentHour())
                                 .append(":").append(timePicker.getCurrentMinute());
                         hand.tv_start.setText(sb);
-                        item.put("amount", sb);
-
+                        data.get(position).put("begintime", sb);
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -200,11 +192,11 @@ public class TallyTeamAdapter extends BaseAdapter{
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         StringBuffer sb = new StringBuffer();
                         sb.append(timePicker.getCurrentHour())
                                 .append(":").append(timePicker.getCurrentMinute());
                         hand.tv_end.setText(sb);
+                        data.get(position).put("endtime", sb);
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -226,32 +218,30 @@ public class TallyTeamAdapter extends BaseAdapter{
                 }
             }
         });
-        if(item.get("select").equals("1")){
-            hand.ck_mac.setChecked(true);}
-        if(item.get("select").equals("0")){
-            hand.ck_mac.setChecked(false);}
+//        if(item.get("select").equals("1")){
+//            hand.ck_mac.setChecked(true);}
+//        if(item.get("select").equals("0")){
+//            hand.ck_mac.setChecked(false);}
         if(!item.get("machine").equals("")){
             hand.tv_mac.setText((CharSequence) item.get("machine"));
-        }
-        if(!item.get("name").equals("")){
-            hand.tv_macpeo.setText((CharSequence) item.get("name"));
         }
         if(!item.get("amount").equals("")){
             hand.et_count1.setText((CharSequence) item.get("amount"));
         }
         if(!item.get("weight").equals("")){
             hand.et_count2.setText((CharSequence) item.get("weight"));
-        } if(!item.get("count").equals("")){
+        }
+        if(!item.get("count").equals("")){
             hand.et_count3.setText((CharSequence) item.get("count"));
         }
-        if(!item.get("pmno").equals("")){
+        if(!item.get("name").equals("")){
+            hand.tv_macpeo.setText((CharSequence) item.get("name"));
+        }
+        if(!"".equals(item.get("pmno"))){
 //            initMachine(item.get("pmno").toString());
 //            initMachineName(item.get("pmno").toString());
         }
 
-//        if(!item.get("amount").equals("")){
-//            hand.tv_count.setText((CharSequence) item.get("amount"));
-//        }
         convertView.setTag(hand);
         return convertView;
     }
@@ -260,19 +250,18 @@ public class TallyTeamAdapter extends BaseAdapter{
         TextView tv_mac,tv_start,tv_end,tv_macpeo;
         EditText et_count1,et_count2,et_count3;
     }
-
 //    private void initMachine(String str){
-//        TallyDetailTeamWork tallyDetailTeamWork = new TallyDetailTeamWork();
-//        tallyDetailTeamWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+//        TallyDetailMachineWork tallyDetailMachineWork = new TallyDetailMachineWork();
+//        tallyDetailMachineWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 //            @Override
 //            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
 //                if (b) {
 //                    String [][] machinearry = new String[2][maps.size()];
-//                    machineitem =new String[maps.size()];
+//                     machineitem =new String[maps.size()];
 //                    for(int i =0; i<maps.size();i++){
-//                        machinearry[0][i]=(String)maps.get(i).get("code_workteam");
-//                        machinearry[1][i]=(String)maps.get(i).get("workteam");
-//                        machineitem[i]=(String)maps.get(i).get("workteam");
+//                        machinearry[0][i]=(String)maps.get(i).get("code_machine");
+//                        machinearry[1][i]=(String)maps.get(i).get("machine");
+//                        machineitem[i]=(String)maps.get(i).get("machine");
 //                    }
 //                    Log.i("machineitem[i]","machineitem[i]的值"+machineitem.toString());
 //                    Log.i("maps", "" + maps.toString());
@@ -283,11 +272,11 @@ public class TallyTeamAdapter extends BaseAdapter{
 //                }
 //            }
 //        });
-//        tallyDetailTeamWork.beginExecute(str);
+//        tallyDetailMachineWork.beginExecute(str);
 //    }
 //    private void initMachineName(String str){
-//        TallyDetailTeamNameWork tallyDetailTeamNameWork = new TallyDetailTeamNameWork();
-//        tallyDetailTeamNameWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+//        TallyDetailMachineNameWork tallyDetailMachineNameWork = new TallyDetailMachineNameWork();
+//        tallyDetailMachineNameWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 //            @Override
 //            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
 //                if (b) {
@@ -303,6 +292,6 @@ public class TallyTeamAdapter extends BaseAdapter{
 //                }
 //            }
 //        });
-//        tallyDetailTeamNameWork.beginExecute(str);
+//        tallyDetailMachineNameWork.beginExecute(str);
 //    }
 }
