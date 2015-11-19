@@ -479,6 +479,7 @@
         <LinearLayout
             android:layout_below="@+id/table_8"
             android:layout_width="fill_parent"
+            android:id="@+id/linear_quality1"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:background="@drawable/shape"
@@ -505,6 +506,40 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:id="@+id/linear_quality2"
+            android:background="@drawable/shape"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_weight="1.0"
+                android:layout_height="wrap_content"
+
+                android:layout_width="0dip"
+                android:layout_marginLeft="10.0dip"
+                android:textColor="@color/black"
+                android:text="质量"
+                android:textSize="@dimen/BasicTextSize"
+                />
+            <TextView
+
+                android:layout_width="0dip"
+                android:layout_height="40dip"
+                android:layout_marginRight="10.0dip"
+                android:layout_weight="3.0"
+                android:textColor="@color/black"
+                android:textSize="@dimen/BasicTextSize"
+                android:gravity="center"
+                android:background="@drawable/shape1"
+                android:id="@+id/tv_quality"
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_below="@+id/table_8"
@@ -559,7 +594,8 @@
                 android:layout_weight="1.0"
                 android:text="到区域"
                 android:textColor="@color/black"
-                android:textSize="@dimen/BasicTextSize"/>
+                android:textSize="@dimen/BasicTextSize"
+                />
             <Spinner
                 android:id="@+id/toarea_spinner"
                 android:layout_width="0dip"
@@ -594,11 +630,12 @@
             <EditText
                 android:id="@+id/et_vehicle"
                 android:layout_width="0dip"
-
+                android:digits="1234567890."
                 android:layout_height="40.0dip"
                 android:layout_marginRight="5.0dip"
                 android:layout_marginLeft="12.0dip"
                 android:layout_weight="4.0"
+                android:gravity="center"
                 android:layout_marginTop="2dp"
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
@@ -645,17 +682,18 @@
                 android:minHeight="30.0dip"
                 android:orientation="horizontal">
                 <EditText
-                    android:id="@+id/et_count2"
+                    android:id="@+id/et_count1"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:text=""
+                    android:digits="1234567890."
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"/>
                 <TextView
                     android:layout_width="0dip"
-                    android:layout_weight="1.0"
+                    android:layout_weight="0.6"
                     android:layout_height="wrap_content"
                     android:text="件"
                     android:gravity="center"
@@ -670,17 +708,18 @@
                 android:minHeight="30.0dip"
                 android:orientation="horizontal">
                 <EditText
-                    android:id="@+id/et_count1"
+                    android:id="@+id/et_count2"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:text=""
+                    android:digits="1234567890."
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"/>
                 <TextView
                     android:layout_width="0dip"
-                    android:layout_weight="1.0"
+                    android:layout_weight="0.6"
                     android:layout_height="wrap_content"
                     android:text="吨"
                     android:gravity="center"
@@ -700,6 +739,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:text=""
+                    android:digits="1234567890."
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"/>
@@ -708,7 +748,7 @@
                     android:text="数量"
                     android:layout_width="0dip"
                     android:gravity="center"
-                    android:layout_weight="1.0"
+                    android:layout_weight="0.8"
                     android:textColor="@color/black"
                     android:textSize="@dimen/BasicTextSize"/>
             </LinearLayout>
@@ -750,6 +790,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.0"
                             android:text=""
+                            android:digits="1234567890."
                             android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/BasicTextSize"/>
@@ -775,6 +816,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.0"
                             android:text=""
+                            android:digits="1234567890."
                             android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/BasicTextSize"/>
@@ -783,6 +825,7 @@
                             android:layout_weight="1.0"
                             android:layout_height="wrap_content"
                             android:text="吨"
+
                             android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/BasicTextSize"/>
@@ -800,6 +843,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.0"
                             android:text=""
+                            android:digits="1234567890."
                             android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="@dimen/BasicTextSize"/>

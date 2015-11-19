@@ -1,7 +1,7 @@
 package com.port.tally.management.work;
 
-import com.port.tally.management.data.TallyDetail_MachineData;
-import com.port.tally.management.data.TallyDetail_TeamData;
+import com.port.tally.management.data.ToAreaData;
+import com.port.tally.management.data.ToAreaNewData;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/24.
+ * Created by song on 2015/11/17.
  */
-public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<String, Object>>, TallyDetail_TeamData> {
+public class ToAreaNewWork extends DefaultWorkModel<String, List<Map<String, Object>>,ToAreaNewData> {
 
     /**
      * 参数合法性检测，
@@ -26,7 +26,7 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
 
     protected boolean onCheckParameters(String... parameters) {
         // 需要至少两个传入参数
-        return !(parameters == null || parameters.length < 1);
+        return true;
     }
 
     /**
@@ -36,7 +36,7 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_Team_URL;
+        return StaticValue.HTTP_GET_DetailAreaNEW_URL;
     }
 
     /**
@@ -51,7 +51,7 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestSuccessSetResult(TallyDetail_TeamData data) {
+    protected List<Map<String, Object>> onRequestSuccessSetResult(ToAreaNewData data) {
         return data.getAll();
     }
 
@@ -67,7 +67,7 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestFailedSetResult(TallyDetail_TeamData data) {
+    protected List<Map<String, Object>> onRequestFailedSetResult( ToAreaNewData data) {
         return null;
     }
 
@@ -79,13 +79,14 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      *
      * @return 参数设置完毕后的数据模型对象
      */
+    @Override
+    protected  ToAreaNewData onCreateDataModel(String... parameters) {
+        ToAreaNewData toAreaData = new ToAreaNewData();
+        toAreaData.setSearchContent1(parameters[0]);
+        toAreaData.setSearchContent2(parameters[1]);
+        toAreaData.setSearchContent3(parameters[2]);
+        return toAreaData;
 
-    protected TallyDetail_TeamData onCreateDataModel(String... parameters) {
-        TallyDetail_TeamData tallyDetail_TeamData = new TallyDetail_TeamData();
-
-        tallyDetail_TeamData.setSearchContent(parameters[0]);
-        tallyDetail_TeamData.setSearchContent1(parameters[1]);
-//        tallyDetail_TeamData.setSearchContent2(parameters[2]);
-        return tallyDetail_TeamData;
     }
 }
+

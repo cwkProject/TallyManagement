@@ -113,7 +113,9 @@ public class TallyManage extends Activity {
                                 } else {
                                     dataList.remove(index - 1);
                                     String tbno = map1.get("Tbno").toString();
-                                    deletListData(value[0], value[1], tbno);
+                                    Log.i("tbno的值是",""+tbno);
+                                    showProgressDialog();
+                                    deletListData(tbno);
                                     tallyManageAdapter.notifyDataSetChanged();
                                 }
 
@@ -132,7 +134,7 @@ public class TallyManage extends Activity {
         });
     }
 
-    private void deletListData(String par1,String par2, String par3){
+    private void deletListData(String par3){
         //实例化，传入参数
         TallyDeletWork tallyDeletWork = new TallyDeletWork();
 
@@ -141,15 +143,19 @@ public class TallyManage extends Activity {
             @Override
             public void doEndWork(boolean b, String s) {
                 if(b){
-                    showToast("删除成功");
+                    Log.i("TallyMangede删除的值",""+s);
+                    progressDialog.dismiss();
                     showToast(s);
+//                    showToast(s);
                 } else{
-                    showToast("删除失败");
+                    progressDialog.dismiss();
+                    Log.i("TallyMangede删除的值",""+s);
                     showToast(s);
+//                    showToast(s);
                 }
             }
         });
-          tallyDeletWork.beginExecute(par1,par2,par3);
+          tallyDeletWork.beginExecute(par3);
     }
     private void Init() {
         // TODO Auto-generated method stub

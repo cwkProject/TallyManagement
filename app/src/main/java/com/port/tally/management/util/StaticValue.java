@@ -214,12 +214,14 @@ public interface StaticValue {
     //提交开工时间
     String HTTP_GET_UPDATSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/StartWork" +
             ".aspx";
-    String HTTP_GET_Team_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetTeamWorker.aspx";
+    String HTTP_GET_Team_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetTeamWorkerAndMark.aspx";
     String HTTP_GET_Machine_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMachineAndMark.aspx";
     String HTTP_GET_NewTeam_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetTeamWorker.aspx";
     String HTTP_GET_NewMachine_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMachine.aspx";
     //提交完工时间
     String HTTP_GET_UPDATEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/EndWork.aspx";
+    //删除暂存数据
+    String HTTP_GET_TALLYDETAILDELET_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/DeleteSavedTallyBill.aspx";
 // 作业计划第一页
     String HTTP_GET_WORKPLAN_URL = "http://218.92.115.55/M_Lhgl/Service/Plan/GetOperationPlan.aspx";
     // 作业计划详情页
@@ -238,5 +240,14 @@ public interface StaticValue {
 String HTTP_GET_TALLYTWO_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetAllTallyBill.aspx";
 //    保存接口
 String HTTP_POST_TALLYSAVE_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/SaveTallyBill.aspx";
-
+//    新子过程标志
+    String HTTP_GET_SUBPROCESSNEW_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedSpecialMark.aspx";
+    //    新区域
+    String HTTP_GET_DetailAreaNEW_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedArea.aspx";
+    //   //获取暂存质量（理货作业票模块）
+    String HTTP_GetSavedQuality_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedQuality.aspx";
+    //获取暂存数量数据
+    String HTTP_GetSavedQuantityData_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedQuantityData.aspx";
+    //获取暂存票货数据
+    String HTTP_GetGoodsBill_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedGoodsBill.aspx";
 }

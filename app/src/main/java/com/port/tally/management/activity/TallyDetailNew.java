@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -62,99 +64,100 @@ public class TallyDetailNew extends TabActivity {
     /**
      * @param args
      */
+    private String str="";
     //公司编码1
-    private  String CodeCompany= null;
+    private  String CodeCompany= "";
     //部门编码2
-    private String CodeDepartment= null;
+    private String CodeDepartment= "";
     //委托编码3
-    private String Cgno= null;
+    private String Cgno= "";
     //派工编码4
-    private String Pmno= null;
+    private String Pmno= "";
     //用户编码5
-    private String CodeTallyman= null;
+    private String CodeTallyman= "";
     //用户姓名6
-    private String Tallyman= null;
+    private String Tallyman= "";
     //源航次编码7
-    private String Vgno= null;
+    private String Vgno= "";
     //源仓别8
-    private String Cabin= null;
+    private String Cabin= "";
     //源车别代码9
-    private String CodeCarrier= null;
+    private String CodeCarrier= "";
     //源车号10
-    private String CarrierNum= null;
+    private String CarrierNum= "";
     //源驳船船舶规范编码11
-    private String CodeNvessel= null;
+    private String CodeNvessel= "";
     //源驳船属性12
-    private String Bargepro= null;
+    private String Bargepro= "";
     //源场地编码13
-    private String CodeStorage= null;
+    private String CodeStorage= "";
     //源货位编码14
-    private String CodeBooth= null;
+    private String CodeBooth= "";
     //源桩角编码15
-    private String CodeAllocation= null;
+    private String CodeAllocation= "";
     //源载体描述16
-    private String Carrier1= null;
+    private String Carrier1= "";
     //源载体属性17
-    private String Carrier1Num= null;
+    private String Carrier1Num= "";
     //目的航次编码18
-    private String VgnoLast= null;
+    private String VgnoLast= "";
     //目的仓别19
-    private String CabinLast= null;
+    private String CabinLast= "";
     //目的车别代码20
-    private String CodeCarrierLast= null;
+    private String CodeCarrierLast= "";
     //目的车号21
-    private String CarrierNumLast= null;
+    private String CarrierNumLast= "";
     //目的驳船船舶规范编码22
-    private String CodeNvesselLast= null;
+    private String CodeNvesselLast="";
     //目的驳船属性23
-    private String BargeproLast= null;
+    private String BargeproLast= "";
     //目的场地编码24
-    private String CodeStorageLast= null;
+    private String CodeStorageLast= "";
     //目的货位编码25
-    private String CodeBoothLast= null;
+    private String CodeBoothLast= "";
     //目的桩角编码26
-    private String CodeAllocationLast= null;
+    private String CodeAllocationLast= "";
     //目的载体描述27
-    private String Carrier2= null;
+    private String Carrier2= "";
     //目的载体属性28
-    private String Carrier2num= null;
+    private String Carrier2num= "";
     //票货编码29
-    private String CodeGoodsBill= null;
+    private String CodeGoodsBill= "";
     //票货描述30
-    private String GoodsBillDisplay= null;
+    private String GoodsBillDisplay= "";
     //商务票货编码31
-    private String CodeGbBusiness= null;
+    private String CodeGbBusiness= "";
     //商务票货描述32
-    private String GbBusinessDisplay= null;
+    private String GbBusinessDisplay= "";
     //子过程特殊标志编码33
-    private String CodeSpecialMark= null;
+    private String CodeSpecialMark= "";
     //源区域编码34
-    private String CodeWorkingArea= null;
+    private String CodeWorkingArea= "";
     //目的区域编码35
-    private String CodeWorkingAreaLast= null;
+    private String CodeWorkingAreaLast= "";
     //质量36
-    private String Quality= null;
+    private String Quality= "";
     //件数1 37
-    private String Amount= null;
+    private String Amount= "";
     //重量1 38
-    private String Weight= null;
+    private String Weight= "";
     //数量1 39
-    private String Count= null;
+    private String Count= "";
     //件数2 40
-    private String Amount2= null;
-//    41
-    private String Weight2= null;
-//    42
-    private String Count2= null;
-//    43
-    private String Machine= null;
-//    44
-    private String WorkTeam= null;
+    private String Amount2= "";
+    //    41
+    private String Weight2= "";
+    //    42
+    private String Count2= "";
+    //    43
+    private String Machine= "";
+    //    44
+    private String WorkTeam="";
     //45 车数
-    private String TrainNum= null;
+    private String TrainNum= "";
     //
-    private String Tbno= null;
-    private String MarkFinish= null;
+    private String Tbno= "";
+    private String MarkFinish= "";
     private Button btn_save,btn_upload;
     private List<Map<String, Object>> dataList = null;
     private List<Map<String, Object>> dataListMachine =null;
@@ -185,6 +188,7 @@ public class TallyDetailNew extends TabActivity {
         dataListTeam = new ArrayList<>();
         CodeCompany = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();//公司编码1
         CodeDepartment=  GlobalApplication.getGlobal().getLoginStatus().getCodeDepartment();//部门编码2
+        Log.i(" CodeDepartment",""+CodeDepartment);
         CodeTallyman=  GlobalApplication.getGlobal().getLoginStatus().getUserID();
         Tallyman= GlobalApplication.getGlobal().getLoginStatus().getNickname();
         init();
@@ -207,6 +211,7 @@ public class TallyDetailNew extends TabActivity {
         loadToAreaData();
         loadFromAreaData();
     }
+
     //    加载标志数据
     private void loadFlagData(){
         SubprocessesFlagWork subprocessesFlagWork = new SubprocessesFlagWork();
@@ -224,7 +229,8 @@ public class TallyDetailNew extends TabActivity {
                             public void onItemSelected(AdapterView<?> parent, View view,
                                                        int position, long id) {
                                 HashMap map = (HashMap) parent.getItemAtPosition(position);
-                                CodeSpecialMark =  map.get("tv2").toString();
+                                CodeSpecialMark =  map.get("tv1").toString();
+                                Log.i("CodeSpecialMark",""+CodeSpecialMark);
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                             }
                             @Override
@@ -260,7 +266,8 @@ public class TallyDetailNew extends TabActivity {
                             public void onItemSelected(AdapterView<?> parent, View view,
                                                        int position, long id) {
                                 HashMap map = (HashMap) parent.getItemAtPosition(position);
-                                CodeWorkingArea =map.get("tv2").toString();;
+                                CodeWorkingArea =map.get("tv1").toString();
+                                Log.i("CodeWorkingArea",""+CodeWorkingArea);
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                             }
                             @Override
@@ -295,7 +302,8 @@ public class TallyDetailNew extends TabActivity {
                             public void onItemSelected(AdapterView<?> parent, View view,
                                                        int position, long id) {
                                 HashMap map = (HashMap) parent.getItemAtPosition(position);
-                                CodeWorkingAreaLast =map.get("tv2").toString();
+                                CodeWorkingAreaLast = map.get("tv1").toString();
+                                Log.i("CodeWorkingAreaLast",""+CodeWorkingAreaLast);
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                             }
 
@@ -343,11 +351,12 @@ public class TallyDetailNew extends TabActivity {
                                 public void onItemSelected(AdapterView<?> parent, View view,
                                                            int position, long id) {
                                     HashMap map = (HashMap) parent.getItemAtPosition(position);
-                                    CodeGoodsBill =map.get("tv2").toString();
-                                    GoodsBillDisplay =map.get("tv3").toString();
+                                    CodeGoodsBill = map.get("tv2").toString();
+                                    GoodsBillDisplay = map.get("tv3").toString();
                                     String str = parent.getItemAtPosition(position).toString();
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                                 }
+
                                 @Override
                                 public void onNothingSelected(AdapterView<?> parent) {
                                     // TODO Auto-generated method stub
@@ -363,8 +372,8 @@ public class TallyDetailNew extends TabActivity {
                                 public void onItemSelected(AdapterView<?> parent, View view,
                                                            int position, long id) {
                                     HashMap map = (HashMap) parent.getItemAtPosition(position);
-                                    CodeGbBusiness =map.get("tv4").toString();
-                                    GbBusinessDisplay =map.get("tv5").toString();
+                                    CodeGbBusiness = map.get("tv4").toString();
+                                    GbBusinessDisplay = map.get("tv5").toString();
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                                 }
 
@@ -416,11 +425,12 @@ public class TallyDetailNew extends TabActivity {
                     if(!"".equals(stringObjectMap.get("Vgno"))){
                         Vgno =stringObjectMap.get("Vgno").toString();
                         VgnoLast=stringObjectMap.get("Vgno").toString();
-                        Carrier1=stringObjectMap.get("Vgno").toString();
+
                     }
                     if(!"".equals(stringObjectMap.get("VgDisplay")))
                         tv_tvboatdetail.setText(stringObjectMap.get("VgDisplay").toString());
                         tv_Eboatdetail.setText(stringObjectMap.get("VgDisplay").toString());
+                        Carrier1=stringObjectMap.get("VgDisplay").toString();
                     if(!"".equals(stringObjectMap.get("Cabin")))
                         tv_changbiedetail.setText(stringObjectMap.get("Cabin").toString());
                         Cabin =stringObjectMap.get("Cabin").toString();
@@ -439,7 +449,7 @@ public class TallyDetailNew extends TabActivity {
                         CodeStorage =stringObjectMap.get("CodeStorage").toString();
                         CodeStorageLast =stringObjectMap.get("CodeStorage").toString();
                         Carrier2num=stringObjectMap.get("CodeStorage").toString();
-                        Carrier2 =stringObjectMap.get("CodeStorage").toString();
+                        Carrier2 =stringObjectMap.get("Storage").toString();
                     if(!"".equals(stringObjectMap.get("Nvessel")))
                         tv_tvboatdetail.setText(stringObjectMap.get("Nvessel").toString());
                         tv_Eboatdetail.setText(stringObjectMap.get("Nvessel").toString());
@@ -620,9 +630,12 @@ public class TallyDetailNew extends TabActivity {
         tv_cardstate = (TextView)findViewById(R.id.tv_cardstate);
         xiaozhang_ly = (LinearLayout)findViewById(R.id.entrust1);
         linear_show= (LinearLayout)findViewById(R.id.linear_show);
-        et_count1.setInputType(InputType.TYPE_CLASS_NUMBER);
-        et_count2.setInputType(InputType.TYPE_CLASS_NUMBER);
-        et_count3.setInputType(InputType.TYPE_CLASS_NUMBER);
+        et_count1.setInputType(InputType.TYPE_CLASS_PHONE);
+        et_count2.setInputType(InputType.TYPE_CLASS_PHONE);
+        et_count3.setInputType(InputType.TYPE_CLASS_PHONE);
+        et_count21.setInputType(InputType.TYPE_CLASS_PHONE);
+        et_count22.setInputType(InputType.TYPE_CLASS_PHONE);
+        et_count23.setInputType(InputType.TYPE_CLASS_PHONE);
         title.setText("作业票生成");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
@@ -633,6 +646,35 @@ public class TallyDetailNew extends TabActivity {
                 R.id.LinearLayout001).setIndicator("机械"));
         mTabHost.addTab(mTabHost.newTabSpec("班组").setContent(
                 R.id.LinearLayout002).setIndicator("班组"));
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+
+                if (tabId.equals("班组")) {
+                    str = tabId;
+                    if (tallyMachineAdapter != null) {
+                        tallyMachineAdapter.notifyDataSetChanged();
+                        Log.i("tallyMachineAdapter",""+tallyMachineAdapter.toString()+"/"+tallyMachineAdapter.isEmpty());
+                    }
+
+                    if (tallyTeamAdapter != null) {
+                        tallyTeamAdapter.notifyDataSetChanged();
+                        Log.i("tallyTeamAdapter", "" + tallyTeamAdapter.toString() + "/" + tallyTeamAdapter.isEmpty());
+                    }
+                    Log.i("dataListMachine", "" + dataListMachine+ "/" + dataListMachine.toString());
+                }
+                if (tabId.equals("机械")) {
+                    str = tabId;
+                    if (tallyMachineAdapter != null) {
+                        tallyMachineAdapter.notifyDataSetChanged();
+                    }
+
+                    if (tallyTeamAdapter != null) {
+                        tallyTeamAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
         imgLeft.setOnClickListener(new View.OnClickListener() {
 
             //			@Override
@@ -644,46 +686,133 @@ public class TallyDetailNew extends TabActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog = new AlertDialog.Builder(TallyDetailNew.this).setTitle("提示").setMessage("确定保存？")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                tallyMachineAdapter.notifyDataSetChanged();
-                                Log.i("dataListMachine",""+dataListMachine.size());
-                                //44
-                                Machine = listmap_to_json_string(dataListMachine);
-                                Amount = et_count1.getText().toString();
-                                Weight = et_count2.getText().toString();
-                                Count = et_count3.getText().toString();
-                                Amount2 = et_count21.getText().toString();
-                                Weight2 = et_count22.getText().toString();
-                                Count2 =  et_count23.getText().toString();
-                                TrainNum =et_vehicle.getText().toString();
-                                   MarkFinish = "0";
-                                CodeWorkingAreaLast = fromarea_spinner.getSelectedItem().toString();
-                                CodeWorkingArea =toarea_spinner.getSelectedItem().toString();
-                                Log.i("Machine", "" + Machine);
-                                //43
-                                WorkTeam =listmap_to_json_string(dataListTeam);
-                                saveData();
-                            }
-                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                if(str.equals("班组")){
+                    mTabHost.setCurrentTab(0);
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            mTabHost.setCurrentTab(1);
+                        }
+                    }, 1000);
+
+                }
+                else if(str.equals("机械")){
+                    mTabHost.setCurrentTab(1);
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            mTabHost.setCurrentTab(0);
+                        }
+                    }, 1000);
+                }
+                if (tallyMachineAdapter != null) {
+                    tallyMachineAdapter.notifyDataSetChanged();
+                }
+                if (tallyTeamAdapter != null) {
+                    tallyTeamAdapter.notifyDataSetChanged();
+                }
+
+             final  Dialog dialog = new AlertDialog.Builder(TallyDetailNew.this).setTitle("提示").setMessage("确定暂存吗？")
+                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int whichButton) {
+
+                         Log.i("dataListMachine", "" + dataListMachine.size());
+                         //44
+                         Machine = listmap_to_json_string(dataListMachine);
+                         Weight = et_count1.getText().toString();
+                         Amount = et_count2.getText().toString();
+                         Count = et_count3.getText().toString();
+                         Amount2 = et_count21.getText().toString();
+                         Weight2 = et_count22.getText().toString();
+                         Count2 = et_count23.getText().toString();
+                         TrainNum = et_vehicle.getText().toString();
+                         MarkFinish = "0";
+//                                CodeWorkingAreaLast = fromarea_spinner.getSelectedItem().toString();
+//                                CodeWorkingArea =toarea_spinner.getSelectedItem().toString();
+                         Log.i("Machine", "" + Machine);
+                         //43
+                         WorkTeam = listmap_to_json_string(dataListTeam);
+
+                                 saveData("0");
+
+
+                     }
+                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 dialog.cancel();
                             }
                         }).create();//创建按钮
-
-                dialog.show();
-
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    dialog.show();
+                 }
+                 }, 1000);
 
             }
         });
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                   MarkFinish = "1";
+                if(str.equals("班组")){
+                    mTabHost.setCurrentTab(0);
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            mTabHost.setCurrentTab(1);
+                        }
+                    }, 1000);
+
+                }
+                else if(str.equals("机械")){
+                    mTabHost.setCurrentTab(1);
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            mTabHost.setCurrentTab(0);
+                        }
+                    }, 1000);
+                }
+                if (tallyMachineAdapter != null) {
+                    tallyMachineAdapter.notifyDataSetChanged();
+                }
+                if (tallyTeamAdapter != null) {
+                    tallyTeamAdapter.notifyDataSetChanged();
+                }
+
+              final Dialog dialog = new AlertDialog.Builder(TallyDetailNew.this).setTitle("提示").setMessage("确定提交吗？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Log.i("dataListMachine",""+dataListMachine.size());
+                                //44
+                                Machine = listmap_to_json_string(dataListMachine);
+                                Weight = et_count1.getText().toString();
+                                Amount = et_count2.getText().toString();
+                                Count = et_count3.getText().toString();
+                                Amount2 = et_count21.getText().toString();
+                                Weight2 = et_count22.getText().toString();
+                                Count2 =  et_count23.getText().toString();
+                                TrainNum =et_vehicle.getText().toString();
+                                MarkFinish = "1";
+//                                CodeWorkingAreaLast = fromarea_spinner.getSelectedItem().toString();
+//                                CodeWorkingArea =toarea_spinner.getSelectedItem().toString();
+                                Log.i("Machine", "" + Machine);
+                                //43
+                                WorkTeam =listmap_to_json_string(dataListTeam);
+
+                                        saveData("1");
+
+
+                            }
+                        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        }).create();//创建按钮
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        dialog.show();
+                    }
+                }, 1000);
+
+
             }
         });
-
         List<Map<String, Object>> qualitylist = new ArrayList<Map<String, Object>>();
         Map<String, Object> qualitymap1 = new HashMap<String, Object>();
         qualitymap1.put("1", "合格");
@@ -692,7 +821,7 @@ public class TallyDetailNew extends TabActivity {
         qualitymap2.put("1", "不合格");
         qualitylist.add(qualitymap2);
         SimpleAdapter qualityadapter = new SimpleAdapter(this,qualitylist, R.layout.quality_item, new String[] { "1",  "1" }, new int[] { R.id.tv_2 });
-         quality_spinner.setAdapter(qualityadapter);
+        quality_spinner.setAdapter(qualityadapter);
 
         quality_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -708,12 +837,24 @@ public class TallyDetailNew extends TabActivity {
             }
         });
     }
-    private void saveData(){
+    private void saveData(final String i){
+
         TallySaveWork tallySaveWork = new TallySaveWork();
         tallySaveWork.setWorkEndListener(new WorkBack<String>() {
             @Override
             public void doEndWork(boolean b, String s) {
-                showDialog(s);
+                if(b){
+                    showDialog(s);
+                    if(i.equals("1")) {
+                        btn_save.setClickable(false);
+                        btn_save.setBackgroundColor(Color.parseColor("#DCDCDC"));
+                        btn_upload.setClickable(false);
+                        btn_upload.setBackgroundColor(Color.parseColor("#DCDCDC"));
+                    }
+                }else{
+                    showDialog(s);
+                    showToast("提交失败");
+                }
             }
         });
         tallySaveWork.beginExecute(CodeCompany, CodeDepartment,Cgno,Pmno,CodeTallyman,Tallyman,Vgno,Cabin,
@@ -721,11 +862,9 @@ public class TallyDetailNew extends TabActivity {
                 CodeBooth,CodeAllocation,Carrier1,Carrier1Num,VgnoLast,CabinLast,CodeCarrierLast,CarrierNumLast,
                 CodeNvesselLast,BargeproLast,CodeStorageLast,CodeBoothLast,CodeAllocationLast,Carrier2,Carrier2num,
                 CodeGoodsBill,GoodsBillDisplay,CodeGbBusiness,GbBusinessDisplay,CodeSpecialMark,
-                CodeWorkingArea,CodeWorkingAreaLast,Quality,Amount,Weight,Count,Amount2,Weight2,Count2,Machine,WorkTeam,TrainNum,Tbno,MarkFinish);
+                CodeWorkingArea,CodeWorkingAreaLast,Quality,Weight,Amount,Count,Amount2,Weight2,Count2,Machine,WorkTeam,TrainNum,Tbno,MarkFinish);
     }
-    private void updateData(){
 
-    }
     /**
      * List<Map<String, Object>> To JsonString
 //     * @param list
@@ -734,10 +873,6 @@ public class TallyDetailNew extends TabActivity {
     private void showDialog(String str) {
         Dialog dialog = new AlertDialog.Builder(TallyDetailNew.this).setTitle("提示").setMessage(str)
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.cancel();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         dialog.cancel();
                     }

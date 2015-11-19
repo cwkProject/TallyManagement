@@ -1,7 +1,8 @@
 package com.port.tally.management.work;
 
-import com.port.tally.management.data.TallyDetail_MachineData;
-import com.port.tally.management.data.TallyDetail_TeamData;
+import com.port.tally.management.data.TallyDetailTrustData;
+import com.port.tally.management.data.ToAreaNewData;
+import com.port.tally.management.data.Trust1Data;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
@@ -10,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/24.
+ * Created by song on 2015/11/18.
  */
-public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<String, Object>>, TallyDetail_TeamData> {
+public class TallyDetailTrustWork extends DefaultWorkModel<String, List<Map<String, Object>>, TallyDetailTrustData> {
 
     /**
      * 参数合法性检测，
@@ -36,7 +37,7 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_Team_URL;
+        return StaticValue.HTTP_GetGoodsBill_URL;
     }
 
     /**
@@ -51,7 +52,7 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestSuccessSetResult(TallyDetail_TeamData data) {
+    protected List<Map<String, Object>> onRequestSuccessSetResult(TallyDetailTrustData data) {
         return data.getAll();
     }
 
@@ -67,7 +68,7 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestFailedSetResult(TallyDetail_TeamData data) {
+    protected List<Map<String, Object>> onRequestFailedSetResult(TallyDetailTrustData data) {
         return null;
     }
 
@@ -79,13 +80,15 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      *
      * @return 参数设置完毕后的数据模型对象
      */
+    @Override
+    protected TallyDetailTrustData onCreateDataModel(String... parameters) {
+        TallyDetailTrustData trust1Data = new TallyDetailTrustData();
+        trust1Data.setSearchContent(parameters[0]);
+        trust1Data.setSearchContent1(parameters[1]);
+        trust1Data.setSearchContent2(parameters[2]);
+        return trust1Data;
 
-    protected TallyDetail_TeamData onCreateDataModel(String... parameters) {
-        TallyDetail_TeamData tallyDetail_TeamData = new TallyDetail_TeamData();
-
-        tallyDetail_TeamData.setSearchContent(parameters[0]);
-        tallyDetail_TeamData.setSearchContent1(parameters[1]);
-//        tallyDetail_TeamData.setSearchContent2(parameters[2]);
-        return tallyDetail_TeamData;
     }
 }
+
+

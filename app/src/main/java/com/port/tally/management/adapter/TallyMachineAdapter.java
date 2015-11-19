@@ -3,12 +3,12 @@ package com.port.tally.management.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -24,15 +24,21 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by song on 2015/11/13.
+ * Created by song on 2015/11/17.
  */
-public class TallyNewMachineAdapter extends BaseAdapter{
+public class TallyMachineAdapter extends BaseAdapter{
 
     private List<Map<String, Object>> data;
     private Context context;
     private LayoutInflater inflater;
+    private String [] machineitem;//班组列表数据
+    private String [] machineNameitem;//司机列表数据
+
     private AtomicInteger atomicInteger=new AtomicInteger();
-    public TallyNewMachineAdapter(Context context, List<Map<String, Object>> data) {
+    //    修改后的值
+    private List<Map<String, Object>> updata;
+    private Map<String,String> upmap;
+    public TallyMachineAdapter(Context context, List<Map<String, Object>> data) {
         this.data = data;
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -194,10 +200,10 @@ public class TallyNewMachineAdapter extends BaseAdapter{
                 }
             }
         });
-//        if(item.get("select").equals("1")){
-//            hand.ck_mac.setChecked(true);}
-//        if(item.get("select").equals("0")){
-//            hand.ck_mac.setChecked(false);}
+        if(item.get("select").equals("1")){
+            hand.ck_mac.setChecked(true);}
+        if(item.get("select").equals("0")){
+            hand.ck_mac.setChecked(false);}
         if(!item.get("machine").equals("")){
             hand.tv_mac.setText((CharSequence) item.get("machine"));
         }
@@ -217,16 +223,16 @@ public class TallyNewMachineAdapter extends BaseAdapter{
                 Log.i("begintime的值", "" + item.get("begintime").toString());
                 item.put("begintime", item.get("begintime").toString().substring(0, 2) + ":" + item.get("begintime").toString().substring(2, 4));
             }
-            hand.tv_start.setText(item.get("begintime").toString());
-            Log.i("item handbegintime的值", "" + hand.tv_start.getText().toString());
-            Log.i("itembegintime的值", "" + item.get("begintime").toString());
+                hand.tv_start.setText(item.get("begintime").toString());
+                Log.i("item handbegintime的值", "" + hand.tv_start.getText().toString());
+                Log.i("itembegintime的值", "" + item.get("begintime").toString());
 
         }
         if(!item.get("endtime").equals("")){
             if(item.get("endtime").toString().length()==4) {
                 item.put("endtime", item.get("endtime").toString().substring(0, 2) + ":" + item.get("endtime").toString().substring(2, 4));
             }
-            hand.tv_end.setText(item.get("endtime").toString());
+                hand.tv_end.setText(item.get("endtime").toString());
             Log.i("itemendtime的值",""+item.get("endtime").toString());
         }
         if(i >2){

@@ -1,18 +1,17 @@
 package com.port.tally.management.work;
 
-import com.port.tally.management.data.TallyDetail_MachineData;
-import com.port.tally.management.data.TallyDetail_TeamData;
+import com.port.tally.management.data.TallyDetailNewAmountData;
+import com.port.tally.management.data.TallyDetailNewQualityData;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
 
-import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/24.
+ * Created by song on 2015/11/17.
  */
-public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<String, Object>>, TallyDetail_TeamData> {
+public class TallyDetailNewMountWork extends DefaultWorkModel<String, Map<String,String>, TallyDetailNewAmountData> {
 
     /**
      * 参数合法性检测，
@@ -36,7 +35,7 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_Team_URL;
+        return StaticValue.HTTP_GetSavedQuantityData_URL;
     }
 
     /**
@@ -51,8 +50,8 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestSuccessSetResult(TallyDetail_TeamData data) {
-        return data.getAll();
+    protected Map<String, String> onRequestSuccessSetResult(TallyDetailNewAmountData data) {
+        return data.getDetailTitle();
     }
 
     /**
@@ -67,7 +66,7 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestFailedSetResult(TallyDetail_TeamData data) {
+    protected Map<String, String> onRequestFailedSetResult(TallyDetailNewAmountData data) {
         return null;
     }
 
@@ -80,12 +79,9 @@ public class TallyDetail_teamWork extends DefaultWorkModel<String,List<Map<Strin
      * @return 参数设置完毕后的数据模型对象
      */
 
-    protected TallyDetail_TeamData onCreateDataModel(String... parameters) {
-        TallyDetail_TeamData tallyDetail_TeamData = new TallyDetail_TeamData();
-
-        tallyDetail_TeamData.setSearchContent(parameters[0]);
-        tallyDetail_TeamData.setSearchContent1(parameters[1]);
-//        tallyDetail_TeamData.setSearchContent2(parameters[2]);
-        return tallyDetail_TeamData;
+    protected TallyDetailNewAmountData onCreateDataModel(String... parameters) {
+        TallyDetailNewAmountData tallyDetailData = new  TallyDetailNewAmountData();
+        tallyDetailData.setSearchContent(parameters[0]);
+        return tallyDetailData;
     }
 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,20 +20,19 @@ import com.port.tally.management.R;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by song on 2015/11/13.
  */
-public class TallyNewTeamAdapter extends BaseAdapter {
+public class TallyNewTeamAdapter extends BaseAdapter{
 
     private List<Map<String, Object>> data;
     private Context context;
     private LayoutInflater inflater;
-    private String [] machineitem;//班组列表数据
-    private String [] machineNameitem;//司机列表数据
-    //    修改后的值
-    private List<Map<String, Object>> updata;
-    private Map<String,String> upmap;
+
+    private AtomicInteger atomicInteger=new AtomicInteger();
+
     public TallyNewTeamAdapter(Context context, List<Map<String, Object>> data) {
         this.data = data;
         this.context = context;
@@ -62,7 +62,8 @@ public class TallyNewTeamAdapter extends BaseAdapter {
 
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Map<String, Object> item = getItem(position);
-
+        int i = atomicInteger.incrementAndGet();
+        Log.i("atomicInteger的值 in team", "" +i);
 //        Log.i("item的值", "" + item);
         final Hand hand;
         if (convertView == null) {
@@ -79,71 +80,23 @@ public class TallyNewTeamAdapter extends BaseAdapter {
         } else {
             hand = (Hand) convertView.getTag();
         }
-
-        hand.tv_macpeo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("请选择司机").setSingleChoiceItems(machineNameitem, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
-                        hand.tv_macpeo.setText(machineNameitem[which]);
-                        item.put("name", machineNameitem[which]);
-                    }
-                }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                }).show();
-
-            }
-        });
-        hand.et_count1.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        hand.et_count2.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        hand.et_count3.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        if(!hand.et_count1.getText().toString().equals("")){
-            item.put("amount",hand.et_count1.getText().toString());
+        hand.et_count1.setInputType(InputType.TYPE_CLASS_PHONE);
+        hand.et_count2.setInputType(InputType.TYPE_CLASS_PHONE);
+        hand.et_count3.setInputType(InputType.TYPE_CLASS_PHONE);
+        if(i >2){
+            item.remove("amount");
+            item.remove("weight");
+            item.remove("count");
+            item.remove("begintime");
+            item.remove("endtime");
+            item.put("amount", hand.et_count1.getText().toString());
+            item.put("weight", hand.et_count2.getText().toString());
+            item.put("count", hand.et_count3.getText().toString());
+            item.put("begintime",hand.tv_start.getText().toString());
+            item.put("endtime", hand.tv_end.getText().toString());
+            Log.i("i值", "" + i);
+            Log.i("i值item",""+item.toString());
         }
-        if(!hand.et_count2.getText().toString().equals("")){
-            item.put("weight",hand.et_count2.getText().toString());
-        }
-        if(!hand.et_count3.getText().toString().equals("")){
-            item.put("count",hand.et_count3.getText().toString());
-        }
-        hand.tv_mac.setOnClickListener(new View.OnClickListener() {
-                                           @Override
-                                           public void onClick(View v) {
-
-                                               final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                               builder.setTitle("请选择机械").setSingleChoiceItems(machineitem, 0, new DialogInterface.OnClickListener() {
-                                                   @Override
-                                                   public void onClick(DialogInterface dialog, int which) {
-//                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
-                                                       hand.tv_mac.setText(machineitem[which]);
-                                                       item.put("machine",machineitem[which]);
-                                                   }
-                                               }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                   public void onClick(DialogInterface dialog, int whichButton) {
-                                                       dialog.dismiss();
-                                                   }
-                                               }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                                   public void onClick(DialogInterface dialog, int whichButton) {
-                                                       dialog.dismiss();
-                                                   }
-                                               }).show();
-
-                                           }
-                                       }
-        );
 
         hand.tv_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,12 +115,24 @@ public class TallyNewTeamAdapter extends BaseAdapter {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         StringBuffer sb = new StringBuffer();
-                        sb.append(timePicker.getCurrentHour())
-                                .append(":").append(timePicker.getCurrentMinute());
+
+                        if(timePicker.getCurrentHour().toString().length()<=1){
+                            if(timePicker.getCurrentMinute().toString().length()<=1){
+                                sb.append("0").append(timePicker.getCurrentHour()).append(":").append("0").append(timePicker.getCurrentMinute());
+                            }else{
+                                sb.append("0").append(timePicker.getCurrentHour()).append(":").append(timePicker.getCurrentMinute());
+                            }
+                        }else{
+                            if(timePicker.getCurrentMinute().toString().length()<=1){
+                                sb.append(timePicker.getCurrentHour()).append(":").append("0").append(timePicker.getCurrentMinute());
+                            }else{
+                                sb.append(timePicker.getCurrentHour()).append(":").append(timePicker.getCurrentMinute());
+                            }
+
+                        }
                         hand.tv_start.setText(sb);
-                        item.put("amount", sb);
+                        item.put("begintime",hand.tv_start.getText().toString());
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -195,11 +160,22 @@ public class TallyNewTeamAdapter extends BaseAdapter {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         StringBuffer sb = new StringBuffer();
-                        sb.append(timePicker.getCurrentHour())
-                                .append(":").append(timePicker.getCurrentMinute());
+                        if(timePicker.getCurrentHour().toString().length()<=1){
+                            if(timePicker.getCurrentMinute().toString().length()<=1){
+                                sb.append("0").append(timePicker.getCurrentHour()).append(":").append("0").append(timePicker.getCurrentMinute());
+                            }else{
+                                sb.append("0").append(timePicker.getCurrentHour()).append(":").append(timePicker.getCurrentMinute());
+                            }
+                        }else{
+                            if(timePicker.getCurrentMinute().toString().length()<=1){
+                                sb.append(timePicker.getCurrentHour()).append(":").append("0").append(timePicker.getCurrentMinute());
+                            }else{
+                                sb.append(timePicker.getCurrentHour()).append(":").append(timePicker.getCurrentMinute());
+                            }
+                        }
                         hand.tv_end.setText(sb);
+                        item.put("endtime", hand.tv_end.getText().toString());
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -223,7 +199,7 @@ public class TallyNewTeamAdapter extends BaseAdapter {
         });
 //        if(item.get("select").equals("1")){
 //            hand.ck_mac.setChecked(true);}
-//        if(item.get("select").equals("0")){
+//        if(item.get("select").equals("0")) {
 //            hand.ck_mac.setChecked(false);}
         if(!item.get("machine").equals("")){
             hand.tv_mac.setText((CharSequence) item.get("machine"));
@@ -239,14 +215,43 @@ public class TallyNewTeamAdapter extends BaseAdapter {
         } if(!item.get("count").equals("")){
             hand.et_count3.setText((CharSequence) item.get("count"));
         }
-        if(!item.get("pmno").equals("")){
-//            initMachine(item.get("pmno").toString());
-//            initMachineName(item.get("pmno").toString());
+
+        if(!item.get("begintime").equals("")){
+            if(item.get("begintime").toString().length()==4){
+                item.put("begintime", item.get("begintime").toString().substring(0, 2) + ":" + item.get("begintime").toString().substring(2, 4));
+                Log.i("begintime的值", "" + item.get("begintime").toString());
+                hand.tv_start.setText(item.get("begintime").toString().substring(0, 2) + ":" + item.get("begintime").toString().substring(2, 4));
+            }
+            hand.tv_start.setText(item.get("begintime").toString());
         }
 
-//        if(!item.get("amount").equals("")){
-//            hand.tv_count.setText((CharSequence) item.get("amount"));
-//        }
+        if(!item.get("endtime").equals("")) {
+            if (item.get("endtime").toString().length()==4) {
+                Log.i("tv_end atomicInteger的值", "" + atomicInteger.get());
+                item.put("endtime", item.get("endtime").toString().substring(0, 2) + ":" + item.get("endtime").toString().substring(2, 4));
+            }
+            Log.i("endtime的值", "" + item.get("endtime").toString());
+            Log.i("endtime的值", "" + item.get("endtime").toString().substring(0, 2) + ":" + item.get("endtime").toString().substring(2, 4));
+//                hand.tv_end.setText(item.get("endtime").toString().substring(0, 2) + ":" + item.get("endtime").toString().substring(2, 4));
+
+            hand.tv_end.setText(item.get("endtime").toString());
+
+        }
+        if(i >2){
+            item.remove("amount");
+            item.remove("weight");
+            item.remove("count");
+            item.remove("begintime");
+            item.remove("endtime");
+            item.put("amount", hand.et_count1.getText().toString());
+            item.put("weight", hand.et_count2.getText().toString());
+            item.put("count", hand.et_count3.getText().toString());
+            item.put("begintime",hand.tv_start.getText().toString());
+            item.put("endtime", hand.tv_end.getText().toString());
+            Log.i("i值", "" + i);
+            Log.i("TallyNewTeamAdapter i值item", "" + item.toString());
+        }
+        Log.i("TallyNewTeamAdapter item的值",""+item.toString());
         convertView.setTag(hand);
         return convertView;
     }
@@ -256,48 +261,4 @@ public class TallyNewTeamAdapter extends BaseAdapter {
         EditText et_count1,et_count2,et_count3;
     }
 
-//    private void initMachine(String str){
-//        TallyDetailTeamWork tallyDetailTeamWork = new TallyDetailTeamWork();
-//        tallyDetailTeamWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
-//            @Override
-//            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
-//                if (b) {
-//                    String [][] machinearry = new String[2][maps.size()];
-//                    machineitem =new String[maps.size()];
-//                    for(int i =0; i<maps.size();i++){
-//                        machinearry[0][i]=(String)maps.get(i).get("code_workteam");
-//                        machinearry[1][i]=(String)maps.get(i).get("workteam");
-//                        machineitem[i]=(String)maps.get(i).get("workteam");
-//                    }
-//                    Log.i("machineitem[i]","machineitem[i]的值"+machineitem.toString());
-//                    Log.i("maps", "" + maps.toString());
-//
-//
-//
-//
-//                }
-//            }
-//        });
-//        tallyDetailTeamWork.beginExecute(str);
-//    }
-//    private void initMachineName(String str){
-//        TallyDetailTeamNameWork tallyDetailTeamNameWork = new TallyDetailTeamNameWork();
-//        tallyDetailTeamNameWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
-//            @Override
-//            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
-//                if (b) {
-//                    String [][] machineNamearry = new String[2][maps.size()];
-//                    machineNameitem =new String[maps.size()];
-//                    for(int i =0; i<maps.size();i++){
-//                        machineNamearry[0][i]=(String)maps.get(i).get("workno");
-//                        machineNamearry[1][i]=(String)maps.get(i).get("name");
-//                        machineNameitem[i]=(String)maps.get(i).get("name");
-//                    }
-//                    Log.i("machinenameitem[i]","machinenameitem[i]的值"+machineNameitem.toString());
-//                    Log.i("maps", "" + maps.toString());
-//                }
-//            }
-//        });
-//        tallyDetailTeamNameWork.beginExecute(str);
-//    }
 }

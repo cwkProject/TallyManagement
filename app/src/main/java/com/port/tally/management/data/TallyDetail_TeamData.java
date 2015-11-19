@@ -57,7 +57,7 @@ public class TallyDetail_TeamData extends JsonDataModel {
     protected void onFillRequestParameters(Map<String, String> dataMap) {
         // 传入请求参数
         dataMap.put("Pmno", searchContent);
-//        dataMap.put("Cgno", searchContent1);
+        dataMap.put("Tbno", searchContent1);
 //        dataMap.put("Gbno", searchContent2);
         Log.i(LOG_TAG + "onFillRequestParameters", "Cgno is " + searchContent);
     }

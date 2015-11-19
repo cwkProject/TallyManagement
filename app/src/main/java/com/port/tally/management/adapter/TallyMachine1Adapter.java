@@ -84,61 +84,9 @@ public class TallyMachine1Adapter extends BaseAdapter{
         } else {
             hand = (Hand) convertView.getTag();
         }
-
-        hand.tv_macpeo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("请选择司机").setSingleChoiceItems(machineNameitem, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
-                        hand.tv_macpeo.setText(machineNameitem[which]);
-                        data.get(position).put("name", machineNameitem[which]);
-                    }
-                }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                }).show();
-
-            }
-        });
-
-
-        hand.tv_mac.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("请选择机械").setSingleChoiceItems(machineitem, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                                Toast.makeText(context, items[which], Toast.LENGTH_SHORT).show();
-                        hand.tv_mac.setText(machineitem[which]);
-                        data.get(position).put("machine", machineitem[which]);
-                    }
-                }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                    }
-                }).show();
-
-            }
-        });
-
-        hand.et_count1.setInputType(InputType.TYPE_CLASS_NUMBER);
-        hand.et_count2.setInputType(InputType.TYPE_CLASS_NUMBER);
-        hand.et_count3.setInputType(InputType.TYPE_CLASS_NUMBER);
+        hand.et_count1.setInputType(InputType.TYPE_CLASS_PHONE);
+        hand.et_count2.setInputType(InputType.TYPE_CLASS_PHONE);
+        hand.et_count3.setInputType(InputType.TYPE_CLASS_PHONE);
         if(!hand.et_count1.getText().toString().equals("")){
             item.put("amount",hand.et_count1.getText().toString());
         }
@@ -147,6 +95,12 @@ public class TallyMachine1Adapter extends BaseAdapter{
         }
         if(!hand.et_count3.getText().toString().equals("")){
             item.put("count",hand.et_count3.getText().toString());
+        }
+        if(!hand.tv_start.getText().toString().equals("")){
+            item.put("begintime",hand.tv_start.getText().toString());
+        }
+        if(!hand.tv_end.getText().toString().equals("")){
+            item.put("endtime",hand.tv_end.getText().toString());
         }
         hand.tv_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,10 +120,21 @@ public class TallyMachine1Adapter extends BaseAdapter{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         StringBuffer sb = new StringBuffer();
-                        sb.append(timePicker.getCurrentHour())
-                                .append(":").append(timePicker.getCurrentMinute());
+                        if(timePicker.getCurrentHour().toString().length()<=1){
+                            if(timePicker.getCurrentMinute().toString().length()<=1){
+                                sb.append("0").append(timePicker.getCurrentHour()).append(":").append("0").append(timePicker.getCurrentMinute());
+                            }else{
+                                sb.append("0").append(timePicker.getCurrentHour()).append(":").append(timePicker.getCurrentMinute());
+                            }
+                        }else{
+                            if(timePicker.getCurrentMinute().toString().length()<=1){
+                                sb.append(timePicker.getCurrentHour()).append(":").append("0").append(timePicker.getCurrentMinute());
+                            }else{
+                                sb.append(timePicker.getCurrentHour()).append(":").append(timePicker.getCurrentMinute());
+                            }
+                        }
                         hand.tv_start.setText(sb);
-                        data.get(position).put("begintime", sb);
+
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -197,10 +162,23 @@ public class TallyMachine1Adapter extends BaseAdapter{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         StringBuffer sb = new StringBuffer();
-                        sb.append(timePicker.getCurrentHour())
-                                .append(":").append(timePicker.getCurrentMinute());
+                        if(timePicker.getCurrentHour().toString().length()<=1){
+                            if(timePicker.getCurrentMinute().toString().length()<=1){
+                                sb.append("0").append(timePicker.getCurrentHour()).append(":").append("0").append(timePicker.getCurrentMinute());
+                            }else{
+                                sb.append("0").append(timePicker.getCurrentHour()).append(":").append(timePicker.getCurrentMinute());
+                            }
+                        }else{
+                            if(timePicker.getCurrentMinute().toString().length()<=1){
+                                sb.append(timePicker.getCurrentHour()).append(":").append("0").append(timePicker.getCurrentMinute());
+                            }else{
+                                sb.append(timePicker.getCurrentHour()).append(":").append(timePicker.getCurrentMinute());
+                            }
+
+                        }
+
                         hand.tv_end.setText(sb);
-                        data.get(position).put("endtime", sb);
+
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -241,6 +219,18 @@ public class TallyMachine1Adapter extends BaseAdapter{
         if(!item.get("name").equals("")){
             hand.tv_macpeo.setText((CharSequence) item.get("name"));
         }
+        if(!item.get("begintime").equals("")){
+            if(item.get("begintime").toString().length()==4){
+            Log.i("begintime的值",""+item.get("begintime").toString());
+            hand.tv_start.setText(item.get("begintime").toString().substring(0,2)+":"+item.get("begintime").toString().substring(2,4));}
+        }
+        if(!item.get("endtime").equals("")){
+            if(item.get("endtime").toString().length()==4){
+            Log.i("endtime的值",""+item.get("endtime").toString());
+            Log.i("endtime的值",""+item.get("endtime").toString().substring(0,2)+":"+item.get("endtime").toString().substring(2,4));
+            hand.tv_end.setText(item.get("endtime").toString().substring(0,2)+":"+item.get("endtime").toString().substring(2,4));}
+        }
+
         if(!"".equals(item.get("pmno"))){
 //            initMachine(item.get("pmno").toString());
 //            initMachineName(item.get("pmno").toString());

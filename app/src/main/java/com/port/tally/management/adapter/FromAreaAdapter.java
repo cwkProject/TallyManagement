@@ -58,7 +58,7 @@ public class FromAreaAdapter extends BaseAdapter {
             view = View.inflate(context, R.layout.fromarea_item, null);
 
             holder = new ViewHolder();
-//            holder.tv_1 = (TextView) view.findViewById(R.id.tv_1);
+            holder.tv_1 = (TextView) view.findViewById(R.id.tv_1);
             holder.tv_2 = (TextView) view.findViewById(R.id.tv_2);
 
 
@@ -67,10 +67,10 @@ public class FromAreaAdapter extends BaseAdapter {
             view = convertView;
             holder = (ViewHolder) view.getTag();
         }
-        Log.i("itemcago", "" + item);
-//        if(!item.get("tv1").equals("")){
-//            holder.tv_1.setText((CharSequence)item.get("tv1"));
-//            Log.i("tv1的值", item.get("tv1").toString());}
+
+        if(!item.get("tv1").equals("")){
+            holder.tv_1.setText((CharSequence)item.get("tv1"));
+            Log.i("tv1的值", item.get("tv1").toString());}
         if(!item.get("tv2").equals("")){
             holder.tv_2.setText((CharSequence)item.get("tv2"));}
 
@@ -80,6 +80,7 @@ public class FromAreaAdapter extends BaseAdapter {
     static class ViewHolder{
 
         public TextView tv_2;
+        public TextView tv_1;
 
 
     }

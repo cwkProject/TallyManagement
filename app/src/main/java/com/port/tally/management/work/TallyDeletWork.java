@@ -32,7 +32,7 @@ public class TallyDeletWork extends DefaultWorkModel<String, String, TallyDeletD
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_UPDATEND_URL;
+        return StaticValue.HTTP_GET_TALLYDETAILDELET_URL;
     }
 
     /**
@@ -82,8 +82,7 @@ public class TallyDeletWork extends DefaultWorkModel<String, String, TallyDeletD
         TallyDeletData  tallyDeletData  = new TallyDeletData();
 
         tallyDeletData.setSearchContent1(parameters[0]);
-        tallyDeletData.setSearchContent1(parameters[1]);
-        tallyDeletData.setSearchContent1(parameters[2]);
+
         return tallyDeletData;
     }
 }

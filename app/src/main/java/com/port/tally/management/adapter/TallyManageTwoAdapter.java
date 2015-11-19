@@ -1,6 +1,7 @@
 package com.port.tally.management.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,9 +68,11 @@ public class TallyManageTwoAdapter extends BaseAdapter {
             hand = (Hand) convertView.getTag();
         }
         if(!item.get("MarkFinish").equals("0")){
-            hand.tv_waitflag.setText("提交成功");}
+            hand.tv_waitflag.setText("提交成功");
+            hand.tv_waitflag.setBackgroundColor(Color.parseColor("#A0522D"));}
         if(!item.get("MarkFinish").equals("1")){
-            hand.tv_waitflag.setText("等待提交");}
+            hand.tv_waitflag.setText("等待提交");
+            hand.tv_waitflag.setBackgroundColor(Color.parseColor("#6B8E23"));}
         if(!item.get("Gbdisplay").equals("")){
 //            TextPaint tp = hand.tv_yuantrust.getPaint();
 //            tp.setFakeBoldText(true);

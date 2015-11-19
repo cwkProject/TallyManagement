@@ -192,7 +192,10 @@ public class TallyActivity extends Activity {
 //                    showToast("无相关信息");
 
                 }
-                tallyCagoAtoAdapter.notifyDataSetChanged();
+                if(tallyCagoAtoAdapter!=null){
+                    tallyCagoAtoAdapter.notifyDataSetChanged();
+                }
+
             }
 
         });
@@ -238,6 +241,7 @@ public class TallyActivity extends Activity {
                     progressDialog.dismiss();
 
                 } else {
+                    progressDialog.dismiss();
                     //清空操作
                     if(flag ==1){
                         if(dataList!=null){
