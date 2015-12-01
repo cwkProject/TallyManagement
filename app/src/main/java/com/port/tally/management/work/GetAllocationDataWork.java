@@ -1,17 +1,15 @@
 package com.port.tally.management.work;
-
-import com.port.tally.management.data.AllCarryData;
-import com.port.tally.management.data.CodeCarryData;
+import com.port.tally.management.data.GetAllocationData;
 import com.port.tally.management.util.StaticValue;
-
 import org.mobile.library.model.work.DefaultWorkModel;
-
+import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/27.
+ * Created by song on 2015/11/25.
  */
-public class AllCarryWork  extends DefaultWorkModel<String, Map<String, Object>, AllCarryData> {
+public class GetAllocationDataWork  extends DefaultWorkModel<String,List<Map<String, Object>>, GetAllocationData> {
+
 
     /**
      * 参数合法性检测，
@@ -27,7 +25,6 @@ public class AllCarryWork  extends DefaultWorkModel<String, Map<String, Object>,
         // 需要至少两个传入参数
         return !(parameters == null || parameters.length < 1);
     }
-
     /**
      * 设置任务请求地址
      *
@@ -35,9 +32,8 @@ public class AllCarryWork  extends DefaultWorkModel<String, Map<String, Object>,
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_AllCarry_URL;
+        return StaticValue.HTTP_GetALLOCATIONDATA_URL;
     }
-
     /**
      * 服务返回数据解析成功后，
      * 并且服务执行为成功即{@link org.mobile.library.model.data.IDefaultDataModel#isSuccess()}返回true时，
@@ -50,7 +46,7 @@ public class AllCarryWork  extends DefaultWorkModel<String, Map<String, Object>,
      * @return 任务返回数据
      */
     @Override
-    protected Map<String, Object> onRequestSuccessSetResult(AllCarryData data) {
+    protected List<Map<String, Object>> onRequestSuccessSetResult(GetAllocationData data) {
         return data.getAll();
     }
 
@@ -65,11 +61,10 @@ public class AllCarryWork  extends DefaultWorkModel<String, Map<String, Object>,
      *
      * @return 任务返回数据
      */
-
-    protected Map<String, Object> onRequestFailedSetResult(AllCarryData data) {
+    @Override
+    protected List<Map<String, Object>> onRequestFailedSetResult(GetAllocationData data) {
         return null;
     }
-
     /**
      * 创建数据模型对象并填充参数，
      * {@link #onCheckParameters(String...)}检测成功后调用
@@ -78,12 +73,9 @@ public class AllCarryWork  extends DefaultWorkModel<String, Map<String, Object>,
      *
      * @return 参数设置完毕后的数据模型对象
      */
-    @Override
-    protected AllCarryData onCreateDataModel(String... parameters) {
-        AllCarryData allCarryData = new AllCarryData();
-        allCarryData.setSearchContent(parameters[0]);
-        allCarryData.setSearchContent1(parameters[1]);
-        return allCarryData;
-
+    protected GetAllocationData onCreateDataModel(String... parameters) {
+        GetAllocationData getAllocationData = new GetAllocationData();
+        getAllocationData.setSearchContent1(parameters[0]);
+        return getAllocationData;
     }
 }

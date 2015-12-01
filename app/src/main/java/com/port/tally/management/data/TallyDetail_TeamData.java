@@ -125,7 +125,7 @@ public class TallyDetail_TeamData extends JsonDataModel {
                     map.put("select", jsonMachine.getString(0));//是否选中
                     map.put("code_workteam", jsonMachine.getString(1));
                     map.put("workno", jsonMachine.getString(2));
-                    map.put("machine", jsonMachine.getString(3));
+                    map.put("workteam", jsonMachine.getString(3));
                     map.put("name", jsonMachine.getString(4));
                     map.put("begintime", jsonMachine.getString(5));
                     map.put("endtime",jsonMachine.getString(6));

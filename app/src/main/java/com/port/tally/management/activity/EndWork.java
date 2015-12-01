@@ -299,7 +299,7 @@ public class EndWork extends Activity {
 
                             Map<String, Object> pc = (Map<String, Object>) parent
                                     .getItemAtPosition(position);
-                            ;
+
                             teamAuto.setText(pc.get("tv2").toString());
                             team = pc.get("tv1").toString();
                             Log.i("EndWorkAutoTeamWorkshowData", "" + pc.get("tv2").toString());

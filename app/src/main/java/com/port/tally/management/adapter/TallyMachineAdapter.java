@@ -226,7 +226,6 @@ public class TallyMachineAdapter extends BaseAdapter{
                 hand.tv_start.setText(item.get("begintime").toString());
                 Log.i("item handbegintime的值", "" + hand.tv_start.getText().toString());
                 Log.i("itembegintime的值", "" + item.get("begintime").toString());
-
         }
         if(!item.get("endtime").equals("")){
             if(item.get("endtime").toString().length()==4) {

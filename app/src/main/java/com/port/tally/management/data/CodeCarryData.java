@@ -30,6 +30,9 @@ public class CodeCarryData extends JsonDataModel {
      */
     private String searchContent = null;
 
+
+
+
     public Map<String, Object> getAll() {
         return all;
     }
@@ -38,7 +41,6 @@ public class CodeCarryData extends JsonDataModel {
     protected void onFillRequestParameters(Map<String, String> dataMap) {
         // 传入请求参数
         dataMap.put("Pmno", searchContent);
-
     }
 
     @Override

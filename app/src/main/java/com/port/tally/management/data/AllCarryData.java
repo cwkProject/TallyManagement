@@ -27,6 +27,11 @@ public class AllCarryData extends JsonDataModel {
      */
     private String searchContent = null;
 
+    public void setSearchContent1(String searchContent1) {
+        this.searchContent1 = searchContent1;
+    }
+
+    private String searchContent1 = null;
     public Map<String, Object> getAll() {
         return all;
     }
@@ -35,7 +40,7 @@ public class AllCarryData extends JsonDataModel {
     protected void onFillRequestParameters(Map<String, String> dataMap) {
         // 传入请求参数
         dataMap.put("Pmno", searchContent);
-
+        dataMap.put("CarriesType", searchContent1);
     }
 
     @Override
@@ -55,7 +60,7 @@ public class AllCarryData extends JsonDataModel {
     protected void onRequestSuccess(JSONObject jsonObject) throws JSONException {
 
         JSONObject jsonResult = jsonObject.getJSONObject("Data");
-        all = new HashMap<String,Object>() ;
+            all = new HashMap<String,Object>() ;
         if(jsonResult instanceof JSONObject){
             all.put("VgDisplay", jsonResult.getString("VgDisplay"));
             all.put("Vgno",jsonResult.getString("Vgno"));
@@ -65,6 +70,7 @@ public class AllCarryData extends JsonDataModel {
             all.put("CodeNvessel",jsonResult.getString("CodeNvessel"));
             all.put("Storage", jsonResult.getString("Storage"));
             all.put("CodeStorage",jsonResult.getString("CodeStorage"));
+            all.put("CodeOpstype",jsonResult.getString("CodeOpstype"));
         }
         Log.i("allCarry的值是", "allCarry的值是" + all);
     }

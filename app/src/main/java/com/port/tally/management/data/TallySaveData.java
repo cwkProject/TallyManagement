@@ -77,6 +77,14 @@ public class TallySaveData extends JsonDataModel {
     private String CodeBoothLast= null;
     //目的桩角编码
     private String CodeAllocationLast= null;
+    //
+    private String Allocation= null;
+    //
+    public void setAllocationLast(String allocationLast) {
+        AllocationLast = allocationLast;
+    }public void setAllocation(String allocation) {
+        Allocation = allocation;
+    }private String AllocationLast= null;
     //目的载体描述
     private String Carrier2= null;
     //目的载体属性
@@ -364,6 +372,8 @@ public class TallySaveData extends JsonDataModel {
         map.put("TrainNum",TrainNum);
         map.put("Tbno",Tbno);
         map.put("MarkFinish",MarkFinish);
+        map.put("Allocation",Allocation);
+        map.put("AllocationLast",AllocationLast);
         Log.i("TallySaveData的map值",""+map);
 
 

@@ -102,9 +102,9 @@
                 android:layout_weight="1.0"
                 android:clickable="false"
                 android:focusable="false"
-                android:id="@+id/tv_mudizaiti"
+                android:id="@+id/tv_count"
                 android:focusableInTouchMode="false"
-                android:text="1"
+                android:text="12"
                 android:textColor="@color/black"
                 android:textSize="@dimen/BasicTextSize"/>
 
@@ -112,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10.0dip"
-                android:id="@+id/tv_count"
+                android:id="@+id/tv_mudizaiti"
                 android:clickable="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"

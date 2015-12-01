@@ -205,8 +205,8 @@ public class TallyTeamAdapter extends BaseAdapter{
             hand.ck_mac.setChecked(true);}
         if(item.get("select").equals("0")) {
             hand.ck_mac.setChecked(false);}
-        if(!item.get("machine").equals("")){
-            hand.tv_mac.setText((CharSequence) item.get("machine"));
+        if(!item.get("workteam").equals("")){
+            hand.tv_mac.setText((CharSequence) item.get("workteam"));
         }
         if(!item.get("name").equals("")){
             hand.tv_macpeo.setText((CharSequence) item.get("name"));

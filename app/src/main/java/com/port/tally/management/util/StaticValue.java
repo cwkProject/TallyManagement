@@ -239,7 +239,8 @@ public interface StaticValue {
 //    理货跳转的第二个listview
 String HTTP_GET_TALLYTWO_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetAllTallyBill.aspx";
 //    保存接口
-String HTTP_POST_TALLYSAVE_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/SaveTallyBill.aspx";
+// String HTTP_POST_TALLYSAVE_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/SaveTallyBill.aspx";
+     String HTTP_POST_TALLYSAVE_URL="http://10.199.10.220:8080/Service/Slip/SaveTallyBill.aspx";
 //    新子过程标志
     String HTTP_GET_SUBPROCESSNEW_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedSpecialMark.aspx";
     //    新区域
@@ -250,4 +251,10 @@ String HTTP_POST_TALLYSAVE_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/SaveTa
     String HTTP_GetSavedQuantityData_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedQuantityData.aspx";
     //获取暂存票货数据
     String HTTP_GetGoodsBill_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedGoodsBill.aspx";
+//    获取货位数据
+    String HTTP_GetALLOCATIONDATA_URL= "http://218.92.115.55/M_Lhgl/Service/Base/GetAllocation.aspx";
+    //    获取桩角数据
+    String HTTP_GetCornerPile_URL= "http://218.92.115.55/M_Lhgl/Service/Base/GetBooth.aspx";
+
+
 }

@@ -132,6 +132,8 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
         tallySaveData.setTrainNum(parameters[44]);
         tallySaveData.setTbno(parameters[45]);
         tallySaveData.setMarkFinish(parameters[46]);
+        tallySaveData.setAllocation(parameters[47]);
+        tallySaveData.setAllocationLast(parameters[48]);
         Log.i("TallySaveWork", "" + tallySaveData.toString());
         Log.i("TallySaveWork", "" +tallySaveData);
         return tallySaveData;
