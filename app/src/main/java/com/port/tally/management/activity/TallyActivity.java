@@ -2,6 +2,7 @@ package com.port.tally.management.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -17,9 +18,12 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import com.port.tally.management.activity.TallyManage;
 import com.port.tally.management.R;
@@ -32,24 +36,26 @@ import com.port.tally.management.work.TallyCagoAtoWork;
 import com.port.tally.management.work.ToallyManageWork;
 import com.port.tally.management.xlistview.XListView;
 
+import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.work.WorkBack;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 public class TallyActivity extends Activity {
-    private InstantAutoComplete cagoAuto;
+
     private ImageView imgLeft;
-    private TextView title;
+    private TextView title,tv_time;
     private String company =null;
-    private Button mBut =null;
-    private EditText et_trust;
+
+    private Spinner spin_trust;
     private TallyManageAdapter tallyManageAdapter;
-    private TallyCagoAtoAdapter tallyCagoAtoAdapter;
     private ProgressDialog progressDialog;
-    private List<Map<String, Object>> dataListCago = null;
     private Toast mToast;
     private int flag = 1;
     private List<Map<String, Object>> dataList = null;
@@ -63,7 +69,6 @@ public class TallyActivity extends Activity {
         showProgressDialog();
         Init();
         initListView();
-        loadCagoValue();
         showData(null, null, null, null, null);
     }
 
@@ -124,83 +129,134 @@ public class TallyActivity extends Activity {
         title = (TextView) findViewById(R.id.title);
         imgLeft = (ImageView) findViewById(R.id.left);
         listView = (XListView) findViewById(R.id.xListView);
-        cagoAuto =(InstantAutoComplete)findViewById(R.id.at_cargo);
-        mBut =(Button)findViewById(R.id.mBut);
-        et_trust =(EditText)findViewById(R.id.et_weituo);
-        et_trust.setInputType(InputType.TYPE_CLASS_NUMBER);
+        tv_time =(TextView)findViewById(R.id.tv_time);
+        spin_trust =(Spinner)findViewById(R.id.et_weituo);
         title.setText("理货作业票");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
-        mBut.setOnClickListener(new OnClickListener() {
+        spin_trust.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int pos, long id) {
+                String[] languages = getResources().getStringArray(R.array.work);
+                showData(null, null, null, tv_time.getText().toString(), languages[pos]);
+                Toast.makeText(TallyActivity.this, "你点击的是:" + languages[pos], Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
+
+
+    imgLeft.setOnClickListener(new OnClickListener() {
+        //			@Override
+        public void onClick(View arg0) {
+            finish();
+        }
+    });
+        dataList = new ArrayList<>();
+        tv_time.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                    showData(null, null, null, cagoAuto.getText().toString(), et_trust.getText().toString());
+                initDate();
             }
         });
-        imgLeft.setOnClickListener(new OnClickListener() {
-            //			@Override
-            public void onClick(View arg0) {
-                finish();
-            }
-        });
-        dataList = new ArrayList<>();
-        dataListCago = new ArrayList<>();
     }
+    /**
+     * 初始化日期控件
+     */
+    private void initDate() {
+         Calendar calendar = Calendar.getInstance();
+            final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    //给个控件赋值
-    private void loadCagoValue() {
+        String nowDate = format.format(calendar.getTime());
 
-        //实例化，传入参数
-        TallyCagoAtoWork tallyCagoAtoWork= new TallyCagoAtoWork();
+            tv_time.setText(nowDate);
 
-        tallyCagoAtoWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+        final DatePickerDialog dutyDateDialog = new DatePickerDialog(TallyActivity
+                .this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-            public void doEndWork(boolean b, List<Map<String, Object>> data) {
+                String date = year + "-" + (monthOfYear + 1) + "-" +
+                        dayOfMonth;
 
+                try {
+                    tv_time.setText(format.format(format.parse(date)));
+                } catch (ParseException e) {
 
-                if (b) {
-                    if(!dataListCago.equals("") || dataListCago!=null)
-                        dataListCago.clear();
-                    dataListCago.addAll(data);
-                    Log.i("dataListCago的值", dataListCago.toString());
-                    Log.i("data的值", data.toString());
-                    tallyCagoAtoAdapter = new TallyCagoAtoAdapter(dataListCago, TallyActivity.this.getApplicationContext());
-                    cagoAuto.setAdapter(tallyCagoAtoAdapter);
-                    cagoAuto.setThreshold(0);  //设置输入一个字符 提示，默认为2
-                    cagoAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                            Map<String, Object> pccago = (Map<String, Object>) parent.getItemAtPosition(position);
-                            cagoAuto.setText(pccago.get("tv2").toString());
-                            showData(null, null, company, pccago.get("tv2").toString(), null);
-                            Log.i("showData", "" + pccago.get("tv2").toString());
-                            Log.i("showDataPosition", "" +  position);
-
-                        }
-                    });
-                    // Clear autocomplete
-                    cagoAuto.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            cagoAuto.setText("");
-                        }
-                    });
-
-                } else {
-//                    showToast("无相关信息");
-
+                    tv_time.setText(date);
                 }
-                if(tallyCagoAtoAdapter!=null){
-                    tallyCagoAtoAdapter.notifyDataSetChanged();
-                }
+                showData(null, null, null, tv_time.getText().toString(), "");
 
             }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar
+                .DAY_OF_MONTH));
 
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dutyDateDialog.show();
+            }
         });
-        tallyCagoAtoWork.beginExecute("");
     }
+//    //给个控件赋值
+//    private void loadCagoValue() {
+//
+//        //实例化，传入参数
+//        TallyCagoAtoWork tallyCagoAtoWork= new TallyCagoAtoWork();
+//
+//        tallyCagoAtoWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+//
+//            public void doEndWork(boolean b, List<Map<String, Object>> data) {
+//
+//
+//                if (b) {
+//                    if(!dataListCago.equals("") || dataListCago!=null)
+//                        dataListCago.clear();
+//                    dataListCago.addAll(data);
+//                    Log.i("dataListCago的值", dataListCago.toString());
+//                    Log.i("data的值", data.toString());
+//                    tallyCagoAtoAdapter = new TallyCagoAtoAdapter(dataListCago, TallyActivity.this.getApplicationContext());
+//                    cagoAuto.setAdapter(tallyCagoAtoAdapter);
+//                    cagoAuto.setThreshold(0);  //设置输入一个字符 提示，默认为2
+//                    cagoAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                            Map<String, Object> pccago = (Map<String, Object>) parent.getItemAtPosition(position);
+//                            cagoAuto.setText(pccago.get("tv2").toString());
+//                            showData(null, null, company, pccago.get("tv2").toString(), null);
+//                            Log.i("showData", "" + pccago.get("tv2").toString());
+//                            Log.i("showDataPosition", "" +  position);
+//
+//                        }
+//                    });
+//                    // Clear autocomplete
+//                    cagoAuto.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            cagoAuto.setText("");
+//                        }
+//                    });
+//
+//                } else {
+////                    showToast("无相关信息");
+//
+//                }
+//                if(tallyCagoAtoAdapter!=null){
+//                    tallyCagoAtoAdapter.notifyDataSetChanged();
+//                }
+//
+//            }
+//
+//        });
+//        tallyCagoAtoWork.beginExecute("");
+//    }
 
     //    显示数据
     private void showData(String key, String type, String company,String cargo,String trustno) {

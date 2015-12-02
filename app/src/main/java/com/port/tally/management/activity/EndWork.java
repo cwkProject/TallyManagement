@@ -443,7 +443,6 @@ public class EndWork extends Activity {
 
     //给个控件赋值
     private void initValue(String key, final String type, String company) {
-
         //实例化，传入参数
         EndWorkWork startWorkWork = new EndWorkWork();
 
@@ -575,7 +574,6 @@ public class EndWork extends Activity {
     //给个控件赋值
     private void uploadValue(String key, String company, String count, String time, String team,
                              String teamwork) {
-
         //实例化，传入参数
         UploadEndWork uploadEndWork = new UploadEndWork();
         uploadEndWork.setWorkEndListener(new WorkBack<String>() {

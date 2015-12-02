@@ -256,5 +256,6 @@ String HTTP_GET_TALLYTWO_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetAllT
     //    获取桩角数据
     String HTTP_GetCornerPile_URL= "http://218.92.115.55/M_Lhgl/Service/Base/GetBooth.aspx";
 
-
+    //    获取桩角和货位数据
+    String HTTP_GetCornerPileAndAllocation_URL= "http://218.92.115.55/M_Lhgl/Service/Base/GetBooth.aspx";
 }

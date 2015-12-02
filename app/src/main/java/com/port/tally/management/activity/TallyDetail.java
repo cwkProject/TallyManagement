@@ -40,6 +40,7 @@ import com.port.tally.management.util.InstantAutoComplete;
 import com.port.tally.management.work.AllCarryWork;
 import com.port.tally.management.work.CodeCarryWork;
 import com.port.tally.management.work.FromAreaNewWork;
+import com.port.tally.management.work.GetAllocationAndConerWork;
 import com.port.tally.management.work.GetAllocationDataWork;
 import com.port.tally.management.work.GetCornerPileDataWork;
 import com.port.tally.management.work.SubprocessNewFlagWork;
@@ -189,24 +190,19 @@ public class TallyDetail extends TabActivity {
     private ProgressDialog progressDialog;
     private TallyMachineAdapter tallyMachineAdapter;
     private TallyTeamAdapter tallyTeamAdapter;
-    private InstantAutoComplete ecornerpile_Auto,cornerpile_Auto;
-    private GetCornerPileDataAdapter getCornerPileDataAdapter2,getCornerPileDataAdapter1;
     private LinearLayout shangwu_ly,xiaozhang_ly,linear_show,linear_quality2,linear_quality1,linear_Ehuowei,linear_huowei;;
     private TextView title,tv_shipment,start,end,shipment,business,tv_messgae,tv_cardstate,tv_boatname,tv_quality
-            ,tv_tvboatdetail,tv_changbie,tv_huowei,tv_huoweidetail,tv_Eboatname,tv_Eboatdetail,tv_Echangbie,tv_Ehuowei,tv_Ehuoweidetail;
-    EditText tv_changbiedetail,tv_Echangbiedetail;
-    private Spinner entrust1_spinner,entrust2_spinner,flag_spinner,quality_spinner,toarea_spinner,fromarea_spinner, Egetallocation_spinner,getallocation_spinner;
+            ,tv_tvboatdetail,tv_changbie,tv_huowei,tv_huoweidetail,tv_Eboatname,tv_Eboatdetail,tv_Echangbie,tv_Ehuowei,tv_Ehuoweidetail, tv_changbiedetail,tv_Echangbiedetail;
+    private Spinner entrust1_spinner,entrust2_spinner,flag_spinner,quality_spinner,toarea_spinner,fromarea_spinner;
     private Toast mToast;
     EditText et_count1,et_count2,et_count3,et_count21,et_count22,et_count23,et_vehicle;
     String[] value=null;
     // 定义5个记录当前时间的变量
     TabHost mTabHost = null;
     TabWidget mTabWidget = null;
-   private String CodeCarriesS;
-   private String CodeCarriesE;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tallydetail);
+        setContentView(R.layout.tallydetailmain);
         dataList = new ArrayList<>();
         dataListMachine = new ArrayList<>();
         dataListTeam = new ArrayList<>();
@@ -232,7 +228,6 @@ public class TallyDetail extends TabActivity {
         initMachine();
         initTeam();
         initAllCarrer();
-
         initAllCarrerE();
         initCodeCarrer();
         loadToAreaData();
@@ -302,7 +297,6 @@ public class TallyDetail extends TabActivity {
                                                        int position, long id) {
                                 HashMap map = (HashMap) parent.getItemAtPosition(position);
                                 CodeWorkingArea = map.get("tv1").toString();
-
 //                                    Toast.makeText(TallyDetail.this, "你点击的是:" + str, 2000).show();
                             }
 
@@ -530,17 +524,7 @@ public class TallyDetail extends TabActivity {
                         tv_tvboatdetail.setText(stringObjectMap.get("Nvessel").toString());
                         CodeNvessel =stringObjectMap.get("CodeNvessel").toString();
                         Carrier1 = stringObjectMap.get("Nvessel").toString();}
-                    if(!stringObjectMap.get("CodeOpstype").equals("1")){
-                        getallocation_spinner.setVisibility(View.VISIBLE);
-                        tv_huoweidetail.setVisibility(View.GONE);
-                        loadAllocationData();
-                        Log.i("CodeOpstype已执行", "" + stringObjectMap.get("CodeOpstype") + "getallocation_spinner显示");
-                    }  if(stringObjectMap.get("CodeOpstype").equals("1")){
-                        getallocation_spinner.setVisibility(View.GONE);
-                        tv_huoweidetail.setVisibility(View.VISIBLE);
-                        allspinsflag="1";
-                        Log.i("CodeOpstype已执行", "" + stringObjectMap.get("CodeOpstype") + "getallocation_spinner 隐藏");
-                    }
+
                 } else {
                 }
             }
@@ -583,18 +567,7 @@ public class TallyDetail extends TabActivity {
                     Carrier2 =stringObjectMap.get("Nvessel").toString();
                     CodeNvesselLast =stringObjectMap.get("CodeNvessel").toString();
                     Log.i("CodeOpstype",""+stringObjectMap.get("CodeNvessel").toString());
-                    if(!stringObjectMap.get("CodeOpstype").equals("1")){
-                        tv_Ehuoweidetail.setVisibility(View.GONE);
-                        Egetallocation_spinner.setVisibility(View.VISIBLE);
-                        loadAllocationData();
-                        Log.i("CodeOpstype已执行",""+stringObjectMap.get("CodeOpstype")+"Egetallocation_spinner 显示");
-                    }
-                    if(stringObjectMap.get("CodeOpstype").equals("1")){
-                        allspineflag="1";
-                        Egetallocation_spinner.setVisibility(View.GONE);
-                        tv_Ehuoweidetail.setVisibility(View.VISIBLE);
-                        Log.i("CodeOpstype已执行", "" + stringObjectMap.get("CodeOpstype") + "Egetallocation_spinner 隐藏");
-                    }
+
                 } else {
                 }
             }
@@ -682,14 +655,12 @@ public class TallyDetail extends TabActivity {
                     }else{
 //                   表示  场地；
                         placeSflag ="1";
-                        loadCornerPileData();
+                        loadAllocationAndCornerData("0");
                         Log.i("placeSflag", "" + placeSflag);
                         tv_boatname.setText("场地");
                         tv_changbie.setText("桩角");
                         tv_huowei.setText("货位");
                         tv_changbie.setVisibility(View.VISIBLE);
-                        tv_changbiedetail.setVisibility(View.GONE);
-                        cornerpile_Auto.setVisibility(View.VISIBLE);
                         //源航次编码7
                         Vgno= "";
                         //源仓别8
@@ -776,13 +747,13 @@ public class TallyDetail extends TabActivity {
 //                   表示  场地；
                         placeEflag ="1";
                         Log.i("placeEflag", "" + placeEflag);
-                        loadCornerPileData();
+                        loadAllocationAndCornerData("1");
                         tv_Eboatname.setText("场地");
                         tv_Echangbie.setText("桩角");
                         tv_Ehuowei.setText("货位");
                         tv_Echangbie.setVisibility(View.VISIBLE);
                         tv_Echangbiedetail.setVisibility(View.GONE);
-                        ecornerpile_Auto.setVisibility(View.VISIBLE);
+
                         //目的航次编码18
                         VgnoLast= "";
                         //目的仓别19
@@ -806,132 +777,30 @@ public class TallyDetail extends TabActivity {
         Log.i("value2的值是", value[0] + "" + value[1] + "" + value[2] + "");
         codeCarryWork.beginExecute(value[0]);
     }
- //获取桩角数据
-    private void loadCornerPileData(){
-        GetCornerPileDataWork getCornerPileDataWork = new GetCornerPileDataWork();
-        getCornerPileDataWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
+    //获取货位数据
+    private void loadAllocationAndCornerData(final String CarriesType){
+        GetAllocationAndConerWork getAllocationDataWork = new GetAllocationAndConerWork();
+        getAllocationDataWork.setWorkEndListener(new WorkBack<Map<String, Object>>() {
             @Override
-            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
-                if (b) {
-                    if (!maps.equals("")) {
-                        //绑定Adapter
-                       getCornerPileDataAdapter1 = new GetCornerPileDataAdapter(maps, TallyDetail.this.getApplicationContext());
-                        ecornerpile_Auto.setAdapter(getCornerPileDataAdapter1);
-                        ecornerpile_Auto.setThreshold(0);  //设置输入一个字符 提示，默认为2
-                        ecornerpile_Auto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                                    long id) {
-                                Map<String, Object> pc = (Map<String, Object>) parent
-                                        .getItemAtPosition(position);
-                                HashMap map = (HashMap) parent.getItemAtPosition(position);
-                                ecornerpile_Auto.setText(map.get("tv2").toString()+map.get("tv3").toString());
-                                CodeBoothLast = map.get("tv1").toString();
-                                Log.i("getCornerPileDataAdapter2", "" + pc.get("tv2").toString());
-                                Log.i("getCornerPileDataAdapter2", "" + position);
-                            }
-                        });
-                        // Clear autocomplete
-                        ecornerpile_Auto.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                ecornerpile_Auto.setText("");
-                            }
-                        });
-                       getCornerPileDataAdapter2 = new GetCornerPileDataAdapter(maps, TallyDetail.this.getApplicationContext());
-                        cornerpile_Auto.setAdapter(getCornerPileDataAdapter2);
-                        cornerpile_Auto.setThreshold(0);  //设置输入一个字符 提示，默认为2
-                        cornerpile_Auto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                                    long id) {
-                                Map<String, Object> pc = (Map<String, Object>) parent
-                                        .getItemAtPosition(position);
-                                HashMap map = (HashMap) parent.getItemAtPosition(position);
-                                cornerpile_Auto.setText(map.get("tv2").toString()+map.get("tv3").toString());
-                                CodeBooth = map.get("tv1").toString();
-                                Log.i("getCornerPileDataAdapter2", "" + pc.get("tv2").toString());
-                                Log.i("getCornerPileDataAdapter2", "" + position);
-                            }
-                        });
+            public void doEndWork(boolean b, Map<String, Object> stringObjectMap) {
+                if(b){
+                    if(stringObjectMap!=null){
+                if (CarriesType.equals("0")) {
+                    tv_changbiedetail.setText(stringObjectMap.get("Booth").toString());
+                    tv_huoweidetail.setText(stringObjectMap.get("Allocation").toString());
 
-                        // Clear autocomplete
-                        cornerpile_Auto.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                cornerpile_Auto.setText("");
-                            }
-                        });
-                    } else {
-                        showToast("数据为空");
-                    }
-                } else {
-
+                } if (CarriesType.equals("1")) {
+                    tv_Echangbiedetail.setText(stringObjectMap.get("Booth").toString());
+                    tv_Ehuoweidetail.setText(stringObjectMap.get("Allocation").toString());
                 }
-                if(getCornerPileDataAdapter1!=null)
-                getCornerPileDataAdapter1.notifyDataSetChanged();
-                if(getCornerPileDataAdapter2!=null)
-                    getCornerPileDataAdapter2.notifyDataSetChanged();
+                    }
+                }
             }
         });
-        getCornerPileDataWork.beginExecute(CodeCompany);
-    }
-    //获取货位数据
-    private void loadAllocationData(){
-        GetAllocationDataWork getAllocationDataWork = new GetAllocationDataWork();
-        getAllocationDataWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
-            @Override
-            public void doEndWork(boolean b, List<Map<String, Object>> maps) {
-                if (b) {
-                    if (!maps.equals("")) {
-                        //绑定Adapter
+            getAllocationDataWork.beginExecute(Tbno,CarriesType);
+        }
+                //    得到机械数据
 
-                         GetAllocationDataAdapter getAllocationDataAdapter = new GetAllocationDataAdapter(maps, TallyDetail.this.getApplicationContext());
-                        Egetallocation_spinner.setAdapter(getAllocationDataAdapter);
-                        Egetallocation_spinner.setEnabled(false);
-                        Egetallocation_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view,
-                                                       int position, long id) {
-                                HashMap map = (HashMap) parent.getItemAtPosition(position);
-                                CodeAllocationLast = map.get("tv1").toString();
-                                Log.i("CodeBoothLast", "" + CodeAllocationLast);
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-                                // TODO Auto-generated method stub
-                            }
-                        });
-
-                        GetAllocationDataAdapter getAllocationDataAdapter1 = new GetAllocationDataAdapter(maps, TallyDetail.this.getApplicationContext());
-                        getallocation_spinner.setAdapter(getAllocationDataAdapter1);
-                        getallocation_spinner.setEnabled(false);
-                        getallocation_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view,
-                                                       int position, long id) {
-                                HashMap map = (HashMap) parent.getItemAtPosition(position);
-                                CodeAllocation = map.get("tv1").toString();
-                                Log.i("CodeBooth",""+ CodeAllocation);
-
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-                                // TODO Auto-generated method stub
-                            }
-                        });
-                    } else {
-                        showToast("数据为空");
-                    }
-                } else {
-
-                }            }
-        });
-        getAllocationDataWork.beginExecute(CodeCompany);
-    }
-    //    得到机械数据
     private void initMachine(){
         TallyDetail_MachineWork tallyDetail_MachineWork = new TallyDetail_MachineWork();
         tallyDetail_MachineWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
@@ -989,10 +858,6 @@ public class TallyDetail extends TabActivity {
         et_vehicle =(EditText) findViewById(R.id.et_vehicle);
         entrust1_spinner = (Spinner)findViewById(R.id.entrust1_spinner);
         entrust2_spinner = (Spinner)findViewById(R.id.entrust2_spinner);
-        ecornerpile_Auto = (InstantAutoComplete) findViewById(R.id.ecornerpile_auto);
-        cornerpile_Auto = (InstantAutoComplete) findViewById(R.id.cornerpile_auto);
-        getallocation_spinner= (Spinner)findViewById(R.id.getallocation_spinner);
-        Egetallocation_spinner = (Spinner)findViewById(R.id.Egetallocation_spinner);
         linear_Ehuowei = (LinearLayout)findViewById(R.id.linear_Ehuowei);
         linear_huowei = (LinearLayout)findViewById(R.id.linear_huowei);
         flag_spinner = (Spinner)findViewById(R.id.flag_spinner);
@@ -1010,13 +875,13 @@ public class TallyDetail extends TabActivity {
         tv_boatname = (TextView)findViewById(R.id.tv_boatname);
         tv_tvboatdetail = (TextView)findViewById(R.id.tv_tvboatdetail);
         tv_changbie = (TextView)findViewById(R.id.tv_changbie);
-        tv_changbiedetail = (EditText)findViewById(R.id.tv_changbiedetail);
+        tv_changbiedetail = (TextView)findViewById(R.id.tv_changbiedetail);
         tv_huowei = (TextView)findViewById(R.id.tv_huowei);
         tv_huoweidetail = (TextView)findViewById(R.id.tv_huoweidetail);
         tv_Eboatname = (TextView)findViewById(R.id.tv_Eboatname);
         tv_Eboatdetail = (TextView)findViewById(R.id.tv_Eboatdetail);
         tv_Echangbie = (TextView)findViewById(R.id.tv_Echangbie);
-        tv_Echangbiedetail = (EditText)findViewById(R.id.tv_Echangbiedetail);
+        tv_Echangbiedetail = (TextView)findViewById(R.id.tv_Echangbiedetail);
         tv_Ehuowei = (TextView)findViewById(R.id.tv_Ehuowei);
         tv_Ehuoweidetail = (TextView)findViewById(R.id.tv_Ehuoweidetail);
         quality_spinner = (Spinner) findViewById(R.id.quality_spinner);

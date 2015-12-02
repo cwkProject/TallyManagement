@@ -61,8 +61,8 @@ public class TallyManageData extends JsonDataModel {
         map.put("CodeUser", companyCode);
         map.put("startRow", startCount);
         map.put("count", endCount);
-        map.put("Cargo", Cargo);
-        map.put("TaskNo", TaskNo);
+        map.put("TallyDate", Cargo);
+        map.put("DayNight", TaskNo);
     }
 
     @Override
