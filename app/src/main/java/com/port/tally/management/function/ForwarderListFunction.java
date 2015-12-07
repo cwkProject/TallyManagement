@@ -56,7 +56,7 @@ public class ForwarderListFunction extends BaseCodeListFunction<Forwarder, Strin
             public void doEndWork(boolean state, List<Forwarder> data) {
                 netWorkEndSetData(state, data);
             }
-        });
+        }, false);
 
         pullForwarderList.execute(parameter);
     }

@@ -155,8 +155,9 @@ public class SplashActivity extends Activity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
+
         // 注销广播接收者
         unregisterReceivers();
     }
@@ -237,8 +238,6 @@ public class SplashActivity extends Activity {
 
             if (actionSemaphore <= 0) {
                 // 数据加载完成
-                // 注销广播接收者
-                unregisterReceivers();
                 // 跳转
                 jump();
             }

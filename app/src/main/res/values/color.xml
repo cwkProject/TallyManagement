@@ -13,6 +13,8 @@
     <color name="chart_grid_color">#55797C7E</color>
     <color name="chart_line_green_color">#DF1A9B32</color>
     <color name="chart_line_orange_color">#FFFF9432</color>
+    
+    <color name="light_gray_background">#EAEAEE</color>
 
     <color name="login_background_color">#E1EFFC</color>
 

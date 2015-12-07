@@ -48,7 +48,7 @@ public class OperationListFunction extends BaseCodeListFunction<Operation, Void>
             public void doEndWork(boolean state, List<Operation> data) {
                 netWorkEndSetData(state, data);
             }
-        });
+        }, false);
 
         pullOperationList.execute();
     }

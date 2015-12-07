@@ -48,7 +48,7 @@ public class CargoOwnerListFunction extends BaseCodeListFunction<CargoOwner, Voi
             public void doEndWork(boolean state, List<CargoOwner> data) {
                 netWorkEndSetData(state, data);
             }
-        });
+        }, false);
 
         pullCargoOwnerList.execute();
     }

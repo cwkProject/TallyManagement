@@ -40,6 +40,11 @@ public class CargoOwnerOperator extends BaseOperator<CargoOwner> {
     }
 
     @Override
+    protected SQLiteOpenHelper onCreateWriteDatabaseHelper(Context context) {
+        return TallySQLiteHelper.getSqLiteOpenHelper(context);
+    }
+
+    @Override
     protected String onCreateTableName() {
         return TableConst.CargoOwner.TABLE_NAME;
     }
@@ -84,7 +89,7 @@ public class CargoOwnerOperator extends BaseOperator<CargoOwner> {
 
         // 关闭数据库
         cursor.close();
-        close();
+        close(sqLiteHelper);
 
         return list;
     }

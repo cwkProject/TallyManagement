@@ -40,6 +40,11 @@ public class ForwarderOperator extends BaseOperator<Forwarder> {
     }
 
     @Override
+    protected SQLiteOpenHelper onCreateWriteDatabaseHelper(Context context) {
+        return TallySQLiteHelper.getSqLiteOpenHelper(context);
+    }
+
+    @Override
     protected String onCreateTableName() {
         return TableConst.Forwarder.TABLE_NAME;
     }
@@ -87,7 +92,7 @@ public class ForwarderOperator extends BaseOperator<Forwarder> {
 
         // 关闭数据库
         cursor.close();
-        close();
+        close(sqLiteHelper);
 
         return list;
     }

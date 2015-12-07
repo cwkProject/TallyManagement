@@ -40,6 +40,11 @@ public class StorageOperator extends BaseOperator<Storage> {
     }
 
     @Override
+    protected SQLiteOpenHelper onCreateWriteDatabaseHelper(Context context) {
+        return TallySQLiteHelper.getSqLiteOpenHelper(context);
+    }
+
+    @Override
     protected String onCreateTableName() {
         return TableConst.Storage.TABLE_NAME;
     }
@@ -87,7 +92,7 @@ public class StorageOperator extends BaseOperator<Storage> {
 
         // 关闭数据库
         cursor.close();
-        close();
+        close(sqLiteHelper);
 
         return list;
     }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/toolbar_default_title"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/activity_shift_change_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_gray_background"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/default_padding_small">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/default_padding_small">
+
+            <EditText
+                android:id="@+id/activity_shift_change_editText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text_shape"
+                android:padding="5dp"/>
+
+            <ImageButton
+                android:id="@+id/activity_shift_change_send_imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="@dimen/default_margin_small"
+                android:layout_marginRight="@dimen/default_margin_small"
+                android:background="@null"
+                android:src="@android:drawable/ic_menu_send"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin_small"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/activity_shift_change_record_imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:src="@android:drawable/ic_btn_speak_now"/>
+
+            <ImageButton
+                android:id="@+id/activity_shift_change_photo_imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:src="@android:drawable/ic_menu_camera"/>
+
+            <ImageButton
+                android:id="@+id/activity_shift_change_gallery_imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@null"
+                android:src="@android:drawable/ic_menu_gallery"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

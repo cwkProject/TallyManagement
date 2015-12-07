@@ -48,7 +48,7 @@ public class CargoTypeListFunction extends BaseCodeListFunction<CargoType, Void>
             public void doEndWork(boolean state, List<CargoType> data) {
                 netWorkEndSetData(state, data);
             }
-        });
+        }, false);
 
         pullCargoTypeList.execute();
     }

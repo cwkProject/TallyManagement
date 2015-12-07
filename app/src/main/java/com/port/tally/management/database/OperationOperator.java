@@ -40,6 +40,11 @@ public class OperationOperator extends BaseOperator<Operation> {
     }
 
     @Override
+    protected SQLiteOpenHelper onCreateWriteDatabaseHelper(Context context) {
+        return TallySQLiteHelper.getSqLiteOpenHelper(context);
+    }
+
+    @Override
     protected String onCreateTableName() {
         return TableConst.Operation.TABLE_NAME;
     }
@@ -84,7 +89,7 @@ public class OperationOperator extends BaseOperator<Operation> {
 
         // 关闭数据库
         cursor.close();
-        close();
+        close(sqLiteHelper);
 
         return list;
     }

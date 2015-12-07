@@ -40,6 +40,11 @@ public class VoyageOperator extends BaseOperator<Voyage> {
     }
 
     @Override
+    protected SQLiteOpenHelper onCreateWriteDatabaseHelper(Context context) {
+        return TallySQLiteHelper.getSqLiteOpenHelper(context);
+    }
+
+    @Override
     protected String onCreateTableName() {
         return TableConst.Voyage.TABLE_NAME;
     }
@@ -84,7 +89,7 @@ public class VoyageOperator extends BaseOperator<Voyage> {
 
         // 关闭数据库
         cursor.close();
-        close();
+        close(sqLiteHelper);
 
         return list;
     }

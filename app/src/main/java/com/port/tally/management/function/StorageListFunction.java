@@ -56,7 +56,7 @@ public class StorageListFunction extends BaseCodeListFunction<Storage, String> {
             public void doEndWork(boolean state, List<Storage> data) {
                 netWorkEndSetData(state, data);
             }
-        });
+        }, false);
 
         pullStorageList.execute(parameter);
     }

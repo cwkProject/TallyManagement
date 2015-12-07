@@ -48,7 +48,7 @@ public class CompanyListFunction extends BaseCodeListFunction<Company, Void> {
             public void doEndWork(boolean state, List<Company> data) {
                 netWorkEndSetData(state, data);
             }
-        });
+        }, false);
 
         pullCompanyList.execute();
     }

@@ -48,7 +48,7 @@ public class VoyageListFunction extends BaseCodeListFunction<Voyage, Void> {
             public void doEndWork(boolean state, List<Voyage> data) {
                 netWorkEndSetData(state, data);
             }
-        });
+        }, false);
 
         pullVoyageList.execute();
     }
