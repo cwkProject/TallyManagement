@@ -20,4 +20,6 @@
     <string name="no_nfc">这个设备上没有发现NFC</string>
     <string name="nfc_disabled">NFC没有打开，请打卡</string>
     <string name="jiyunguanli_title">汽运查询</string>
+
+    <string name="record">长按录音</string>
 </resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="@dimen/audio_list_item_height"
+              android:layout_marginLeft="@dimen/default_margin_small"
+              android:gravity="center"
+              android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/shift_change_audio_item_imageView"
+        android:layout_width="@dimen/audio_list_item_width"
+        android:layout_height="@dimen/audio_list_item_height"
+        android:scaleType="fitXY"
+        android:src="@drawable/audio_image_list"/>
+
+    <TextView
+        android:id="@+id/shift_change_audio_item_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
