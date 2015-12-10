@@ -5,8 +5,6 @@ package com.port.tally.management.activity;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,15 +34,14 @@ import com.port.tally.management.fragment.RecordFragment;
 import com.port.tally.management.holder.ShiftChangeAudioViewHolder;
 import com.port.tally.management.holder.ShiftChangeImageViewHolder;
 import com.port.tally.management.util.CacheKeyUtil;
+import com.port.tally.management.util.ImageUtil;
 
 import org.mobile.library.cache.util.CacheManager;
 import org.mobile.library.cache.util.CacheTool;
-import org.mobile.library.common.function.ImageCompression;
 import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.DataChangeObserver;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -204,6 +202,16 @@ public class ShiftChangeActivity extends AppCompatActivity {
          * 记录当前正在播放的音频文件图标
          */
         public ImageView audioImageView = null;
+
+        /**
+         * 录音机片段
+         */
+        public RecordFragment recordFragment = null;
+
+        /**
+         * 共享片段标签
+         */
+        public String[] shareFragmentTag = null;
     }
 
     /**
@@ -269,6 +277,8 @@ public class ShiftChangeActivity extends AppCompatActivity {
                 .activity_shift_change_function_layout);
 
         viewHolder.mediaPlayer = new MediaPlayer();
+
+        viewHolder.recordFragment = new RecordFragment();
     }
 
     /**
@@ -292,6 +302,9 @@ public class ShiftChangeActivity extends AppCompatActivity {
         initAudioButton();
         // 初始化编辑框
         initEditText();
+
+        // 初始化待发送音频列表
+        initAudioList();
     }
 
     /**
@@ -327,33 +340,77 @@ public class ShiftChangeActivity extends AppCompatActivity {
     private void initFragment() {
         // 初始化录音机片段
         initRecordFragment();
-        // 初始化待发送音频列表
-        initAudioList();
+
+        // 注册要共享片段
+        initShareFragment();
+    }
+
+    /**
+     * 注册要共享片段
+     */
+    private void initShareFragment() {
+        // 加入布局管理器
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // 录音机片段
+        transaction.add(R.id.activity_shift_change_bottom_frameLayout, viewHolder.recordFragment,
+                viewHolder.AUDIO_FRAGMENT_TAG).hide(viewHolder.recordFragment);
+
+        transaction.commit();
+
+        // 注册要共享片段标签
+        viewHolder.shareFragmentTag = new String[]{viewHolder.AUDIO_FRAGMENT_TAG};
+    }
+
+    /**
+     * 显示指定可替换片段
+     *
+     * @param fragmentTag 要显示的片段
+     */
+    private void showFragment(String fragmentTag) {
+
+        // 获取片段管理器
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // 要显示的片段
+        Fragment showFragment = fragmentManager.findFragmentByTag(fragmentTag);
+
+        // 当前正在显示
+        if (showFragment.isVisible()) {
+            return;
+        }
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        for (String tag : viewHolder.shareFragmentTag) {
+            Fragment fragment = fragmentManager.findFragmentByTag(tag);
+            if (fragment != null && fragment.isVisible()) {
+                // 隐藏上一个显示片段
+                transaction.hide(fragment);
+                break;
+            }
+        }
+
+        // 显示目标片段
+        transaction.show(showFragment).commit();
     }
 
     /**
      * 初始化录音机片段
      */
     private void initRecordFragment() {
-        // 录音机片段
-        RecordFragment fragment = new RecordFragment();
 
         // 缓存工具
-        fragment.setRecordCacheTool(viewHolder.sendCacheTool);
+        viewHolder.recordFragment.setRecordCacheTool(viewHolder.sendCacheTool);
 
         // 接收
-        fragment.setRecordEndListener(new DataChangeObserver<String>() {
+        viewHolder.recordFragment.setRecordEndListener(new DataChangeObserver<String>() {
             @Override
             public void notifyDataChange(String data) {
                 viewHolder.audioRecyclerView.setVisibility(View.VISIBLE);
                 viewHolder.audioRecyclerViewAdapter.addData(0, data);
             }
         });
-
-        // 加入布局管理器
-        getSupportFragmentManager().beginTransaction().add(R.id
-                .activity_shift_change_bottom_frameLayout, fragment, viewHolder
-                .AUDIO_FRAGMENT_TAG).hide(fragment).commit();
     }
 
     /**
@@ -558,53 +615,6 @@ public class ShiftChangeActivity extends AppCompatActivity {
     }
 
     /**
-     * 显示指定标签的片段布局
-     *
-     * @param tag 指定的标签
-     */
-    private void showFragment(String tag) {
-        // 获取片段管理器
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        // 尝试获取该片段
-        Fragment tagFragment = fragmentManager.findFragmentByTag(tag);
-        // 尝试获取当前显示的片段对象
-        Fragment currentFragment = getVisibleFragment();
-
-        if (currentFragment != null) {
-            // 有显示的片段则先隐藏
-            Log.i(LOG_TAG + "showFragment", currentFragment.getTag() + " fragment is gone");
-            fragmentManager.beginTransaction().hide(currentFragment).commit();
-        }
-
-        // 显示
-        Log.i(LOG_TAG + "showFragment", tagFragment.getTag() + " fragment is show");
-        fragmentManager.beginTransaction().show(tagFragment).commit();
-    }
-
-    /**
-     * 获取当前显示的片段对象
-     *
-     * @return 当前显示的片段实例，没有则返回null
-     */
-    private Fragment getVisibleFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        List<Fragment> fragments = fragmentManager.getFragments();
-        if (fragments == null || fragments.size() == 0) {
-            Log.i(LOG_TAG + "getVisibleFragment", "no fragment");
-            return null;
-        } else {
-            Log.i(LOG_TAG + "getVisibleFragment", "fragment count is " + fragments.size());
-        }
-        for (Fragment fragment : fragments) {
-            if (fragment != null && fragment.isVisible()) {
-                Log.i(LOG_TAG + "getVisibleFragment", "fragment tag is " + fragment.getTag());
-                return fragment;
-            }
-        }
-        return null;
-    }
-
-    /**
      * 创建图片存放路径
      *
      * @return 文件uri
@@ -618,8 +628,8 @@ public class ShiftChangeActivity extends AppCompatActivity {
         viewHolder.sendImageCacheKeyList.add(0, key);
 
         // 获取一个缓存位置
-        FileOutputStream fileOutputStream = viewHolder.sendCacheTool.putAndBack
-                (SOURCE_IMAGE_CACHE_PRE + key);
+        FileOutputStream fileOutputStream = viewHolder.sendCacheTool.putAndBack(ImageUtil
+                .SOURCE_IMAGE_CACHE_PRE + key);
 
         try {
             fileOutputStream.close();
@@ -627,7 +637,7 @@ public class ShiftChangeActivity extends AppCompatActivity {
             Log.e(LOG_TAG + "getOutputMediaFileUri", "IOException is " + e.getMessage());
         }
 
-        File file = viewHolder.sendCacheTool.getForFile(SOURCE_IMAGE_CACHE_PRE + key);
+        File file = viewHolder.sendCacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE + key);
 
         return Uri.fromFile(file);
     }
@@ -647,20 +657,28 @@ public class ShiftChangeActivity extends AppCompatActivity {
                         String key = viewHolder.sendImageCacheKeyList.get(0);
 
                         // 提取图片文件
-                        File file = viewHolder.sendCacheTool.getForFile(SOURCE_IMAGE_CACHE_PRE +
-                                key);
-                        // 处理图片
-                        createThumbnail(file, key);
+                        File file = viewHolder.sendCacheTool.getForFile(ImageUtil
+                                .SOURCE_IMAGE_CACHE_PRE + key);
                         // 使图片列表可见
                         viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
-                        // 通知列表刷新
-                        notifyImageAdapter(THUMBNAIL_CACHE_PRE + key);
+
+                        // 处理图片
+                        ImageUtil.createThumbnail(file, viewHolder.sendCacheTool, key, viewHolder
+                                .thumbnailWidth, viewHolder.thumbnailHeight, new ImageUtil
+                                .ProcessFinishListener() {
+                            @Override
+                            public void finish(CacheTool cacheTool, String key) {
+                                // 通知列表刷新
+                                notifyImageAdapter(key);
+                            }
+                        });
+
                         break;
                     default:
                         // 取消或失败
                         // 移除缓存位
-                        viewHolder.sendCacheTool.remove(SOURCE_IMAGE_CACHE_PRE + viewHolder
-                                .sendImageCacheKeyList.get(0));
+                        viewHolder.sendCacheTool.remove(ImageUtil.SOURCE_IMAGE_CACHE_PRE +
+                                viewHolder.sendImageCacheKeyList.get(0));
                         // 移除预置缓存key
                         viewHolder.sendImageCacheKeyList.remove(0);
                         break;
@@ -678,25 +696,35 @@ public class ShiftChangeActivity extends AppCompatActivity {
                                 filePathColumns, null, null, null);
                         int columnIndex = c.getColumnIndex(filePathColumns[0]);
                         while (c.moveToNext()) {
-                            String picturePath = c.getString(columnIndex);
+                            final String picturePath = c.getString(columnIndex);
                             Log.i(LOG_TAG + "onActivityResult", "picture path is " + picturePath);
 
                             // 生成一个缓存key
-                            String key = CacheKeyUtil.getRandomKey();
+                            final String cacheKey = CacheKeyUtil.getRandomKey();
 
                             // 存入缓存key列表
-                            viewHolder.sendImageCacheKeyList.add(0, key);
+                            viewHolder.sendImageCacheKeyList.add(0, cacheKey);
 
-                            // 处理图片
-                            createThumbnail(new File(picturePath), key);
                             // 使图片列表可见
                             viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
-                            // 通知列表刷新
-                            notifyImageAdapter(THUMBNAIL_CACHE_PRE + key);
 
-                            // 存入缓存
-                            viewHolder.sendCacheTool.put(SOURCE_IMAGE_CACHE_PRE + key, new File
-                                    (picturePath));
+                            // 处理图片
+                            ImageUtil.createThumbnail(new File(picturePath), viewHolder
+                                    .sendCacheTool, cacheKey, viewHolder.thumbnailWidth,
+                                    viewHolder.thumbnailHeight, new ImageUtil
+                                            .ProcessFinishListener() {
+                                        @Override
+                                        public void finish(CacheTool cacheTool, String key) {
+                                            // 通知列表刷新
+                                            notifyImageAdapter(key);
+
+                                            // 存入缓存
+                                            viewHolder.sendCacheTool.put(ImageUtil
+                                                    .SOURCE_IMAGE_CACHE_PRE + cacheKey, new File
+                                                    (picturePath));
+                                        }
+                                    });
+
                         }
                         c.close();
 
@@ -706,115 +734,18 @@ public class ShiftChangeActivity extends AppCompatActivity {
     }
 
     /**
-     * 创建缩略图
-     *
-     * @param file 原图文件
-     * @param key  要存放的缓存key（不含前缀）
-     */
-    private void createThumbnail(File file, String key) {
-        Log.i(LOG_TAG + "createThumbnail", "image path:" + file.getPath() + " target cache key" +
-                key);
-
-        // 创建缩略图
-        Log.i(LOG_TAG + "createThumbnail", "thumbnail begin");
-
-        viewHolder.sendCacheTool.put(THUMBNAIL_CACHE_PRE + key, resolutionBitmap(file, viewHolder
-                .thumbnailWidth, viewHolder.thumbnailHeight));
-
-        Log.i(LOG_TAG + "createThumbnail", "thumbnail end");
-    }
-
-    /**
-     * 处理图片
-     *
-     * @param file 要处理的原图文件
-     * @param key  要存放的缓存key（不含前缀）
-     */
-    private void processPicture(final File file, final String key) {
-
-        Log.i(LOG_TAG + "processPicture", "image path:" + file.getPath() + " target cache key" +
-                key);
-
-        viewHolder.taskExecutor.submit(new Runnable() {
-            @Override
-            public void run() {
-                // 像素压缩，尺寸缩小为720P
-                Bitmap bitmap = resolutionBitmap(file, 720, 1280);
-
-                // 质量压缩50K
-                qualityBitmap(key, bitmap, 50);
-            }
-        });
-    }
-
-    /**
      * 通知待发送图片列表刷新
      *
      * @param key 缩略图key
      */
-    private synchronized void notifyImageAdapter(String key) {
-        viewHolder.imageRecyclerViewAdapter.addData(0, key);
-    }
+    private void notifyImageAdapter(final String key) {
 
-    /**
-     * 质量压缩
-     *
-     * @param key    要存放的缓存key（不含前缀）
-     * @param bitmap 要压缩的图片
-     * @param size   目标容量，单位KB
-     */
-    private void qualityBitmap(String key, Bitmap bitmap, int size) {
-        Log.i(LOG_TAG + "processPicture", "quality compression begin");
-        // 进行质量压缩
-        ByteArrayOutputStream byteArrayOutputStream = ImageCompression.compressImage(bitmap, size);
-
-        // 获取一个缓存位置
-        FileOutputStream fileOutputStream = viewHolder.sendCacheTool.putAndBack
-                (COMPRESSION_IMAGE_CACHE_PRE + key);
-
-        try {
-            byteArrayOutputStream.writeTo(fileOutputStream);
-
-            byteArrayOutputStream.flush();
-
-            byteArrayOutputStream.close();
-
-            fileOutputStream.flush();
-
-            fileOutputStream.close();
-
-        } catch (IOException e) {
-            Log.e(LOG_TAG + "processPicture", "IOException is " + e.getMessage());
-        }
-
-        Log.i(LOG_TAG + "processPicture", "quality compression end");
-    }
-
-    /**
-     * 像素压缩
-     *
-     * @param file   图片路径
-     * @param width  目标宽
-     * @param height 目标高
-     *
-     * @return 压缩图
-     */
-    private Bitmap resolutionBitmap(File file, int width, int height) {
-        Log.i(LOG_TAG + "processPicture", "resolution compression begin");
-        BitmapFactory.Options options = new BitmapFactory.Options();
-
-        options.inJustDecodeBounds = true;
-
-        BitmapFactory.decodeFile(file.getPath(), options);
-
-        options.inSampleSize = ImageCompression.calculateHighSampleSize(options, width, height);
-
-        options.inJustDecodeBounds = false;
-        options.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(file.getPath(), options);
-        Log.i(LOG_TAG + "processPicture", "resolution compression end");
-        return bitmap;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                viewHolder.imageRecyclerViewAdapter.addData(0, key);
+            }
+        });
     }
 
     @Override
