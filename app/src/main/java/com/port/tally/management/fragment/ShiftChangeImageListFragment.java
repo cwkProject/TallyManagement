@@ -248,6 +248,9 @@ public class ShiftChangeImageListFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                // 屏蔽多次连击
+                viewHolder.photoImageButton.setEnabled(false);
+
                 // 利用系统自带的相机应用:拍照
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -268,6 +271,10 @@ public class ShiftChangeImageListFragment extends Fragment {
         viewHolder.galleryImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // 屏蔽多次连击
+                viewHolder.galleryImageButton.setEnabled(false);
+
                 Intent picture = new Intent(Intent.ACTION_PICK, android.provider.MediaStore
                         .Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(picture, CAPTURE_GALLERY_ACTIVITY_REQUEST_CODE);
@@ -310,6 +317,8 @@ public class ShiftChangeImageListFragment extends Fragment {
         switch (requestCode) {
             case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
                 // 拍照结果
+                // 重新开启按钮
+                viewHolder.photoImageButton.setEnabled(true);
                 Log.i(LOG_TAG + "onActivityResult", "image result is " + resultCode);
                 switch (resultCode) {
                     case Activity.RESULT_OK:
@@ -324,6 +333,9 @@ public class ShiftChangeImageListFragment extends Fragment {
                 break;
             case CAPTURE_GALLERY_ACTIVITY_REQUEST_CODE:
                 // 相册结果
+                // 重新开启按钮
+                viewHolder.galleryImageButton.setEnabled(true);
+
                 switch (resultCode) {
                     case Activity.RESULT_OK:
                         // 选取成功
@@ -421,6 +433,8 @@ public class ShiftChangeImageListFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // 滚动到头部准备插图
+                viewHolder.imageRecyclerView.scrollToPosition(0);
                 viewHolder.imageRecyclerViewAdapter.addData(0, key);
             }
         });

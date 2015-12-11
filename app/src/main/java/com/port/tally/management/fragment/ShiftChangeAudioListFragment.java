@@ -91,6 +91,7 @@ public class ShiftChangeAudioListFragment extends Fragment {
      */
     public void addAudio(String cacheKey) {
         viewHolder.audioRecyclerView.setVisibility(View.VISIBLE);
+        viewHolder.audioRecyclerView.scrollToPosition(0);
         viewHolder.audioRecyclerViewAdapter.addData(0, cacheKey);
     }
 

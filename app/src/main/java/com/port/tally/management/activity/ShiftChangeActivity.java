@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -63,19 +63,9 @@ public class ShiftChangeActivity extends AppCompatActivity {
         public CacheTool sendCacheTool = null;
 
         /**
-         * 交接班信息正文列表缓存工具
-         */
-        public CacheTool contentCacheTool = null;
-
-        /**
          * 底部功能布局
          */
         public LinearLayout functionLayout = null;
-
-        /**
-         * 正文列表
-         */
-        public RecyclerView contentRecyclerView = null;
 
         /**
          * 音频按钮
@@ -146,9 +136,6 @@ public class ShiftChangeActivity extends AppCompatActivity {
 
         viewHolder.taskExecutor = Executors.newFixedThreadPool(POOL_COUNT);
 
-        viewHolder.contentRecyclerView = (RecyclerView) findViewById(R.id
-                .activity_shift_change_content_recyclerView);
-
         viewHolder.audioImageButton = (ImageButton) findViewById(R.id
                 .activity_shift_change_audio_imageButton);
 
@@ -156,8 +143,6 @@ public class ShiftChangeActivity extends AppCompatActivity {
 
         viewHolder.sendImageButton = (ImageButton) findViewById(R.id
                 .activity_shift_change_send_imageButton);
-
-        viewHolder.contentCacheTool = CacheManager.getCacheTool("shift_change_content");
 
         viewHolder.sendCacheTool = CacheManager.getCacheTool("shift_change_send");
 
@@ -342,6 +327,9 @@ public class ShiftChangeActivity extends AppCompatActivity {
         viewHolder.audioImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.i(LOG_TAG + "initAudioButton", "bottom frame visibility is " + viewHolder
+                        .bottomFrameLayout.getVisibility());
                 viewHolder.contentEditText.clearFocus();
                 InputMethodController.CloseInputMethod(ShiftChangeActivity.this);
                 if (viewHolder.bottomFrameLayout.getVisibility() == View.GONE) {
@@ -352,6 +340,9 @@ public class ShiftChangeActivity extends AppCompatActivity {
                     viewHolder.bottomFrameLayout.setVisibility(View.GONE);
                     //viewHolder.functionLayout.startAnimation(animationOut);
                 }
+
+                Log.i(LOG_TAG + "initAudioButton", "content edit focus is " + viewHolder
+                        .contentEditText.isFocused());
             }
         });
     }
@@ -364,6 +355,8 @@ public class ShiftChangeActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
+                    Log.i(LOG_TAG + "initEditText", "bottom frame visibility is " + viewHolder
+                            .bottomFrameLayout.getVisibility());
                     viewHolder.bottomFrameLayout.setVisibility(View.GONE);
                 }
             }

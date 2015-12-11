@@ -111,7 +111,7 @@ public class ShiftChangeRecordFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_media_recorder, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_shift_change_recorder, container, false);
 
         // 初始化布局
         initView(rootView);
