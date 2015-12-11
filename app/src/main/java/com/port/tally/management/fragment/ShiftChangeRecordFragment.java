@@ -32,7 +32,7 @@ import java.io.IOException;
  * @version 1.0 2015/12/8
  * @since 1.0
  */
-public class RecordFragment extends Fragment {
+public class ShiftChangeRecordFragment extends Fragment {
 
     /**
      * 日志标签前缀

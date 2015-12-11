@@ -3,50 +3,29 @@ package com.port.tally.management.activity;
  * Created by 超悟空 on 2015/12/2.
  */
 
-import android.content.Intent;
-import android.database.Cursor;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.port.tally.management.R;
-import com.port.tally.management.adapter.ShiftChangeAudioRecyclerViewAdapter;
-import com.port.tally.management.adapter.ShiftChangeImageRecyclerViewAdapter;
-import com.port.tally.management.fragment.RecordFragment;
-import com.port.tally.management.holder.ShiftChangeAudioViewHolder;
-import com.port.tally.management.holder.ShiftChangeImageViewHolder;
-import com.port.tally.management.util.CacheKeyUtil;
-import com.port.tally.management.util.ImageUtil;
+import com.port.tally.management.fragment.ShiftChangeAudioListFragment;
+import com.port.tally.management.fragment.ShiftChangeImageListFragment;
+import com.port.tally.management.fragment.ShiftChangeRecordFragment;
 
 import org.mobile.library.cache.util.CacheManager;
 import org.mobile.library.cache.util.CacheTool;
 import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.model.operate.DataChangeObserver;
-import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -62,31 +41,6 @@ public class ShiftChangeActivity extends AppCompatActivity {
      * 日志标签前缀
      */
     private static final String LOG_TAG = "ShiftChangeActivity.";
-
-    /**
-     * 照相接收返回码
-     */
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-
-    /**
-     * 相册接收返回码
-     */
-    private static final int CAPTURE_GALLERY_ACTIVITY_REQUEST_CODE = 200;
-
-    /**
-     * 原图缓存key前缀
-     */
-    private static final String SOURCE_IMAGE_CACHE_PRE = "source_";
-
-    /**
-     * 压缩后图片缓存key前缀
-     */
-    private static final String COMPRESSION_IMAGE_CACHE_PRE = "compression_";
-
-    /**
-     * 缩略图缓存key前缀
-     */
-    private static final String THUMBNAIL_CACHE_PRE = "thumbnail_";
 
     /**
      * 线程池线程数
@@ -124,26 +78,6 @@ public class ShiftChangeActivity extends AppCompatActivity {
         public RecyclerView contentRecyclerView = null;
 
         /**
-         * 发送图片列表
-         */
-        public RecyclerView imageRecyclerView = null;
-
-        /**
-         * 发送图片列表的适配器
-         */
-        public ShiftChangeImageRecyclerViewAdapter imageRecyclerViewAdapter = null;
-
-        /**
-         * 发送音频列表
-         */
-        public RecyclerView audioRecyclerView = null;
-
-        /**
-         * 发送音频列表的适配器
-         */
-        public ShiftChangeAudioRecyclerViewAdapter audioRecyclerViewAdapter = null;
-
-        /**
          * 音频按钮
          */
         public ImageButton audioImageButton = null;
@@ -152,16 +86,6 @@ public class ShiftChangeActivity extends AppCompatActivity {
          * 音频布局的标签
          */
         public String AUDIO_FRAGMENT_TAG = "audio_fragment_tag";
-
-        /**
-         * 照相按钮
-         */
-        public ImageButton photoImageButton = null;
-
-        /**
-         * 相册按钮
-         */
-        public ImageButton galleryImageButton = null;
 
         /**
          * 底部扩展布局
@@ -179,34 +103,19 @@ public class ShiftChangeActivity extends AppCompatActivity {
         public ImageButton sendImageButton = null;
 
         /**
-         * 存放待发送图片缓存key列表
-         */
-        public List<String> sendImageCacheKeyList = null;
-
-        /**
-         * 缩略图高度
-         */
-        public int thumbnailHeight = 0;
-
-        /**
-         * 缩略图宽度
-         */
-        public int thumbnailWidth = 0;
-
-        /**
-         * 音频播放器
-         */
-        public MediaPlayer mediaPlayer = null;
-
-        /**
-         * 记录当前正在播放的音频文件图标
-         */
-        public ImageView audioImageView = null;
-
-        /**
          * 录音机片段
          */
-        public RecordFragment recordFragment = null;
+        public ShiftChangeRecordFragment recordFragment = null;
+
+        /**
+         * 待发送图片列表片段
+         */
+        public ShiftChangeImageListFragment imageListFragment = null;
+
+        /**
+         * 待发送音频列表片段
+         */
+        public ShiftChangeAudioListFragment audioListFragment = null;
 
         /**
          * 共享片段标签
@@ -240,20 +149,8 @@ public class ShiftChangeActivity extends AppCompatActivity {
         viewHolder.contentRecyclerView = (RecyclerView) findViewById(R.id
                 .activity_shift_change_content_recyclerView);
 
-        viewHolder.imageRecyclerView = (RecyclerView) findViewById(R.id
-                .activity_shift_change_image_recyclerView);
-
-        viewHolder.audioRecyclerView = (RecyclerView) findViewById(R.id
-                .activity_shift_change_audio_recyclerView);
-
         viewHolder.audioImageButton = (ImageButton) findViewById(R.id
                 .activity_shift_change_audio_imageButton);
-
-        viewHolder.photoImageButton = (ImageButton) findViewById(R.id
-                .activity_shift_change_photo_imageButton);
-
-        viewHolder.galleryImageButton = (ImageButton) findViewById(R.id
-                .activity_shift_change_gallery_imageButton);
 
         viewHolder.contentEditText = (EditText) findViewById(R.id.activity_shift_change_editText);
 
@@ -264,21 +161,17 @@ public class ShiftChangeActivity extends AppCompatActivity {
 
         viewHolder.sendCacheTool = CacheManager.getCacheTool("shift_change_send");
 
-        viewHolder.sendImageCacheKeyList = new ArrayList<>();
-
-        viewHolder.thumbnailHeight = getResources().getDimensionPixelSize(R.dimen
-                .image_list_item_height);
-        viewHolder.thumbnailWidth = getResources().getDimensionPixelSize(R.dimen
-                .image_list_item_width);
-
         viewHolder.bottomFrameLayout = (FrameLayout) findViewById(R.id
                 .activity_shift_change_bottom_frameLayout);
+
         viewHolder.functionLayout = (LinearLayout) findViewById(R.id
                 .activity_shift_change_function_layout);
 
-        viewHolder.mediaPlayer = new MediaPlayer();
+        viewHolder.recordFragment = new ShiftChangeRecordFragment();
 
-        viewHolder.recordFragment = new RecordFragment();
+        viewHolder.imageListFragment = new ShiftChangeImageListFragment();
+
+        viewHolder.audioListFragment = new ShiftChangeAudioListFragment();
     }
 
     /**
@@ -292,19 +185,10 @@ public class ShiftChangeActivity extends AppCompatActivity {
         // 初始化fragment
         initFragment();
 
-        // 初始化待发送图片列表
-        initImageList();
-        // 初始化照相按钮
-        initPhotoButton();
-        // 初始化相册按钮
-        initGalleryButton();
         // 初始化音频按钮
         initAudioButton();
         // 初始化编辑框
         initEditText();
-
-        // 初始化待发送音频列表
-        initAudioList();
     }
 
     /**
@@ -338,11 +222,61 @@ public class ShiftChangeActivity extends AppCompatActivity {
      * 初始化内容片段
      */
     private void initFragment() {
+
+        // 初始化待发送图片列表片段
+        initImageListFragment();
+
+        // 初始化待发送音频列表片段
+        initAudioListFragment();
+
         // 初始化录音机片段
         initRecordFragment();
 
         // 注册要共享片段
         initShareFragment();
+    }
+
+    /**
+     * 初始化待发送音频列表片段
+     */
+    private void initAudioListFragment() {
+        viewHolder.audioListFragment.setCacheTool(viewHolder.sendCacheTool);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id
+                .activity_shift_change_audio_frameLayout, viewHolder.audioListFragment).commit();
+    }
+
+    /**
+     * 初始化待发送图片列表片段
+     */
+    private void initImageListFragment() {
+        viewHolder.imageListFragment.setCacheTool(viewHolder.sendCacheTool);
+
+        viewHolder.imageListFragment.setPhotoImageButton((ImageButton) findViewById(R.id
+                .activity_shift_change_photo_imageButton));
+
+        viewHolder.imageListFragment.setGalleryImageButton((ImageButton) findViewById(R.id
+                .activity_shift_change_gallery_imageButton));
+
+        getSupportFragmentManager().beginTransaction().replace(R.id
+                .activity_shift_change_image_frameLayout, viewHolder.imageListFragment).commit();
+    }
+
+    /**
+     * 初始化录音机片段
+     */
+    private void initRecordFragment() {
+
+        // 缓存工具
+        viewHolder.recordFragment.setRecordCacheTool(viewHolder.sendCacheTool);
+
+        // 接收
+        viewHolder.recordFragment.setRecordEndListener(new DataChangeObserver<String>() {
+            @Override
+            public void notifyDataChange(String data) {
+                viewHolder.audioListFragment.addAudio(data);
+            }
+        });
     }
 
     /**
@@ -396,184 +330,6 @@ public class ShiftChangeActivity extends AppCompatActivity {
     }
 
     /**
-     * 初始化录音机片段
-     */
-    private void initRecordFragment() {
-
-        // 缓存工具
-        viewHolder.recordFragment.setRecordCacheTool(viewHolder.sendCacheTool);
-
-        // 接收
-        viewHolder.recordFragment.setRecordEndListener(new DataChangeObserver<String>() {
-            @Override
-            public void notifyDataChange(String data) {
-                viewHolder.audioRecyclerView.setVisibility(View.VISIBLE);
-                viewHolder.audioRecyclerViewAdapter.addData(0, data);
-            }
-        });
-    }
-
-    /**
-     * 初始化待发送音频列表
-     */
-    private void initAudioList() {
-        RecyclerView recyclerView = viewHolder.audioRecyclerView;
-
-        // 设置item动画
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        // 创建布局管理器
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false);
-
-        // 设置布局管理器
-        recyclerView.setLayoutManager(layoutManager);
-
-        // 初始化适配器
-        viewHolder.audioRecyclerViewAdapter = new ShiftChangeAudioRecyclerViewAdapter(viewHolder
-                .sendCacheTool);
-
-        // 设置监听器
-        viewHolder.audioRecyclerViewAdapter.setOnItemClickListener(new OnItemClickListenerForRecyclerViewItem<List<String>, ShiftChangeAudioViewHolder>() {
-            @Override
-            public void onClick(List<String> dataSource, final ShiftChangeAudioViewHolder holder) {
-
-                // 播放音频
-                playAudio(dataSource.get(holder.getAdapterPosition()), holder.imageView);
-            }
-        });
-
-        recyclerView.setAdapter(viewHolder.audioRecyclerViewAdapter);
-    }
-
-    /**
-     * 播放音频
-     *
-     * @param key       音频缓存key
-     * @param imageView 同步操作的音频图标
-     */
-    private void playAudio(String key, ImageView imageView) {
-
-        if (viewHolder.mediaPlayer.isPlaying()) {
-            viewHolder.mediaPlayer.stop();
-            if (viewHolder.audioImageView != null) {
-                viewHolder.audioImageView.getDrawable().setLevel(0);
-            }
-        }
-
-        // 记录正在播放的文件
-        viewHolder.audioImageView = imageView;
-
-        viewHolder.mediaPlayer.reset();
-
-        try {
-            viewHolder.mediaPlayer.setDataSource(viewHolder.sendCacheTool.getForFile(key).getPath
-                    ());
-            viewHolder.mediaPlayer.prepare();
-        } catch (IOException e) {
-            Log.e(LOG_TAG + "initAudioList", "IOException is " + e.getMessage());
-        }
-
-        viewHolder.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                viewHolder.audioImageView.getDrawable().setLevel(0);
-                viewHolder.audioImageView = null;
-            }
-        });
-
-        imageView.getDrawable().setLevel(1);
-        viewHolder.mediaPlayer.start();
-    }
-
-    /**
-     * 初始化待发送图片列表
-     */
-    private void initImageList() {
-
-        RecyclerView recyclerView = viewHolder.imageRecyclerView;
-
-        // 设置item动画
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        // 创建布局管理器
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false);
-
-        // 设置布局管理器
-        recyclerView.setLayoutManager(layoutManager);
-
-        // 初始化适配器
-        viewHolder.imageRecyclerViewAdapter = new ShiftChangeImageRecyclerViewAdapter(viewHolder
-                .sendCacheTool);
-
-        // 设置监听器
-        viewHolder.imageRecyclerViewAdapter.setOnItemClickListener(new OnItemClickListenerForRecyclerViewItem<List<String>, ShiftChangeImageViewHolder>() {
-            @Override
-            public void onClick(List<String> dataSource, ShiftChangeImageViewHolder holder) {
-                // 显示大图
-                showImage(viewHolder.sendCacheTool.getForFile(SOURCE_IMAGE_CACHE_PRE + viewHolder
-                        .sendImageCacheKeyList.get(holder.getAdapterPosition())), holder
-                        .imageView, dataSource.get(holder.getAdapterPosition()));
-            }
-        });
-
-        recyclerView.setAdapter(viewHolder.imageRecyclerViewAdapter);
-    }
-
-    /**
-     * 展示大图
-     *
-     * @param file 大图路径
-     * @param view 缩略图控件
-     */
-    private void showImage(File file, View view, String key) {
-
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeThumbnailScaleUpAnimation(view,
-                viewHolder.sendCacheTool.getForBitmap(key), view.getWidth() / 2, view.getHeight()
-                        / 2);
-
-        Intent intent = new Intent(ShiftChangeActivity.this, ImageShowActivity.class);
-        intent.putExtra(ImageShowActivity.IMAGE_FILE, file);
-        ActivityCompat.startActivity(ShiftChangeActivity.this, intent, options.toBundle());
-    }
-
-    /**
-     * 初始化照相按钮
-     */
-    private void initPhotoButton() {
-        viewHolder.photoImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // 利用系统自带的相机应用:拍照
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                // 创建图片存放路径
-                Uri fileUri = getOutputMediaFileUri();
-
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
-                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-            }
-        });
-    }
-
-    /**
-     * 初始化相册按钮
-     */
-    private void initGalleryButton() {
-        viewHolder.galleryImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent picture = new Intent(Intent.ACTION_PICK, android.provider.MediaStore
-                        .Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(picture, CAPTURE_GALLERY_ACTIVITY_REQUEST_CODE);
-            }
-        });
-    }
-
-    /**
      * 初始化音频按钮
      */
     private void initAudioButton() {
@@ -612,146 +368,5 @@ public class ShiftChangeActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    /**
-     * 创建图片存放路径
-     *
-     * @return 文件uri
-     */
-    private Uri getOutputMediaFileUri() {
-
-        // 创建缓存key
-        String key = CacheKeyUtil.getRandomKey();
-
-        // 存入缓存key列表
-        viewHolder.sendImageCacheKeyList.add(0, key);
-
-        // 获取一个缓存位置
-        FileOutputStream fileOutputStream = viewHolder.sendCacheTool.putAndBack(ImageUtil
-                .SOURCE_IMAGE_CACHE_PRE + key);
-
-        try {
-            fileOutputStream.close();
-        } catch (IOException e) {
-            Log.e(LOG_TAG + "getOutputMediaFileUri", "IOException is " + e.getMessage());
-        }
-
-        File file = viewHolder.sendCacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE + key);
-
-        return Uri.fromFile(file);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE:
-                // 拍照结果
-                Log.i(LOG_TAG + "onActivityResult", "image result is " + resultCode);
-                switch (resultCode) {
-                    case RESULT_OK:
-                        // 拍照成功
-                        // 图片文件缓存key
-                        String key = viewHolder.sendImageCacheKeyList.get(0);
-
-                        // 提取图片文件
-                        File file = viewHolder.sendCacheTool.getForFile(ImageUtil
-                                .SOURCE_IMAGE_CACHE_PRE + key);
-                        // 使图片列表可见
-                        viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
-
-                        // 处理图片
-                        ImageUtil.createThumbnail(file, viewHolder.sendCacheTool, key, viewHolder
-                                .thumbnailWidth, viewHolder.thumbnailHeight, new ImageUtil
-                                .ProcessFinishListener() {
-                            @Override
-                            public void finish(CacheTool cacheTool, String key) {
-                                // 通知列表刷新
-                                notifyImageAdapter(key);
-                            }
-                        });
-
-                        break;
-                    default:
-                        // 取消或失败
-                        // 移除缓存位
-                        viewHolder.sendCacheTool.remove(ImageUtil.SOURCE_IMAGE_CACHE_PRE +
-                                viewHolder.sendImageCacheKeyList.get(0));
-                        // 移除预置缓存key
-                        viewHolder.sendImageCacheKeyList.remove(0);
-                        break;
-                }
-                break;
-            case CAPTURE_GALLERY_ACTIVITY_REQUEST_CODE:
-                // 相册结果
-                switch (resultCode) {
-                    case RESULT_OK:
-                        // 选取成功
-                        Uri selectedImage = data.getData();
-                        Log.i(LOG_TAG + "onActivityResult", "gallery result is " + selectedImage);
-                        String[] filePathColumns = {MediaStore.Images.Media.DATA};
-                        Cursor c = this.getContentResolver().query(selectedImage,
-                                filePathColumns, null, null, null);
-                        int columnIndex = c.getColumnIndex(filePathColumns[0]);
-                        while (c.moveToNext()) {
-                            final String picturePath = c.getString(columnIndex);
-                            Log.i(LOG_TAG + "onActivityResult", "picture path is " + picturePath);
-
-                            // 生成一个缓存key
-                            final String cacheKey = CacheKeyUtil.getRandomKey();
-
-                            // 存入缓存key列表
-                            viewHolder.sendImageCacheKeyList.add(0, cacheKey);
-
-                            // 使图片列表可见
-                            viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
-
-                            // 处理图片
-                            ImageUtil.createThumbnail(new File(picturePath), viewHolder
-                                    .sendCacheTool, cacheKey, viewHolder.thumbnailWidth,
-                                    viewHolder.thumbnailHeight, new ImageUtil
-                                            .ProcessFinishListener() {
-                                        @Override
-                                        public void finish(CacheTool cacheTool, String key) {
-                                            // 通知列表刷新
-                                            notifyImageAdapter(key);
-
-                                            // 存入缓存
-                                            viewHolder.sendCacheTool.put(ImageUtil
-                                                    .SOURCE_IMAGE_CACHE_PRE + cacheKey, new File
-                                                    (picturePath));
-                                        }
-                                    });
-
-                        }
-                        c.close();
-
-                        break;
-                }
-        }
-    }
-
-    /**
-     * 通知待发送图片列表刷新
-     *
-     * @param key 缩略图key
-     */
-    private void notifyImageAdapter(final String key) {
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                viewHolder.imageRecyclerViewAdapter.addData(0, key);
-            }
-        });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        viewHolder.mediaPlayer.release();
-        viewHolder.audioRecyclerViewAdapter.release();
     }
 }
