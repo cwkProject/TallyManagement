@@ -110,29 +110,14 @@ public class ShiftChangeAudioRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(final ShiftChangeAudioViewHolder holder, int position) {
+        File file = cacheTool.getForFile(dataList.get(position));
+        if (file != null) {
 
-        try {
-            File file = cacheTool.getForFile(dataList.get(position));
-            if (file != null) {
-                mediaPlayer.setDataSource(file.getPath());
-                mediaPlayer.prepare();
-                // 音频长度
-                int length = mediaPlayer.getDuration();
-                mediaPlayer.reset();
+            String lengthString = getAudioLength(file.getPath());
 
-                String lengthString = "";
-
-                if (length / 60000 > 0) {
-                    lengthString += length / 60000 + "'";
-                }
-                lengthString += (length / 1000) % 60 + "\"";
-
-                lengthString += length % 1000;
-
+            if (lengthString != null) {
                 holder.textView.setText(lengthString);
             }
-        } catch (IOException e) {
-            Log.e(LOG_TAG + "onBindViewHolder", "IOException is " + e.getMessage());
         }
 
         // 绑定监听事件
@@ -143,6 +128,37 @@ public class ShiftChangeAudioRecyclerViewAdapter extends RecyclerView
                     onItemClickListener.onClick(dataList, holder);
                 }
             });
+        }
+    }
+
+    /**
+     * 获取音频长度文本
+     *
+     * @param path 音频路径
+     *
+     * @return 格式化后的文本
+     */
+    private String getAudioLength(String path) {
+        try {
+            mediaPlayer.setDataSource(path);
+            mediaPlayer.prepare();
+            // 音频长度
+            int length = mediaPlayer.getDuration();
+            mediaPlayer.reset();
+
+            String lengthString = "";
+
+            if (length / 60000 > 0) {
+                lengthString += length / 60000 + "'";
+            }
+            lengthString += (length / 1000) % 60 + "\"";
+
+            lengthString += length % 1000;
+
+            return lengthString;
+        } catch (IOException e) {
+            Log.e(LOG_TAG + "getAudioLength", "IOException is " + e.getMessage());
+            return null;
         }
     }
 
