@@ -1,19 +1,19 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style send="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item send="colorPrimary">@color/colorPrimary</item>
+        <item send="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item send="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:background">@mipmap/splash_background</item>
+    <style send="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item send="android:windowFullscreen">true</item>
+        <item send="android:background">@mipmap/splash_background</item>
     </style>
     <!-- spinner -->
-    <style name="spinner_style">
-        <item name="android:background">@drawable/spinner_selector</item>
-        <item name="android:paddingLeft">5dip</item>
+    <style send="spinner_style">
+        <item send="android:background">@drawable/spinner_selector</item>
+        <item send="android:paddingLeft">5dip</item>
     </style>
 </resources>

@@ -18,7 +18,7 @@ public interface TableConst {
     String[] CREATE_TABLE_SQL_ARRAY = {CargoType.CREATE_TABLE_SQL , CargoOwner.CREATE_TABLE_SQL ,
                                        Voyage.CREATE_TABLE_SQL , Operation.CREATE_TABLE_SQL ,
                                        Forwarder.CREATE_TABLE_SQL , Storage.CREATE_TABLE_SQL ,
-                                       Company.CREATE_TABLE_SQL};
+                                       Company.CREATE_TABLE_SQL , ShiftChange.CREATE_TABLE_SQL};
 
     /**
      * 货物类别
@@ -134,7 +134,56 @@ public interface TableConst {
          * 建表语句
          */
         String CREATE_TABLE_SQL = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
-                "PRIMARY" + " KEY, %s TEXT NOT NULL,  %s TEXT)", TABLE_NAME, CommonConst._ID,
-                CommonConst.CODE, CommonConst.NAME);
+                        "PRIMARY" + " KEY, %s TEXT NOT NULL,  %s TEXT)", TABLE_NAME, CommonConst
+                ._ID, CommonConst.CODE, CommonConst.NAME);
+    }
+
+    /**
+     * 交接班消息数据
+     */
+    interface ShiftChange {
+
+        /**
+         * 表名
+         */
+        String TABLE_NAME = "tb_shift_change";
+
+        /**
+         * 发送者姓名
+         */
+        String SEND_NAME = "send_name";
+
+        /**
+         * 接收者姓名
+         */
+        String RECEIVE_NAME = "receive_name";
+
+        /**
+         * 内容文本
+         */
+        String CONTENT = "content";
+
+        /**
+         * 消息时间
+         */
+        String TIME = "time";
+
+        /**
+         * 图片地址集合
+         */
+        String IMAGE_URL = "image_url";
+
+        /**
+         * 音频地址集合
+         */
+        String AUDIO_URL = "audio_url";
+
+        /**
+         * 建表语句
+         */
+        String CREATE_TABLE_SQL = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
+                        "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TEXT " +
+                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT)", TABLE_NAME, CommonConst._ID,
+                CommonConst.CODE, SEND_NAME, RECEIVE_NAME, TIME, CONTENT, IMAGE_URL, AUDIO_URL);
     }
 }

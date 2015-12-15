@@ -6,7 +6,7 @@
 
     <include layout="@layout/toolbar_default_title"/>
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/activity_shift_change_content_frameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"

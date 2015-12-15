@@ -15,6 +15,11 @@ import java.util.Map;
 public class ShiftChangeContent {
 
     /**
+     * 消息对应的唯一编码
+     */
+    private String token = null;
+
+    /**
      * 发送者姓名
      */
     private String name = null;
@@ -150,5 +155,23 @@ public class ShiftChangeContent {
      */
     public void setSend(boolean send) {
         this.send = send;
+    }
+
+    /**
+     * 获取消息唯一标识
+     *
+     * @return 消息token
+     */
+    public String getToken() {
+        return token;
+    }
+
+    /**
+     * 设置消息唯一标识
+     *
+     * @param token 消息token
+     */
+    public void setToken(String token) {
+        this.token = token;
     }
 }

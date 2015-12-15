@@ -22,7 +22,7 @@
 
             <fragment
                 android:id="@+id/activity_main_fragment"
-                android:name="com.port.tally.management.fragment.ToDoTaskFragment"
+                android:send="com.port.tally.management.fragment.ToDoTaskFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_collapseMode="parallax"

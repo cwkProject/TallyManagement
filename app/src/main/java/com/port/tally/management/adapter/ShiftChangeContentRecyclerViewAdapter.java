@@ -91,13 +91,15 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
     public interface BindGridItemFailedListener {
 
         /**
-         * 缓存读取失败
+         * 缓存读取失败，同时绑定控件点击事件
          *
+         * @param holder       要绑定的控件管理器
          * @param ItemPosition 列表位置
          * @param key          缓存key
          * @param contentType  内容类型
          */
-        void onFailed(int ItemPosition, String key, int contentType);
+        void onFailed(ImageWithTextViewHolder holder, int ItemPosition, String key, int
+                contentType);
     }
 
     /**
@@ -218,6 +220,13 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
                 ImageWithTextViewHolder imageWithTextViewHolder = new ImageWithTextViewHolder
                         (holder.itemView.getContext());
 
+                if (entry.getValue() != 100) {
+                    imageWithTextViewHolder.textView.setText(entry.getValue() + "%");
+                }
+
+                imageWithTextViewHolder.rootItem.setTag(entry.getKey());
+                holder.imageGridLayout.addView(imageWithTextViewHolder.rootItem);
+
                 if (content.isSend()) {
                     // 当前为上传状态
                     Bitmap bitmap = cacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE + entry
@@ -231,33 +240,47 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
                     }
                 } else {
                     if (entry.getValue() == 100) {
-                        Bitmap bitmap = cacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE +
+
+                        // 图片源文件缓存
+                        File file = cacheTool.getForFile(ImageUtil.COMPRESSION_IMAGE_CACHE_PRE +
                                 entry.getKey());
-                        if (bitmap != null) {
-                            imageWithTextViewHolder.imageView.setImageBitmap(bitmap);
-                        } else {
+
+                        if (file == null || !file.exists()) {
+                            // 图片源文件缓存已丢失，需要重新下载
                             Log.d(LOG_TAG + "onBindViewHolder", "holder index:" + holder
                                     .holderIndex + " position:" + position + " ImageList " +
                                     "key:" + entry.getKey() + " value:" + entry.getValue() + " no" +
                                     " bitmap");
                             // 此处触发失败事件回调
                             if (bindGridItemFailedListener != null) {
-                                bindGridItemFailedListener.onFailed(holder.getAdapterPosition(),
-                                        entry.getKey(), TYPE_IMAGE_CONTENT);
+                                bindGridItemFailedListener.onFailed(imageWithTextViewHolder,
+                                        holder.getAdapterPosition(), entry.getKey(),
+                                        TYPE_IMAGE_CONTENT);
+                            }
+                            break;
+                        }
+
+                        Bitmap bitmap = cacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE +
+                                entry.getKey());
+                        if (bitmap != null) {
+                            imageWithTextViewHolder.imageView.setImageBitmap(bitmap);
+                        } else {
+                            // 缩略图缓存丢失，重新加载缩略图
+                            Log.d(LOG_TAG + "onBindViewHolder", "holder index:" + holder
+                                    .holderIndex + " position:" + position + " ImageList " +
+                                    "key:" + entry.getKey() + " value:" + entry.getValue() + " no" +
+                                    " bitmap");
+                            // 此处触发失败事件回调
+                            if (bindGridItemFailedListener != null) {
+                                bindGridItemFailedListener.onFailed(imageWithTextViewHolder,
+                                        holder.getAdapterPosition(), entry.getKey(),
+                                        TYPE_IMAGE_CONTENT);
                             }
                         }
                     }
                 }
 
-                if (entry.getValue() != 100) {
-                    imageWithTextViewHolder.textView.setText(entry.getValue() + "%");
-                }
-
-                imageWithTextViewHolder.rootItem.setTag(entry.getKey());
-                holder.imageGridLayout.addView(imageWithTextViewHolder.rootItem);
-
                 // 此处绑定事件
-
                 if (bindGridItemViewHolderListener != null) {
                     bindGridItemViewHolderListener.onBind(imageWithTextViewHolder, entry.getKey()
                             , TYPE_IMAGE_CONTENT, entry.getValue() == 100);
@@ -284,6 +307,9 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
 
                 imageWithTextViewHolder.imageView.setImageResource(R.drawable.audio_image_list);
 
+                imageWithTextViewHolder.rootItem.setTag(entry.getKey());
+                holder.audioGridLayout.addView(imageWithTextViewHolder.rootItem);
+
                 if (entry.getValue() != 100) {
                     imageWithTextViewHolder.textView.setText(entry.getValue() + "%");
                 } else {
@@ -309,14 +335,14 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
 
                         // 此处触发下载事件回调
                         if (bindGridItemFailedListener != null) {
-                            bindGridItemFailedListener.onFailed(holder.getAdapterPosition(),
-                                    entry.getKey(), TYPE_AUDIO_CONTENT);
+                            bindGridItemFailedListener.onFailed(imageWithTextViewHolder, holder
+                                    .getAdapterPosition(), entry.getKey(), TYPE_AUDIO_CONTENT);
                         }
+
+                        break;
                     }
                 }
 
-                imageWithTextViewHolder.rootItem.setTag(entry.getKey());
-                holder.audioGridLayout.addView(imageWithTextViewHolder.rootItem);
                 // 此处绑定事件
                 if (bindGridItemViewHolderListener != null) {
                     bindGridItemViewHolderListener.onBind(imageWithTextViewHolder, entry.getKey()

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="grid_item_function_name_list">
+    <string-array send="grid_item_function_name_list">
         <item>理货作业</item>
         <item>衡重</item>
         <item>委托</item>
@@ -13,16 +13,16 @@
         <item>电子场图</item>
         <item>消息中心</item>
     </string-array>
-    <string-array name="work"> //完工
+    <string-array send="work"> //完工
         <item>白班</item>
         <item>夜班</item>
 
     </string-array>
-    <string-array name="quanlity">
+    <string-array send="quanlity">
         <item>合格</item>
         <item>不合格</item>
     </string-array>
-    <string-array name="trunkquery_city">
+    <string-array send="trunkquery_city">
         <item>晋</item>
         <item>冀</item>
         <item>鲁</item>
@@ -48,7 +48,7 @@
         <item>新</item>
         <item>桂</item>
     </string-array>
-    <string-array name="trunkquery_letter">
+    <string-array send="trunkquery_letter">
         <item>A</item>
         <item>B</item>
         <item>C</item>
@@ -69,7 +69,7 @@
         <item>T</item>
         <item>U</item>
     </string-array>
-    <array name="grid_item_function_image_list">
+    <array send="grid_item_function_image_list">
         <item>@mipmap/work_bill_icon</item>
         <item>@mipmap/balance_weight_icon</item>
         <item>@mipmap/entrust_icon</item>

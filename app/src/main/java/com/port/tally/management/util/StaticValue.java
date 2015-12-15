@@ -107,23 +107,25 @@ public interface StaticValue {
      * 派工计划模块ip
      */
     //派工货物提示框IP
-    String HTTP_GET_CagoAuto_URL ="http://218.92.115.55/M_Lhgl/Service/Base/GetCargo.aspx";
+    String HTTP_GET_CagoAuto_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetCargo.aspx";
     //派工计划第一页IP
     String HTTP_GET_TASKONE_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionCommand.aspx";
     //详细派工页
-    String HTTP_GET_TASKDETAIL_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionCommandSummary.aspx";
+    String HTTP_GET_TASKDETAIL_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Slip/GetMissionCommandSummary.aspx";
     //派工获取委托查询数据
     String HTTP_GET_ENTRUST_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetConsign.aspx";
     //获取子过程标志列表数据
     String HTTP_GET_SUBPROCESS_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetSpecialMark.aspx";
     //获取票货数据
     String HTTP_GET_SHIPMENTDATA_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetGoogsBill.aspx";
-//  获取载货工具编码（源、目的）
-    String HTTP_GET_CodeCarry_URL ="http://218.92.115.55/M_Lhgl/Service/Slip/GetCodeCarries.aspx";
     //  获取载货工具编码（源、目的）
-    String HTTP_GET_AllCarry_URL ="http://218.92.115.55/M_Lhgl/Service/Slip/GetAllCarries.aspx";
+    String HTTP_GET_CodeCarry_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetCodeCarries.aspx";
+    //  获取载货工具编码（源、目的）
+    String HTTP_GET_AllCarry_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetAllCarries.aspx";
     //获取所有载体数据
-    String HTTP_GET_TRUSTSHIPMENTDATA_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetGoodsBill.aspx";
+    String HTTP_GET_TRUSTSHIPMENTDATA_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Slip/GetGoodsBill.aspx";
     //获取作业数据列表数据
     String HTTP_GET_OPERATDATA_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkingArea.aspx";
     //汽运查询地址
@@ -195,24 +197,39 @@ public interface StaticValue {
     /**
      * 获取衡重详情的请求地址
      */
-    String BALANCE_WEIGHT_CONTENT_URL = "http://218.92.115" +
+    String BALANCE_WEIGHT_CONTENT_URL = "http://218.92.115" + "" +
             ".55/M_Lhgl/Service/Weighing/GetWeightingDetail.aspx";
+
+    /**
+     * 文件上传接口地址
+     */
+    String UPLOAD_FILE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/UploadFile.aspx";
+
+    /**
+     * 交接班提交接口地址
+     */
+    String SHIFT_CHANGE_COMMIT_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/WorkHandover"
+            + ".aspx";
+
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";
     //地图数据请求地址
     String HTTP_GET_MAP_URL = "http://218.92.115.55/M_Lhgl/Service/Map/GetMassCoord.aspx";
     //    校验车辆是否黑名单
-    String HTTP_GET_VERIFYVEHICLE_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyVehicleBlackList.aspx";
+    String HTTP_GET_VERIFYVEHICLE_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Vehicle/VerifyVehicleBlackList.aspx";
     //    校验开工状态
-    String HTTP_GET_VERIFYSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyStartWork.aspx";
+    String HTTP_GET_VERIFYSTART_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Vehicle/VerifyStartWork.aspx";
     //    校验完工状态
-    String HTTP_GET_VERIFYEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyEndWork.aspx";
+    String HTTP_GET_VERIFYEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/VerifyEndWork" +
+            ".aspx";
     //   开工
     String HTTP_GET_STARTWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetStartWork.aspx";
     //   完工
     String HTTP_GET_ENDWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/GetEndWork.aspx";
     //提交开工时间
-    String HTTP_GET_UPDATSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/StartWork" +
+    String HTTP_GET_UPDATSTART_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/StartWork" + "" +
             ".aspx";
     String HTTP_GET_Team_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetTeamWorkerAndMark.aspx";
     String HTTP_GET_Machine_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMachineAndMark.aspx";
@@ -221,41 +238,55 @@ public interface StaticValue {
     //提交完工时间
     String HTTP_GET_UPDATEND_URL = "http://218.92.115.55/M_Lhgl/Service/Vehicle/EndWork.aspx";
     //删除暂存数据
-    String HTTP_GET_TALLYDETAILDELET_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/DeleteSavedTallyBill.aspx";
-// 作业计划第一页
+    String HTTP_GET_TALLYDETAILDELET_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Slip/DeleteSavedTallyBill.aspx";
+    // 作业计划第一页
     String HTTP_GET_WORKPLAN_URL = "http://218.92.115.55/M_Lhgl/Service/Plan/GetOperationPlan.aspx";
     // 作业计划详情页
-    String HTTP_GET_WORKPLANDETAIL_URL = "http://218.92.115.55/M_Lhgl/Service/Plan/GetOperationPlanDetail.aspx";
-//    获取配工机械数据接口
-    String HTTP_GET_DetailMachine_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionMachine.aspx";
-//   获取配工司机数据
-    String HTTP_GET_DetailName_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionDriver.aspx";
-//获取配工班组班别数据
-    String HTTP_GET_DetailTeam_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionWorkTeam.aspx";
+    String HTTP_GET_WORKPLANDETAIL_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Plan/GetOperationPlanDetail.aspx";
+    //    获取配工机械数据接口
+    String HTTP_GET_DetailMachine_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Slip/GetMissionMachine.aspx";
+    //   获取配工司机数据
+    String HTTP_GET_DetailName_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionDriver"
+            + ".aspx";
+    //获取配工班组班别数据
+    String HTTP_GET_DetailTeam_URL = "http://218.92.115" +
+            ".55/M_Lhgl/Service/Slip/GetMissionWorkTeam" + ".aspx";
     //获取配工班组工人姓名数据
-    String HTTP_GET_DetailTeamName_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetMissionWorkerName.aspx";
+    String HTTP_GET_DetailTeamName_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Slip/GetMissionWorkerName.aspx";
     //获取区域数据（理货作业票模块）
-    String HTTP_GET_DetailArea_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetArea.aspx";
-//    理货跳转的第二个listview
-String HTTP_GET_TALLYTWO_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetAllTallyBill.aspx";
-//    保存接口
-// String HTTP_POST_TALLYSAVE_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/SaveTallyBill.aspx";
-     String HTTP_POST_TALLYSAVE_URL="http://10.199.10.220:8080/Service/Slip/SaveTallyBill.aspx";
-//    新子过程标志
-    String HTTP_GET_SUBPROCESSNEW_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedSpecialMark.aspx";
+    String HTTP_GET_DetailArea_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetArea.aspx";
+    //    理货跳转的第二个listview
+    String HTTP_GET_TALLYTWO_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetAllTallyBill.aspx";
+    //    保存接口
+    // String HTTP_POST_TALLYSAVE_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/SaveTallyBill
+    // .aspx";
+    String HTTP_POST_TALLYSAVE_URL = "http://10.199.10.220:8080/Service/Slip/SaveTallyBill.aspx";
+    //    新子过程标志
+    String HTTP_GET_SUBPROCESSNEW_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Slip/GetSavedSpecialMark.aspx";
     //    新区域
-    String HTTP_GET_DetailAreaNEW_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedArea.aspx";
+    String HTTP_GET_DetailAreaNEW_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedArea" +
+            ".aspx";
     //   //获取暂存质量（理货作业票模块）
-    String HTTP_GetSavedQuality_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedQuality.aspx";
+    String HTTP_GetSavedQuality_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedQuality"
+            + ".aspx";
     //获取暂存数量数据
-    String HTTP_GetSavedQuantityData_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedQuantityData.aspx";
+    String HTTP_GetSavedQuantityData_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Slip/GetSavedQuantityData.aspx";
     //获取暂存票货数据
-    String HTTP_GetGoodsBill_URL= "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedGoodsBill.aspx";
-//    获取货位数据
-    String HTTP_GetALLOCATIONDATA_URL= "http://218.92.115.55/M_Lhgl/Service/Base/GetAllocation.aspx";
+    String HTTP_GetGoodsBill_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetSavedGoodsBill" +
+            ".aspx";
+    //    获取货位数据
+    String HTTP_GetALLOCATIONDATA_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetAllocation"
+            + ".aspx";
     //    获取桩角数据
-    String HTTP_GetCornerPile_URL= "http://218.92.115.55/M_Lhgl/Service/Base/GetBooth.aspx";
+    String HTTP_GetCornerPile_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetBooth.aspx";
 
     //    获取桩角和货位数据
-    String HTTP_GetCornerPileAndAllocation_URL= "http://218.92.115.55/M_Lhgl/Service/Base/GetBooth.aspx";
+    String HTTP_GetCornerPileAndAllocation_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Base/GetBooth.aspx";
 }
