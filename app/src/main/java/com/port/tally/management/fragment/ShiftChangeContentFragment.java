@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -29,14 +30,21 @@ import com.port.tally.management.bean.ShiftChangeContent;
 import com.port.tally.management.function.ShiftChangeFunction;
 import com.port.tally.management.holder.ImageWithTextViewHolder;
 import com.port.tally.management.holder.ShiftChangeContentViewHolder;
+import com.port.tally.management.util.CacheKeyUtil;
 import com.port.tally.management.util.ImageUtil;
+import com.port.tally.management.work.SendShiftChangeWork;
 
 import org.mobile.library.cache.util.CacheManager;
 import org.mobile.library.cache.util.CacheTool;
+import org.mobile.library.global.GlobalApplication;
+import org.mobile.library.model.operate.DataChangeObserver;
+import org.mobile.library.model.work.WorkBack;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -185,6 +193,112 @@ public class ShiftChangeContentFragment extends Fragment {
     }
 
     /**
+     * 发送新消息
+     *
+     * @param receive        接收者编码
+     * @param receiveCompany 接收公司编码
+     * @param content        正文
+     * @param images         图片文件集合
+     * @param audios         音频文件集合
+     * @param listener       结果监听器
+     */
+    public void sendNewMessage(final String receive, String receiveCompany, final String content,
+                               final File[] images, final File[] audios, final
+                               DataChangeObserver<Boolean> listener) {
+
+        SendShiftChangeWork sendShiftChangeWork = new SendShiftChangeWork();
+
+        sendShiftChangeWork.setWorkEndListener(new WorkBack<String>() {
+            @Override
+            public void doEndWork(boolean state, String s) {
+                if (state && s != null && !s.isEmpty()) {
+                    // 发送成功，保存数据
+                    ShiftChange shiftChange = new ShiftChange();
+
+                    shiftChange.setToken(s);
+                    shiftChange.setSend(GlobalApplication.getGlobal().getLoginStatus().getUserID());
+                    shiftChange.setReceive(receive);
+                    shiftChange.setContent(content);
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    shiftChange.setTime(format.format(new Date()));
+                    shiftChange.setMySend(true);
+
+                    // 缓存图片
+                    if (images != null) {
+
+                        Map<String, String> map = onMoveFile(images);
+
+                        shiftChange.setImageUrlList(map);
+                    }
+
+                    // 缓存音频
+                    if (audios != null) {
+
+                        Map<String, String> map = onMoveFile(audios);
+
+                        shiftChange.setAudioUrlList(map);
+                    }
+
+                    // 保存数据
+                    viewHolder.shiftChangeFunction.save(shiftChange);
+
+                    // 更新到界面
+                    notifyAdapter(fillData(shiftChange, 0));
+
+                    if (shiftChange.getImageUrlList() != null) {
+                        // 上传图片
+                        for (String key : shiftChange.getImageUrlList().keySet()) {
+                            uploadImage(shiftChange.getToken(), key);
+                        }
+                    }
+
+                    if (shiftChange.getAudioUrlList() != null) {
+                        // 上传音频
+                        for (String key : shiftChange.getAudioUrlList().keySet()) {
+                            uploadAudio(shiftChange.getToken(), key);
+                        }
+                    }
+                }
+
+                // 执行回调
+                if (listener != null) {
+                    listener.notifyDataChange(state);
+                }
+            }
+        }, false);
+
+        sendShiftChangeWork.beginExecute();
+    }
+
+    /**
+     * 移动资源文件，得到新的缓存key集合
+     *
+     * @param files 源文件
+     *
+     * @return key集合，value为null
+     */
+    @NonNull
+    private Map<String, String> onMoveFile(File[] files) {
+        Map<String, String> map = new HashMap<>();
+        for (File file : files) {
+            String key = CacheKeyUtil.getRandomKey();
+            try {
+                viewHolder.contentCacheTool.putAndBack(key).close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            File newFile = viewHolder.contentCacheTool.getForFile(key);
+            newFile.delete();
+
+            // 移动文件
+            file.renameTo(newFile);
+
+            map.put(key, null);
+        }
+        return map;
+    }
+
+    /**
      * 修正文件加载进度
      *
      * @param shiftChangeContentList 要修正的数据
@@ -210,35 +324,7 @@ public class ShiftChangeContentFragment extends Fragment {
         List<ShiftChangeContent> shiftChangeContentList = new ArrayList<>();
 
         for (ShiftChange shiftChange : data) {
-            ShiftChangeContent shiftChangeContent = new ShiftChangeContent();
-
-            shiftChangeContent.setToken(shiftChange.getToken());
-            shiftChangeContent.setName(shiftChange.getSend());
-            shiftChangeContent.setTime(shiftChange.getTime());
-            shiftChangeContent.setMessage(shiftChange.getContent());
-            shiftChangeContent.setSend(shiftChange.isMySend());
-
-            if (shiftChange.getImageUrlList() != null) {
-                // 填充图片缓存
-                Map<String, Integer> map = new HashMap<>();
-
-                for (String key : shiftChange.getImageUrlList().keySet()) {
-                    map.put(key, progress);
-                }
-
-                shiftChangeContent.setImageList(map);
-            }
-
-            if (shiftChange.getAudioUrlList() != null) {
-                // 填充音频缓存
-                Map<String, Integer> map = new HashMap<>();
-
-                for (String key : shiftChange.getAudioUrlList().keySet()) {
-                    map.put(key, progress);
-                }
-
-                shiftChangeContent.setAudioList(map);
-            }
+            ShiftChangeContent shiftChangeContent = fillData(shiftChange, progress);
 
             shiftChangeContentList.add(shiftChangeContent);
         }
@@ -246,6 +332,48 @@ public class ShiftChangeContentFragment extends Fragment {
         Log.i(LOG_TAG + "fillData", "data count " + shiftChangeContentList.size());
 
         return shiftChangeContentList;
+    }
+
+    /**
+     * 数据转换，将数据库数据转换为显示数据
+     *
+     * @param shiftChange 数据源
+     * @param progress    初始化进度
+     *
+     * @return 转换后的数据
+     */
+    @NonNull
+    private ShiftChangeContent fillData(ShiftChange shiftChange, int progress) {
+        ShiftChangeContent shiftChangeContent = new ShiftChangeContent();
+
+        shiftChangeContent.setToken(shiftChange.getToken());
+        shiftChangeContent.setName(shiftChange.getSend());
+        shiftChangeContent.setTime(shiftChange.getTime());
+        shiftChangeContent.setMessage(shiftChange.getContent());
+        shiftChangeContent.setSend(shiftChange.isMySend());
+
+        if (shiftChange.getImageUrlList() != null) {
+            // 填充图片缓存
+            Map<String, Integer> map = new HashMap<>();
+
+            for (String key : shiftChange.getImageUrlList().keySet()) {
+                map.put(key, progress);
+            }
+
+            shiftChangeContent.setImageList(map);
+        }
+
+        if (shiftChange.getAudioUrlList() != null) {
+            // 填充音频缓存
+            Map<String, Integer> map = new HashMap<>();
+
+            for (String key : shiftChange.getAudioUrlList().keySet()) {
+                map.put(key, progress);
+            }
+
+            shiftChangeContent.setAudioList(map);
+        }
+        return shiftChangeContent;
     }
 
     /**
@@ -527,6 +655,28 @@ public class ShiftChangeContentFragment extends Fragment {
     }
 
     /**
+     * 上传图片
+     *
+     * @param token 消息标签
+     * @param key   缓存key(不含前缀)
+     */
+    private void uploadImage(String token, String key) {
+        Log.i(LOG_TAG + "uploadImage", "content token:" + token + " key:" + key);
+
+    }
+
+    /**
+     * 上传音频
+     *
+     * @param token 消息标识
+     * @param key   缓存key(不含前缀)
+     */
+    private void uploadAudio(String token, String key) {
+        Log.i(LOG_TAG + "uploadAudio", "content token:" + token + " key:" + key);
+
+    }
+
+    /**
      * 图片缓存丢失重新下载
      *
      * @param position 图片对应的消息位置索引
@@ -553,7 +703,7 @@ public class ShiftChangeContentFragment extends Fragment {
      * 音频缓存丢失重新下载
      *
      * @param position 音频对应的消息位置索引
-     * @param key      缓存key(不含前缀)
+     * @param key      缓存key
      */
     private void downloadAudio(int position, String key) {
         Log.i(LOG_TAG + "downloadAudio", "content index:" + position + " key:" + key);
@@ -564,7 +714,7 @@ public class ShiftChangeContentFragment extends Fragment {
      * 音频缓存丢失重新下载
      *
      * @param token 消息标识
-     * @param key   缓存key(不含前缀)
+     * @param key   缓存key
      * @param url   音频下载地址
      */
     private void downloadAudio(String token, String key, String url) {

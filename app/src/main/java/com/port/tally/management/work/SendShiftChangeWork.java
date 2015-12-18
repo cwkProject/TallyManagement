@@ -19,7 +19,7 @@ public class SendShiftChangeWork extends DefaultWorkModel<String, String, ShiftC
 
     @Override
     protected boolean onCheckParameters(String... parameters) {
-        return parameters != null && parameters.length >= 5;
+        return parameters != null && parameters.length > 4;
     }
 
     @Override
