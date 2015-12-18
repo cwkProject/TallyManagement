@@ -4,11 +4,18 @@ package com.port.tally.management.function;
  */
 
 import android.content.Context;
+import android.util.Log;
 
 import com.port.tally.management.bean.ShiftChange;
 import com.port.tally.management.database.ShiftChangeOperator;
+import com.port.tally.management.work.PullShiftChangeContent;
 
+import org.mobile.library.global.GlobalApplication;
+import org.mobile.library.model.work.WorkBack;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -62,6 +69,7 @@ public class ShiftChangeFunction {
     public List<ShiftChange> next() {
 
         if (isEnd) {
+            Log.i(LOG_TAG + "next", "now end");
             return new ArrayList<>();
         }
 
@@ -74,6 +82,7 @@ public class ShiftChangeFunction {
             isEnd = true;
         }
 
+        Log.i(LOG_TAG + "next", "plus:" + shiftChangeList.size() + " now index:" + currentRow);
         return shiftChangeList;
     }
 
@@ -84,6 +93,7 @@ public class ShiftChangeFunction {
      */
     public ShiftChange nextOne() {
         if (isEnd) {
+            Log.i(LOG_TAG + "nextOne", "now end");
             return null;
         }
 
@@ -92,6 +102,7 @@ public class ShiftChangeFunction {
 
         currentRow += shiftChangeList.size();
 
+        Log.i(LOG_TAG + "nextOne", "now index:" + currentRow);
         if (shiftChangeList.size() == 0) {
             isEnd = true;
             return null;
@@ -106,11 +117,14 @@ public class ShiftChangeFunction {
      * @return 消息对象，未找到则返回null
      */
     public ShiftChange findByToken(String token) {
+        Log.i(LOG_TAG + "findByToken", "target token is " + token);
         List<ShiftChange> shiftChangeList = operator.queryWithCondition(token);
 
         if (shiftChangeList.size() == 0) {
+            Log.i(LOG_TAG + "findByToken", "no token:" + token);
             return null;
         } else {
+            Log.i(LOG_TAG + "findByToken", "found token:" + token);
             return shiftChangeList.get(0);
         }
     }
@@ -128,6 +142,7 @@ public class ShiftChangeFunction {
      * @param position 目标位置
      */
     public void move(int position) {
+        Log.i(LOG_TAG + "move", "move to " + position);
         currentRow = position;
         isEnd = false;
     }
@@ -137,8 +152,44 @@ public class ShiftChangeFunction {
      *
      * @param listener 请求完成的监听器，返回最新的消息记录
      */
-    public void getLatest(ShiftChangeRequestListener<List<ShiftChange>> listener) {
+    public void getLatest(final ShiftChangeRequestListener<List<ShiftChange>> listener) {
 
+        // 最近的记录时间
+        String time = null;
+
+        // 得到近的一条记录数据
+        List<ShiftChange> shiftChangeList = operator.queryWithCondition(String.valueOf(0), String
+                .valueOf(1));
+
+        if (shiftChangeList.size() > 0) {
+            time = shiftChangeList.get(0).getTime();
+            Log.i(LOG_TAG + "getLatest", "found latest time is " + time);
+        } else {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_YEAR, -3);
+            time = format.format(calendar.getTime());
+            Log.i(LOG_TAG + "getLatest", "no content, use three days ago time is " + time);
+        }
+
+        PullShiftChangeContent pullShiftChangeContent = new PullShiftChangeContent();
+
+        pullShiftChangeContent.setWorkEndListener(new WorkBack<List<ShiftChange>>() {
+            @Override
+            public void doEndWork(boolean state, List<ShiftChange> shiftChanges) {
+                if (state && shiftChanges != null) {
+                    currentRow += shiftChanges.size();
+                    operator.insert(shiftChanges);
+                }
+
+                if (listener != null) {
+                    listener.onRequestEnd(state, shiftChanges);
+                }
+            }
+        }, false);
+
+        pullShiftChangeContent.beginExecute(GlobalApplication.getGlobal().getLoginStatus()
+                .getUserID(), time);
     }
 
     /**
@@ -152,6 +203,19 @@ public class ShiftChangeFunction {
     public void fillFromNetwork(ShiftChange shiftChange, ShiftChangeRequestListener<ShiftChange>
             listener) {
 
+    }
+
+    /**
+     * 保存一条消息，用于发送消息后将新消息数据保存到本地
+     *
+     * @param shiftChange 新消息
+     */
+    public void save(ShiftChange shiftChange) {
+        if (shiftChange == null || shiftChange.getToken() == null) {
+            return;
+        }
+
+        operator.insert(shiftChange);
     }
 
     /**

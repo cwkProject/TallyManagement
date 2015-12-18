@@ -179,11 +179,17 @@ public interface TableConst {
         String AUDIO_URL = "audio_url";
 
         /**
+         * 标识是否为本机发送的数据
+         */
+        String MY_SEND = "my_send";
+
+        /**
          * 建表语句
          */
         String CREATE_TABLE_SQL = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
                         "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TEXT " +
-                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT)", TABLE_NAME, CommonConst._ID,
-                CommonConst.CODE, SEND_NAME, RECEIVE_NAME, TIME, CONTENT, IMAGE_URL, AUDIO_URL);
+                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", TABLE_NAME,
+                CommonConst._ID, CommonConst.CODE, SEND_NAME, RECEIVE_NAME, TIME, CONTENT,
+                IMAGE_URL, AUDIO_URL, MY_SEND);
     }
 }

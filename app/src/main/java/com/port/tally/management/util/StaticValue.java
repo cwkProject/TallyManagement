@@ -211,6 +211,18 @@ public interface StaticValue {
     String SHIFT_CHANGE_COMMIT_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/WorkHandover"
             + ".aspx";
 
+    /**
+     * 交接班消息获取接口地址
+     */
+    String SHIFT_CHANGE_CONTENT_URL = "http://218.92.115" + "" +
+            ".55/M_Lhgl/Service/Handover/GetHandoverRecord.aspx";
+
+    /**
+     * 工作计划获取接口地址
+     */
+    String WORK_PLAN_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetUncommitedMachineCommand"
+            + ".aspx";
+
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";
     //地图数据请求地址

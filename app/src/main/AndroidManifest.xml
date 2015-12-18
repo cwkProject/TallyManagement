@@ -10,95 +10,95 @@
 
         android:theme="@style/AppTheme">
         <meta-data
-            android:send="com.baidu.lbsapi.API_KEY"
+            android:name="com.baidu.lbsapi.API_KEY"
             android:value="cgTaWnGGDTuUzBXdCMSXTKqE"/>
 
         <activity
-            android:send=".activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:send="android.intent.action.MAIN"/>
-                <category android:send="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
 
             </intent-filter>
             <intent-filter>
-                <action android:send="android.nfc.action.TAG_DISCOVERED"/>
-                <category android:send="android.intent.category.DEFAULT"/>
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:send=".activity.MainActivity"/>
-        <activity android:send=".activity.LoginActivity"/>
-        <activity android:send=".activity.TallyActivity"/>
+        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.TallyActivity"/>
 
         <activity
-            android:send=".activity.DianZiMap"
+            android:name=".activity.DianZiMap"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="sensor"/>
-        <activity android:send=".activity.JiaoJieQuery"/>
-        <activity android:send=".activity.TallyDetail"/>
-        <activity android:send="com.port.tally.management.activity.TallyManage"/>
-        <activity android:send=".activity.TrunkQuery"/>
-        <activity android:send=".activity.ShiftDuty"/>
-        <activity android:send=".activity.PushMessage"/>
-        <activity android:send=".activity.TrunkActivity"/>
-        <activity android:send=".activity.StartWork"/>
-        <activity android:send=".activity.WorkPlan"/>
-        <activity android:send=".activity.EndWork"/>
-        <activity android:send=".activity.EntrustQueryActivity"/>
-        <activity android:send=".activity.EntrustContentActivity"/>
-        <activity android:send="com.port.tally.management.activity.TallyDetailNew"/>
-        <activity android:send=".activity.StockQueryActivity"/>
-        <activity android:send=".activity.StockContentActivity"/>
-        <activity android:send=".activity.BalanceWeightQueryActivity"/>
-        <activity android:send=".activity.BalanceWeightContentActivity"/>
-        <activity android:send=".activity.ShiftChangeActivity"/>
+        <activity android:name=".activity.JiaoJieQuery"/>
+        <activity android:name=".activity.TallyDetail"/>
+        <activity android:name="com.port.tally.management.activity.TallyManage"/>
+        <activity android:name=".activity.TrunkQuery"/>
+        <activity android:name=".activity.ShiftDuty"/>
+        <activity android:name=".activity.PushMessage"/>
+        <activity android:name=".activity.TrunkActivity"/>
+        <activity android:name=".activity.StartWork"/>
+        <activity android:name=".activity.WorkPlan"/>
+        <activity android:name=".activity.EndWork"/>
+        <activity android:name=".activity.EntrustQueryActivity"/>
+        <activity android:name=".activity.EntrustContentActivity"/>
+        <activity android:name="com.port.tally.management.activity.TallyDetailNew"/>
+        <activity android:name=".activity.StockQueryActivity"/>
+        <activity android:name=".activity.StockContentActivity"/>
+        <activity android:name=".activity.BalanceWeightQueryActivity"/>
+        <activity android:name=".activity.BalanceWeightContentActivity"/>
+        <activity android:name=".activity.ShiftChangeActivity"/>
         <activity
-            android:send=".activity.ImageShowActivity"
+            android:name=".activity.ImageShowActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
     </application>
 
-    <uses-permission android:send="android.permission.ACCESS_NETWORK_STATE">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE">
     </uses-permission>
-    <uses-permission android:send="android.permission.INTERNET">
+    <uses-permission android:name="android.permission.INTERNET">
     </uses-permission>
-    <uses-permission android:send="com.android.launcher.permission.READ_SETTINGS"/>
-    <uses-permission android:send="android.permission.WAKE_LOCK">
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK">
     </uses-permission>
 
-    <uses-permission android:send="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:send="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
-    <uses-permission android:send="android.permission.GET_TASKS"/>
-    <uses-permission android:send="android.permission.WRITE_EXTERNAL_STORAGE">
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE">
     </uses-permission>
-    <uses-permission android:send="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <!-- 这个权限用于进行网络定位-->
-    <uses-permission android:send="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
     <!-- 这个权限用于访问GPS定位-->
-    <uses-permission android:send="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
     <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
-    <uses-permission android:send="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
-    <uses-permission android:send="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
     <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
-    <uses-permission android:send="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
     <!-- 用于读取手机当前的状态-->
-    <uses-permission android:send="android.permission.READ_PHONE_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
     <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
-    <uses-permission android:send="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <!-- 访问网络，网络定位需要上网-->
-    <uses-permission android:send="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- SD卡读取权限，用户写入离线定位数据-->
-    <uses-permission android:send="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
-    <uses-permission android:send="android.permission.RECORD_AUDIO"></uses-permission>
-    <uses-permission android:send="android.permission.INTERNET"/>
-    <uses-permission android:send="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:send="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <uses-permission android:send="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:send="android.permission.VIBRATE"/>
-    <uses-permission android:send="android.permission.NFC"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.NFC"/>
 
-    <uses-feature android:send="android.hardware.nfc"/>
+    <uses-feature android:name="android.hardware.nfc"/>
 </manifest>

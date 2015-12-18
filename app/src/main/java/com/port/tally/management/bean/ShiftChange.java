@@ -50,6 +50,11 @@ public class ShiftChange {
     private Map<String, String> audioUrlList = null;
 
     /**
+     * 标识是否为本机发送的数据
+     */
+    private boolean mySend = false;
+
+    /**
      * 获取发送者姓名
      *
      * @return 姓名
@@ -173,5 +178,23 @@ public class ShiftChange {
      */
     public void setToken(String token) {
         this.token = token;
+    }
+
+    /**
+     * 判断是否为本机发送过的数据
+     *
+     * @return true表示本条消息为本机发送
+     */
+    public boolean isMySend() {
+        return mySend;
+    }
+
+    /**
+     * 设置是否为本机发送过的数据
+     *
+     * @param mySend true表示本条消息为本机发送
+     */
+    public void setMySend(boolean mySend) {
+        this.mySend = mySend;
     }
 }

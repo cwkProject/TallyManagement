@@ -148,10 +148,10 @@ public class ShiftChangeCommitData extends JsonDataModel {
         Log.i(LOG_TAG + "onFillRequestParameters", "CodeCompanySecond is " + receiveCompany);
         dataMap.put("Text", content);
         Log.i(LOG_TAG + "onFillRequestParameters", "Text is " + content);
-        dataMap.put("CodeUserFirst", imageCount);
-        Log.i(LOG_TAG + "onFillRequestParameters", "CodeUserFirst is " + imageCount);
-        dataMap.put("CodeUserFirst", audioCount);
-        Log.i(LOG_TAG + "onFillRequestParameters", "CodeUserFirst is " + audioCount);
+        dataMap.put("PicNum", imageCount);
+        Log.i(LOG_TAG + "onFillRequestParameters", "PicNum is " + imageCount);
+        dataMap.put("VoiceNum", audioCount);
+        Log.i(LOG_TAG + "onFillRequestParameters", "VoiceNum is " + audioCount);
     }
 
     @Override

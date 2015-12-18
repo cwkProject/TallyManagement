@@ -1,25 +1,25 @@
 <resources>
-    <string send="app_name">掌上云港</string>
-    <string send="entrust_query">委托查询</string>
-    <string send="entrust_content">委托详情</string>
-    <string send="forwarder_query">堆存查询</string>
-    <string send="forwarder_content">堆存详情</string>
-    <string send="balance_weight_query">衡重查询</string>
-    <string send="balance_weight_content">衡重详情</string>
-    <string send="shift_change">交接班</string>
+    <string name="app_name">掌上云港</string>
+    <string name="entrust_query">委托查询</string>
+    <string name="entrust_content">委托详情</string>
+    <string name="forwarder_query">堆存查询</string>
+    <string name="forwarder_content">堆存详情</string>
+    <string name="balance_weight_query">衡重查询</string>
+    <string name="balance_weight_content">衡重详情</string>
+    <string name="shift_change">交接班</string>
 
-    <string send="search_hit"> </string>
-    <string send="search_text">搜索</string>
-    <string send="xlistview_header_hint_normal">下拉刷新</string>
-    <string send="xlistview_header_hint_ready">松开刷新数据</string>
-    <string send="xlistview_header_hint_loading">正在加载...</string>
-    <string send="xlistview_header_last_time">上次更新时间：</string>
-    <string send="xlistview_footer_hint_normal">查看更多</string>
-    <string send="xlistview_footer_hint_ready">松开载入更多</string>
-    <string send="error">错误</string>
-    <string send="no_nfc">这个设备上没有发现NFC</string>
-    <string send="nfc_disabled">NFC没有打开，请打卡</string>
-    <string send="jiyunguanli_title">汽运查询</string>
+    <string name="search_hit"> </string>
+    <string name="search_text">搜索</string>
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载...</string>
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    <string name="error">错误</string>
+    <string name="no_nfc">这个设备上没有发现NFC</string>
+    <string name="nfc_disabled">NFC没有打开，请打卡</string>
+    <string name="jiyunguanli_title">汽运查询</string>
 
-    <string send="record">长按录音</string>
+    <string name="record">长按录音</string>
 </resources>

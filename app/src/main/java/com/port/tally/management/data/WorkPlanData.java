@@ -1,19 +1,26 @@
 package com.port.tally.management.data;
+/**
+ * Created by 超悟空 on 2015/12/18.
+ */
 
 import android.util.Log;
 
+import com.port.tally.management.bean.WorkPlan;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/14.
+ * 作业计划数据模型
+ *
+ * @author 超悟空
+ * @version 1.0 2015/12/18
+ * @since 1.0
  */
 public class WorkPlanData extends JsonDataModel {
 
@@ -23,107 +30,82 @@ public class WorkPlanData extends JsonDataModel {
     private static final String LOG_TAG = "WorkPlanData.";
 
     /**
-     * 服务请求传入参数  起始行+行数+公司编码
+     * 作业计划列表
      */
-    private String companyCode = null;
-    private  String Cargo =null;
+    private List<WorkPlan> dataList = null;
 
-    public void setTaskNo(String taskNo) {
-        TaskNo = taskNo;
+    /**
+     * 用户编码
+     */
+    private String userCode = null;
+
+    /**
+     * 设置用户编码
+     *
+     * @param userCode 用户编码
+     */
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
     }
 
-    public void setCargo(String cargo) {
-        Cargo = cargo;
-    }
-
-    private String TaskNo=null;
-    public void setEndCount(String endCount) {
-        this.endCount = endCount;
-    }
-
-    public void setStartCount(String startCount) {
-        this.startCount = startCount;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
-    private String startCount =null;
-    private String endCount = null;
-
-    public List<Map<String, Object>> getAll() {
-        return all;
-    }
-
-    List<Map<String,Object>> all = new ArrayList<Map<String,Object>>() ;
-    protected void onFillRequestParameters(Map<String, String> map) {
-        map.put("CodeCompany", companyCode);
-        map.put("startRow", startCount);
-        map.put("count", endCount);
-        map.put("Cargo", Cargo);
-        map.put("TaskNo", TaskNo);
+    /**
+     * 获取计划任务列表
+     *
+     * @return 计划任务列表
+     */
+    public List<WorkPlan> getDataList() {
+        return dataList;
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject jsonObject) throws JSONException {
+    protected void onFillRequestParameters(Map<String, String> dataMap) {
+        dataMap.put("CodeUser", userCode);
+        Log.i(LOG_TAG + "onFillRequestParameters", "CodeUser is " + userCode);
+    }
+
+    @Override
+    protected boolean onRequestResult(JSONObject handleResult) throws Exception {
         // 得到执行结果
-        String resultState = jsonObject.getString("IsSuccess");
+        String resultState = handleResult.getString("IsSuccess");
 
         return resultState != null && "yes".equals(resultState.trim().toLowerCase());
     }
 
     @Override
-    protected String onRequestMessage(boolean b, JSONObject jsonObject) throws JSONException {
-        return jsonObject.getString("Message");
+    protected String onRequestMessage(boolean result, JSONObject handleResult) throws Exception {
+        return handleResult.getString("Message");
     }
 
     @Override
-    protected void onRequestSuccess(JSONObject jsonObject) throws JSONException {
-        JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-        if (jsonArray != null) {
-
-            Log.i(LOG_TAG + "onRequestSuccess", "get TallyManage count is " + jsonArray.length());
-
+    protected void onRequestSuccess(JSONObject handleResult) throws Exception {
+        if (!handleResult.isNull("Data")) {
+            JSONArray jsonArray = handleResult.getJSONArray("Data");
+            dataList = new ArrayList<>();
 
             for (int i = 0; i < jsonArray.length(); i++) {
+                JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-                JSONArray jsonEntrust = jsonArray.getJSONArray(i);
+                if (jsonRow.length() > 11) {
+                    WorkPlan data = new WorkPlan();
 
-                Log.i(LOG_TAG + "onRequestSuccess", "JSONArray is " + jsonEntrust);
-                if (jsonEntrust.length() > 5) {
-                    // 一条委托数据
-                    Log.i(LOG_TAG + "onRequestSuccess", "now is " + i);
-                    Map<String,Object> map = new HashMap<String,Object>() ;
-                    map.put("tv_cargoname", jsonEntrust.getString(5));
-                    map.put("tv_starttime", jsonEntrust.getString(3));
-                    map.put("tv_end", jsonEntrust.getString(4));
-                    map.put("tv_trustno", jsonEntrust.getString(0));
-                    map.put("tv_bowei", jsonEntrust.getString(1));
-                    map.put("tv_process", jsonEntrust.getString(2));
-//                    map.put("tv_cargo", jsonEntrust.getString(0));
-//                    map.put("cgno", jsonEntrust.getString(1));
-//                    map.put("gbno", jsonEntrust.getString(2));
-//                    map.put("tv_purposecargo", jsonEntrust.getString(3));
-//                    map.put("tv_operationprocess", jsonEntrust.getString(4));
-//                    map.put("tv_starttime", jsonEntrust.getString(5));
-//                    map.put("tv_terminaltime", jsonEntrust.getString(6));
-//                    map.put("tv_destinationvector", jsonEntrust.getString(7));
-//                    map.put("tv_terminaltime", jsonEntrust.getString(8));
-//                    map.put("tv_sourcecargo", jsonEntrust.getString(9));
-//                    map.put("tv_planwork",jsonEntrust.getString(10));
-//                    map.put("tv_sourcevector", jsonEntrust.getString(11));
-//                    map.put("client", jsonEntrust.getString(12));
-//                    map.put("taskno", jsonEntrust.getString());
+                    data.setDispatchCode(jsonRow.getString(0));
+                    data.setEntrustCode(jsonRow.getString(1));
+                    data.setTicketCode(jsonRow.getString(2));
+                    data.setEntrustName(jsonRow.getString(3));
+                    data.setTaskNumber(jsonRow.getString(4));
+                    data.setGoods(jsonRow.getString(5));
+                    data.setOperation(jsonRow.getString(6));
+                    data.setAmount(jsonRow.getString(7));
+                    data.setBeginTime(jsonRow.getString(8));
+                    data.setEndTime(jsonRow.getString(9));
+                    data.setSourceCarrier(jsonRow.getString(10));
+                    data.setTargetCarrier(jsonRow.getString(11));
 
-                    // 添加到列表
-                    all.add(map);
+                    dataList.add(data);
                 }
             }
 
-            Log.i(LOG_TAG + "onRequestSuccess", "TallyManage list count is " + all.size());
+            Log.i(LOG_TAG + "onRequestSuccess", "data list count " + dataList.size());
         }
     }
-
 }

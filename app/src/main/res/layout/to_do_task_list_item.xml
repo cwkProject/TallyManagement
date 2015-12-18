@@ -10,7 +10,7 @@
               android:padding="@dimen/default_padding_small">
 
     <TextView
-        android:id="@+id/to_do_task_list_item_title_textView"
+        android:id="@+id/to_do_task_list_item_first_row_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin_small"
@@ -19,7 +19,7 @@
         android:textColor="@android:color/black"/>
 
     <TextView
-        android:id="@+id/to_do_task_list_item_number_textView"
+        android:id="@+id/to_do_task_list_item_second_row_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin_small"
@@ -28,7 +28,7 @@
         android:textColor="@android:color/black"/>
 
     <TextView
-        android:id="@+id/to_do_task_list_item_content_textView"
+        android:id="@+id/to_do_task_list_item_third_row_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin_small"

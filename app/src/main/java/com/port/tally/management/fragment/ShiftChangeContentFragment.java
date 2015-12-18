@@ -19,12 +19,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.port.tally.management.R;
 import com.port.tally.management.activity.ImageShowActivity;
 import com.port.tally.management.adapter.ShiftChangeContentRecyclerViewAdapter;
+import com.port.tally.management.bean.ShiftChange;
 import com.port.tally.management.bean.ShiftChangeContent;
+import com.port.tally.management.function.ShiftChangeFunction;
 import com.port.tally.management.holder.ImageWithTextViewHolder;
+import com.port.tally.management.holder.ShiftChangeContentViewHolder;
 import com.port.tally.management.util.ImageUtil;
 
 import org.mobile.library.cache.util.CacheManager;
@@ -33,7 +37,9 @@ import org.mobile.library.cache.util.CacheTool;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 交接班正文内容列表片段
@@ -58,6 +64,11 @@ public class ShiftChangeContentFragment extends Fragment {
          * 交接班信息正文列表缓存工具
          */
         public CacheTool contentCacheTool = null;
+
+        /**
+         * 交接班消息管理功能
+         */
+        public ShiftChangeFunction shiftChangeFunction = null;
 
         /**
          * 内容列表
@@ -88,6 +99,7 @@ public class ShiftChangeContentFragment extends Fragment {
          * 缩略图宽度
          */
         public int thumbnailWidth = 0;
+
     }
 
     /**
@@ -106,7 +118,134 @@ public class ShiftChangeContentFragment extends Fragment {
         // 初始化布局
         initView(rootView);
 
+        // 初始化数据
+        initData();
+
         return rootView;
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+        loadNewData();
+    }
+
+    /**
+     * 尝试获取新消息
+     */
+    private void loadNewData() {
+        viewHolder.shiftChangeFunction.getLatest(new ShiftChangeFunction
+                .ShiftChangeRequestListener<List<ShiftChange>>() {
+            @Override
+            public void onRequestEnd(boolean result, List<ShiftChange> shiftChanges) {
+                if (result) {
+                    if (shiftChanges != null) {
+                        // 填充到界面
+                        notifyAdapter(fillData(shiftChanges, 0));
+                        // 下载数据
+                        for (ShiftChange shiftChange : shiftChanges) {
+                            if (shiftChange.getImageUrlList() != null) {
+                                for (Map.Entry<String, String> entry : shiftChange
+                                        .getImageUrlList().entrySet()) {
+                                    downloadImage(shiftChange.getToken(), entry.getKey(), entry
+                                            .getValue());
+                                }
+                            }
+
+                            if (shiftChange.getAudioUrlList() != null) {
+                                for (Map.Entry<String, String> entry : shiftChange
+                                        .getAudioUrlList().entrySet()) {
+                                    downloadAudio(shiftChange.getToken(), entry.getKey(), entry
+                                            .getValue());
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    loadOldData();
+                }
+            }
+        });
+    }
+
+    /**
+     * 加载旧消息
+     */
+    private void loadOldData() {
+        List<ShiftChange> shiftChangeList = viewHolder.shiftChangeFunction.next();
+
+        if (shiftChangeList.size() > 0) {
+            List<ShiftChangeContent> shiftChangeContentList = fillData(shiftChangeList, 100);
+
+            correctProgress(shiftChangeContentList);
+
+            viewHolder.adapter.addData(0, shiftChangeContentList);
+        }
+    }
+
+    /**
+     * 修正文件加载进度
+     *
+     * @param shiftChangeContentList 要修正的数据
+     */
+    private void correctProgress(List<ShiftChangeContent> shiftChangeContentList) {
+
+    }
+
+    /**
+     * 数据转换，将数据库数据转换为显示数据
+     *
+     * @param data     数据源
+     * @param progress 初始化进度
+     *
+     * @return 转换后的数据
+     */
+    private List<ShiftChangeContent> fillData(List<ShiftChange> data, int progress) {
+        if (data == null) {
+            Log.d(LOG_TAG + "fillData", "data is null");
+            return new ArrayList<>(1);
+        }
+
+        List<ShiftChangeContent> shiftChangeContentList = new ArrayList<>();
+
+        for (ShiftChange shiftChange : data) {
+            ShiftChangeContent shiftChangeContent = new ShiftChangeContent();
+
+            shiftChangeContent.setToken(shiftChange.getToken());
+            shiftChangeContent.setName(shiftChange.getSend());
+            shiftChangeContent.setTime(shiftChange.getTime());
+            shiftChangeContent.setMessage(shiftChange.getContent());
+            shiftChangeContent.setSend(shiftChange.isMySend());
+
+            if (shiftChange.getImageUrlList() != null) {
+                // 填充图片缓存
+                Map<String, Integer> map = new HashMap<>();
+
+                for (String key : shiftChange.getImageUrlList().keySet()) {
+                    map.put(key, progress);
+                }
+
+                shiftChangeContent.setImageList(map);
+            }
+
+            if (shiftChange.getAudioUrlList() != null) {
+                // 填充音频缓存
+                Map<String, Integer> map = new HashMap<>();
+
+                for (String key : shiftChange.getAudioUrlList().keySet()) {
+                    map.put(key, progress);
+                }
+
+                shiftChangeContent.setAudioList(map);
+            }
+
+            shiftChangeContentList.add(shiftChangeContent);
+        }
+
+        Log.i(LOG_TAG + "fillData", "data count " + shiftChangeContentList.size());
+
+        return shiftChangeContentList;
     }
 
     /**
@@ -135,6 +274,8 @@ public class ShiftChangeContentFragment extends Fragment {
         viewHolder.mediaPlayer = new MediaPlayer();
 
         viewHolder.dataList = new ArrayList<>();
+
+        viewHolder.shiftChangeFunction = new ShiftChangeFunction(getContext());
 
         viewHolder.thumbnailWidth = getResources().getDisplayMetrics().widthPixels / 3;
     }
@@ -320,26 +461,68 @@ public class ShiftChangeContentFragment extends Fragment {
     /**
      * 更新资源网络加载进度
      *
-     * @param token 消息标识
-     * @param key   缓存key
+     * @param token    消息标识
+     * @param key      缓存key
+     * @param progress 新的进度
      */
-    private void updateProgress(String token, String key) {
+    private void updateProgress(String token, String key, int progress) {
         Log.i(LOG_TAG + "updateProgress", "this token:" + token + " key:" + key);
 
-        int position=0;
+        int position = 0;
 
         // 找出要更新进度的资源在数据源列表中的位置
-        while (position<viewHolder.dataList.size()){
-            if (viewHolder.dataList.get(position).getToken().equals(token)){
+        while (position < viewHolder.dataList.size()) {
+            if (viewHolder.dataList.get(position).getToken().equals(token)) {
                 break;
-            }
-            else {
+            } else {
                 position++;
             }
         }
 
         // 找出要更新的资源键值对和资源类型
-        boolean hit=false;
+        if (position < viewHolder.dataList.size()) {
+            // 标识是图片还是音频
+            boolean imageType = false;
+            // 先判断图片
+            Map<String, Integer> imageMap = viewHolder.dataList.get(position).getImageList();
+            if (imageMap.containsKey(key)) {
+                imageMap.put(key, progress);
+                imageType = true;
+            }
+
+            if (!imageType) {
+                // 先判断图片
+                Map<String, Integer> audioMap = viewHolder.dataList.get(position).getAudioList();
+                if (audioMap.containsKey(key)) {
+                    audioMap.put(key, progress);
+                }
+            }
+
+            // 尝试同步改变界面显示的进度值
+            RecyclerView.ViewHolder holder = viewHolder.contentRecyclerView
+                    .findViewHolderForAdapterPosition(position);
+            if (holder != null) {
+                ShiftChangeContentViewHolder shiftChangeContentViewHolder =
+                        (ShiftChangeContentViewHolder) holder;
+                TextView textView = null;
+                if (imageType) {
+                    textView = (TextView) shiftChangeContentViewHolder.imageGridLayout
+                            .findViewWithTag(key).findViewById(R.id.image_with_text_view_textView);
+                } else {
+                    textView = (TextView) shiftChangeContentViewHolder.audioGridLayout
+                            .findViewWithTag(key).findViewById(R.id.image_with_text_view_textView);
+                }
+
+                if (textView != null) {
+                    if (progress == 100) {
+                        // 通知重绘
+                        viewHolder.adapter.notifyItemChanged(position);
+                    } else {
+                        textView.setText(progress + "%");
+                    }
+                }
+            }
+        }
 
     }
 
@@ -355,6 +538,18 @@ public class ShiftChangeContentFragment extends Fragment {
     }
 
     /**
+     * 图片缓存丢失重新下载
+     *
+     * @param token 消息标识
+     * @param key   缓存key(不含前缀)
+     * @param url   图片下载地址
+     */
+    private void downloadImage(String token, String key, String url) {
+        Log.i(LOG_TAG + "downloadImage", "content token:" + token + " key:" + key + " url:" + url);
+
+    }
+
+    /**
      * 音频缓存丢失重新下载
      *
      * @param position 音频对应的消息位置索引
@@ -363,6 +558,52 @@ public class ShiftChangeContentFragment extends Fragment {
     private void downloadAudio(int position, String key) {
         Log.i(LOG_TAG + "downloadAudio", "content index:" + position + " key:" + key);
 
+    }
+
+    /**
+     * 音频缓存丢失重新下载
+     *
+     * @param token 消息标识
+     * @param key   缓存key(不含前缀)
+     * @param url   音频下载地址
+     */
+    private void downloadAudio(String token, String key, String url) {
+        Log.i(LOG_TAG + "downloadAudio", "content token:" + token + " key:" + key + " url:" + url);
+
+    }
+
+    /**
+     * 通知列表增加
+     *
+     * @param shiftChangeContentList 新添加的数据集
+     */
+    private void notifyAdapter(final List<ShiftChangeContent> shiftChangeContentList) {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // 滚动到头部准备添加
+                viewHolder.contentRecyclerView.scrollToPosition(0);
+                viewHolder.adapter.addData(0, shiftChangeContentList);
+            }
+        });
+    }
+
+    /**
+     * 通知列表增加
+     *
+     * @param shiftChangeContent 新添加的数据
+     */
+    private void notifyAdapter(final ShiftChangeContent shiftChangeContent) {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // 滚动到头部准备添加
+                viewHolder.contentRecyclerView.scrollToPosition(0);
+                viewHolder.adapter.addData(0, shiftChangeContent);
+            }
+        });
     }
 
     @Override

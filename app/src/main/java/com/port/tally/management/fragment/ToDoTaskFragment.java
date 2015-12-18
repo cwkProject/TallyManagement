@@ -3,6 +3,7 @@ package com.port.tally.management.fragment;
  * Created by 超悟空 on 2015/10/24.
  */
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,13 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.port.tally.management.R;
+import com.port.tally.management.activity.TallyDetailNew;
 import com.port.tally.management.adapter.ToDoTaskPagerAdapter;
-import com.port.tally.management.work.ToallyManageWork;
+import com.port.tally.management.bean.WorkPlan;
+import com.port.tally.management.work.PullWorkPlan;
 
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.work.WorkBack;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 今日待办布局片段
@@ -111,27 +114,48 @@ public class ToDoTaskFragment extends Fragment {
 
         adapter = new ToDoTaskPagerAdapter(getActivity());
 
+        adapter.setOnPagerClickListener(new ToDoTaskPagerAdapter.OnPagerClickListener() {
+            @Override
+            public void onClick(List<WorkPlan> dataList, int position) {
+                onToWork(dataList.get(position));
+            }
+        });
+
         viewPager.setAdapter(adapter);
+    }
+
+    /**
+     * 进入详细作业票操作界面
+     *
+     * @param workPlan 作业计划
+     */
+    private void onToWork(WorkPlan workPlan) {
+        Intent intent = new Intent(getActivity(), TallyDetailNew.class);
+        Bundle bundle = new Bundle();
+        bundle.putStringArray("detailString", new String[]{workPlan.getDispatchCode() , workPlan
+                .getEntrustCode() , workPlan.getTicketCode()});
+
+        intent.putExtras(bundle);
+
+        startActivity(intent);
     }
 
     /**
      * 加载数据
      */
     private void loadData() {
-        //实例化，传入参数
-        ToallyManageWork toallyManageWork = new ToallyManageWork();
+        PullWorkPlan pullWorkPlan = new PullWorkPlan();
 
-        toallyManageWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
-
-            public void doEndWork(boolean state, List<Map<String, Object>> data) {
-
-                if (state && data != null) {
-                    adapter.reset(data);
+        pullWorkPlan.setWorkEndListener(new WorkBack<List<WorkPlan>>() {
+            @Override
+            public void doEndWork(boolean state, List<WorkPlan> workPlans) {
+                if (state && workPlans != null) {
+                    adapter.reset(workPlans);
                 }
             }
         });
 
-        toallyManageWork.beginExecute("5", "14", "1", null, null);
+        pullWorkPlan.beginExecute(GlobalApplication.getGlobal().getLoginStatus().getUserID());
     }
 
     /**

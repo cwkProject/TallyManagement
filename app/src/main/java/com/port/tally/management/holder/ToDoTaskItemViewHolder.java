@@ -37,12 +37,12 @@ public class ToDoTaskItemViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         // 标题文本框
-        titleTextView = (TextView) itemView.findViewById(R.id.to_do_task_list_item_title_textView);
+        titleTextView = (TextView) itemView.findViewById(R.id.to_do_task_list_item_first_row_textView);
         // 编号文本框
         numberTextView = (TextView) itemView.findViewById(R.id
-                .to_do_task_list_item_number_textView);
+                .to_do_task_list_item_second_row_textView);
         // 内容文本框
         contentTextView = (TextView) itemView.findViewById(R.id
-                .to_do_task_list_item_content_textView);
+                .to_do_task_list_item_third_row_textView);
     }
 }

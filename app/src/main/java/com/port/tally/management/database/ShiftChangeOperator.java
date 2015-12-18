@@ -68,6 +68,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
         cv.put(TableConst.ShiftChange.RECEIVE_NAME, data.getReceive());
         cv.put(TableConst.ShiftChange.TIME, data.getTime());
         cv.put(TableConst.ShiftChange.CONTENT, data.getContent());
+        cv.put(TableConst.ShiftChange.MY_SEND, data.isMySend() ? 1 : 0);
 
         if (data.getImageUrlList() != null) {
             JSONObject imageUrl = new JSONObject(data.getImageUrlList());
@@ -94,6 +95,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
         int receiveName = cursor.getColumnIndex(TableConst.ShiftChange.RECEIVE_NAME);
         int time = cursor.getColumnIndex(TableConst.ShiftChange.TIME);
         int content = cursor.getColumnIndex(TableConst.ShiftChange.CONTENT);
+        int mySend = cursor.getColumnIndex(TableConst.ShiftChange.MY_SEND);
         int imageUrl = cursor.getColumnIndex(TableConst.ShiftChange.IMAGE_URL);
         int audioUrl = cursor.getColumnIndex(TableConst.ShiftChange.AUDIO_URL);
 
@@ -108,6 +110,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
             data.setReceive(cursor.getString(receiveName));
             data.setTime(cursor.getString(time));
             data.setContent(cursor.getString(content));
+            data.setMySend(cursor.getInt(mySend) == 1);
 
             try {
                 String imageString = cursor.getString(imageUrl);
