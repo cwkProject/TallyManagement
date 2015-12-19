@@ -88,11 +88,6 @@ public class ShiftChangeService extends Service {
     private boolean connecting = false;
 
     /**
-     * 记录当前任务数
-     */
-    private volatile int taskCount = 0;
-
-    /**
      * 存放数据加载进度的列表
      */
     private Map<String, Map<String, Integer>> progressList = null;
@@ -108,8 +103,6 @@ public class ShiftChangeService extends Service {
         Log.i(LOG_TAG + "onCreate", "service create");
 
         progressList = new HashMap<>();
-
-        taskCount = 0;
 
         cacheTool = CacheManager.getCacheTool("shift_change_content");
 
@@ -163,6 +156,11 @@ public class ShiftChangeService extends Service {
         Log.i(LOG_TAG + "onUnbind", "service unbind");
         connecting = false;
         clientMessenger = null;
+
+        if (progressList.isEmpty()) {
+            stopSelf();
+        }
+
         return super.onUnbind(intent);
     }
 
@@ -197,9 +195,6 @@ public class ShiftChangeService extends Service {
             progressList.put(token, map);
         }
 
-        taskCount++;
-        Log.i(LOG_TAG + "addTask", "token:" + token + " key:" + key + " now task count:" +
-                taskCount);
         return true;
     }
 
@@ -228,10 +223,6 @@ public class ShiftChangeService extends Service {
                     progressList.remove(token);
                 }
 
-                taskCount--;
-                Log.i(LOG_TAG + "removeTask", "token:" + token + " key:" + key + " now task " +
-                        "count:" +
-                        taskCount);
                 return true;
             } else {
                 Log.d(LOG_TAG + "removeTask", "token:" + token + " key:" + key + ", key not " +
