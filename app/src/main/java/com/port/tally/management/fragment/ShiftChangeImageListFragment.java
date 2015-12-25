@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.port.tally.management.util.CacheKeyUtil;
 import com.port.tally.management.util.ImageUtil;
 
 import org.mobile.library.cache.util.CacheTool;
+import org.mobile.library.model.operate.DataGetHandle;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
 import java.io.File;
@@ -45,7 +47,7 @@ import java.util.List;
  * @version 1.0 2015/12/11
  * @since 1.0
  */
-public class ShiftChangeImageListFragment extends Fragment {
+public class ShiftChangeImageListFragment extends Fragment implements DataGetHandle<File[]> {
 
     /**
      * 日志标签前缀
@@ -61,6 +63,11 @@ public class ShiftChangeImageListFragment extends Fragment {
      * 相册接收返回码
      */
     private static final int CAPTURE_GALLERY_ACTIVITY_REQUEST_CODE = 200;
+
+    /**
+     * 暂存图片缓存key列表的取值标签
+     */
+    private static final String SAVE_IMAGE_CACHE_KEY_LIST = "save_image_cache_key_list";
 
     /**
      * 控件集
@@ -104,7 +111,7 @@ public class ShiftChangeImageListFragment extends Fragment {
         /**
          * 存放待发送图片缓存key列表
          */
-        public List<String> sendImageCacheKeyList = null;
+        public ArrayList<String> sendImageCacheKeyList = null;
     }
 
     /**
@@ -139,6 +146,37 @@ public class ShiftChangeImageListFragment extends Fragment {
         viewHolder.galleryImageButton = galleryImageButton;
     }
 
+    /**
+     * 清空列表
+     */
+    public void clearList() {
+        viewHolder.sendImageCacheKeyList.clear();
+        viewHolder.imageRecyclerViewAdapter.clear();
+        viewHolder.imageRecyclerView.setVisibility(View.GONE);
+    }
+
+    /**
+     * 获取待发送的图片文件
+     *
+     * @return 文件数组
+     */
+    @Override
+    public File[] getData() {
+
+        if (viewHolder.sendImageCacheKeyList.isEmpty()) {
+            return null;
+        }
+
+        File[] files = new File[viewHolder.sendImageCacheKeyList.size()];
+
+        for (int i = 0; i < viewHolder.sendImageCacheKeyList.size(); i++) {
+            files[i] = viewHolder.sendCacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE +
+                    viewHolder.sendImageCacheKeyList.get(i));
+        }
+
+        return files;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
@@ -149,6 +187,9 @@ public class ShiftChangeImageListFragment extends Fragment {
 
         // 初始化布局
         initView(rootView);
+
+        // 初始化数据
+        initData(savedInstanceState);
 
         return rootView;
     }
@@ -189,6 +230,27 @@ public class ShiftChangeImageListFragment extends Fragment {
     }
 
     /**
+     * 初始化列表数据
+     *
+     * @param savedInstanceState 暂存数据
+     */
+    private void initData(Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+            ArrayList<String> list = savedInstanceState.getStringArrayList
+                    (SAVE_IMAGE_CACHE_KEY_LIST);
+
+
+            if (list != null && !list.isEmpty()) {
+                viewHolder.sendImageCacheKeyList.addAll(list);
+                // 使图片列表可见
+                viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
+                viewHolder.imageRecyclerViewAdapter.addData(0, viewHolder.sendImageCacheKeyList);
+            }
+        }
+    }
+
+    /**
      * 初始化待发送图片列表
      */
     private void initImageList() {
@@ -221,6 +283,34 @@ public class ShiftChangeImageListFragment extends Fragment {
         });
 
         recyclerView.setAdapter(viewHolder.imageRecyclerViewAdapter);
+
+        // 滑动拖拽监听器
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback
+                (0, ItemTouchHelper.UP) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // 上滑删除
+                ShiftChangeImageListFragment.this.viewHolder.sendImageCacheKeyList.remove
+                        (viewHolder.getAdapterPosition());
+                ShiftChangeImageListFragment.this.viewHolder.imageRecyclerViewAdapter.remove
+                        (viewHolder.getAdapterPosition());
+                if (ShiftChangeImageListFragment.this.viewHolder.imageRecyclerViewAdapter
+                        .getItemCount() == 0) {
+                    // 列表清空
+                    ShiftChangeImageListFragment.this.viewHolder.imageRecyclerView.setVisibility
+                            (View.GONE);
+                }
+            }
+        });
+
+        // 绑定事件
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     /**
@@ -421,6 +511,12 @@ public class ShiftChangeImageListFragment extends Fragment {
                         notifyImageAdapter(key);
                     }
                 });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArrayList(SAVE_IMAGE_CACHE_KEY_LIST, viewHolder.sendImageCacheKeyList);
     }
 
     /**

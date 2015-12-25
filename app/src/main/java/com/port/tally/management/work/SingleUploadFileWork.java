@@ -7,6 +7,7 @@ import com.port.tally.management.data.SingleUploadFileData;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
+import org.mobile.library.network.factory.NetworkType;
 
 /**
  * 单文件上传
@@ -25,6 +26,11 @@ public class SingleUploadFileWork extends DefaultWorkModel<String, Void, SingleU
     @Override
     protected String onTaskUri() {
         return StaticValue.UPLOAD_FILE_URL;
+    }
+
+    @Override
+    protected NetworkType onNetworkType() {
+        return NetworkType.UPLOAD;
     }
 
     @Override

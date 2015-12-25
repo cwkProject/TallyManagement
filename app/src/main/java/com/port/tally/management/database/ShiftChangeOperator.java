@@ -175,11 +175,34 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
             sql = String.format("select * from %s where %s=%s", TableConst.ShiftChange
                     .TABLE_NAME, CommonConst.CODE, parameters[0]);
         } else {
-            sql = String.format("select * from %s where order by %s desc limit %s,%s", TableConst
+            sql = String.format("select * from %s order by %s desc limit %s,%s", TableConst
                     .ShiftChange.TABLE_NAME, TableConst.ShiftChange.TIME, parameters[0],
                     parameters[1]);
         }
         return query(sql);
+    }
+
+    /**
+     * 根据行ID查询结果
+     *
+     * @param id 行ID
+     *
+     * @return 数据对象，没有返回null
+     */
+    public ShiftChange queryById(long id) {
+        Log.i(LOG_TAG + "queryById", "query id is " + id);
+
+        // 查询语句
+        String sql = String.format("select * from %s where %s=%s", TableConst.ShiftChange
+                .TABLE_NAME, CommonConst._ID, id);
+
+        List<ShiftChange> list = query(sql);
+
+        if (!list.isEmpty()) {
+            return list.get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override

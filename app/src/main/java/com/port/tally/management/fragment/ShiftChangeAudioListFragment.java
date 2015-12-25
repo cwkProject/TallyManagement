@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,12 @@ import com.port.tally.management.adapter.ShiftChangeAudioRecyclerViewAdapter;
 import com.port.tally.management.holder.ShiftChangeAudioViewHolder;
 
 import org.mobile.library.cache.util.CacheTool;
+import org.mobile.library.model.operate.DataGetHandle;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,12 +37,17 @@ import java.util.List;
  * @version 1.0 2015/12/11
  * @since 1.0
  */
-public class ShiftChangeAudioListFragment extends Fragment {
+public class ShiftChangeAudioListFragment extends Fragment implements DataGetHandle<File[]> {
 
     /**
      * 日志标签前缀
      */
     private static final String LOG_TAG = "ShiftChangeAudioListFragment.";
+
+    /**
+     * 保存音频文件缓存key列表的取值标签
+     */
+    private static final String SAVE_AUDIO_CACHE_KEY_LIST = "save_audio_cache_key_list";
 
     /**
      * 控件集
@@ -95,6 +104,36 @@ public class ShiftChangeAudioListFragment extends Fragment {
         viewHolder.audioRecyclerViewAdapter.addData(0, cacheKey);
     }
 
+    /**
+     * 获取待发送的音频文件
+     *
+     * @return 文件数组
+     */
+    @Override
+    public File[] getData() {
+
+        if (viewHolder.audioRecyclerViewAdapter.getDataList().isEmpty()) {
+            return null;
+        }
+
+        File[] files = new File[viewHolder.audioRecyclerViewAdapter.getDataList().size()];
+
+        for (int i = 0; i < viewHolder.audioRecyclerViewAdapter.getDataList().size(); i++) {
+            files[i] = viewHolder.sendCacheTool.getForFile(viewHolder.audioRecyclerViewAdapter
+                    .getDataList().get(i));
+        }
+
+        return files;
+    }
+
+    /**
+     * 清空列表
+     */
+    public void clearList() {
+        viewHolder.audioRecyclerViewAdapter.clear();
+        viewHolder.audioRecyclerView.setVisibility(View.GONE);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
@@ -104,6 +143,9 @@ public class ShiftChangeAudioListFragment extends Fragment {
 
         // 初始化布局
         initView(rootView);
+
+        // 初始化数据
+        initData(savedInstanceState);
 
         return rootView;
     }
@@ -130,6 +172,27 @@ public class ShiftChangeAudioListFragment extends Fragment {
                 .fragment_shift_change_audio_recyclerView);
 
         viewHolder.mediaPlayer = new MediaPlayer();
+    }
+
+    /**
+     * 初始化列表数据
+     *
+     * @param savedInstanceState 暂存数据
+     */
+    private void initData(Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+
+            ArrayList<String> list = savedInstanceState.getStringArrayList
+                    (SAVE_AUDIO_CACHE_KEY_LIST);
+
+
+            if (list != null && !list.isEmpty()) {
+                // 使列表可见
+                viewHolder.audioRecyclerView.setVisibility(View.VISIBLE);
+                viewHolder.audioRecyclerViewAdapter.addData(0, list);
+            }
+        }
     }
 
     /**
@@ -163,6 +226,32 @@ public class ShiftChangeAudioListFragment extends Fragment {
         });
 
         recyclerView.setAdapter(viewHolder.audioRecyclerViewAdapter);
+
+        // 滑动拖拽监听器
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback
+                (0, ItemTouchHelper.UP) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // 上滑删除
+                ShiftChangeAudioListFragment.this.viewHolder.audioRecyclerViewAdapter.remove
+                        (viewHolder.getAdapterPosition());
+                if (ShiftChangeAudioListFragment.this.viewHolder.audioRecyclerViewAdapter
+                        .getItemCount() == 0) {
+                    // 列表清空
+                    ShiftChangeAudioListFragment.this.viewHolder.audioRecyclerView.setVisibility
+                            (View.GONE);
+                }
+            }
+        });
+
+        // 绑定事件
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     /**
@@ -206,9 +295,15 @@ public class ShiftChangeAudioListFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArrayList(SAVE_AUDIO_CACHE_KEY_LIST, (ArrayList<String>) viewHolder
+                .audioRecyclerViewAdapter.getDataList());
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         viewHolder.mediaPlayer.release();
-        viewHolder.audioRecyclerViewAdapter.release();
     }
 }

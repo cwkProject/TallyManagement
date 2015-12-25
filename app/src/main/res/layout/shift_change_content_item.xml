@@ -56,19 +56,24 @@
                 android:id="@+id/shift_change_content_message_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_view_default_text_size"/>
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/shift_change_content_Image_gridLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:columnCount="3"/>
+                app:alignmentMode="alignBounds"
+                app:columnCount="3"
+                app:useDefaultMargins="true"/>
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/shift_change_content_audio_gridLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:columnCount="6"/>
+                app:alignmentMode="alignBounds"
+                app:columnCount="6"
+                app:useDefaultMargins="true"/>
 
         </LinearLayout>
 

@@ -22,4 +22,8 @@
     <string name="jiyunguanli_title">汽运查询</string>
 
     <string name="record">长按录音</string>
+    <string name="load_failed">传输失败</string>
+    <string name="send_failed_check_network">发送失败，请检查网络</string>
+
+    <item name="view_holder_tag" type="id"/>
 </resources>

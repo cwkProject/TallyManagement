@@ -44,11 +44,6 @@ public class ShiftChangeContentViewHolder extends RecyclerView.ViewHolder {
      */
     public GridLayout audioGridLayout = null;
 
-    /**
-     * 存放本holder序号
-     */
-    public int holderIndex = 0;
-
     public ShiftChangeContentViewHolder(View itemView) {
         super(itemView);
 

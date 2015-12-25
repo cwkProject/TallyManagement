@@ -5,8 +5,7 @@ package com.port.tally.management.util;
 
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.UUID;
 
 /**
  * 缓存key相关工具
@@ -23,18 +22,13 @@ public class CacheKeyUtil {
     private static final String LOG_TAG = "CacheKeyUtil.";
 
     /**
-     * 日期格式工具
-     */
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
-
-    /**
      * 生成一个缓存随机key
      *
      * @return key
      */
     public static String getRandomKey() {
         // 创建缓存key
-        String key = simpleDateFormat.format(new Date());
+        String key = UUID.randomUUID().toString();
         Log.i(LOG_TAG + "getRandomKey", "cache key is " + key);
 
         return key;

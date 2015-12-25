@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
 
     <include layout="@layout/toolbar_default_title"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/activity_shift_change_content_frameLayout"
+    <fragment
+        android:id="@+id/activity_shift_change_content_fragment"
+        android:name="com.port.tally.management.fragment.ShiftChangeContentFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_shift_change_content_list"/>
 
     <LinearLayout
         android:id="@+id/activity_shift_change_function_layout"

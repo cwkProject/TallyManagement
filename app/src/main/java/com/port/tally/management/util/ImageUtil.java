@@ -94,9 +94,14 @@ public class ImageUtil {
                 // 创建缩略图
                 Log.i(LOG_TAG + "createThumbnail", "thumbnail begin");
 
-                cacheTool.put(THUMBNAIL_CACHE_PRE + key, resolutionBitmap(file, width, height));
+                Bitmap bitmap = resolutionBitmap(file, width, height);
 
-                Log.i(LOG_TAG + "createThumbnail", "thumbnail end");
+                if (bitmap != null) {
+                    cacheTool.put(THUMBNAIL_CACHE_PRE + key, bitmap);
+                    Log.i(LOG_TAG + "createThumbnail", "thumbnail end");
+                } else {
+                    Log.d(LOG_TAG + "createThumbnail", "thumbnail failed");
+                }
 
                 if (listener != null) {
                     listener.finish(cacheTool, THUMBNAIL_CACHE_PRE + key);
@@ -124,9 +129,15 @@ public class ImageUtil {
         // 创建缩略图
         Log.i(LOG_TAG + "createThumbnail", "thumbnail begin");
 
-        cacheTool.put(THUMBNAIL_CACHE_PRE + key, resolutionBitmap(file, width, height));
+        Bitmap bitmap = resolutionBitmap(file, width, height);
 
-        Log.i(LOG_TAG + "createThumbnail", "thumbnail end");
+        if (bitmap != null) {
+            cacheTool.put(THUMBNAIL_CACHE_PRE + key, bitmap);
+            Log.i(LOG_TAG + "createThumbnail", "thumbnail end");
+        } else {
+            Log.d(LOG_TAG + "createThumbnail", "thumbnail failed");
+        }
+
 
         return THUMBNAIL_CACHE_PRE + key;
     }
@@ -152,8 +163,8 @@ public class ImageUtil {
                 // 像素压缩，尺寸缩小为720P
                 Bitmap bitmap = resolutionBitmap(file, 720, 1280);
 
-                // 质量压缩50K
-                qualityBitmap(cacheTool, key, bitmap, 50);
+                // 质量压缩100K
+                qualityBitmap(cacheTool, key, bitmap, 100);
 
                 if (listener != null) {
                     listener.finish(cacheTool, COMPRESSION_IMAGE_CACHE_PRE + key);

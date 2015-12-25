@@ -3,8 +3,8 @@ package com.port.tally.management.adapter;
  * Created by 超悟空 on 2015/12/12.
  */
 
+import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,14 +13,17 @@ import android.view.ViewGroup;
 
 import com.port.tally.management.R;
 import com.port.tally.management.bean.ShiftChangeContent;
-import com.port.tally.management.holder.ImageWithTextViewHolder;
+import com.port.tally.management.function.AudioFileLengthFunction;
+import com.port.tally.management.function.ShiftChangeContentAudioRecycler;
+import com.port.tally.management.function.ShiftChangeContentImageRecycler;
+import com.port.tally.management.holder.ShiftChangeContentAudioViewHolder;
+import com.port.tally.management.holder.ShiftChangeContentImageViewHolder;
 import com.port.tally.management.holder.ShiftChangeContentViewHolder;
 import com.port.tally.management.util.ImageUtil;
+import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.cache.util.CacheTool;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -40,34 +43,24 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
     private static final String LOG_TAG = "ShiftChangeContentRecyclerViewAdapter.";
 
     /**
-     * 图片类型内容
-     */
-    public static final int TYPE_IMAGE_CONTENT = 1;
-
-    /**
-     * 音频类型内容
-     */
-    public static final int TYPE_AUDIO_CONTENT = 2;
-
-    /**
-     * 记录当前布局管理器数量
-     */
-    private int holderCount = 0;
-
-    /**
      * 存有内容文件的缓存工具
      */
     private CacheTool cacheTool = null;
 
     /**
-     * 音频播放器
-     */
-    private MediaPlayer mediaPlayer = new MediaPlayer();
-
-    /**
      * 内容数据源列表
      */
     private List<ShiftChangeContent> dataList = null;
+
+    /**
+     * 图片布局项回收器
+     */
+    private ShiftChangeContentImageRecycler imageRecycler = null;
+
+    /**
+     * 音频布局项回收器
+     */
+    private ShiftChangeContentAudioRecycler audioRecycler = null;
 
     /**
      * 绑定内容中的表格布局时的监听器
@@ -77,29 +70,13 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
         /**
          * 控件绑定之后执行
          *
+         * @param position    在数据源中的索引
          * @param holder      要绑定的控件管理器
          * @param key         数据缓存key
          * @param contentType 内容类型
-         * @param done        是否为完成状态
+         * @param progress    当前文件加载进度
          */
-        void onBind(ImageWithTextViewHolder holder, String key, int contentType, boolean done);
-    }
-
-    /**
-     * 绑定内容中的表格布局资源缓存读取失败时的监听器
-     */
-    public interface BindGridItemFailedListener {
-
-        /**
-         * 缓存读取失败，同时绑定控件点击事件
-         *
-         * @param holder       要绑定的控件管理器
-         * @param ItemPosition 列表位置
-         * @param key          缓存key
-         * @param contentType  内容类型
-         */
-        void onFailed(ImageWithTextViewHolder holder, int ItemPosition, String key, int
-                contentType);
+        void onBind(int position, Object holder, String key, int contentType, int progress);
     }
 
     /**
@@ -108,40 +85,28 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
     private BindGridItemViewHolderListener bindGridItemViewHolderListener = null;
 
     /**
-     * 绑定内容中的表格布局资源缓存读取失败时的监听器
-     */
-    private BindGridItemFailedListener bindGridItemFailedListener = null;
-
-    /**
      * 构造函数
      *
+     * @param context   上下文
      * @param cacheTool 内容缓存工具
      * @param dataList  数据源列表
      */
-    public ShiftChangeContentRecyclerViewAdapter(CacheTool cacheTool, List<ShiftChangeContent>
-            dataList) {
+    public ShiftChangeContentRecyclerViewAdapter(Context context, CacheTool cacheTool,
+                                                 List<ShiftChangeContent> dataList) {
         this.cacheTool = cacheTool;
         this.dataList = dataList;
+        this.imageRecycler = new ShiftChangeContentImageRecycler(context);
+        this.audioRecycler = new ShiftChangeContentAudioRecycler(context);
     }
 
     /**
-     * 设置绑定内容中的表格布局时的监听器
+     * 设置绑定内容中的表格布局时的监听器，用于绑定表格项事件
      *
      * @param bindGridItemViewHolderListener 监听器实例
      */
     public void setBindGridItemViewHolderListener(BindGridItemViewHolderListener
                                                           bindGridItemViewHolderListener) {
         this.bindGridItemViewHolderListener = bindGridItemViewHolderListener;
-    }
-
-    /**
-     * 绑定内容中的表格布局资源缓存读取失败时的监听器
-     *
-     * @param bindGridItemFailedListener 监听器实例
-     */
-    public void setBindGridItemFailedListener(BindGridItemFailedListener
-                                                      bindGridItemFailedListener) {
-        this.bindGridItemFailedListener = bindGridItemFailedListener;
     }
 
     /**
@@ -166,30 +131,49 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
         notifyItemRangeInserted(position, data.size());
     }
 
+    /**
+     * 移除一组数据
+     *
+     * @param start 起始位置
+     * @param count 删除行数
+     */
+    public void remove(int start, int count) {
+        for (int i = 0; i < count; i++) {
+            this.dataList.remove(start);
+        }
+        notifyItemRangeRemoved(start, count);
+    }
+
+    /**
+     * 移除一条数据
+     *
+     * @param position 起始位置
+     */
+    public void remove(int position) {
+        this.dataList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    /**
+     * 清空
+     */
+    public void clear() {
+        int count = this.dataList.size();
+        this.dataList.clear();
+        notifyItemRangeRemoved(0, count);
+    }
+
     @Override
     public ShiftChangeContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 创建Item根布局
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout
                 .shift_change_content_item, parent, false);
-
-        ShiftChangeContentViewHolder holder = new ShiftChangeContentViewHolder(itemView);
-        holder.holderIndex = holderCount++;
-        Log.i(LOG_TAG + "onCreateViewHolder", "holder index is " + holder.holderIndex);
-
-        return holder;
+        return new ShiftChangeContentViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(ShiftChangeContentViewHolder holder, int position) {
-
-        Log.i(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex + " position:" +
-                position);
-
-        Log.i(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex + " position:" +
-                position + " image grid " + "row:" + holder.imageGridLayout.getRowCount());
-
-        Log.i(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex + " position:" +
-                position + " audio grid " + "row:" + holder.audioGridLayout.getRowCount());
+        Log.i(LOG_TAG + "onBindViewHolder", "position:" + position);
 
         // 内容
         ShiftChangeContent content = dataList.get(position);
@@ -197,202 +181,119 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
         holder.nameTextView.setText(content.getName());
         holder.timeTextView.setText(content.getTime());
         holder.messageTextView.setText(content.getMessage());
-        holder.imageGridLayout.removeAllViews();
-        holder.audioGridLayout.removeAllViews();
-
-        Log.i(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex + " " +
-                "position:" + position + " send state:" + content.isSend());
 
         if (content.getImageList() != null) {
-            // 当前为上传状态
 
-            Log.i(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex + " " +
-                    "position:" + position + " ImageList " + "count:" + content.getImageList()
-                    .size());
+            Log.i(LOG_TAG + "onBindViewHolder", "position:" + position + " ImageList " + "count:"
+                    + content.getImageList().size());
 
             for (Map.Entry<String, Integer> entry : content.getImageList().entrySet()) {
 
-                Log.i(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex + " " +
-                        "position:" + position + " ImageList " + " key:" + entry.getKey() + " " +
-                        "value:" + entry.getValue());
-
                 // 一个图片布局控件
-                ImageWithTextViewHolder imageWithTextViewHolder = new ImageWithTextViewHolder
-                        (holder.itemView.getContext());
+                ShiftChangeContentImageViewHolder viewHolder = imageRecycler.getViewHolder();
 
-                if (entry.getValue() != 100) {
-                    imageWithTextViewHolder.textView.setText(entry.getValue() + "%");
-                }
-
-                imageWithTextViewHolder.rootItem.setTag(entry.getKey());
-                holder.imageGridLayout.addView(imageWithTextViewHolder.rootItem);
-
-                if (content.isSend()) {
-                    // 当前为上传状态
-                    Bitmap bitmap = cacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE + entry
-                            .getKey());
-                    if (bitmap != null) {
-                        imageWithTextViewHolder.imageView.setImageBitmap(bitmap);
-                    } else {
-                        Log.d(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex
-                                + " position:" + position + " ImageList " + " key:" + entry
-                                .getKey() + " value:" + entry.getValue() + " no bitmap");
-                    }
+                if (entry.getValue() > -1 && entry.getValue() < 100) {
+                    viewHolder.textView.setText(entry.getValue() + "%");
                 } else {
                     if (entry.getValue() == 100) {
-
-                        // 图片源文件缓存
-                        File file = cacheTool.getForFile(ImageUtil.COMPRESSION_IMAGE_CACHE_PRE +
-                                entry.getKey());
-
-                        if (file == null || !file.exists()) {
-                            // 图片源文件缓存已丢失，需要重新下载
-                            Log.d(LOG_TAG + "onBindViewHolder", "holder index:" + holder
-                                    .holderIndex + " position:" + position + " ImageList " +
-                                    "key:" + entry.getKey() + " value:" + entry.getValue() + " no" +
-                                    " bitmap");
-                            // 此处触发失败事件回调
-                            if (bindGridItemFailedListener != null) {
-                                bindGridItemFailedListener.onFailed(imageWithTextViewHolder,
-                                        holder.getAdapterPosition(), entry.getKey(),
-                                        TYPE_IMAGE_CONTENT);
-                            }
-                            break;
-                        }
-
-                        Bitmap bitmap = cacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE +
-                                entry.getKey());
-                        if (bitmap != null) {
-                            imageWithTextViewHolder.imageView.setImageBitmap(bitmap);
-                        } else {
-                            // 缩略图缓存丢失，重新加载缩略图
-                            Log.d(LOG_TAG + "onBindViewHolder", "holder index:" + holder
-                                    .holderIndex + " position:" + position + " ImageList " +
-                                    "key:" + entry.getKey() + " value:" + entry.getValue() + " no" +
-                                    " bitmap");
-                            // 此处触发失败事件回调
-                            if (bindGridItemFailedListener != null) {
-                                bindGridItemFailedListener.onFailed(imageWithTextViewHolder,
-                                        holder.getAdapterPosition(), entry.getKey(),
-                                        TYPE_IMAGE_CONTENT);
-                            }
-                        }
+                        viewHolder.textView.setText(null);
+                    } else {
+                        viewHolder.textView.setText(R.string.load_failed);
                     }
                 }
+
+                viewHolder.rootItem.setTag(entry.getKey());
+
+                Bitmap bitmap = cacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE + entry
+                        .getKey());
+                if (bitmap != null) {
+                    viewHolder.imageView.setImageBitmap(bitmap);
+                } else {
+                    Log.d(LOG_TAG + "onBindViewHolder", "position:" + position + " ImageList " +
+                            " key:" + entry.getKey() + " value:" + entry.getValue() + " no bitmap");
+                    viewHolder.imageView.setImageDrawable(null);
+                }
+
+                holder.imageGridLayout.addView(viewHolder.rootItem, imageRecycler.getLayoutParams
+                        ());
 
                 // 此处绑定事件
                 if (bindGridItemViewHolderListener != null) {
-                    bindGridItemViewHolderListener.onBind(imageWithTextViewHolder, entry.getKey()
-                            , TYPE_IMAGE_CONTENT, entry.getValue() == 100);
+                    bindGridItemViewHolderListener.onBind(position, viewHolder, entry.getKey(),
+                            StaticValue.TypeTag.TYPE_IMAGE_CONTENT, entry.getValue());
                 }
             }
         }
 
         if (content.getAudioList() != null) {
             // 开始绑定音频列表
-
-            Log.i(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex + " " +
-                    "AudioList " +
-                    "count:" + content.getAudioList().size());
+            Log.i(LOG_TAG + "onBindViewHolder", "position:" + position + " AudioList " + "count:"
+                    + content.getAudioList().size());
 
             for (Map.Entry<String, Integer> entry : content.getAudioList().entrySet()) {
 
-                Log.i(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex + " " +
-                        "position:" + position + " AudioList " + " key:" + entry.getKey() + " " +
-                        "value:" + entry.getValue());
+                // 一个音频布局控件
+                ShiftChangeContentAudioViewHolder viewHolder = audioRecycler.getViewHolder();
 
-                // 一个图片布局控件
-                ImageWithTextViewHolder imageWithTextViewHolder = new ImageWithTextViewHolder
-                        (holder.itemView.getContext());
+                viewHolder.imageView.setImageResource(R.drawable.audio_image_list);
 
-                imageWithTextViewHolder.imageView.setImageResource(R.drawable.audio_image_list);
+                viewHolder.rootItem.setTag(entry.getKey());
 
-                imageWithTextViewHolder.rootItem.setTag(entry.getKey());
-                holder.audioGridLayout.addView(imageWithTextViewHolder.rootItem);
-
-                if (entry.getValue() != 100) {
-                    imageWithTextViewHolder.textView.setText(entry.getValue() + "%");
-                } else {
-
-                    File file = cacheTool.getForFile(entry.getKey());
-                    if (file != null) {
-
-                        String lengthString = getAudioLength(file.getPath());
-
-                        if (lengthString != null) {
-                            imageWithTextViewHolder.textView.setText(lengthString);
-                        } else {
-                            Log.d(LOG_TAG + "onBindViewHolder", "holder index:" + holder
-                                    .holderIndex + " position:" + position + " AudioList " + " " +
-                                    "key:" + entry.getKey() + " value:" + entry.getValue() + " " +
-                                    "audio file error.");
-                        }
-                    } else {
-                        Log.d(LOG_TAG + "onBindViewHolder", "holder index:" + holder.holderIndex
-                                + " position:" + position + " AudioList " + " " +
-                                "key:" + entry.getKey() + " value:" + entry.getValue() + " " +
-                                "no audio file.");
-
-                        // 此处触发下载事件回调
-                        if (bindGridItemFailedListener != null) {
-                            bindGridItemFailedListener.onFailed(imageWithTextViewHolder, holder
-                                    .getAdapterPosition(), entry.getKey(), TYPE_AUDIO_CONTENT);
-                        }
-
-                        break;
-                    }
+                if (entry.getValue() > -1 && entry.getValue() < 100) {
+                    viewHolder.textView.setText(entry.getValue() + "%");
                 }
+
+                if (entry.getValue() == 100) {
+
+                    viewHolder.textView.setText(AudioFileLengthFunction.getFunction()
+                            .getAudioLength(cacheTool, entry.getKey()));
+                }
+
+                holder.audioGridLayout.addView(viewHolder.rootItem);
 
                 // 此处绑定事件
                 if (bindGridItemViewHolderListener != null) {
-                    bindGridItemViewHolderListener.onBind(imageWithTextViewHolder, entry.getKey()
-                            , TYPE_AUDIO_CONTENT, entry.getValue() == 100);
+                    bindGridItemViewHolderListener.onBind(position, viewHolder, entry.getKey(),
+                            StaticValue.TypeTag.TYPE_AUDIO_CONTENT, entry.getValue());
                 }
             }
         }
 
     }
 
-    /**
-     * 获取音频长度文本
-     *
-     * @param path 音频路径
-     *
-     * @return 格式化后的文本
-     */
-    private String getAudioLength(String path) {
-        try {
-            mediaPlayer.setDataSource(path);
-            mediaPlayer.prepare();
-            // 音频长度
-            int length = mediaPlayer.getDuration();
-            mediaPlayer.reset();
+    @Override
+    public void onViewRecycled(ShiftChangeContentViewHolder holder) {
+        super.onViewRecycled(holder);
 
-            String lengthString = "";
+        Log.i(LOG_TAG + "onViewRecycled", "holder adapter position:" + holder.getAdapterPosition
+                () + " image grid count:" + holder.imageGridLayout.getChildCount() + " audio grid" +
+                " count:" + holder.audioGridLayout.getChildCount());
 
-            if (length / 60000 > 0) {
-                lengthString += length / 60000 + "'";
+        // 回收图片表格项
+        for (int i = 0; i < holder.imageGridLayout.getChildCount(); i++) {
+            Object tag = holder.imageGridLayout.getChildAt(i).getTag(R.id.view_holder_tag);
+
+            if (tag != null && tag instanceof ShiftChangeContentImageViewHolder) {
+                imageRecycler.putViewHolder((ShiftChangeContentImageViewHolder) tag);
             }
-            lengthString += (length / 1000) % 60 + "\"";
-
-            lengthString += length % 1000;
-
-            return lengthString;
-        } catch (IOException e) {
-            Log.e(LOG_TAG + "getAudioLength", "IOException is " + e.getMessage());
-            return null;
         }
+
+        holder.imageGridLayout.removeAllViews();
+
+        // 回收音频表格项
+        for (int i = 0; i < holder.audioGridLayout.getChildCount(); i++) {
+            Object tag = holder.audioGridLayout.getChildAt(i).getTag(R.id.view_holder_tag);
+
+            if (tag != null && tag instanceof ShiftChangeContentAudioViewHolder) {
+                audioRecycler.putViewHolder((ShiftChangeContentAudioViewHolder) tag);
+            }
+        }
+
+        holder.audioGridLayout.removeAllViews();
     }
 
     @Override
     public int getItemCount() {
         return dataList.size();
-    }
-
-    /**
-     * 释放资源
-     */
-    public void release() {
-        mediaPlayer.release();
     }
 }

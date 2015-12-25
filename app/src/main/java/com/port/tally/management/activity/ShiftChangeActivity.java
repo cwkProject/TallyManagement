@@ -15,19 +15,22 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.port.tally.management.R;
 import com.port.tally.management.fragment.ShiftChangeAudioListFragment;
+import com.port.tally.management.fragment.ShiftChangeContentFragment;
 import com.port.tally.management.fragment.ShiftChangeImageListFragment;
 import com.port.tally.management.fragment.ShiftChangeRecordFragment;
+import com.port.tally.management.function.AudioFileLengthFunction;
 
 import org.mobile.library.cache.util.CacheManager;
 import org.mobile.library.cache.util.CacheTool;
 import org.mobile.library.common.function.InputMethodController;
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.operate.DataChangeObserver;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.io.File;
 
 /**
  * 交接班界面
@@ -43,19 +46,14 @@ public class ShiftChangeActivity extends AppCompatActivity {
     private static final String LOG_TAG = "ShiftChangeActivity.";
 
     /**
-     * 线程池线程数
+     * 保存待发送文本的取值标签
      */
-    private static final int POOL_COUNT = Runtime.getRuntime().availableProcessors() * 2 + 2;
+    private static final String SAVE_CONTENT = "save_content";
 
     /**
      * 控件集
      */
     private class LocalViewHolder {
-
-        /**
-         * 线程池
-         */
-        public ExecutorService taskExecutor = null;
 
         /**
          * 待发送数据临时缓存工具
@@ -108,6 +106,11 @@ public class ShiftChangeActivity extends AppCompatActivity {
         public ShiftChangeAudioListFragment audioListFragment = null;
 
         /**
+         * 内容列表片段
+         */
+        public ShiftChangeContentFragment contentFragment = null;
+
+        /**
          * 共享片段标签
          */
         public String[] shareFragmentTag = null;
@@ -134,8 +137,6 @@ public class ShiftChangeActivity extends AppCompatActivity {
      */
     private void initViewHolder() {
 
-        viewHolder.taskExecutor = Executors.newFixedThreadPool(POOL_COUNT);
-
         viewHolder.audioImageButton = (ImageButton) findViewById(R.id
                 .activity_shift_change_audio_imageButton);
 
@@ -157,6 +158,9 @@ public class ShiftChangeActivity extends AppCompatActivity {
         viewHolder.imageListFragment = new ShiftChangeImageListFragment();
 
         viewHolder.audioListFragment = new ShiftChangeAudioListFragment();
+
+        viewHolder.contentFragment = (ShiftChangeContentFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.activity_shift_change_content_fragment);
     }
 
     /**
@@ -174,6 +178,8 @@ public class ShiftChangeActivity extends AppCompatActivity {
         initAudioButton();
         // 初始化编辑框
         initEditText();
+        // 初始化发送按钮
+        initSendButton();
     }
 
     /**
@@ -361,5 +367,60 @@ public class ShiftChangeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * 初始化发送按钮
+     */
+    private void initSendButton() {
+        viewHolder.sendImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewHolder.sendImageButton.setEnabled(false);
+                String text = viewHolder.contentEditText.getText().toString();
+                File[] images = viewHolder.imageListFragment.getData();
+                File[] audios = viewHolder.audioListFragment.getData();
+
+                if (text.isEmpty() && images == null && audios == null) {
+                    // 无内容
+                    viewHolder.sendImageButton.setEnabled(true);
+                }
+
+                viewHolder.contentFragment.sendNewMessage(GlobalApplication.getGlobal()
+                        .getLoginStatus().getUserID(), GlobalApplication.getGlobal()
+                        .getLoginStatus().getCodeCompany(), text, images, audios, new
+                        DataChangeObserver<Boolean>() {
+
+                    @Override
+                    public void notifyDataChange(final Boolean data) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewHolder.sendImageButton.setEnabled(true);
+                                if (data) {
+                                    // 消息发送成功
+                                    // 清除缓存
+                                    viewHolder.contentEditText.setText(null);
+                                    viewHolder.imageListFragment.clearList();
+                                    viewHolder.audioListFragment.clearList();
+                                    viewHolder.sendCacheTool.clear();
+                                } else {
+                                    // 消息发送失败
+                                    Toast.makeText(ShiftChangeActivity.this, R.string
+                                            .send_failed_check_network, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AudioFileLengthFunction.release();
     }
 }

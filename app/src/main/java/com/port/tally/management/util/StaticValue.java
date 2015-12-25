@@ -12,14 +12,25 @@ package com.port.tally.management.util;
  */
 public interface StaticValue {
 
-
-    /**
-     * 意图数据传递标签
-     */
     /**
      * 本应用编号
      */
     String APP_CODE = "LHGL";
+
+    /**
+     * 标识各种数据类型枚举
+     */
+    interface TypeTag {
+        /**
+         * 图片类型内容
+         */
+        int TYPE_IMAGE_CONTENT = 1;
+
+        /**
+         * 音频类型内容
+         */
+        int TYPE_AUDIO_CONTENT = 2;
+    }
 
     /**
      * 意图数据传递标签
@@ -222,6 +233,12 @@ public interface StaticValue {
      */
     String WORK_PLAN_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetUncommitedMachineCommand"
             + ".aspx";
+
+    /**
+     * 获取指定编号交接班记录的接口地址
+     */
+    String SHIFT_CHANGE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/GetOneHandoverRecord" +
+            ".aspx";
 
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";
