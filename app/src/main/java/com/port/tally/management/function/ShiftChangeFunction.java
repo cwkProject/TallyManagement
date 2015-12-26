@@ -18,9 +18,10 @@ import org.mobile.library.model.work.WorkBack;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 交接班消息管理器
@@ -94,7 +95,7 @@ public class ShiftChangeFunction {
         /**
          * 通知列表
          */
-        public volatile List<ShiftChangeRequestListener<ShiftChange>> callback = new ArrayList<>();
+        public Stack<ShiftChangeRequestListener<ShiftChange>> callback = new Stack<>();
     }
 
     /**
@@ -104,7 +105,7 @@ public class ShiftChangeFunction {
      */
     public ShiftChangeFunction(Context context) {
         operator = new ShiftChangeOperator(context);
-        networkTask = new HashMap<>();
+        networkTask = new ConcurrentHashMap<>();
 
         sharedPreferences = context.getSharedPreferences("shift_change", Context.MODE_PRIVATE);
     }
@@ -118,7 +119,7 @@ public class ShiftChangeFunction {
 
         if (isEnd) {
             Log.i(LOG_TAG + "next", "now end");
-            return new ArrayList<>();
+            return new ArrayList<>(1);
         }
 
         List<ShiftChange> shiftChangeList = operator.queryWithCondition(String.valueOf
@@ -316,10 +317,9 @@ public class ShiftChangeFunction {
                     }
 
                     // 通知其他事件
-                    for (ShiftChangeRequestListener<ShiftChange> runnable : task.callback) {
-                        runnable.onRequestEnd(state, data);
+                    while (!task.callback.empty()) {
+                        task.callback.pop().onRequestEnd(state, data);
                     }
-                    task.callback.clear();
                 }
             }, false);
 
@@ -334,7 +334,7 @@ public class ShiftChangeFunction {
             } else {
                 // 正在请求，挂载通知
                 if (listener != null) {
-                    task.callback.add(listener);
+                    task.callback.push(listener);
                 }
             }
         }

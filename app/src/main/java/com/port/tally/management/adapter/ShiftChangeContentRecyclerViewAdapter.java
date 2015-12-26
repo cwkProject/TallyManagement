@@ -192,26 +192,44 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
                 // 一个图片布局控件
                 ShiftChangeContentImageViewHolder viewHolder = imageRecycler.getViewHolder();
 
+                viewHolder.rootItem.setTag(entry.getKey());
+
+                if (content.isSend()) {
+                    // 发送状态优先加载图片
+                    Bitmap bitmap = cacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE + entry
+                            .getKey());
+                    if (bitmap != null) {
+                        viewHolder.imageView.setImageBitmap(bitmap);
+                    } else {
+                        Log.d(LOG_TAG + "onBindViewHolder", "position:" + position + " ImageList " +
+                                " key:" + entry.getKey() + " value:" + entry.getValue() + " no " +
+                                "bitmap");
+                        viewHolder.imageView.setImageDrawable(null);
+                    }
+                }
+
                 if (entry.getValue() > -1 && entry.getValue() < 100) {
                     viewHolder.textView.setText(entry.getValue() + "%");
                 } else {
                     if (entry.getValue() == 100) {
-                        viewHolder.textView.setText(null);
+                        if (!content.isSend()) {
+                            // 非发送状态此时加载图片
+                            viewHolder.textView.setText(null);
+                            Bitmap bitmap = cacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE
+                                    + entry.getKey());
+
+                            if (bitmap != null) {
+                                viewHolder.imageView.setImageBitmap(bitmap);
+                            } else {
+                                Log.d(LOG_TAG + "onBindViewHolder", "position:" + position + " " +
+                                        "ImageList key:" + entry.getKey() + " value:" + entry
+                                        .getValue() + " no bitmap");
+                                viewHolder.imageView.setImageDrawable(null);
+                            }
+                        }
                     } else {
                         viewHolder.textView.setText(R.string.load_failed);
                     }
-                }
-
-                viewHolder.rootItem.setTag(entry.getKey());
-
-                Bitmap bitmap = cacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE + entry
-                        .getKey());
-                if (bitmap != null) {
-                    viewHolder.imageView.setImageBitmap(bitmap);
-                } else {
-                    Log.d(LOG_TAG + "onBindViewHolder", "position:" + position + " ImageList " +
-                            " key:" + entry.getKey() + " value:" + entry.getValue() + " no bitmap");
-                    viewHolder.imageView.setImageDrawable(null);
                 }
 
                 holder.imageGridLayout.addView(viewHolder.rootItem, imageRecycler.getLayoutParams
@@ -234,22 +252,20 @@ public class ShiftChangeContentRecyclerViewAdapter extends RecyclerView
 
                 // 一个音频布局控件
                 ShiftChangeContentAudioViewHolder viewHolder = audioRecycler.getViewHolder();
-
-                viewHolder.imageView.setImageResource(R.drawable.audio_image_list);
-
                 viewHolder.rootItem.setTag(entry.getKey());
+                viewHolder.imageView.setImageResource(R.drawable.audio_image_list);
 
                 if (entry.getValue() > -1 && entry.getValue() < 100) {
                     viewHolder.textView.setText(entry.getValue() + "%");
                 }
 
                 if (entry.getValue() == 100) {
-
                     viewHolder.textView.setText(AudioFileLengthFunction.getFunction()
                             .getAudioLength(cacheTool, entry.getKey()));
                 }
 
-                holder.audioGridLayout.addView(viewHolder.rootItem);
+                holder.audioGridLayout.addView(viewHolder.rootItem, audioRecycler.getLayoutParams
+                        ());
 
                 // 此处绑定事件
                 if (bindGridItemViewHolderListener != null) {

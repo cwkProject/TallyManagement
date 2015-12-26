@@ -53,10 +53,8 @@ public class ShiftChangeContentImageRecycler {
         if (!stack.empty()) {
             return stack.pop();
         } else {
-            ShiftChangeContentImageViewHolder viewHolder = new ShiftChangeContentImageViewHolder
-                    (context);
 
-            return viewHolder;
+            return new ShiftChangeContentImageViewHolder(context);
         }
     }
 
@@ -86,8 +84,9 @@ public class ShiftChangeContentImageRecycler {
 
         // 创建一个GridLayout布局属性
         GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(GridLayout.spec
-                (GridLayout.UNDEFINED), GridLayout.spec(GridLayout.UNDEFINED, GridLayout.LEFT));
+                (GridLayout.UNDEFINED), GridLayout.spec(GridLayout.UNDEFINED, 1f));
         layoutParams.height = size;
+        layoutParams.width = size;
 
         return layoutParams;
     }

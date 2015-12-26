@@ -59,8 +59,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * 交接班正文内容列表片段
@@ -79,7 +82,7 @@ public class ShiftChangeContentFragment extends Fragment {
     /**
      * 线程池线程数
      */
-    private static final int POOL_COUNT = Runtime.getRuntime().availableProcessors() * 2 + 2;
+    private static final int POOL_COUNT = Runtime.getRuntime().availableProcessors() * 3 + 2;
 
     /**
      * 控件集
@@ -254,10 +257,15 @@ public class ShiftChangeContentFragment extends Fragment {
                             imageViewHolder.rootItem.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    // 重新下载
+                                    // 重新传输
                                     shiftChangeContent.getImageList().put(key, 0);
                                     imageViewHolder.textView.setText("0%");
-                                    downloadImage(shiftChangeContent.getToken(), key);
+
+                                    if (shiftChangeContent.isSend()) {
+                                        uploadImage(shiftChangeContent.getToken(), key);
+                                    } else {
+                                        downloadImage(shiftChangeContent.getToken(), key);
+                                    }
                                 }
                             });
                         } else {
@@ -286,10 +294,14 @@ public class ShiftChangeContentFragment extends Fragment {
                             audioViewHolder.rootItem.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    // 重新下载
+                                    // 重新传输
                                     shiftChangeContent.getAudioList().put(key, 0);
                                     audioViewHolder.textView.setText("0%");
-                                    downloadAudio(shiftChangeContent.getToken(), key);
+                                    if (shiftChangeContent.isSend()) {
+                                        uploadAudio(shiftChangeContent.getToken(), key);
+                                    } else {
+                                        downloadAudio(shiftChangeContent.getToken(), key);
+                                    }
                                 }
                             });
                         } else {
@@ -456,22 +468,50 @@ public class ShiftChangeContentFragment extends Fragment {
             public void run() {
                 // 获取新消息
                 List<ShiftChange> shiftChangeList = viewHolder.shiftChangeFunction.next();
-                List<ShiftChangeContent> shiftChangeContentList = new ArrayList<>();
 
-                Stack<Runnable> runnableList = new Stack<>();
+                if (!shiftChangeList.isEmpty()) {
+                    List<ShiftChangeContent> shiftChangeContentList = new ArrayList<>
+                            (shiftChangeList.size());
+                    // 数据转换校验任务
+                    List<Callable<ShiftChangeContent>> callableList = new ArrayList<>
+                            (shiftChangeList.size());
 
-                // 装配检测校准消息
-                for (ShiftChange shiftChange : shiftChangeList) {
-                    // 添加到列表
-                    shiftChangeContentList.add(0, checkOldData(shiftChange, runnableList));
-                }
-                // 通知界面改变
-                notifyAdapter(shiftChangeContentList, true);
-                viewHolder.loading = false;
+                    // 下载任务栈
+                    final Stack<Runnable> runnableList = new Stack<>();
 
-                // 执行下载任务
-                while (!runnableList.empty()) {
-                    viewHolder.taskExecutor.submit(runnableList.pop());
+                    // 装配检测校准消息
+                    for (final ShiftChange shiftChange : shiftChangeList) {
+                        callableList.add(0, new Callable<ShiftChangeContent>() {
+                            @Override
+                            public ShiftChangeContent call() throws Exception {
+                                return checkOldData(shiftChange, runnableList);
+                            }
+                        });
+                    }
+
+                    try {
+                        List<Future<ShiftChangeContent>> futureList = viewHolder.taskExecutor
+                                .invokeAll(callableList);
+
+                        // 提取数据
+                        for (Future<ShiftChangeContent> future : futureList) {
+                            shiftChangeContentList.add(future.get());
+                        }
+
+                        // 通知界面改变
+                        notifyAdapter(shiftChangeContentList, true);
+                        viewHolder.loading = false;
+
+                        // 执行下载任务
+                        while (!runnableList.empty()) {
+                            viewHolder.taskExecutor.submit(runnableList.pop());
+                        }
+
+                    } catch (InterruptedException e) {
+                        Log.e(LOG_TAG + "loadOldData", "InterruptedException is " + e.getMessage());
+                    } catch (ExecutionException e) {
+                        Log.e(LOG_TAG + "loadOldData", "ExecutionException is " + e.getMessage());
+                    }
                 }
             }
         });
@@ -554,11 +594,12 @@ public class ShiftChangeContentFragment extends Fragment {
 
                 // 仅对无任务的数据进行检测
                 if (shiftChangeContent.getAudioList().get(entry.getKey()) == 100) {
-                    // 尝试获取音频文件
-                    File file = viewHolder.contentCacheTool.getForFile(entry.getKey());
+                    // 尝试获取音频长度
+                    String length = AudioFileLengthFunction.getFunction().getAudioLength
+                            (viewHolder.contentCacheTool, entry.getKey());
 
-                    if (file == null || !file.exists()) {
-                        // 音频文件已不存在
+                    if (length == null) {
+                        // 音频文件不存在或损坏
                         Log.i(LOG_TAG + "checkOldData", "key:" + entry.getKey() + "no audio");
                         // 修正进度
                         shiftChangeContent.getAudioList().put(entry.getKey(), 0);
@@ -703,11 +744,11 @@ public class ShiftChangeContentFragment extends Fragment {
                         shiftChange.setAudioUrlList(map);
                     }
 
-                    // 保存数据
-                    viewHolder.shiftChangeFunction.save(shiftChange);
-
                     // 更新到界面
                     notifyAdapter(fillData(shiftChange, 0), false);
+
+                    // 保存数据
+                    viewHolder.shiftChangeFunction.save(shiftChange);
 
                     if (shiftChange.getImageUrlList() != null) {
                         // 上传图片
@@ -957,80 +998,78 @@ public class ShiftChangeContentFragment extends Fragment {
 
         // 找出要更新进度的资源在数据源列表中的位置
         while (position < viewHolder.dataList.size()) {
-            if (viewHolder.dataList.get(position).getToken().equals(token)) {
+
+            ShiftChangeContent shiftChangeContent = viewHolder.dataList.get(position);
+
+            if (shiftChangeContent.getToken().equals(token)) {
+
+                Log.i(LOG_TAG + "updateProgress", "this token:" + token + " key:" + key + " " +
+                        "source " +
+                        "position:" + position);
+
+                // 尝试找出当前显示的资源项布局管理
+                Object holder = findGridLayoutItemViewHolder(position, key, type);
+
+                switch (type) {
+                    case StaticValue.TypeTag.TYPE_IMAGE_CONTENT:
+                        // 图片类型
+                        Map<String, Integer> imageMap = shiftChangeContent.getImageList();
+                        if (imageMap != null && imageMap.containsKey(key)) {
+
+                            int oldProgress = imageMap.get(key);
+
+                            if (oldProgress >= 0 && oldProgress < 100) {
+                                // 此状态为正在加载，其余可能是迟到线程
+                                imageMap.put(key, progress);
+
+                                // 同步更新界面
+                                if (holder != null) {
+                                    final ShiftChangeContentImageViewHolder imageViewHolder =
+                                            (ShiftChangeContentImageViewHolder) holder;
+
+                                    imageViewHolder.textView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            imageViewHolder.textView.setText(progress + "%");
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        break;
+                    case StaticValue.TypeTag.TYPE_AUDIO_CONTENT:
+                        // 音频类型
+                        Map<String, Integer> audioMap = shiftChangeContent.getAudioList();
+                        if (audioMap != null && audioMap.containsKey(key)) {
+
+                            int oldProgress = audioMap.get(key);
+
+                            if (oldProgress >= 0 && oldProgress < 100) {
+                                // 此状态为正在加载，其余可能是迟到线程
+                                audioMap.put(key, progress);
+                                // 同步更新界面
+                                if (holder != null) {
+                                    final ShiftChangeContentAudioViewHolder audioViewHolder =
+                                            (ShiftChangeContentAudioViewHolder) holder;
+
+                                    audioViewHolder.textView.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            audioViewHolder.textView.setText(progress + "%");
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        break;
+                }
+
                 break;
             } else {
                 position++;
             }
         }
-
-        // 找出要更新的资源键值对
-        if (position < viewHolder.dataList.size()) {
-            Log.i(LOG_TAG + "updateProgress", "this token:" + token + " key:" + key + " source " +
-                    "position:" + position);
-
-            // 尝试找出当前显示的资源项布局管理
-            Object holder = findGridLayoutItemViewHolder(position, key, type);
-
-            switch (type) {
-                case StaticValue.TypeTag.TYPE_IMAGE_CONTENT:
-                    // 图片类型
-                    Map<String, Integer> imageMap = viewHolder.dataList.get(position)
-                            .getImageList();
-                    if (imageMap != null && imageMap.containsKey(key)) {
-
-                        int oldProgress = imageMap.get(key);
-
-                        if (oldProgress >= 0 && oldProgress < 100) {
-                            // 此状态为正在加载，其余可能是迟到线程
-                            imageMap.put(key, progress);
-
-                            // 同步更新界面
-                            if (holder != null) {
-                                final ShiftChangeContentImageViewHolder imageViewHolder =
-                                        (ShiftChangeContentImageViewHolder) holder;
-
-                                imageViewHolder.textView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        imageViewHolder.textView.setText(progress + "%");
-                                    }
-                                });
-                            }
-                        }
-                    }
-
-                    break;
-                case StaticValue.TypeTag.TYPE_AUDIO_CONTENT:
-                    // 音频类型
-                    Map<String, Integer> audioMap = viewHolder.dataList.get(position)
-                            .getAudioList();
-                    if (audioMap != null && audioMap.containsKey(key)) {
-
-                        int oldProgress = audioMap.get(key);
-
-                        if (oldProgress >= 0 && oldProgress < 100) {
-                            // 此状态为正在加载，其余可能是迟到线程
-                            audioMap.put(key, progress);
-                            // 同步更新界面
-                            if (holder != null) {
-                                final ShiftChangeContentAudioViewHolder audioViewHolder =
-                                        (ShiftChangeContentAudioViewHolder) holder;
-
-                                audioViewHolder.textView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        audioViewHolder.textView.setText(progress + "%");
-                                    }
-                                });
-                            }
-                        }
-                    }
-
-                    break;
-            }
-        }
-
     }
 
     /**
@@ -1090,7 +1129,8 @@ public class ShiftChangeContentFragment extends Fragment {
     private void loadFinish(final String token, final String key, int type, final boolean state) {
         Log.i(LOG_TAG + "loadFinish", "this token:" + token + " key:" + key + " type:" + type + "" +
                 " isSuccess:" + state);
-        if (viewHolder.contentCacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE + key) == null) {
+        if (StaticValue.TypeTag.TYPE_IMAGE_CONTENT == type && viewHolder.contentCacheTool
+                .getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE + key) == null) {
             // 生成缩略图
             reloadImage(key);
         }
@@ -1099,143 +1139,145 @@ public class ShiftChangeContentFragment extends Fragment {
 
         // 找出要更新进度的资源在数据源列表中的位置
         while (position < viewHolder.dataList.size()) {
-            if (viewHolder.dataList.get(position).getToken().equals(token)) {
+            ShiftChangeContent shiftChangeContent = viewHolder.dataList.get(position);
+            final boolean isSend = shiftChangeContent.isSend();
+            if (shiftChangeContent.getToken().equals(token)) {
+
+                Log.i(LOG_TAG + "loadFinish", "this token:" + token + " key:" + key + " type:" +
+                        type + " isSuccess:" + state + " source position:" + position);
+
+                // 尝试找出当前显示的资源项布局管理
+                Object holder = findGridLayoutItemViewHolder(position, key, type);
+
+                switch (type) {
+                    case StaticValue.TypeTag.TYPE_IMAGE_CONTENT:
+                        // 图片类型
+                        final Map<String, Integer> imageMap = shiftChangeContent.getImageList();
+                        if (imageMap != null && imageMap.containsKey(key)) {
+                            imageMap.put(key, state ? 100 : -1);
+                        }
+
+                        // 同步更新界面
+                        if (holder != null) {
+                            final ShiftChangeContentImageViewHolder imageViewHolder =
+                                    (ShiftChangeContentImageViewHolder) holder;
+
+                            if (state) {
+                                // 成功
+                                imageViewHolder.rootItem.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 修改文字显示
+                                        imageViewHolder.textView.setText(null);
+
+                                        // 修改图片
+                                        imageViewHolder.imageView.setImageBitmap(viewHolder
+                                                .contentCacheTool.getForBitmap(ImageUtil
+                                                        .THUMBNAIL_CACHE_PRE + key));
+
+                                        // 添加点击事件
+                                        imageViewHolder.rootItem.setOnClickListener(new View
+                                                .OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                showImage(imageViewHolder.imageView, key);
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                // 失败
+                                imageViewHolder.rootItem.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 修改文字显示
+                                        imageViewHolder.textView.setText(R.string.load_failed);
+
+                                        // 添加点击事件
+                                        imageViewHolder.rootItem.setOnClickListener(new View
+                                                .OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                assert imageMap != null;
+                                                imageMap.put(key, 0);
+                                                imageViewHolder.textView.setText("0%");
+
+                                                if (isSend) {
+                                                    uploadImage(token, key);
+                                                } else {
+                                                    downloadImage(token, key);
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+
+                        break;
+                    case StaticValue.TypeTag.TYPE_AUDIO_CONTENT:
+                        // 音频类型
+                        final Map<String, Integer> audioMap = shiftChangeContent.getAudioList();
+                        if (audioMap != null && audioMap.containsKey(key)) {
+                            audioMap.put(key, state ? 100 : -1);
+                        }
+
+                        // 同步更新界面
+                        if (holder != null) {
+                            final ShiftChangeContentAudioViewHolder audioViewHolder =
+                                    (ShiftChangeContentAudioViewHolder) holder;
+
+                            if (state) {
+                                // 成功
+                                audioViewHolder.rootItem.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 修改文字显示
+                                        audioViewHolder.textView.setText(AudioFileLengthFunction
+                                                .getFunction().getAudioLength(viewHolder
+                                                        .contentCacheTool, key));
+
+                                        // 添加点击事件
+                                        audioViewHolder.rootItem.setOnClickListener(new View
+                                                .OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                playAudio(key, audioViewHolder.imageView);
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                // 失败
+                                audioViewHolder.rootItem.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // 修改文字显示
+                                        audioViewHolder.textView.setText(R.string.load_failed);
+
+                                        // 添加点击事件
+                                        audioViewHolder.rootItem.setOnClickListener(new View
+                                                .OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                assert audioMap != null;
+                                                audioMap.put(key, 0);
+                                                audioViewHolder.textView.setText("0%");
+                                                if (isSend) {
+                                                    uploadAudio(token, key);
+                                                } else
+                                                    downloadAudio(token, key);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                        break;
+                }
                 break;
             } else {
                 position++;
-            }
-        }
-
-        // 更新数据
-        if (position < viewHolder.dataList.size()) {
-            Log.i(LOG_TAG + "loadFinish", "this token:" + token + " key:" + key + " type:" + type
-                    + " isSuccess:" + state + " source position:" + position);
-
-            final int finalPosition = position;
-
-            // 尝试找出当前显示的资源项布局管理
-            Object holder = findGridLayoutItemViewHolder(position, key, type);
-
-            switch (type) {
-                case StaticValue.TypeTag.TYPE_IMAGE_CONTENT:
-                    // 图片类型
-                    final Map<String, Integer> imageMap = viewHolder.dataList.get(position)
-                            .getImageList();
-                    if (imageMap != null && imageMap.containsKey(key)) {
-                        imageMap.put(key, state ? 100 : -1);
-                    }
-
-                    // 同步更新界面
-                    if (holder != null) {
-                        final ShiftChangeContentImageViewHolder imageViewHolder =
-                                (ShiftChangeContentImageViewHolder) holder;
-
-                        if (state) {
-                            // 成功
-                            imageViewHolder.rootItem.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // 修改文字显示
-                                    imageViewHolder.textView.setText(null);
-
-                                    // 修改图片
-                                    imageViewHolder.imageView.setImageBitmap(viewHolder
-                                            .contentCacheTool.getForBitmap(ImageUtil
-                                                    .THUMBNAIL_CACHE_PRE + key));
-
-                                    // 添加点击事件
-                                    imageViewHolder.rootItem.setOnClickListener(new View
-                                            .OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            showImage(imageViewHolder.imageView, key);
-                                        }
-                                    });
-                                }
-                            });
-                        } else {
-                            // 失败
-                            imageViewHolder.rootItem.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // 修改文字显示
-                                    imageViewHolder.textView.setText(R.string.load_failed);
-
-                                    // 添加点击事件
-                                    imageViewHolder.rootItem.setOnClickListener(new View
-                                            .OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            assert imageMap != null;
-                                            imageMap.put(key, 0);
-                                            imageViewHolder.textView.setText("0%");
-                                            downloadImage(token, key);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    }
-
-                    break;
-                case StaticValue.TypeTag.TYPE_AUDIO_CONTENT:
-                    // 音频类型
-                    final Map<String, Integer> audioMap = viewHolder.dataList.get(position)
-                            .getAudioList();
-                    if (audioMap != null && audioMap.containsKey(key)) {
-                        audioMap.put(key, state ? 100 : -1);
-                    }
-
-                    // 同步更新界面
-                    if (holder != null) {
-                        final ShiftChangeContentAudioViewHolder audioViewHolder =
-                                (ShiftChangeContentAudioViewHolder) holder;
-
-                        if (state) {
-                            // 成功
-                            audioViewHolder.rootItem.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // 修改文字显示
-                                    audioViewHolder.textView.setText(AudioFileLengthFunction
-                                            .getFunction().getAudioLength(viewHolder
-                                                    .contentCacheTool, key));
-
-                                    // 添加点击事件
-                                    audioViewHolder.rootItem.setOnClickListener(new View
-                                            .OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            playAudio(key, audioViewHolder.imageView);
-                                        }
-                                    });
-                                }
-                            });
-                        } else {
-                            // 失败
-                            audioViewHolder.rootItem.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // 修改文字显示
-                                    audioViewHolder.textView.setText(R.string.load_failed);
-
-                                    // 添加点击事件
-                                    audioViewHolder.rootItem.setOnClickListener(new View
-                                            .OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            assert audioMap != null;
-                                            audioMap.put(key, 0);
-                                            audioViewHolder.textView.setText("0%");
-                                            downloadImage(token, key);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    }
-
-                    break;
             }
         }
     }

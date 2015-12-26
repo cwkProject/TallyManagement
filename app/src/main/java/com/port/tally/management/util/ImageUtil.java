@@ -51,7 +51,7 @@ public class ImageUtil {
     /**
      * 线程池线程数
      */
-    private static final int POOL_COUNT = Runtime.getRuntime().availableProcessors() * 2 + 2;
+    private static final int POOL_COUNT = Runtime.getRuntime().availableProcessors() * 3 + 2;
 
     /**
      * 线程池

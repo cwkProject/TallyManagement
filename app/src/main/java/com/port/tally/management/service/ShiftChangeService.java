@@ -25,9 +25,11 @@ import org.mobile.library.cache.util.CacheTool;
 import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.network.util.NetworkProgressListener;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 交接班文件上传下载服务
@@ -255,7 +257,7 @@ public class ShiftChangeService extends Service {
         super.onCreate();
         Log.i(LOG_TAG + "onCreate", "service create");
 
-        progressList = new HashMap<>();
+        progressList = new ConcurrentHashMap<>();
 
         cacheTool = CacheManager.getCacheTool("shift_change_content");
 
@@ -335,9 +337,12 @@ public class ShiftChangeService extends Service {
             if (map.containsKey(key)) {
                 Log.i(LOG_TAG + "removeTask", "token:" + token + " key:" + key + ", key exist, " +
                         "remove " + key);
+
                 map.remove(key);
                 if (map.isEmpty()) {
-                    Log.i(LOG_TAG + "removeTask", "token:" + token + " key:" + key + ", token " +
+                    Log.i(LOG_TAG + "removeTask", "token:" + token + " key:" + key + ", token" +
+                            " " +
+
                             "children empty, remove " + token);
                     progressList.remove(token);
                 }
@@ -451,14 +456,22 @@ public class ShiftChangeService extends Service {
      */
     private void uploadImage(final SingleUploadFileWork singleUploadFileWork, final String token,
                              String key) {
-        ImageUtil.processPicture(cacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE + key),
-                cacheTool, key, new ImageUtil.ProcessFinishListener() {
-                    @Override
-                    public void finish(CacheTool cacheTool, String key) {
-                        singleUploadFileWork.beginExecute(token, cacheTool.getForFile(key)
-                                .getPath(), "jpg");
-                    }
-                });
+        File file = cacheTool.getForFile(ImageUtil.COMPRESSION_IMAGE_CACHE_PRE + key);
+
+        if (file == null || !file.exists()) {
+
+            ImageUtil.processPicture(cacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE + key)
+                    , cacheTool, key, new ImageUtil.ProcessFinishListener() {
+
+                @Override
+                public void finish(CacheTool cacheTool, String key) {
+                    singleUploadFileWork.beginExecute(token, cacheTool.getForFile(key).getPath(),
+                            "jpg");
+                }
+            });
+        } else {
+            singleUploadFileWork.beginExecute(token, cacheTool.getForFile(key).getPath(), "jpg");
+        }
     }
 
     /**

@@ -30,11 +30,6 @@ public class ShiftChangeContentAudioRecycler {
     private Context context = null;
 
     /**
-     * 布局属性
-     */
-    private GridLayout.LayoutParams layoutParams = null;
-
-    /**
      * 控件大小
      */
     private int size = 0;
@@ -59,10 +54,7 @@ public class ShiftChangeContentAudioRecycler {
         if (!stack.empty()) {
             return stack.pop();
         } else {
-            ShiftChangeContentAudioViewHolder viewHolder = new ShiftChangeContentAudioViewHolder
-                    (context);
-            //viewHolder.rootItem.setLayoutParams(layoutParams);
-            return viewHolder;
+            return new ShiftChangeContentAudioViewHolder(context);
         }
     }
 
@@ -91,8 +83,9 @@ public class ShiftChangeContentAudioRecycler {
     public GridLayout.LayoutParams getLayoutParams() {
         // 创建一个GridLayout布局属性
         GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(GridLayout.spec
-                (GridLayout.UNDEFINED, GridLayout.FILL), GridLayout.spec(GridLayout.UNDEFINED));
+                (GridLayout.UNDEFINED), GridLayout.spec(GridLayout.UNDEFINED, 1f));
         layoutParams.height = size;
+        layoutParams.width = size;
 
         return layoutParams;
     }

@@ -216,6 +216,9 @@ public interface StaticValue {
      */
     String UPLOAD_FILE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/UploadFile.aspx";
 
+    // 调试地址
+    // String UPLOAD_FILE_URL="http://192.168.155.3:8080/Service/Handover/UploadFile.aspx";
+
     /**
      * 交接班提交接口地址
      */
@@ -237,8 +240,8 @@ public interface StaticValue {
     /**
      * 获取指定编号交接班记录的接口地址
      */
-    String SHIFT_CHANGE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/GetOneHandoverRecord" +
-            ".aspx";
+    String SHIFT_CHANGE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/GetOneHandoverRecord"
+            + ".aspx";
 
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";
