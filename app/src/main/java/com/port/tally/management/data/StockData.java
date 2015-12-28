@@ -5,9 +5,7 @@ package com.port.tally.management.data;
 
 import android.util.Log;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,7 +17,7 @@ import java.util.Map;
  * @version 1.0 2015/10/13
  * @since 1.0
  */
-public class StockData extends JsonDataModel {
+public class StockData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -93,23 +91,9 @@ public class StockData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject jsonObject) throws JSONException {
-        // 得到执行结果
-        String resultState = jsonObject.getString("IsSuccess");
-
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
-
-    @Override
-    protected String onRequestMessage(boolean b, JSONObject jsonObject) throws JSONException {
-        return jsonObject.getString("Message");
-    }
-
-    @Override
-    protected void onRequestSuccess(JSONObject jsonObject) throws JSONException {
-
+    protected void onExtractData(JSONObject jsonData) throws Exception {
         // 结果数据
-        JSONObject data = jsonObject.getJSONObject("Data");
+        JSONObject data = jsonData.getJSONObject("Data");
 
         String[] order = data.getString("Order").split("[+]");
 

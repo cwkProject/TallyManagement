@@ -1,11 +1,11 @@
 package com.port.tally.management.data;
 /**
- * Created by 超悟空 on 2015/9/21.
+ * Created by 超悟空 on 2015/12/28.
  */
 
 import android.util.Log;
 
-import com.port.tally.management.bean.Storage;
+import com.port.tally.management.bean.Employee;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,23 +15,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 货场列表任务数据模型
+ * 获取员工信息的数据模型
  *
  * @author 超悟空
- * @version 1.0 2015/10/12
+ * @version 1.0 2015/12/28
  * @since 1.0
  */
-public class StorageListData extends SimpleJsonDataModel {
+public class EmployeeData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "StorageListData.";
+    private static final String LOG_TAG = "EmployeeData.";
 
     /**
-     * 货代列表
+     * 存放员工信息列表
      */
-    private List<Storage> storageList = null;
+    private List<Employee> dataList = null;
 
     /**
      * 公司编码
@@ -39,12 +39,12 @@ public class StorageListData extends SimpleJsonDataModel {
     private String company = null;
 
     /**
-     * 获取货代列表
+     * 获取员工信息列表
      *
-     * @return 货代列表
+     * @return 员工信息列表
      */
-    public List<Storage> getStorageList() {
-        return storageList;
+    public List<Employee> getDataList() {
+        return dataList;
     }
 
     /**
@@ -65,28 +65,27 @@ public class StorageListData extends SimpleJsonDataModel {
     @Override
     protected void onExtractData(JSONObject jsonData) throws Exception {
         JSONArray jsonArray = jsonData.getJSONArray("Data");
-        Log.i(LOG_TAG + "onExtractData", "get storageList count is " + jsonArray.length());
+        Log.i(LOG_TAG + "onExtractData", "get data count is " + jsonArray.length());
 
-        // 新建货主列表
-        storageList = new ArrayList<>();
+        // 新建列表
+        dataList = new ArrayList<>();
 
         for (int i = 0; i < jsonArray.length(); i++) {
 
             JSONArray jsonRow = jsonArray.getJSONArray(i);
 
             if (jsonRow.length() > 2) {
-                // 一条货主数据
-                Storage storage = new Storage();
-                storage.setId(jsonRow.getString(0));
-                storage.setName(jsonRow.getString(1));
-                storage.setShortCode(jsonRow.getString(2));
-                storage.setCompany(company);
+                // 一条数据
+                Employee employee = new Employee();
+                employee.setId(jsonRow.getString(0));
+                employee.setName(jsonRow.getString(1));
+                employee.setShortCode(jsonRow.getString(2));
 
                 // 加入列表
-                storageList.add(storage);
+                dataList.add(employee);
             }
         }
 
-        Log.i(LOG_TAG + "onExtractData", "storage list count is " + storageList.size());
+        Log.i(LOG_TAG + "onExtractData", "data list count is " + dataList.size());
     }
 }

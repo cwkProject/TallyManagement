@@ -243,6 +243,11 @@ public interface StaticValue {
     String SHIFT_CHANGE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/GetOneHandoverRecord"
             + ".aspx";
 
+    /**
+     * 获取员工列表地址
+     */
+    String EMPLOYEE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/GetEmployee.aspx";
+
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";
     //地图数据请求地址
