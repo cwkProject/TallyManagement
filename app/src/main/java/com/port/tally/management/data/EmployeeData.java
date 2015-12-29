@@ -80,6 +80,7 @@ public class EmployeeData extends SimpleJsonDataModel {
                 employee.setId(jsonRow.getString(0));
                 employee.setName(jsonRow.getString(1));
                 employee.setShortCode(jsonRow.getString(2));
+                employee.setCompany(company);
 
                 // 加入列表
                 dataList.add(employee);

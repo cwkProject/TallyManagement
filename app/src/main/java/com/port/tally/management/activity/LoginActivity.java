@@ -7,11 +7,8 @@ import android.content.Intent;
 
 import com.port.tally.management.R;
 import com.port.tally.management.function.CodeListManager;
-import com.port.tally.management.function.ForwarderListFunction;
-import com.port.tally.management.function.StorageListFunction;
 import com.port.tally.management.util.StaticValue;
 
-import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.activity.BaseLoginActivity;
 
 
@@ -64,9 +61,8 @@ public class LoginActivity extends BaseLoginActivity {
      * 登录成功后加载数据
      */
     private void onLoginLoadData() {
-        CodeListManager.put(StaticValue.CodeListTag.FORWARDER_LIST, new ForwarderListFunction
-                (this, GlobalApplication.getGlobal().getLoginStatus().getCodeCompany()), true);
-        CodeListManager.put(StaticValue.CodeListTag.STORAGE_LIST, new StorageListFunction(this,
-                GlobalApplication.getGlobal().getLoginStatus().getCodeCompany()), true);
+        CodeListManager.create(StaticValue.CodeListTag.FORWARDER_LIST, true);
+        CodeListManager.create(StaticValue.CodeListTag.STORAGE_LIST, true);
+        CodeListManager.create(StaticValue.CodeListTag.EMPLOYEE_LIST, true);
     }
 }

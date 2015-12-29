@@ -70,6 +70,11 @@ public interface StaticValue {
          * 货位编码取值标签
          */
         String POSITION_CODE_TAG = "position_code_tag";
+
+        /**
+         * 员工取值标签
+         */
+        String EMPLOYEE_TAG = "employee_tag";
     }
 
     /**
@@ -111,6 +116,10 @@ public interface StaticValue {
          */
         String COMPANY_LIST = "company_list";
 
+        /**
+         * 员工
+         */
+        String EMPLOYEE_LIST = "employee_list";
     }
 
     String HTTP_GET_SAMPLE_URL = "http://168.100.1.218/wlkg/Service/";

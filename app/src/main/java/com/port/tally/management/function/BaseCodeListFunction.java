@@ -49,6 +49,11 @@ public abstract class BaseCodeListFunction<DataModel, Condition> {
     private volatile boolean loading = false;
 
     /**
+     * 标识工具加载是否被取消
+     */
+    private volatile boolean canceled = false;
+
+    /**
      * 数据提取条件参数
      */
     private Condition parameter;
@@ -94,6 +99,13 @@ public abstract class BaseCodeListFunction<DataModel, Condition> {
     }
 
     /**
+     * 取消数据加载，将不发出完成通知
+     */
+    public void cancel() {
+        canceled = true;
+    }
+
+    /**
      * 数据初始化
      */
     public void onCreate() {
@@ -114,7 +126,9 @@ public abstract class BaseCodeListFunction<DataModel, Condition> {
             Log.i(LOG_TAG + "onCreate", "from network");
             onLoadFromNetWork(parameter);
         } else {
-            onNotify(context);
+            if (!canceled) {
+                onNotify(context);
+            }
             // 加载结束
             loading = false;
         }
@@ -178,7 +192,9 @@ public abstract class BaseCodeListFunction<DataModel, Condition> {
         // 保存数据
         Log.i(LOG_TAG + "netWorkEndSetData", "onSaveData is invoked");
         onSaveData(operator, dataList);
-        onNotify(context);
+        if (!canceled) {
+            onNotify(context);
+        }
         // 加载结束
         loading = false;
     }
