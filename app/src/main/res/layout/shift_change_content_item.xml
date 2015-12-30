@@ -63,19 +63,19 @@
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/shift_change_content_Image_gridLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                app:alignmentMode="alignBounds"
+                app:alignmentMode="alignMargins"
                 app:columnCount="2"
                 app:useDefaultMargins="true"/>
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/shift_change_content_audio_gridLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                app:alignmentMode="alignBounds"
+                app:alignmentMode="alignMargins"
                 app:columnCount="4"
                 app:useDefaultMargins="true"/>
 

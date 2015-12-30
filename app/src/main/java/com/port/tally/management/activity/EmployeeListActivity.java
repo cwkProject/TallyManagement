@@ -5,14 +5,13 @@ package com.port.tally.management.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.port.tally.management.R;
 import com.port.tally.management.bean.Employee;
-import com.port.tally.management.holder.ISelectListener;
+import com.port.tally.management.fragment.EmployeeFragment;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.operate.DataChangeObserver;
@@ -78,24 +77,23 @@ public class EmployeeListActivity extends AppCompatActivity {
      * 初始化数据列表
      */
     private void initListFragment() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id
-                .activity_employee_list_fragment);
 
-        if (fragment != null && fragment instanceof ISelectListener) {
-            ISelectListener<Employee> select = (ISelectListener<Employee>) fragment;
+        EmployeeFragment fragment = new EmployeeFragment();
 
-            select.setSelectedListener(new DataChangeObserver<Employee>() {
-                @Override
-                public void notifyDataChange(Employee data) {
-                    Intent intent = new Intent();
+        fragment.setSelectedListener(new DataChangeObserver<Employee>() {
+            @Override
+            public void notifyDataChange(Employee data) {
+                Intent intent = new Intent();
 
-                    intent.putExtra(StaticValue.IntentTag.EMPLOYEE_TAG, data);
+                intent.putExtra(StaticValue.IntentTag.EMPLOYEE_TAG, data);
 
-                    setResult(RESULT_OK, intent);
+                setResult(RESULT_OK, intent);
 
-                    finish();
-                }
-            });
-        }
+                finish();
+            }
+        });
+
+        getSupportFragmentManager().beginTransaction().replace(R.id
+                .activity_employee_list_frameLayout, fragment).commit();
     }
 }

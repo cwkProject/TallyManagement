@@ -456,21 +456,36 @@ public class ShiftChangeService extends Service {
      */
     private void uploadImage(final SingleUploadFileWork singleUploadFileWork, final String token,
                              String key) {
-        File file = cacheTool.getForFile(ImageUtil.COMPRESSION_IMAGE_CACHE_PRE + key);
+
+        final String originalKey = key;
+
+        File file = cacheTool.getForFile(ImageUtil.COMPRESSION_IMAGE_CACHE_PRE + originalKey);
 
         if (file == null || !file.exists()) {
 
-            ImageUtil.processPicture(cacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE + key)
-                    , cacheTool, key, new ImageUtil.ProcessFinishListener() {
+            ImageUtil.processPicture(cacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE +
+                    originalKey), cacheTool, originalKey, new ImageUtil.ProcessFinishListener() {
 
                 @Override
                 public void finish(CacheTool cacheTool, String key) {
-                    singleUploadFileWork.beginExecute(token, cacheTool.getForFile(key).getPath(),
-                            "jpg");
+                    if (key != null) {
+                        // 压缩成功
+                        singleUploadFileWork.beginExecute(token, cacheTool.getForFile(key)
+                                .getPath(), "jpg");
+                    } else {
+                        // 压缩失败
+                        // 移除任务
+                        if (removeTask(token, originalKey)) {
+                            // 上传失败
+                            sendMessage(LOAD_FAILED, token, originalKey, StaticValue.TypeTag
+                                    .TYPE_IMAGE_CONTENT, -1);
+                        }
+                    }
                 }
             });
         } else {
-            singleUploadFileWork.beginExecute(token, cacheTool.getForFile(key).getPath(), "jpg");
+            singleUploadFileWork.beginExecute(token, cacheTool.getForFile(ImageUtil
+                    .COMPRESSION_IMAGE_CACHE_PRE + originalKey).getPath(), "jpg");
         }
     }
 

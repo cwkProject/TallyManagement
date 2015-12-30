@@ -20,8 +20,12 @@ import android.widget.ImageView;
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.ShiftChangeAudioRecyclerViewAdapter;
 import com.port.tally.management.holder.ShiftChangeAudioViewHolder;
+import com.port.tally.management.util.StaticValue;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.mobile.library.cache.util.CacheTool;
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.operate.DataGetHandle;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
@@ -145,7 +149,7 @@ public class ShiftChangeAudioListFragment extends Fragment implements DataGetHan
         initView(rootView);
 
         // 初始化数据
-        initData(savedInstanceState);
+        initData();
 
         return rootView;
     }
@@ -176,21 +180,42 @@ public class ShiftChangeAudioListFragment extends Fragment implements DataGetHan
 
     /**
      * 初始化列表数据
-     *
-     * @param savedInstanceState 暂存数据
      */
-    private void initData(Bundle savedInstanceState) {
+    private void initData() {
 
-        if (savedInstanceState != null) {
+        String user_id = viewHolder.sendCacheTool.getForText(StaticValue.IntentTag.USER_ID_TAG);
+        if (user_id != null && !user_id.equals(GlobalApplication.getGlobal().getLoginStatus()
+                .getUserID())) {
+            // 更换了用户
+            return;
+        }
 
-            ArrayList<String> list = savedInstanceState.getStringArrayList
-                    (SAVE_AUDIO_CACHE_KEY_LIST);
+        String arrayString = viewHolder.sendCacheTool.getForText(SAVE_AUDIO_CACHE_KEY_LIST);
 
+        if (arrayString != null && !arrayString.isEmpty()) {
+            try {
+                JSONArray jsonArray = new JSONArray(arrayString);
+                List<String> keyList = new ArrayList<>();
 
-            if (list != null && !list.isEmpty()) {
-                // 使列表可见
-                viewHolder.audioRecyclerView.setVisibility(View.VISIBLE);
-                viewHolder.audioRecyclerViewAdapter.addData(0, list);
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    String key = jsonArray.getString(i);
+
+                    File file = viewHolder.sendCacheTool.getForFile(key);
+
+                    if (file != null && file.exists()) {
+                        // 音频存在
+                        keyList.add(key);
+                    }
+                }
+
+                if (!keyList.isEmpty()) {
+                    // 使列表可见
+                    viewHolder.audioRecyclerView.setVisibility(View.VISIBLE);
+                    viewHolder.audioRecyclerViewAdapter.addData(0, keyList);
+                }
+            } catch (JSONException e) {
+                Log.e(LOG_TAG + "initData", "JSONException is " + e.getMessage());
             }
         }
     }
@@ -295,15 +320,12 @@ public class ShiftChangeAudioListFragment extends Fragment implements DataGetHan
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putStringArrayList(SAVE_AUDIO_CACHE_KEY_LIST, (ArrayList<String>) viewHolder
-                .audioRecyclerViewAdapter.getDataList());
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         viewHolder.mediaPlayer.release();
+
+        // 保存数据
+        JSONArray jsonArray = new JSONArray(viewHolder.audioRecyclerViewAdapter.getDataList());
+        viewHolder.sendCacheTool.put(SAVE_AUDIO_CACHE_KEY_LIST, jsonArray.toString());
     }
 }

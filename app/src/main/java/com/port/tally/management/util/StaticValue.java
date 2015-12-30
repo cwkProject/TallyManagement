@@ -75,6 +75,11 @@ public interface StaticValue {
          * 员工取值标签
          */
         String EMPLOYEE_TAG = "employee_tag";
+
+        /**
+         * 用户编码取值标签
+         */
+        String USER_ID_TAG = "user_id_tag";
     }
 
     /**

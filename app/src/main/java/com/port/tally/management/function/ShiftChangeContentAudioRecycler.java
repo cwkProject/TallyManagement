@@ -83,7 +83,7 @@ public class ShiftChangeContentAudioRecycler {
     public GridLayout.LayoutParams getLayoutParams() {
         // 创建一个GridLayout布局属性
         GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(GridLayout.spec
-                (GridLayout.UNDEFINED), GridLayout.spec(GridLayout.UNDEFINED));
+                (GridLayout.UNDEFINED), GridLayout.spec(GridLayout.UNDEFINED,GridLayout.CENTER,1f));
         layoutParams.height = size;
         layoutParams.width = size;
 

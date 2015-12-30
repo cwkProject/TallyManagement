@@ -52,6 +52,7 @@
         <activity android:name=".activity.BalanceWeightQueryActivity"/>
         <activity android:name=".activity.BalanceWeightContentActivity"/>
         <activity android:name=".activity.ShiftChangeActivity"/>
+        <activity android:name=".activity.EmployeeListActivity"/>
         <activity
             android:name=".activity.ImageShowActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>

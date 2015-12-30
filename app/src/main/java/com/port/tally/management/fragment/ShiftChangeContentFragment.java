@@ -322,12 +322,11 @@ public class ShiftChangeContentFragment extends Fragment {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                upScroll = dy < 0;
+                upScroll = dy <= 0;
             }
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-
                 if (newState == RecyclerView.SCROLL_STATE_SETTLING && upScroll && !viewHolder
                         .loading && viewHolder.shiftChangeFunction.hasNext() && recyclerView
                         .getChildAdapterPosition(recyclerView.getChildAt(0)) <= 0) {
@@ -895,11 +894,13 @@ public class ShiftChangeContentFragment extends Fragment {
      */
     private void showImage(View view, String key) {
 
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeThumbnailScaleUpAnimation(view,
-                viewHolder.contentCacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE + key),
-                view.getWidth() / 2, view.getHeight() / 2);
+        Bitmap bitmap = viewHolder.contentCacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE +
+                key);
 
-        Intent intent = new Intent(getActivity(), ImageShowActivity.class);
+        if (bitmap == null) {
+            Log.d(LOG_TAG + "showImage", "key:" + key + "no thumbnail");
+            return;
+        }
 
         // 先从源图获取
         File file = viewHolder.contentCacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE + key);
@@ -911,6 +912,16 @@ public class ShiftChangeContentFragment extends Fragment {
                     key);
         }
 
+        if (file == null || !file.exists()) {
+            Log.d(LOG_TAG + "showImage", "key:" + key + "no compression image");
+            return;
+        }
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeThumbnailScaleUpAnimation(view,
+                viewHolder.contentCacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE + key),
+                view.getWidth() / 2, view.getHeight() / 2);
+
+        Intent intent = new Intent(getActivity(), ImageShowActivity.class);
         intent.putExtra(ImageShowActivity.IMAGE_FILE, file);
         ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
@@ -939,20 +950,21 @@ public class ShiftChangeContentFragment extends Fragment {
             viewHolder.mediaPlayer.setDataSource(viewHolder.contentCacheTool.getForFile(key)
                     .getPath());
             viewHolder.mediaPlayer.prepare();
+
+            viewHolder.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    viewHolder.audioImageView.getDrawable().setLevel(0);
+                    viewHolder.audioImageView = null;
+                }
+            });
+
+            imageView.getDrawable().setLevel(1);
+            viewHolder.mediaPlayer.start();
+
         } catch (IOException e) {
             Log.e(LOG_TAG + "initAudioList", "IOException is " + e.getMessage());
         }
-
-        viewHolder.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                viewHolder.audioImageView.getDrawable().setLevel(0);
-                viewHolder.audioImageView = null;
-            }
-        });
-
-        imageView.getDrawable().setLevel(1);
-        viewHolder.mediaPlayer.start();
     }
 
     /**
@@ -978,8 +990,15 @@ public class ShiftChangeContentFragment extends Fragment {
             return null;
         }
 
-        return viewHolder.contentCacheTool.getForBitmap(ImageUtil.createThumbnail(file,
-                viewHolder.contentCacheTool, key, viewHolder.thumbnailWidth, 0));
+        // 创建缩略图
+        String thumbnailKey = ImageUtil.createThumbnail(file, viewHolder.contentCacheTool, key,
+                viewHolder.thumbnailWidth, 0);
+
+        if (thumbnailKey != null) {
+            return viewHolder.contentCacheTool.getForBitmap(thumbnailKey);
+        } else {
+            return null;
+        }
     }
 
     /**

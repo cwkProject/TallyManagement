@@ -17,11 +17,9 @@
         android:singleLine="true"
         android:textSize="@dimen/text_view_default_text_size"/>
 
-    <fragment
-        android:id="@+id/activity_employee_list_fragment"
-        android:name="com.port.tally.management.fragment.EmployeeFragment"
+    <FrameLayout
+        android:id="@+id/activity_employee_list_frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_only_list"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

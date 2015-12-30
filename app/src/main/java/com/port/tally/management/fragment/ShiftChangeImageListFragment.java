@@ -29,8 +29,12 @@ import com.port.tally.management.adapter.ShiftChangeImageRecyclerViewAdapter;
 import com.port.tally.management.holder.ShiftChangeImageViewHolder;
 import com.port.tally.management.util.CacheKeyUtil;
 import com.port.tally.management.util.ImageUtil;
+import com.port.tally.management.util.StaticValue;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.mobile.library.cache.util.CacheTool;
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.operate.DataGetHandle;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
@@ -111,7 +115,7 @@ public class ShiftChangeImageListFragment extends Fragment implements DataGetHan
         /**
          * 存放待发送图片缓存key列表
          */
-        public ArrayList<String> sendImageCacheKeyList = null;
+        public List<String> sendImageCacheKeyList = null;
     }
 
     /**
@@ -189,7 +193,7 @@ public class ShiftChangeImageListFragment extends Fragment implements DataGetHan
         initView(rootView);
 
         // 初始化数据
-        initData(savedInstanceState);
+        initData();
 
         return rootView;
     }
@@ -231,21 +235,63 @@ public class ShiftChangeImageListFragment extends Fragment implements DataGetHan
 
     /**
      * 初始化列表数据
-     *
-     * @param savedInstanceState 暂存数据
      */
-    private void initData(Bundle savedInstanceState) {
+    private void initData() {
 
-        if (savedInstanceState != null) {
-            ArrayList<String> list = savedInstanceState.getStringArrayList
-                    (SAVE_IMAGE_CACHE_KEY_LIST);
+        String user_id = viewHolder.sendCacheTool.getForText(StaticValue.IntentTag.USER_ID_TAG);
+        if (user_id != null && !user_id.equals(GlobalApplication.getGlobal().getLoginStatus()
+                .getUserID())) {
+            // 更换了用户
+            return;
+        }
 
+        String arrayString = viewHolder.sendCacheTool.getForText(SAVE_IMAGE_CACHE_KEY_LIST);
 
-            if (list != null && !list.isEmpty()) {
-                viewHolder.sendImageCacheKeyList.addAll(list);
-                // 使图片列表可见
-                viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
-                viewHolder.imageRecyclerViewAdapter.addData(0, viewHolder.sendImageCacheKeyList);
+        if (arrayString != null && !arrayString.isEmpty()) {
+
+            try {
+                JSONArray jsonArray = new JSONArray(arrayString);
+                List<String> thumbnailKeyList = new ArrayList<>();
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    String key = jsonArray.getString(i);
+
+                    File file = viewHolder.sendCacheTool.getForFile(ImageUtil
+                            .SOURCE_IMAGE_CACHE_PRE + key);
+
+                    if (file != null && file.exists()) {
+                        // 原图存在
+                        if (viewHolder.sendCacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE +
+                                key) == null) {
+                            // 缩略图丢失
+                            String thumbnailKey = ImageUtil.createThumbnail(file, viewHolder
+                                    .sendCacheTool, key, viewHolder.thumbnailWidth, viewHolder
+                                    .thumbnailHeight);
+
+                            if (thumbnailKey == null) {
+                                // 图片异常
+                                continue;
+                            }
+                        }
+
+                        // 将该key加入列表
+                        viewHolder.sendImageCacheKeyList.add(key);
+                        thumbnailKeyList.add(ImageUtil.THUMBNAIL_CACHE_PRE + key);
+                    } else {
+                        // 原图丢失，跳过
+                        Log.d(LOG_TAG + "initData", "no source image");
+                    }
+                }
+
+                if (!viewHolder.sendImageCacheKeyList.isEmpty()) {
+                    // 有未发送图片
+                    // 使图片列表可见
+                    viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
+                    viewHolder.imageRecyclerViewAdapter.addData(0, thumbnailKeyList);
+                }
+            } catch (JSONException e) {
+                Log.e(LOG_TAG + "initData", "JSONException is " + e.getMessage());
             }
         }
     }
@@ -477,12 +523,15 @@ public class ShiftChangeImageListFragment extends Fragment implements DataGetHan
                             .ProcessFinishListener() {
                         @Override
                         public void finish(CacheTool cacheTool, String key) {
-                            // 通知列表刷新
-                            notifyImageAdapter(key);
 
-                            // 存入缓存
-                            viewHolder.sendCacheTool.put(ImageUtil.SOURCE_IMAGE_CACHE_PRE +
-                                    cacheKey, new File(picturePath));
+                            if (key != null) {
+                                // 通知列表刷新
+                                notifyImageAdapter(key);
+
+                                // 存入缓存
+                                viewHolder.sendCacheTool.put(ImageUtil.SOURCE_IMAGE_CACHE_PRE +
+                                        cacheKey, new File(picturePath));
+                            }
                         }
                     });
 
@@ -507,16 +556,23 @@ public class ShiftChangeImageListFragment extends Fragment implements DataGetHan
                 viewHolder.thumbnailHeight, new ImageUtil.ProcessFinishListener() {
                     @Override
                     public void finish(CacheTool cacheTool, String key) {
-                        // 通知列表刷新
-                        notifyImageAdapter(key);
+                        if (key != null) {
+                            // 通知列表刷新
+                            notifyImageAdapter(key);
+                        } else {
+                            // 图片出现异常
+                            viewHolder.sendImageCacheKeyList.remove(0);
+                        }
                     }
                 });
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putStringArrayList(SAVE_IMAGE_CACHE_KEY_LIST, viewHolder.sendImageCacheKeyList);
+    public void onDestroy() {
+        super.onDestroy();
+        // 保存数据
+        JSONArray jsonArray = new JSONArray(viewHolder.sendImageCacheKeyList);
+        viewHolder.sendCacheTool.put(SAVE_IMAGE_CACHE_KEY_LIST, jsonArray.toString());
     }
 
     /**

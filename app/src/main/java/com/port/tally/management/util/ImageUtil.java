@@ -67,7 +67,7 @@ public class ImageUtil {
          * 图片处理完成
          *
          * @param cacheTool 存放处理后图片的缓存工具
-         * @param key       处理后图片的缓存key(已包含前缀)
+         * @param key       处理后图片的缓存key(已包含前缀)，处理失败则返回null
          */
         void finish(CacheTool cacheTool, String key);
     }
@@ -99,12 +99,14 @@ public class ImageUtil {
                 if (bitmap != null) {
                     cacheTool.put(THUMBNAIL_CACHE_PRE + key, bitmap);
                     Log.i(LOG_TAG + "createThumbnail", "thumbnail end");
+                    if (listener != null) {
+                        listener.finish(cacheTool, THUMBNAIL_CACHE_PRE + key);
+                    }
                 } else {
                     Log.d(LOG_TAG + "createThumbnail", "thumbnail failed");
-                }
-
-                if (listener != null) {
-                    listener.finish(cacheTool, THUMBNAIL_CACHE_PRE + key);
+                    if (listener != null) {
+                        listener.finish(cacheTool, null);
+                    }
                 }
             }
         });
@@ -119,7 +121,7 @@ public class ImageUtil {
      * @param width     缩略图宽
      * @param height    缩略图高
      *
-     * @return 处理后图片的缓存key(已包含前缀)
+     * @return 处理后图片的缓存key(已包含前缀)，处理失败则返回null
      */
     public static String createThumbnail(@NotNull File file, @NotNull CacheTool cacheTool,
                                          @NotNull String key, int width, int height) {
@@ -134,12 +136,11 @@ public class ImageUtil {
         if (bitmap != null) {
             cacheTool.put(THUMBNAIL_CACHE_PRE + key, bitmap);
             Log.i(LOG_TAG + "createThumbnail", "thumbnail end");
+            return THUMBNAIL_CACHE_PRE + key;
         } else {
             Log.d(LOG_TAG + "createThumbnail", "thumbnail failed");
+            return null;
         }
-
-
-        return THUMBNAIL_CACHE_PRE + key;
     }
 
     /**
@@ -162,6 +163,13 @@ public class ImageUtil {
 
                 // 像素压缩，尺寸缩小为720P
                 Bitmap bitmap = resolutionBitmap(file, 720, 1280);
+
+                if (bitmap == null) {
+                    if (listener != null) {
+                        listener.finish(cacheTool, null);
+                    }
+                    return;
+                }
 
                 // 质量压缩100K
                 qualityBitmap(cacheTool, key, bitmap, 100);
