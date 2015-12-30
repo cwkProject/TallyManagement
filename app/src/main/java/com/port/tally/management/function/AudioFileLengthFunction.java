@@ -10,8 +10,8 @@ import org.mobile.library.cache.util.CacheTool;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 计算音频文件录音时长的功能类
@@ -47,7 +47,7 @@ public class AudioFileLengthFunction {
      */
     private AudioFileLengthFunction() {
         mediaPlayer = new MediaPlayer();
-        lengthMap = new ConcurrentHashMap<>();
+        lengthMap = new HashMap<>();
     }
 
     /**

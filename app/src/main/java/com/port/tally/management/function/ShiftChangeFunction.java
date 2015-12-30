@@ -213,14 +213,16 @@ public class ShiftChangeFunction {
     public void getLatest(final ShiftChangeRequestListener<List<ShiftChange>> listener) {
 
         // 最近的记录时间
-        String time = sharedPreferences.getString(LATEST_TIME_TAG, null);
+        String time = sharedPreferences.getString(LATEST_TIME_TAG + "_" + GlobalApplication
+                .getGlobal().getLoginStatus().getUserID(), null);
 
         if (time == null) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, -3);
             time = format.format(calendar.getTime());
-            sharedPreferences.edit().putString(LATEST_TIME_TAG, time).apply();
+            sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication
+                    .getGlobal().getLoginStatus().getUserID(), time).apply();
             Log.i(LOG_TAG + "getLatest", "no content, use three days ago time is " + time);
         }
 
@@ -233,7 +235,8 @@ public class ShiftChangeFunction {
 
                     // 记录新时间
                     ShiftChange sc = shiftChanges.get(0);
-                    sharedPreferences.edit().putString(LATEST_TIME_TAG, sc.getTime()).apply();
+                    sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication
+                            .getGlobal().getLoginStatus().getUserID(), sc.getTime()).apply();
 
                     List<Long> idList = operator.insert(shiftChanges);
                     List<ShiftChange> list;
