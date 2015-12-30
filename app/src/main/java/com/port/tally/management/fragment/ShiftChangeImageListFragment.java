@@ -245,55 +245,67 @@ public class ShiftChangeImageListFragment extends Fragment implements DataGetHan
             return;
         }
 
-        String arrayString = viewHolder.sendCacheTool.getForText(SAVE_IMAGE_CACHE_KEY_LIST);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String arrayString = viewHolder.sendCacheTool.getForText(SAVE_IMAGE_CACHE_KEY_LIST);
 
-        if (arrayString != null && !arrayString.isEmpty()) {
+                if (arrayString != null && !arrayString.isEmpty()) {
 
-            try {
-                JSONArray jsonArray = new JSONArray(arrayString);
-                List<String> thumbnailKeyList = new ArrayList<>();
+                    try {
+                        JSONArray jsonArray = new JSONArray(arrayString);
+                        final List<String> thumbnailKeyList = new ArrayList<>();
 
-                for (int i = 0; i < jsonArray.length(); i++) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
 
-                    String key = jsonArray.getString(i);
+                            String key = jsonArray.getString(i);
 
-                    File file = viewHolder.sendCacheTool.getForFile(ImageUtil
-                            .SOURCE_IMAGE_CACHE_PRE + key);
+                            File file = viewHolder.sendCacheTool.getForFile(ImageUtil
+                                    .SOURCE_IMAGE_CACHE_PRE + key);
 
-                    if (file != null && file.exists()) {
-                        // 原图存在
-                        if (viewHolder.sendCacheTool.getForBitmap(ImageUtil.THUMBNAIL_CACHE_PRE +
-                                key) == null) {
-                            // 缩略图丢失
-                            String thumbnailKey = ImageUtil.createThumbnail(file, viewHolder
-                                    .sendCacheTool, key, viewHolder.thumbnailWidth, viewHolder
-                                    .thumbnailHeight);
+                            if (file != null && file.exists()) {
+                                // 原图存在
+                                if (viewHolder.sendCacheTool.getForBitmap(ImageUtil
+                                        .THUMBNAIL_CACHE_PRE + key) == null) {
+                                    // 缩略图丢失
+                                    String thumbnailKey = ImageUtil.createThumbnail(file,
+                                            viewHolder.sendCacheTool, key, viewHolder
+                                                    .thumbnailWidth, viewHolder.thumbnailHeight);
 
-                            if (thumbnailKey == null) {
-                                // 图片异常
-                                continue;
+                                    if (thumbnailKey == null) {
+                                        // 图片异常
+                                        continue;
+                                    }
+                                }
+
+                                // 将该key加入列表
+                                viewHolder.sendImageCacheKeyList.add(key);
+                                thumbnailKeyList.add(ImageUtil.THUMBNAIL_CACHE_PRE + key);
+                            } else {
+                                // 原图丢失，跳过
+                                Log.d(LOG_TAG + "initData", "no source image");
                             }
                         }
 
-                        // 将该key加入列表
-                        viewHolder.sendImageCacheKeyList.add(key);
-                        thumbnailKeyList.add(ImageUtil.THUMBNAIL_CACHE_PRE + key);
-                    } else {
-                        // 原图丢失，跳过
-                        Log.d(LOG_TAG + "initData", "no source image");
+                        if (!viewHolder.sendImageCacheKeyList.isEmpty()) {
+                            // 有未发送图片
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 使图片列表可见
+                                    viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
+                                    viewHolder.imageRecyclerViewAdapter.addData(0,
+                                            thumbnailKeyList);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        Log.e(LOG_TAG + "initData", "JSONException is " + e.getMessage());
                     }
                 }
-
-                if (!viewHolder.sendImageCacheKeyList.isEmpty()) {
-                    // 有未发送图片
-                    // 使图片列表可见
-                    viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
-                    viewHolder.imageRecyclerViewAdapter.addData(0, thumbnailKeyList);
-                }
-            } catch (JSONException e) {
-                Log.e(LOG_TAG + "initData", "JSONException is " + e.getMessage());
             }
-        }
+        }).start();
     }
 
     /**

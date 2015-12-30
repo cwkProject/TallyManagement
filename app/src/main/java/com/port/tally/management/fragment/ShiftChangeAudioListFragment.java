@@ -190,34 +190,44 @@ public class ShiftChangeAudioListFragment extends Fragment implements DataGetHan
             return;
         }
 
-        String arrayString = viewHolder.sendCacheTool.getForText(SAVE_AUDIO_CACHE_KEY_LIST);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String arrayString = viewHolder.sendCacheTool.getForText(SAVE_AUDIO_CACHE_KEY_LIST);
 
-        if (arrayString != null && !arrayString.isEmpty()) {
-            try {
-                JSONArray jsonArray = new JSONArray(arrayString);
-                List<String> keyList = new ArrayList<>();
+                if (arrayString != null && !arrayString.isEmpty()) {
+                    try {
+                        JSONArray jsonArray = new JSONArray(arrayString);
+                        final List<String> keyList = new ArrayList<>();
 
-                for (int i = 0; i < jsonArray.length(); i++) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
 
-                    String key = jsonArray.getString(i);
+                            String key = jsonArray.getString(i);
 
-                    File file = viewHolder.sendCacheTool.getForFile(key);
+                            File file = viewHolder.sendCacheTool.getForFile(key);
 
-                    if (file != null && file.exists()) {
-                        // 音频存在
-                        keyList.add(key);
+                            if (file != null && file.exists()) {
+                                // 音频存在
+                                keyList.add(key);
+                            }
+                        }
+
+                        if (!keyList.isEmpty()) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 使列表可见
+                                    viewHolder.audioRecyclerView.setVisibility(View.VISIBLE);
+                                    viewHolder.audioRecyclerViewAdapter.addData(0, keyList);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        Log.e(LOG_TAG + "initData", "JSONException is " + e.getMessage());
                     }
                 }
-
-                if (!keyList.isEmpty()) {
-                    // 使列表可见
-                    viewHolder.audioRecyclerView.setVisibility(View.VISIBLE);
-                    viewHolder.audioRecyclerViewAdapter.addData(0, keyList);
-                }
-            } catch (JSONException e) {
-                Log.e(LOG_TAG + "initData", "JSONException is " + e.getMessage());
             }
-        }
+        }).start();
     }
 
     /**

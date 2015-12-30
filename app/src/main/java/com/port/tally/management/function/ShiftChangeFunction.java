@@ -232,13 +232,14 @@ public class ShiftChangeFunction {
             @Override
             public void doEndWork(boolean state, List<ShiftChange> shiftChanges) {
                 if (state && shiftChanges != null && !shiftChanges.isEmpty()) {
-
+                    Log.i(LOG_TAG + "getLatest", "shiftChanges count is " + shiftChanges.size());
                     // 记录新时间
                     ShiftChange sc = shiftChanges.get(0);
                     sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication
                             .getGlobal().getLoginStatus().getUserID(), sc.getTime()).apply();
 
                     List<Long> idList = operator.insert(shiftChanges);
+                    Log.i(LOG_TAG + "getLatest", "id list count is " + idList.size());
                     List<ShiftChange> list;
                     if (idList.size() < shiftChanges.size()) {
                         list = new ArrayList<>();
@@ -252,6 +253,7 @@ public class ShiftChangeFunction {
                         list = shiftChanges;
                     }
 
+                    Log.i(LOG_TAG + "getLatest", "final ShiftChange list count is " + list.size());
                     currentRow += list.size();
 
                     if (listener != null) {

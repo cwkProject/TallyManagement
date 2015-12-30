@@ -461,6 +461,7 @@ public class ShiftChangeContentFragment extends Fragment {
      * 加载旧消息
      */
     private void loadOldData() {
+        Log.i(LOG_TAG + "loadOldData", "load old data");
         viewHolder.loading = true;
         viewHolder.taskExecutor.submit(new Runnable() {
             @Override
@@ -1384,7 +1385,7 @@ public class ShiftChangeContentFragment extends Fragment {
      */
     private void downloadAudio(String token, String key, String url) {
         Log.i(LOG_TAG + "downloadAudio", "content token:" + token + " key:" + key + " url:" + url);
-        viewHolder.binder.downloadFile(token, key, url, StaticValue.TypeTag.TYPE_IMAGE_CONTENT);
+        viewHolder.binder.downloadFile(token, key, url, StaticValue.TypeTag.TYPE_AUDIO_CONTENT);
     }
 
     /**
