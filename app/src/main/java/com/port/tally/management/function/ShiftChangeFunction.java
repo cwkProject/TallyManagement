@@ -201,8 +201,12 @@ public class ShiftChangeFunction {
      */
     public void move(int position) {
         Log.i(LOG_TAG + "move", "move to " + position);
+
+        if (position < currentRow) {
+            isEnd = false;
+        }
+
         currentRow = position;
-        isEnd = false;
     }
 
     /**
@@ -356,6 +360,20 @@ public class ShiftChangeFunction {
         }
 
         operator.insert(shiftChange);
+    }
+
+    /**
+     * 移除一条消息数据
+     *
+     * @param token 消息标识
+     */
+    public void remove(String token) {
+        Log.i(LOG_TAG + "remove", "remove shiftChange token is " + token);
+
+        ShiftChange shiftChange = new ShiftChange();
+        shiftChange.setToken(token);
+        operator.delete(shiftChange);
+        currentRow--;
     }
 
     /**

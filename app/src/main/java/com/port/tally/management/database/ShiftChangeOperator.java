@@ -76,8 +76,8 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
          * 建表语句
          */
         String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
-                        "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TEXT " +
-                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", onCreateTableName(),
+                        "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TIMESTAMP " +
+                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", nowTableName,
                 CommonConst._ID, CommonConst.CODE, TableConst.ShiftChange.SEND_NAME, TableConst
                         .ShiftChange.RECEIVE_NAME, TableConst.ShiftChange.TIME, TableConst
                         .ShiftChange.CONTENT, TableConst.ShiftChange.IMAGE_URL, TableConst
@@ -204,8 +204,8 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
             sql = String.format("select * from %s where %s=%s", nowTableName, CommonConst.CODE,
                     parameters[0]);
         } else {
-            sql = String.format("select * from %s order by %s desc limit %s,%s", nowTableName,
-                    TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
+            sql = String.format("select * from %s order by datetime(%s) desc limit " + "%s,%s",
+                    nowTableName, TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
         }
         return query(sql);
     }

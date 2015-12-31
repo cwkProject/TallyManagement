@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -336,6 +337,64 @@ public class ShiftChangeContentFragment extends Fragment {
                 }
             }
         });
+
+        // 滑动拖拽监听器
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback
+                (0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                Log.i(LOG_TAG + "onSwiped", "remove shiftChange position is " + position);
+
+                // 该项数据源
+                final ShiftChangeContent data = ShiftChangeContentFragment.this.viewHolder
+                        .dataList.get(position);
+                Log.i(LOG_TAG + "onSwiped", "remove shiftChange position:" + position + " " +
+                        "token:" + data.getToken());
+                // 左滑删除
+                ShiftChangeContentFragment.this.viewHolder.adapter.remove(position);
+
+                ShiftChangeContentFragment.this.viewHolder.taskExecutor.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 清除缓存
+                        if (data.getImageList() != null) {
+                            // 清除图片缓存
+                            for (Map.Entry<String, Integer> entry : data.getImageList().entrySet
+                                    ()) {
+                                ShiftChangeContentFragment.this.viewHolder.contentCacheTool
+                                        .remove(ImageUtil.THUMBNAIL_CACHE_PRE + entry.getKey());
+                                ShiftChangeContentFragment.this.viewHolder.contentCacheTool
+                                        .remove(ImageUtil.COMPRESSION_IMAGE_CACHE_PRE + entry
+                                                .getKey());
+                                ShiftChangeContentFragment.this.viewHolder.contentCacheTool
+                                        .remove(ImageUtil.SOURCE_IMAGE_CACHE_PRE + entry.getKey());
+                            }
+                        }
+                        if (data.getAudioList() != null) {
+                            // 清除音频缓存
+                            for (Map.Entry<String, Integer> entry : data.getAudioList().entrySet
+                                    ()) {
+                                ShiftChangeContentFragment.this.viewHolder.contentCacheTool
+                                        .remove(entry.getKey());
+                            }
+                        }
+                        // 清除数据库记录
+                        ShiftChangeContentFragment.this.viewHolder.shiftChangeFunction.remove
+                                (data.getToken());
+                    }
+                });
+            }
+        });
+
+        // 绑定事件
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     /**
