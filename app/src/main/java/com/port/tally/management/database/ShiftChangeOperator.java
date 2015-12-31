@@ -48,6 +48,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
      */
     public ShiftChangeOperator(Context context) {
         super(context);
+        onCreateTableName();
     }
 
     @Override
@@ -76,7 +77,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
          */
         String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
                         "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TEXT " +
-                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", nowTableName,
+                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", onCreateTableName(),
                 CommonConst._ID, CommonConst.CODE, TableConst.ShiftChange.SEND_NAME, TableConst
                         .ShiftChange.RECEIVE_NAME, TableConst.ShiftChange.TIME, TableConst
                         .ShiftChange.CONTENT, TableConst.ShiftChange.IMAGE_URL, TableConst
