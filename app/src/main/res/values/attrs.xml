@@ -8,12 +8,12 @@
         <item>堆存</item>
         <item>汽运查询</item>
         <item>汽运作业</item>
-        <item>作业计划</item>
+        <!--<item>作业计划</item>-->
         <item>交接班</item>
         <item>电子场图</item>
-        <item>消息中心</item>
+        <!--<item>消息中心</item>-->
     </string-array>
-    <string-array name="work"> //完工
+    <string-array name="work">//完工
         <item>白班</item>
         <item>夜班</item>
 
@@ -76,10 +76,10 @@
         <item>@mipmap/stack_icon</item>
         <item>@mipmap/truck_work_icon</item>
         <item>@mipmap/truck_query_icon</item>
-        <item>@mipmap/work_plan_icon</item>
+        <!--<item>@mipmap/work_plan_icon</item>-->
         <item>@mipmap/shift_icon</item>
         <item>@mipmap/electron_map_icon</item>
-        <item>@mipmap/email</item>
+        <!--<item>@mipmap/email</item>-->
     </array>
 
 </resources>
