@@ -16,6 +16,8 @@ import org.json.JSONObject;
 import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.database.BaseOperator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -76,7 +78,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
          * 建表语句
          */
         String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
-                        "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TIMESTAMP " +
+                        "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TEXT " +
                         "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", nowTableName,
                 CommonConst._ID, CommonConst.CODE, TableConst.ShiftChange.SEND_NAME, TableConst
                         .ShiftChange.RECEIVE_NAME, TableConst.ShiftChange.TIME, TableConst
@@ -95,9 +97,18 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
         cv.put(CommonConst.CODE, data.getToken());
         cv.put(TableConst.ShiftChange.SEND_NAME, data.getSend());
         cv.put(TableConst.ShiftChange.RECEIVE_NAME, data.getReceive());
-        cv.put(TableConst.ShiftChange.TIME, data.getTime());
         cv.put(TableConst.ShiftChange.CONTENT, data.getContent());
         cv.put(TableConst.ShiftChange.MY_SEND, data.isMySend() ? 1 : 0);
+
+        SimpleDateFormat formatTarget = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatSource = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+        try {
+            cv.put(TableConst.ShiftChange.TIME, formatTarget.format(formatSource.parse(data
+                    .getTime())));
+        } catch (ParseException e) {
+            Log.e(LOG_TAG + "onFillData", "ParseException is " + e.getMessage());
+        }
 
         if (data.getImageUrlList() != null) {
             JSONObject imageUrl = new JSONObject(data.getImageUrlList());
@@ -137,7 +148,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
             data.setToken(cursor.getString(code));
             data.setSend(cursor.getString(sendName));
             data.setReceive(cursor.getString(receiveName));
-            data.setTime(cursor.getString(time));
+            data.setTime(cursor.getString(time).replace('-', '/'));
             data.setContent(cursor.getString(content));
             data.setMySend(cursor.getInt(mySend) == 1);
 
@@ -204,8 +215,8 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
             sql = String.format("select * from %s where %s=%s", nowTableName, CommonConst.CODE,
                     parameters[0]);
         } else {
-            sql = String.format("select * from %s order by datetime(%s) desc limit " + "%s,%s",
-                    nowTableName, TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
+            sql = String.format("select * from %s order by %s desc limit %s,%s", nowTableName,
+                    TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
         }
         return query(sql);
     }
