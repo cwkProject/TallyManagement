@@ -12,14 +12,25 @@ package com.port.tally.management.util;
  */
 public interface StaticValue {
 
-
-    /**
-     * 意图数据传递标签
-     */
     /**
      * 本应用编号
      */
     String APP_CODE = "LHGL";
+
+    /**
+     * 标识各种数据类型枚举
+     */
+    interface TypeTag {
+        /**
+         * 图片类型内容
+         */
+        int TYPE_IMAGE_CONTENT = 1;
+
+        /**
+         * 音频类型内容
+         */
+        int TYPE_AUDIO_CONTENT = 2;
+    }
 
     /**
      * 意图数据传递标签
@@ -59,6 +70,16 @@ public interface StaticValue {
          * 货位编码取值标签
          */
         String POSITION_CODE_TAG = "position_code_tag";
+
+        /**
+         * 员工取值标签
+         */
+        String EMPLOYEE_TAG = "employee_tag";
+
+        /**
+         * 用户编码取值标签
+         */
+        String USER_ID_TAG = "user_id_tag";
     }
 
     /**
@@ -100,6 +121,10 @@ public interface StaticValue {
          */
         String COMPANY_LIST = "company_list";
 
+        /**
+         * 员工
+         */
+        String EMPLOYEE_LIST = "employee_list";
     }
 
     String HTTP_GET_SAMPLE_URL = "http://168.100.1.218/wlkg/Service/";
@@ -205,6 +230,9 @@ public interface StaticValue {
      */
     String UPLOAD_FILE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/UploadFile.aspx";
 
+    // 调试地址
+    // String UPLOAD_FILE_URL="http://192.168.155.3:8080/Service/Handover/UploadFile.aspx";
+
     /**
      * 交接班提交接口地址
      */
@@ -222,6 +250,17 @@ public interface StaticValue {
      */
     String WORK_PLAN_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetUncommitedMachineCommand"
             + ".aspx";
+
+    /**
+     * 获取指定编号交接班记录的接口地址
+     */
+    String SHIFT_CHANGE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/GetOneHandoverRecord"
+            + ".aspx";
+
+    /**
+     * 获取员工列表地址
+     */
+    String EMPLOYEE_URL = "http://218.92.115.55/M_Lhgl/Service/Handover/GetEmployee.aspx";
 
     //汽运作业班组请求地址
     String HTTP_GET_TRUNKWORKTEAM_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetWorkTeam.aspx";
