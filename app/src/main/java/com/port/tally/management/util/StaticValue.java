@@ -338,6 +338,8 @@ public interface StaticValue {
     String HTTP_GetCornerPile_URL = "http://218.92.115.55/M_Lhgl/Service/Base/GetBooth.aspx";
 
     //    获取桩角和货位数据
-    String HTTP_GetCornerPileAndAllocation_URL = "http://218.92.115" + "" +
+    String HTTP_GetCornerPileAndAllocation_URL = "http://218.92.115" +
             ".55/M_Lhgl/Service/Base/GetBooth.aspx";
+    String HTTP_GetDATEANDWORK_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetSchedule.aspx";
+    String HTTP_GetFlagAutoData_URL = "http://218.92.115.55/M_Lhgl/Service/Slip/GetOperation.aspx";
 }
