@@ -3,21 +3,18 @@ package com.port.tally.management.adapter;
  * Created by 超悟空 on 2015/12/9.
  */
 
-import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.port.tally.management.R;
+import com.port.tally.management.function.AudioFileLengthFunction;
 import com.port.tally.management.holder.ShiftChangeAudioViewHolder;
 
 import org.mobile.library.cache.util.CacheTool;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +37,6 @@ public class ShiftChangeAudioRecyclerViewAdapter extends RecyclerView
      * 存有音频文件的缓存工具
      */
     private CacheTool cacheTool = null;
-
-    /**
-     * 音频播放器
-     */
-    private MediaPlayer mediaPlayer = new MediaPlayer();
 
     /**
      * 显示的音频缓存key集合
@@ -99,6 +91,47 @@ public class ShiftChangeAudioRecyclerViewAdapter extends RecyclerView
         notifyItemRangeInserted(position, data.size());
     }
 
+    /**
+     * 移除一组数据
+     *
+     * @param start 起始位置
+     * @param count 删除行数
+     */
+    public void remove(int start, int count) {
+        for (int i = 0; i < count; i++) {
+            this.dataList.remove(start);
+        }
+        notifyItemRangeRemoved(start, count);
+    }
+
+    /**
+     * 移除一条数据
+     *
+     * @param position 起始位置
+     */
+    public void remove(int position) {
+        this.dataList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    /**
+     * 清空
+     */
+    public void clear() {
+        int count = this.dataList.size();
+        this.dataList.clear();
+        notifyItemRangeRemoved(0, count);
+    }
+
+    /**
+     * 获取适配器数据源
+     *
+     * @return 数据源列表
+     */
+    public List<String> getDataList() {
+        return dataList;
+    }
+
     @Override
     public ShiftChangeAudioViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 创建Item根布局
@@ -110,15 +143,8 @@ public class ShiftChangeAudioRecyclerViewAdapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(final ShiftChangeAudioViewHolder holder, int position) {
-        File file = cacheTool.getForFile(dataList.get(position));
-        if (file != null) {
-
-            String lengthString = getAudioLength(file.getPath());
-
-            if (lengthString != null) {
-                holder.textView.setText(lengthString);
-            }
-        }
+        holder.textView.setText(AudioFileLengthFunction.getFunction().getAudioLength(cacheTool,
+                dataList.get(position)));
 
         // 绑定监听事件
         if (onItemClickListener != null) {
@@ -131,46 +157,8 @@ public class ShiftChangeAudioRecyclerViewAdapter extends RecyclerView
         }
     }
 
-    /**
-     * 获取音频长度文本
-     *
-     * @param path 音频路径
-     *
-     * @return 格式化后的文本
-     */
-    private String getAudioLength(String path) {
-        try {
-            mediaPlayer.setDataSource(path);
-            mediaPlayer.prepare();
-            // 音频长度
-            int length = mediaPlayer.getDuration();
-            mediaPlayer.reset();
-
-            String lengthString = "";
-
-            if (length / 60000 > 0) {
-                lengthString += length / 60000 + "'";
-            }
-            lengthString += (length / 1000) % 60 + "\"";
-
-            lengthString += length % 1000;
-
-            return lengthString;
-        } catch (IOException e) {
-            Log.e(LOG_TAG + "getAudioLength", "IOException is " + e.getMessage());
-            return null;
-        }
-    }
-
     @Override
     public int getItemCount() {
         return dataList.size();
-    }
-
-    /**
-     * 释放资源
-     */
-    public void release() {
-        mediaPlayer.release();
     }
 }

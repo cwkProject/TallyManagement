@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/toolbar_default_title"/>
+
+    <EditText
+        android:id="@+id/activity_employee_list_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/edit_default_margin_left"
+        android:background="@drawable/edit_text_with_frame_shape"
+        android:padding="@dimen/edit_default_padding_left"
+        android:singleLine="true"
+        android:textSize="@dimen/text_view_default_text_size"/>
+
+    <FrameLayout
+        android:id="@+id/activity_employee_list_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

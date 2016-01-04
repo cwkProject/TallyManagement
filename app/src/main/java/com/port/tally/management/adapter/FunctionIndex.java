@@ -9,13 +9,11 @@ import android.content.Intent;
 import com.port.tally.management.activity.BalanceWeightQueryActivity;
 import com.port.tally.management.activity.DianZiMap;
 import com.port.tally.management.activity.EntrustQueryActivity;
-import com.port.tally.management.activity.PushMessage;
 import com.port.tally.management.activity.ShiftChangeActivity;
 import com.port.tally.management.activity.StockQueryActivity;
 import com.port.tally.management.activity.TallyActivity;
 import com.port.tally.management.activity.TrunkActivity;
 import com.port.tally.management.activity.TrunkQuery;
-import com.port.tally.management.activity.WorkPlan;
 
 /**
  * 主界面功能索引
@@ -62,22 +60,22 @@ public class FunctionIndex {
                 // 汽运作业
                 intent = new Intent(context, TrunkActivity.class);
                 break;
+            //            case 6:
+            //                // 作业计划
+            //                intent = new Intent(context, WorkPlan.class);
+            //                break;
             case 6:
-                // 作业计划
-                intent = new Intent(context, WorkPlan.class);
-                break;
-            case 7:
                 // 交接班
                 intent = new Intent(context, ShiftChangeActivity.class);
                 break;
-            case 8:
+            case 7:
                 // 电子场图
                 intent = new Intent(context, DianZiMap.class);
                 break;
-            case 9:
-                // 消息推送
-                intent = new Intent(context, PushMessage.class);
-                break;
+            //            case 9:
+            //                // 消息推送
+            //                intent = new Intent(context, PushMessage.class);
+            //                break;
 
         }
 

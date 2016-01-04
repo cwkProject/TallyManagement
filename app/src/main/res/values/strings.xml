@@ -6,6 +6,7 @@
     <string name="forwarder_content">堆存详情</string>
     <string name="balance_weight_query">衡重查询</string>
     <string name="balance_weight_content">衡重详情</string>
+    <string name="employee_list">选取联系人</string>
     <string name="shift_change">交接班</string>
 
     <string name="search_hit"> </string>
@@ -22,4 +23,9 @@
     <string name="jiyunguanli_title">汽运查询</string>
 
     <string name="record">长按录音</string>
+    <string name="load_failed">传输失败</string>
+    <string name="send_failed_check_network">发送失败，请检查网络</string>
+    <string name="alert_select_receive">请选择收件人</string>
+
+    <item name="view_holder_tag" type="id"/>
 </resources>

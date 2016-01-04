@@ -184,6 +184,7 @@ public class ShiftChangeRecordFragment extends Fragment {
                         // 长按松开
                         if (viewHolder.longClicked) {
                             viewHolder.longClicked = false;
+
                             viewHolder.recorder.stop();
                             if (viewHolder.recordEndListener != null) {
                                 viewHolder.recordEndListener.notifyDataChange(AUDIO_CACHE_PRE +

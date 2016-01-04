@@ -9,7 +9,6 @@ import com.port.tally.management.bean.WorkPlan;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.Map;
  * @version 1.0 2015/12/18
  * @since 1.0
  */
-public class WorkPlanData extends JsonDataModel {
+public class WorkPlanData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -64,48 +63,33 @@ public class WorkPlanData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject handleResult) throws Exception {
-        // 得到执行结果
-        String resultState = handleResult.getString("IsSuccess");
+    protected void onExtractData(JSONObject jsonData) throws Exception {
+        JSONArray jsonArray = jsonData.getJSONArray("Data");
+        dataList = new ArrayList<>();
 
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-    @Override
-    protected String onRequestMessage(boolean result, JSONObject handleResult) throws Exception {
-        return handleResult.getString("Message");
-    }
+            if (jsonRow.length() > 11) {
+                WorkPlan data = new WorkPlan();
 
-    @Override
-    protected void onRequestSuccess(JSONObject handleResult) throws Exception {
-        if (!handleResult.isNull("Data")) {
-            JSONArray jsonArray = handleResult.getJSONArray("Data");
-            dataList = new ArrayList<>();
+                data.setDispatchCode(jsonRow.getString(0));
+                data.setEntrustCode(jsonRow.getString(1));
+                data.setTicketCode(jsonRow.getString(2));
+                data.setEntrustName(jsonRow.getString(3));
+                data.setTaskNumber(jsonRow.getString(4));
+                data.setGoods(jsonRow.getString(5));
+                data.setOperation(jsonRow.getString(6));
+                data.setAmount(jsonRow.getString(7));
+                data.setBeginTime(jsonRow.getString(8));
+                data.setEndTime(jsonRow.getString(9));
+                data.setSourceCarrier(jsonRow.getString(10));
+                data.setTargetCarrier(jsonRow.getString(11));
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONArray jsonRow = jsonArray.getJSONArray(i);
-
-                if (jsonRow.length() > 11) {
-                    WorkPlan data = new WorkPlan();
-
-                    data.setDispatchCode(jsonRow.getString(0));
-                    data.setEntrustCode(jsonRow.getString(1));
-                    data.setTicketCode(jsonRow.getString(2));
-                    data.setEntrustName(jsonRow.getString(3));
-                    data.setTaskNumber(jsonRow.getString(4));
-                    data.setGoods(jsonRow.getString(5));
-                    data.setOperation(jsonRow.getString(6));
-                    data.setAmount(jsonRow.getString(7));
-                    data.setBeginTime(jsonRow.getString(8));
-                    data.setEndTime(jsonRow.getString(9));
-                    data.setSourceCarrier(jsonRow.getString(10));
-                    data.setTargetCarrier(jsonRow.getString(11));
-
-                    dataList.add(data);
-                }
+                dataList.add(data);
             }
-
-            Log.i(LOG_TAG + "onRequestSuccess", "data list count " + dataList.size());
         }
+
+        Log.i(LOG_TAG + "onExtractData", "data list count " + dataList.size());
     }
 }

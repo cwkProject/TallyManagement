@@ -8,9 +8,7 @@ import android.util.Log;
 import com.port.tally.management.bean.Forwarder;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.Map;
  * @version 1.0 2015/10/12
  * @since 1.0
  */
-public class ForwarderListData extends JsonDataModel {
+public class ForwarderListData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -65,49 +63,32 @@ public class ForwarderListData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject jsonResult) throws JSONException {
-        // 得到执行结果
-        String resultState = jsonResult.getString("IsSuccess");
+    protected void onExtractData(JSONObject jsonData) throws Exception {
+        JSONArray jsonArray = jsonData.getJSONArray("Data");
+        Log.i(LOG_TAG + "onExtractData", "get forwarderList count is " + jsonArray.length());
 
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
+        // 新建货主列表
+        forwarderList = new ArrayList<>();
 
-    @Override
-    protected String onRequestMessage(boolean result, JSONObject jsonResult) throws JSONException {
-        return jsonResult.getString("Message");
-    }
+        for (int i = 0; i < jsonArray.length(); i++) {
 
-    @Override
-    protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
-        JSONArray jsonArray = jsonResult.getJSONArray("Data");
+            JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-        if (jsonArray != null) {
+            if (jsonRow.length() > 2) {
+                // 一条货主数据
+                Forwarder forwarder = new Forwarder();
+                forwarder.setId(jsonRow.getString(0));
+                forwarder.setName(jsonRow.getString(1));
+                forwarder.setShortCode(jsonRow.getString(2));
 
-            Log.i(LOG_TAG + "onRequestSuccess", "get forwarderList count is " + jsonArray.length());
+                // 填充请求数据
+                forwarder.setCompany(company);
 
-            // 新建货主列表
-            forwarderList = new ArrayList<>();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONArray jsonRow = jsonArray.getJSONArray(i);
-
-                if (jsonRow.length() > 2) {
-                    // 一条货主数据
-                    Forwarder forwarder = new Forwarder();
-                    forwarder.setId(jsonRow.getString(0));
-                    forwarder.setName(jsonRow.getString(1));
-                    forwarder.setShortCode(jsonRow.getString(2));
-
-                    // 填充请求数据
-                    forwarder.setCompany(company);
-
-                    // 加入列表
-                    forwarderList.add(forwarder);
-                }
+                // 加入列表
+                forwarderList.add(forwarder);
             }
-
-            Log.i(LOG_TAG + "onRequestSuccess", "forwarder list count is " + forwarderList.size());
         }
+
+        Log.i(LOG_TAG + "onExtractData", "forwarder list count is " + forwarderList.size());
     }
 }

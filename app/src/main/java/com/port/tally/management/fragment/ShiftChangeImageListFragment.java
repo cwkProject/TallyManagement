@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +29,13 @@ import com.port.tally.management.adapter.ShiftChangeImageRecyclerViewAdapter;
 import com.port.tally.management.holder.ShiftChangeImageViewHolder;
 import com.port.tally.management.util.CacheKeyUtil;
 import com.port.tally.management.util.ImageUtil;
+import com.port.tally.management.util.StaticValue;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.mobile.library.cache.util.CacheTool;
+import org.mobile.library.global.GlobalApplication;
+import org.mobile.library.model.operate.DataGetHandle;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
 import java.io.File;
@@ -45,7 +51,7 @@ import java.util.List;
  * @version 1.0 2015/12/11
  * @since 1.0
  */
-public class ShiftChangeImageListFragment extends Fragment {
+public class ShiftChangeImageListFragment extends Fragment implements DataGetHandle<File[]> {
 
     /**
      * 日志标签前缀
@@ -61,6 +67,11 @@ public class ShiftChangeImageListFragment extends Fragment {
      * 相册接收返回码
      */
     private static final int CAPTURE_GALLERY_ACTIVITY_REQUEST_CODE = 200;
+
+    /**
+     * 暂存图片缓存key列表的取值标签
+     */
+    private static final String SAVE_IMAGE_CACHE_KEY_LIST = "save_image_cache_key_list";
 
     /**
      * 控件集
@@ -139,6 +150,37 @@ public class ShiftChangeImageListFragment extends Fragment {
         viewHolder.galleryImageButton = galleryImageButton;
     }
 
+    /**
+     * 清空列表
+     */
+    public void clearList() {
+        viewHolder.sendImageCacheKeyList.clear();
+        viewHolder.imageRecyclerViewAdapter.clear();
+        viewHolder.imageRecyclerView.setVisibility(View.GONE);
+    }
+
+    /**
+     * 获取待发送的图片文件
+     *
+     * @return 文件数组
+     */
+    @Override
+    public File[] getData() {
+
+        if (viewHolder.sendImageCacheKeyList.isEmpty()) {
+            return null;
+        }
+
+        File[] files = new File[viewHolder.sendImageCacheKeyList.size()];
+
+        for (int i = 0; i < viewHolder.sendImageCacheKeyList.size(); i++) {
+            files[i] = viewHolder.sendCacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE +
+                    viewHolder.sendImageCacheKeyList.get(i));
+        }
+
+        return files;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
@@ -149,6 +191,9 @@ public class ShiftChangeImageListFragment extends Fragment {
 
         // 初始化布局
         initView(rootView);
+
+        // 初始化数据
+        initData();
 
         return rootView;
     }
@@ -189,6 +234,81 @@ public class ShiftChangeImageListFragment extends Fragment {
     }
 
     /**
+     * 初始化列表数据
+     */
+    private void initData() {
+
+        String user_id = viewHolder.sendCacheTool.getForText(StaticValue.IntentTag.USER_ID_TAG);
+        if (user_id != null && !user_id.equals(GlobalApplication.getGlobal().getLoginStatus()
+                .getUserID())) {
+            // 更换了用户
+            return;
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String arrayString = viewHolder.sendCacheTool.getForText(SAVE_IMAGE_CACHE_KEY_LIST);
+
+                if (arrayString != null && !arrayString.isEmpty()) {
+
+                    try {
+                        JSONArray jsonArray = new JSONArray(arrayString);
+                        final List<String> thumbnailKeyList = new ArrayList<>();
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            String key = jsonArray.getString(i);
+
+                            File file = viewHolder.sendCacheTool.getForFile(ImageUtil
+                                    .SOURCE_IMAGE_CACHE_PRE + key);
+
+                            if (file != null && file.exists()) {
+                                // 原图存在
+                                if (viewHolder.sendCacheTool.getForBitmap(ImageUtil
+                                        .THUMBNAIL_CACHE_PRE + key) == null) {
+                                    // 缩略图丢失
+                                    String thumbnailKey = ImageUtil.createThumbnail(file,
+                                            viewHolder.sendCacheTool, key, viewHolder
+                                                    .thumbnailWidth, viewHolder.thumbnailHeight);
+
+                                    if (thumbnailKey == null) {
+                                        // 图片异常
+                                        continue;
+                                    }
+                                }
+
+                                // 将该key加入列表
+                                viewHolder.sendImageCacheKeyList.add(key);
+                                thumbnailKeyList.add(ImageUtil.THUMBNAIL_CACHE_PRE + key);
+                            } else {
+                                // 原图丢失，跳过
+                                Log.d(LOG_TAG + "initData", "no source image");
+                            }
+                        }
+
+                        if (!viewHolder.sendImageCacheKeyList.isEmpty()) {
+                            // 有未发送图片
+
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // 使图片列表可见
+                                    viewHolder.imageRecyclerView.setVisibility(View.VISIBLE);
+                                    viewHolder.imageRecyclerViewAdapter.addData(0,
+                                            thumbnailKeyList);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        Log.e(LOG_TAG + "initData", "JSONException is " + e.getMessage());
+                    }
+                }
+            }
+        }).start();
+    }
+
+    /**
      * 初始化待发送图片列表
      */
     private void initImageList() {
@@ -221,6 +341,34 @@ public class ShiftChangeImageListFragment extends Fragment {
         });
 
         recyclerView.setAdapter(viewHolder.imageRecyclerViewAdapter);
+
+        // 滑动拖拽监听器
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback
+                (0, ItemTouchHelper.UP) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // 上滑删除
+                ShiftChangeImageListFragment.this.viewHolder.sendImageCacheKeyList.remove
+                        (viewHolder.getAdapterPosition());
+                ShiftChangeImageListFragment.this.viewHolder.imageRecyclerViewAdapter.remove
+                        (viewHolder.getAdapterPosition());
+                if (ShiftChangeImageListFragment.this.viewHolder.imageRecyclerViewAdapter
+                        .getItemCount() == 0) {
+                    // 列表清空
+                    ShiftChangeImageListFragment.this.viewHolder.imageRecyclerView.setVisibility
+                            (View.GONE);
+                }
+            }
+        });
+
+        // 绑定事件
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     /**
@@ -387,12 +535,15 @@ public class ShiftChangeImageListFragment extends Fragment {
                             .ProcessFinishListener() {
                         @Override
                         public void finish(CacheTool cacheTool, String key) {
-                            // 通知列表刷新
-                            notifyImageAdapter(key);
 
-                            // 存入缓存
-                            viewHolder.sendCacheTool.put(ImageUtil.SOURCE_IMAGE_CACHE_PRE +
-                                    cacheKey, new File(picturePath));
+                            if (key != null) {
+                                // 通知列表刷新
+                                notifyImageAdapter(key);
+
+                                // 存入缓存
+                                viewHolder.sendCacheTool.put(ImageUtil.SOURCE_IMAGE_CACHE_PRE +
+                                        cacheKey, new File(picturePath));
+                            }
                         }
                     });
 
@@ -417,10 +568,23 @@ public class ShiftChangeImageListFragment extends Fragment {
                 viewHolder.thumbnailHeight, new ImageUtil.ProcessFinishListener() {
                     @Override
                     public void finish(CacheTool cacheTool, String key) {
-                        // 通知列表刷新
-                        notifyImageAdapter(key);
+                        if (key != null) {
+                            // 通知列表刷新
+                            notifyImageAdapter(key);
+                        } else {
+                            // 图片出现异常
+                            viewHolder.sendImageCacheKeyList.remove(0);
+                        }
                     }
                 });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // 保存数据
+        JSONArray jsonArray = new JSONArray(viewHolder.sendImageCacheKeyList);
+        viewHolder.sendCacheTool.put(SAVE_IMAGE_CACHE_KEY_LIST, jsonArray.toString());
     }
 
     /**

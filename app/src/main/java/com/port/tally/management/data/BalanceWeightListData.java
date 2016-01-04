@@ -8,9 +8,7 @@ import android.util.Log;
 import com.port.tally.management.bean.BalanceWeight;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.Map;
  * @version 1.0 2015/10/14
  * @since 1.0
  */
-public class BalanceWeightListData extends JsonDataModel {
+public class BalanceWeightListData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -129,57 +127,39 @@ public class BalanceWeightListData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject jsonObject) throws JSONException {
-        // 得到执行结果
-        String resultState = jsonObject.getString("IsSuccess");
+    protected void onExtractData(JSONObject jsonData) throws Exception {
+        JSONArray jsonArray = jsonData.getJSONArray("Data");
+        Log.i(LOG_TAG + "onExtractData", "get balanceWeightList count is " + jsonArray.length());
 
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
+        // 新建衡重列表
+        balanceWeightList = new ArrayList<>();
 
-    @Override
-    protected String onRequestMessage(boolean result, JSONObject jsonObject) throws JSONException {
-        return jsonObject.getString("Message");
-    }
+        for (int i = 0; i < jsonArray.length(); i++) {
 
-    @Override
-    protected void onRequestSuccess(JSONObject jsonObject) throws JSONException {
-        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+            JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-        if (jsonArray != null) {
+            if (jsonRow.length() > 5) {
+                // 一条衡重数据
+                BalanceWeight balanceWeight = new BalanceWeight();
 
-            Log.i(LOG_TAG + "onRequestSuccess", "get balanceWeightList count is " + jsonArray
-                    .length());
+                balanceWeight.setEntrustNumber(jsonRow.getString(0));
+                balanceWeight.setShip(jsonRow.getString(1));
+                balanceWeight.setEntrust(jsonRow.getString(2));
+                balanceWeight.setCargo(jsonRow.getString(3));
+                balanceWeight.setPlanWeight(jsonRow.getString(4));
+                balanceWeight.setDutyWeight(jsonRow.getString(5));
 
-            // 新建衡重列表
-            balanceWeightList = new ArrayList<>();
+                // 填充请求数据
+                balanceWeight.setCompanyCode(company);
+                balanceWeight.setDate(date);
+                balanceWeight.setDayNight(dayNight);
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONArray jsonRow = jsonArray.getJSONArray(i);
-
-                if (jsonRow.length() > 5) {
-                    // 一条衡重数据
-                    BalanceWeight balanceWeight = new BalanceWeight();
-
-                    balanceWeight.setEntrustNumber(jsonRow.getString(0));
-                    balanceWeight.setShip(jsonRow.getString(1));
-                    balanceWeight.setEntrust(jsonRow.getString(2));
-                    balanceWeight.setCargo(jsonRow.getString(3));
-                    balanceWeight.setPlanWeight(jsonRow.getString(4));
-                    balanceWeight.setDutyWeight(jsonRow.getString(5));
-
-                    // 填充请求数据
-                    balanceWeight.setCompanyCode(company);
-                    balanceWeight.setDate(date);
-                    balanceWeight.setDayNight(dayNight);
-
-                    // 添加到列表
-                    balanceWeightList.add(balanceWeight);
-                }
+                // 添加到列表
+                balanceWeightList.add(balanceWeight);
             }
-
-            Log.i(LOG_TAG + "onRequestSuccess", "balance weight list count is " +
-                    balanceWeightList.size());
         }
+
+        Log.i(LOG_TAG + "onExtractData", "balance weight list count is " + balanceWeightList.size
+                ());
     }
 }

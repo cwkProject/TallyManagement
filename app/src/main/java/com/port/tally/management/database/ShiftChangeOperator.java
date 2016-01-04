@@ -13,8 +13,11 @@ import com.port.tally.management.bean.ShiftChange;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.database.BaseOperator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,12 +39,18 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
     private static final String LOG_TAG = "ShiftChangeOperator.";
 
     /**
+     * 当前使用的表名(与用户关联)
+     */
+    private String nowTableName = null;
+
+    /**
      * 构造函数
      *
      * @param context 上下文
      */
     public ShiftChangeOperator(Context context) {
         super(context);
+        onCreateTableName();
     }
 
     @Override
@@ -56,7 +65,29 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
 
     @Override
     protected String onCreateTableName() {
-        return TableConst.ShiftChange.TABLE_NAME;
+
+        nowTableName = TableConst.ShiftChange.TABLE_NAME + "_" + GlobalApplication.getGlobal()
+                .getLoginStatus().getUserID();
+
+        return nowTableName;
+    }
+
+    @Override
+    protected void onCreateTable(SQLiteOpenHelper sqLiteHelper) {
+        /**
+         * 建表语句
+         */
+        String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
+                        "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TEXT " +
+                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", nowTableName,
+                CommonConst._ID, CommonConst.CODE, TableConst.ShiftChange.SEND_NAME, TableConst
+                        .ShiftChange.RECEIVE_NAME, TableConst.ShiftChange.TIME, TableConst
+                        .ShiftChange.CONTENT, TableConst.ShiftChange.IMAGE_URL, TableConst
+                        .ShiftChange.AUDIO_URL, TableConst.ShiftChange.MY_SEND);
+        Log.i(LOG_TAG + "onCreateTable", "sql is " + createTableSql);
+        sqLiteHelper.getWritableDatabase().execSQL(createTableSql);
+
+        close(sqLiteHelper);
     }
 
     @Override
@@ -66,9 +97,18 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
         cv.put(CommonConst.CODE, data.getToken());
         cv.put(TableConst.ShiftChange.SEND_NAME, data.getSend());
         cv.put(TableConst.ShiftChange.RECEIVE_NAME, data.getReceive());
-        cv.put(TableConst.ShiftChange.TIME, data.getTime());
         cv.put(TableConst.ShiftChange.CONTENT, data.getContent());
         cv.put(TableConst.ShiftChange.MY_SEND, data.isMySend() ? 1 : 0);
+
+        SimpleDateFormat formatTarget = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatSource = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+        try {
+            cv.put(TableConst.ShiftChange.TIME, formatTarget.format(formatSource.parse(data
+                    .getTime())));
+        } catch (ParseException e) {
+            Log.e(LOG_TAG + "onFillData", "ParseException is " + e.getMessage());
+        }
 
         if (data.getImageUrlList() != null) {
             JSONObject imageUrl = new JSONObject(data.getImageUrlList());
@@ -108,7 +148,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
             data.setToken(cursor.getString(code));
             data.setSend(cursor.getString(sendName));
             data.setReceive(cursor.getString(receiveName));
-            data.setTime(cursor.getString(time));
+            data.setTime(cursor.getString(time).replace('-', '/'));
             data.setContent(cursor.getString(content));
             data.setMySend(cursor.getInt(mySend) == 1);
 
@@ -172,14 +212,36 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
         String sql;
 
         if (parameters.length == 1) {
-            sql = String.format("select * from %s where %s=%s", TableConst.ShiftChange
-                    .TABLE_NAME, CommonConst.CODE, parameters[0]);
+            sql = String.format("select * from %s where %s=%s", nowTableName, CommonConst.CODE,
+                    parameters[0]);
         } else {
-            sql = String.format("select * from %s where order by %s desc limit %s,%s", TableConst
-                    .ShiftChange.TABLE_NAME, TableConst.ShiftChange.TIME, parameters[0],
-                    parameters[1]);
+            sql = String.format("select * from %s order by %s desc limit %s,%s", nowTableName,
+                    TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
         }
         return query(sql);
+    }
+
+    /**
+     * 根据行ID查询结果
+     *
+     * @param id 行ID
+     *
+     * @return 数据对象，没有返回null
+     */
+    public ShiftChange queryById(long id) {
+        Log.i(LOG_TAG + "queryById", "query id is " + id);
+
+        // 查询语句
+        String sql = String.format("select * from %s where %s=%s", nowTableName, CommonConst._ID,
+                id);
+
+        List<ShiftChange> list = query(sql);
+
+        if (!list.isEmpty()) {
+            return list.get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override

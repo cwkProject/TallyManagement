@@ -7,6 +7,9 @@ import com.port.tally.management.data.SingleUploadFileData;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
+import org.mobile.library.network.factory.NetworkType;
+import org.mobile.library.network.util.AsyncCommunication;
+import org.mobile.library.network.util.NetworkTimeoutHandler;
 
 /**
  * 单文件上传
@@ -25,6 +28,23 @@ public class SingleUploadFileWork extends DefaultWorkModel<String, Void, SingleU
     @Override
     protected String onTaskUri() {
        return StaticValue.UPLOAD_FILE_URL;
+    }
+
+    @Override
+    protected NetworkType onNetworkType() {
+        return NetworkType.UPLOAD;
+    }
+
+    @Override
+    protected AsyncCommunication onCreateAsyncCommunication() {
+
+        AsyncCommunication asyncCommunication = super.onCreateAsyncCommunication();
+
+        NetworkTimeoutHandler timeoutHandler = (NetworkTimeoutHandler) asyncCommunication;
+        timeoutHandler.setTimeout(0);
+        timeoutHandler.setReadTimeout(0);
+
+        return asyncCommunication;
     }
 
     @Override

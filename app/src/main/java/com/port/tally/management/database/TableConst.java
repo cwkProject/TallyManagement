@@ -18,7 +18,7 @@ public interface TableConst {
     String[] CREATE_TABLE_SQL_ARRAY = {CargoType.CREATE_TABLE_SQL , CargoOwner.CREATE_TABLE_SQL ,
                                        Voyage.CREATE_TABLE_SQL , Operation.CREATE_TABLE_SQL ,
                                        Forwarder.CREATE_TABLE_SQL , Storage.CREATE_TABLE_SQL ,
-                                       Company.CREATE_TABLE_SQL , ShiftChange.CREATE_TABLE_SQL};
+                                       Company.CREATE_TABLE_SQL , Employee.CREATE_TABLE_SQL};
 
     /**
      * 货物类别
@@ -134,8 +134,20 @@ public interface TableConst {
          * 建表语句
          */
         String CREATE_TABLE_SQL = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
-                        "PRIMARY" + " KEY, %s TEXT NOT NULL,  %s TEXT)", TABLE_NAME, CommonConst
-                ._ID, CommonConst.CODE, CommonConst.NAME);
+                "PRIMARY" + " KEY, %s TEXT NOT NULL,  %s TEXT)", TABLE_NAME, CommonConst._ID,
+                CommonConst.CODE, CommonConst.NAME);
+    }
+
+    interface Employee {
+        String TABLE_NAME = "tb_employee";
+
+        /**
+         * 建表语句
+         */
+        String CREATE_TABLE_SQL = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
+                "PRIMARY" + " KEY, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT, %s TEXT)" +
+                "", TABLE_NAME, CommonConst._ID, CommonConst.CODE, CommonConst.NAME, CommonConst
+                .COMPANY_CODE, CommonConst.SHORT_CODE);
     }
 
     /**
@@ -182,14 +194,5 @@ public interface TableConst {
          * 标识是否为本机发送的数据
          */
         String MY_SEND = "my_send";
-
-        /**
-         * 建表语句
-         */
-        String CREATE_TABLE_SQL = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
-                        "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TEXT " +
-                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", TABLE_NAME,
-                CommonConst._ID, CommonConst.CODE, SEND_NAME, RECEIVE_NAME, TIME, CONTENT,
-                IMAGE_URL, AUDIO_URL, MY_SEND);
     }
 }

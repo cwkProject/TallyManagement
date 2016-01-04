@@ -86,6 +86,38 @@ public class ShiftChangeImageRecyclerViewAdapter extends RecyclerView
         notifyItemRangeInserted(position, data.size());
     }
 
+    /**
+     * 移除一组数据
+     *
+     * @param start 起始位置
+     * @param count 删除行数
+     */
+    public void remove(int start, int count) {
+        for (int i = 0; i < count; i++) {
+            this.dataList.remove(start);
+        }
+        notifyItemRangeRemoved(start, count);
+    }
+
+    /**
+     * 移除一条数据
+     *
+     * @param position 起始位置
+     */
+    public void remove(int position) {
+        this.dataList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    /**
+     * 清空
+     */
+    public void clear() {
+        int count = this.dataList.size();
+        this.dataList.clear();
+        notifyItemRangeRemoved(0, count);
+    }
+
     @Override
     public ShiftChangeImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 创建Item根布局

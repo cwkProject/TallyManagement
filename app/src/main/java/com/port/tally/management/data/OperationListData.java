@@ -8,9 +8,7 @@ import android.util.Log;
 import com.port.tally.management.bean.Operation;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.Map;
  * @version 1.0 2015/9/21
  * @since 1.0
  */
-public class OperationListData extends JsonDataModel {
+public class OperationListData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -50,46 +48,29 @@ public class OperationListData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject jsonResult) throws JSONException {
-        // 得到执行结果
-        String resultState = jsonResult.getString("IsSuccess");
+    protected void onExtractData(JSONObject jsonData) throws Exception {
+        JSONArray jsonArray = jsonData.getJSONArray("Data");
+        Log.i(LOG_TAG + "onExtractData", "get operationList count is " + jsonArray.length());
 
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
+        // 新建列表
+        operationList = new ArrayList<>();
 
-    @Override
-    protected String onRequestMessage(boolean result, JSONObject jsonResult) throws JSONException {
-        return jsonResult.getString("Message");
-    }
+        for (int i = 0; i < jsonArray.length(); i++) {
 
-    @Override
-    protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
-        JSONArray jsonArray = jsonResult.getJSONArray("Data");
+            JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-        if (jsonArray != null) {
+            if (jsonRow.length() > 2) {
+                // 一条数据
+                Operation operation = new Operation();
+                operation.setId(jsonRow.getString(0));
+                operation.setName(jsonRow.getString(1));
+                operation.setShortCode(jsonRow.getString(2));
 
-            Log.i(LOG_TAG + "onRequestSuccess", "get operationList count is " + jsonArray.length());
-
-            // 新建列表
-            operationList = new ArrayList<>();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONArray jsonRow = jsonArray.getJSONArray(i);
-
-                if (jsonRow.length() > 2) {
-                    // 一条数据
-                    Operation operation = new Operation();
-                    operation.setId(jsonRow.getString(0));
-                    operation.setName(jsonRow.getString(1));
-                    operation.setShortCode(jsonRow.getString(2));
-
-                    // 加入列表
-                    operationList.add(operation);
-                }
+                // 加入列表
+                operationList.add(operation);
             }
-
-            Log.i(LOG_TAG + "onRequestSuccess", "operation list count is " + operationList.size());
         }
+
+        Log.i(LOG_TAG + "onExtractData", "operation list count is " + operationList.size());
     }
 }

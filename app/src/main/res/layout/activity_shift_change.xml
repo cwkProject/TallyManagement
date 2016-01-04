@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
 
     <include layout="@layout/toolbar_default_title"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/activity_shift_change_content_frameLayout"
+    <fragment
+        android:id="@+id/activity_shift_change_content_fragment"
+        android:name="com.port.tally.management.fragment.ShiftChangeContentFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_shift_change_content_list"/>
 
     <LinearLayout
         android:id="@+id/activity_shift_change_function_layout"
@@ -58,17 +61,16 @@
                 android:src="@android:drawable/ic_menu_send"/>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin_small"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/default_margin_small">
 
             <ImageButton
                 android:id="@+id/activity_shift_change_audio_imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
                 android:background="@null"
@@ -78,9 +80,10 @@
                 android:id="@+id/activity_shift_change_photo_imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/activity_shift_change_audio_imageButton"
                 android:background="@null"
                 android:src="@android:drawable/ic_menu_camera"/>
 
@@ -88,12 +91,28 @@
                 android:id="@+id/activity_shift_change_gallery_imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
+                android:layout_toRightOf="@+id/activity_shift_change_photo_imageButton"
                 android:background="@null"
                 android:src="@android:drawable/ic_menu_gallery"/>
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/activity_shift_change_receive_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/edit_text_shape"
+                android:gravity="center"
+                android:hint="@string/text_hint_select_receive"
+                android:padding="@dimen/default_padding_small"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_view_default_text_size"/>
+
+        </RelativeLayout>
 
         <FrameLayout
             android:id="@+id/activity_shift_change_bottom_frameLayout"

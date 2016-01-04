@@ -13,14 +13,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.port.tally.management.R;
-import com.port.tally.management.function.CargoOwnerListFunction;
-import com.port.tally.management.function.CargoTypeListFunction;
 import com.port.tally.management.function.CodeListManager;
-import com.port.tally.management.function.CompanyListFunction;
-import com.port.tally.management.function.ForwarderListFunction;
-import com.port.tally.management.function.OperationListFunction;
-import com.port.tally.management.function.StorageListFunction;
-import com.port.tally.management.function.VoyageListFunction;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.common.function.AutoLogin;
@@ -83,24 +76,20 @@ public class SplashActivity extends Activity {
      * 尝试加载本地数据
      */
     private void loadData() {
-        CodeListManager.put(StaticValue.CodeListTag.CARGO_TYPE_LIST, new CargoTypeListFunction
-                (this));
-        CodeListManager.put(StaticValue.CodeListTag.CARGO_OWNER_LIST, new CargoOwnerListFunction
-                (this));
-        CodeListManager.put(StaticValue.CodeListTag.VOYAGE_LIST, new VoyageListFunction(this));
-        CodeListManager.put(StaticValue.CodeListTag.OPERATION_LIST, new OperationListFunction
-                (this));
-        CodeListManager.put(StaticValue.CodeListTag.COMPANY_LIST, new CompanyListFunction(this));
+        CodeListManager.create(StaticValue.CodeListTag.CARGO_TYPE_LIST);
+        CodeListManager.create(StaticValue.CodeListTag.CARGO_OWNER_LIST);
+        CodeListManager.create(StaticValue.CodeListTag.VOYAGE_LIST);
+        CodeListManager.create(StaticValue.CodeListTag.OPERATION_LIST);
+        CodeListManager.create(StaticValue.CodeListTag.COMPANY_LIST);
     }
 
     /**
      * 登录成功后加载数据
      */
     private void onLoginLoadData() {
-        CodeListManager.put(StaticValue.CodeListTag.FORWARDER_LIST, new ForwarderListFunction
-                (this, GlobalApplication.getGlobal().getLoginStatus().getCodeCompany()), true);
-        CodeListManager.put(StaticValue.CodeListTag.STORAGE_LIST, new StorageListFunction(this,
-                GlobalApplication.getGlobal().getLoginStatus().getCodeCompany()), true);
+        CodeListManager.create(StaticValue.CodeListTag.FORWARDER_LIST, true);
+        CodeListManager.create(StaticValue.CodeListTag.STORAGE_LIST, true);
+        CodeListManager.create(StaticValue.CodeListTag.EMPLOYEE_LIST, true);
     }
 
     /**
@@ -177,7 +166,7 @@ public class SplashActivity extends Activity {
          * 初始时为注册的动作数量，
          * 当减少到0时表示数据加载完毕
          */
-        private volatile int actionSemaphore = 8;
+        private volatile int actionSemaphore = 9;
 
         /**
          * 得到本接收者监听的动作集合
@@ -197,6 +186,7 @@ public class SplashActivity extends Activity {
             filter.addAction(StaticValue.CodeListTag.FORWARDER_LIST);
             filter.addAction(StaticValue.CodeListTag.STORAGE_LIST);
             filter.addAction(StaticValue.CodeListTag.COMPANY_LIST);
+            filter.addAction(StaticValue.CodeListTag.EMPLOYEE_LIST);
             return filter;
         }
 
@@ -221,6 +211,9 @@ public class SplashActivity extends Activity {
                         // 跳过一条数据加载
                         actionSemaphore--;
                         Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");
+                        // 跳过一条数据加载
+                        actionSemaphore--;
+                        Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");
                     }
                 case StaticValue.CodeListTag.CARGO_TYPE_LIST:
                 case StaticValue.CodeListTag.CARGO_OWNER_LIST:
@@ -229,6 +222,7 @@ public class SplashActivity extends Activity {
                 case StaticValue.CodeListTag.FORWARDER_LIST:
                 case StaticValue.CodeListTag.STORAGE_LIST:
                 case StaticValue.CodeListTag.COMPANY_LIST:
+                case StaticValue.CodeListTag.EMPLOYEE_LIST:
                     // 完成一个动作信号量减1
                     actionSemaphore--;
                     Log.i(LOG_TAG + "LoadingReceiver.onReceive", "actionSemaphore--");

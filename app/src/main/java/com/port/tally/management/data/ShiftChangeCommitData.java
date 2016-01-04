@@ -6,7 +6,6 @@ package com.port.tally.management.data;
 import android.util.Log;
 
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.Map;
 
@@ -17,7 +16,7 @@ import java.util.Map;
  * @version 1.0 2015/12/14
  * @since 1.0
  */
-public class ShiftChangeCommitData extends JsonDataModel {
+public class ShiftChangeCommitData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -155,21 +154,8 @@ public class ShiftChangeCommitData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject handleResult) throws Exception {
-        // 得到执行结果
-        String resultState = handleResult.getString("IsSuccess");
-
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
-
-    @Override
-    protected String onRequestMessage(boolean result, JSONObject handleResult) throws Exception {
-        return handleResult.getString("Message");
-    }
-
-    @Override
-    protected void onRequestSuccess(JSONObject handleResult) throws Exception {
-        token = handleResult.getString("Data");
-        Log.i(LOG_TAG + "onRequestSuccess", "token is " + token);
+    protected void onExtractData(JSONObject jsonData) throws Exception {
+        token = jsonData.getString("Data");
+        Log.i(LOG_TAG + "onExtractData", "token is " + token);
     }
 }

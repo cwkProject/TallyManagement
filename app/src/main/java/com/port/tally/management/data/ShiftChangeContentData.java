@@ -10,7 +10,6 @@ import com.port.tally.management.util.CacheKeyUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +23,7 @@ import java.util.Map;
  * @version 1.0 2015/12/16
  * @since 1.0
  */
-public class ShiftChangeContentData extends JsonDataModel {
+public class ShiftChangeContentData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -82,75 +81,56 @@ public class ShiftChangeContentData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject handleResult) throws Exception {
-        // 得到执行结果
-        String resultState = handleResult.getString("IsSuccess");
+    protected void onExtractData(JSONObject jsonData) throws Exception {
+        JSONArray jsonArray = jsonData.getJSONArray("Data");
+        Log.i(LOG_TAG + "onExtractData", "get shift change count is " + jsonArray.length());
 
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
+        // 新建列表
+        shiftChangeList = new ArrayList<>();
 
-    @Override
-    protected String onRequestMessage(boolean result, JSONObject handleResult) throws Exception {
-        return handleResult.getString("Message");
-    }
+        for (int i = 0; i < jsonArray.length(); i++) {
 
-    @Override
-    protected void onRequestSuccess(JSONObject handleResult) throws Exception {
-        JSONArray jsonArray = handleResult.getJSONArray("Data");
+            JSONObject jsonRow = jsonArray.getJSONObject(i);
 
-        if (jsonArray != null) {
+            // 一条数据
+            ShiftChange shiftChange = new ShiftChange();
 
-            Log.i(LOG_TAG + "onRequestSuccess", "get shift change count is " + jsonArray.length());
+            shiftChange.setToken(jsonRow.getString("CodeToken"));
+            shiftChange.setSend(jsonRow.getString("UserNameFirst"));
+            shiftChange.setReceive(jsonRow.getString("UserNameSecond"));
+            shiftChange.setTime(jsonRow.getString("CreateTime"));
+            shiftChange.setContent(jsonRow.getString("Text"));
 
-            // 新建列表
-            shiftChangeList = new ArrayList<>();
+            if (!jsonRow.isNull("PICURL")) {
+                // 图片地址集合
+                Map<String, String> map = new HashMap<>();
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONObject jsonRow = jsonArray.getJSONObject(i);
-
-                if (jsonRow.length() > 2) {
-                    // 一条数据
-                    ShiftChange shiftChange = new ShiftChange();
-
-                    shiftChange.setToken(jsonRow.getString("CodeToekn"));
-                    shiftChange.setSend(jsonRow.getString("UserNameFirst"));
-                    shiftChange.setReceive(jsonRow.getString("UserNameSecond"));
-                    shiftChange.setTime(jsonRow.getString("CreateTime"));
-                    shiftChange.setContent(jsonRow.getString("Text"));
-
-                    if (!jsonRow.isNull("PICURL")) {
-                        // 图片地址集合
-                        Map<String, String> map = new HashMap<>();
-
-                        JSONArray array = jsonRow.getJSONArray("PICURL");
-                        for (int j = 0; j < array.length(); j++) {
-                            map.put(CacheKeyUtil.getRandomKey(), array.getString(j));
-                        }
-
-                        shiftChange.setImageUrlList(map);
-                    }
-                    if (!jsonRow.isNull("VOICEURL")) {
-
-                        // 地址集合
-                        Map<String, String> map = new HashMap<>();
-
-                        JSONArray array = jsonRow.getJSONArray("VOICEURL");
-
-                        for (int j = 0; j < array.length(); j++) {
-                            map.put(CacheKeyUtil.getRandomKey(), array.getString(j));
-                        }
-
-                        shiftChange.setAudioUrlList(map);
-                    }
-
-                    // 加入列表
-                    shiftChangeList.add(shiftChange);
+                JSONArray array = jsonRow.getJSONArray("PICURL");
+                for (int j = 0; j < array.length(); j++) {
+                    map.put(CacheKeyUtil.getRandomKey(), array.getString(j));
                 }
+
+                shiftChange.setImageUrlList(map);
+            }
+            if (!jsonRow.isNull("VOICEURL")) {
+
+                // 地址集合
+                Map<String, String> map = new HashMap<>();
+
+                JSONArray array = jsonRow.getJSONArray("VOICEURL");
+
+                for (int j = 0; j < array.length(); j++) {
+                    map.put(CacheKeyUtil.getRandomKey(), array.getString(j));
+                }
+
+                shiftChange.setAudioUrlList(map);
             }
 
-            Log.i(LOG_TAG + "onRequestSuccess", "shift change list count is " + shiftChangeList
-                    .size());
+            // 加入列表
+            shiftChangeList.add(shiftChange);
+
         }
+
+        Log.i(LOG_TAG + "onExtractData", "shift change list count is " + shiftChangeList.size());
     }
 }

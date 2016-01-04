@@ -36,7 +36,7 @@
             android:screenOrientation="sensor"/>
         <activity android:name=".activity.JiaoJieQuery"/>
         <activity android:name=".activity.TallyDetail"/>
-        <activity android:name="com.port.tally.management.activity.TallyManage"/>
+        <activity android:name=".activity.TallyManage"/>
         <activity android:name=".activity.TrunkQuery"/>
         <activity android:name=".activity.ShiftDuty"/>
         <activity android:name=".activity.PushMessage"/>
@@ -46,15 +46,22 @@
         <activity android:name=".activity.EndWork"/>
         <activity android:name=".activity.EntrustQueryActivity"/>
         <activity android:name=".activity.EntrustContentActivity"/>
-        <activity android:name="com.port.tally.management.activity.TallyDetailNew"/>
+        <activity android:name=".activity.TallyDetailNew"/>
         <activity android:name=".activity.StockQueryActivity"/>
         <activity android:name=".activity.StockContentActivity"/>
         <activity android:name=".activity.BalanceWeightQueryActivity"/>
         <activity android:name=".activity.BalanceWeightContentActivity"/>
-        <activity android:name=".activity.ShiftChangeActivity"/>
+        <activity
+            android:name=".activity.ShiftChangeActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity
+            android:name=".activity.EmployeeListActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".activity.ImageShowActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
+        <service android:name=".service.ShiftChangeService"/>
 
     </application>
 

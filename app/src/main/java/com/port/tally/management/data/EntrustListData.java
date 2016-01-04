@@ -8,9 +8,7 @@ import android.util.Log;
 import com.port.tally.management.bean.Entrust;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.Map;
  * @version 1.0 2015/9/19
  * @since 1.0
  */
-public class EntrustListData extends JsonDataModel {
+public class EntrustListData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -193,52 +191,35 @@ public class EntrustListData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject jsonObject) throws JSONException {
-        // 得到执行结果
-        String resultState = jsonObject.getString("IsSuccess");
+    protected void onExtractData(JSONObject jsonData) throws Exception {
+        JSONArray jsonArray = jsonData.getJSONArray("Data");
+        Log.i(LOG_TAG + "onExtractData", "get entrustList count is " + jsonArray.length());
 
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
+        // 新建委托列表
+        entrustList = new ArrayList<>();
 
-    @Override
-    protected String onRequestMessage(boolean result, JSONObject jsonObject) throws JSONException {
-        return jsonObject.getString("Message");
-    }
+        for (int i = 0; i < jsonArray.length(); i++) {
 
-    @Override
-    protected void onRequestSuccess(JSONObject jsonObject) throws JSONException {
-        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+            JSONArray jsonEntrust = jsonArray.getJSONArray(i);
 
-        if (jsonArray != null) {
+            if (jsonEntrust.length() > 7) {
+                // 一条委托数据
+                Entrust entrust = new Entrust();
 
-            Log.i(LOG_TAG + "onRequestSuccess", "get entrustList count is " + jsonArray.length());
+                entrust.setId(jsonEntrust.getString(0));
+                entrust.setCargoOwner(jsonEntrust.getString(1));
+                entrust.setCargo(jsonEntrust.getString(2));
+                entrust.setVoyage(jsonEntrust.getString(3));
+                entrust.setWork(jsonEntrust.getString(4));
+                entrust.setEntrustNumber(jsonEntrust.getString(5));
+                entrust.setPlanAmount(jsonEntrust.getString(6));
+                entrust.setPlanWeight(jsonEntrust.getString(7));
 
-            // 新建委托列表
-            entrustList = new ArrayList<>();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONArray jsonEntrust = jsonArray.getJSONArray(i);
-
-                if (jsonEntrust.length() > 7) {
-                    // 一条委托数据
-                    Entrust entrust = new Entrust();
-
-                    entrust.setId(jsonEntrust.getString(0));
-                    entrust.setCargoOwner(jsonEntrust.getString(1));
-                    entrust.setCargo(jsonEntrust.getString(2));
-                    entrust.setVoyage(jsonEntrust.getString(3));
-                    entrust.setWork(jsonEntrust.getString(4));
-                    entrust.setEntrustNumber(jsonEntrust.getString(5));
-                    entrust.setPlanAmount(jsonEntrust.getString(6));
-                    entrust.setPlanWeight(jsonEntrust.getString(7));
-
-                    // 添加到列表
-                    entrustList.add(entrust);
-                }
+                // 添加到列表
+                entrustList.add(entrust);
             }
-
-            Log.i(LOG_TAG + "onRequestSuccess", "entrust list count is " + entrustList.size());
         }
+
+        Log.i(LOG_TAG + "onExtractData", "entrust list count is " + entrustList.size());
     }
 }

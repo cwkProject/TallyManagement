@@ -8,9 +8,7 @@ import android.util.Log;
 import com.port.tally.management.bean.Stock;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.Map;
  * @version 1.0 2015/10/13
  * @since 1.0
  */
-public class StockListData extends JsonDataModel {
+public class StockListData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -161,53 +159,36 @@ public class StockListData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject jsonObject) throws JSONException {
-        // 得到执行结果
-        String resultState = jsonObject.getString("IsSuccess");
+    protected void onExtractData(JSONObject jsonData) throws Exception {
+        JSONArray jsonArray = jsonData.getJSONArray("Data");
+        Log.i(LOG_TAG + "onExtractData", "get stockList count is " + jsonArray.length());
 
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
+        // 新建堆存列表
+        stockList = new ArrayList<>();
 
-    @Override
-    protected String onRequestMessage(boolean result, JSONObject jsonObject) throws JSONException {
-        return jsonObject.getString("Message");
-    }
+        for (int i = 0; i < jsonArray.length(); i++) {
 
-    @Override
-    protected void onRequestSuccess(JSONObject jsonObject) throws JSONException {
-        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+            JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-        if (jsonArray != null) {
+            if (jsonRow.length() > 8) {
+                // 一条委托数据
+                Stock stock = new Stock();
 
-            Log.i(LOG_TAG + "onRequestSuccess", "get stockList count is " + jsonArray.length());
+                stock.setId(jsonRow.getString(0));
+                stock.setCargoOwner(jsonRow.getString(1));
+                stock.setCargo(jsonRow.getString(2));
+                stock.setVoyage(jsonRow.getString(3));
+                stock.setForwarder(jsonRow.getString(4));
+                stock.setStorage(jsonRow.getString(5));
+                stock.setWeight(jsonRow.getString(6));
+                stock.setStorageCode(jsonRow.getString(7));
+                stock.setPositionCode(jsonRow.getString(8));
 
-            // 新建堆存列表
-            stockList = new ArrayList<>();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONArray jsonRow = jsonArray.getJSONArray(i);
-
-                if (jsonRow.length() > 8) {
-                    // 一条委托数据
-                    Stock stock = new Stock();
-
-                    stock.setId(jsonRow.getString(0));
-                    stock.setCargoOwner(jsonRow.getString(1));
-                    stock.setCargo(jsonRow.getString(2));
-                    stock.setVoyage(jsonRow.getString(3));
-                    stock.setForwarder(jsonRow.getString(4));
-                    stock.setStorage(jsonRow.getString(5));
-                    stock.setWeight(jsonRow.getString(6));
-                    stock.setStorageCode(jsonRow.getString(7));
-                    stock.setPositionCode(jsonRow.getString(8));
-
-                    // 添加到列表
-                    stockList.add(stock);
-                }
+                // 添加到列表
+                stockList.add(stock);
             }
-
-            Log.i(LOG_TAG + "onRequestSuccess", "stock list count is " + stockList.size());
         }
+
+        Log.i(LOG_TAG + "onExtractData", "stock list count is " + stockList.size());
     }
 }

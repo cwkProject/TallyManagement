@@ -64,10 +64,8 @@ public class DirectFileDownLoadData extends DownloadDataModel {
             while ((count = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, count);
             }
-
-            inputStream.close();
-
             outputStream.close();
+            inputStream.close();
         }
     }
 }

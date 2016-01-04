@@ -8,9 +8,7 @@ import android.util.Log;
 import com.port.tally.management.bean.Company;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.mobile.library.model.data.base.JsonDataModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,7 @@ import java.util.Map;
  * @version 1.0 2015/10/14
  * @since 1.0
  */
-public class CompanyListData extends JsonDataModel {
+public class CompanyListData extends SimpleJsonDataModel {
 
     /**
      * 日志标签前缀
@@ -50,44 +48,27 @@ public class CompanyListData extends JsonDataModel {
     }
 
     @Override
-    protected boolean onRequestResult(JSONObject jsonResult) throws JSONException {
-        // 得到执行结果
-        String resultState = jsonResult.getString("IsSuccess");
+    protected void onExtractData(JSONObject jsonData) throws Exception {
+        JSONArray jsonArray = jsonData.getJSONArray("Data");
+        Log.i(LOG_TAG + "onExtractData", "get companyList count is " + jsonArray.length());
 
-        return resultState != null && "yes".equals(resultState.trim().toLowerCase());
-    }
+        // 新建公司列表
+        companyList = new ArrayList<>();
 
-    @Override
-    protected String onRequestMessage(boolean result, JSONObject jsonResult) throws JSONException {
-        return jsonResult.getString("Message");
-    }
+        for (int i = 0; i < jsonArray.length(); i++) {
 
-    @Override
-    protected void onRequestSuccess(JSONObject jsonResult) throws JSONException {
-        JSONArray jsonArray = jsonResult.getJSONArray("Data");
+            JSONArray jsonRow = jsonArray.getJSONArray(i);
 
-        if (jsonArray != null) {
-
-            Log.i(LOG_TAG + "onRequestSuccess", "get companyList count is " + jsonArray.length());
-
-            // 新建公司列表
-            companyList = new ArrayList<>();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-
-                JSONArray jsonRow = jsonArray.getJSONArray(i);
-
-                if (jsonRow.length() > 1) {
-                    // 一条公司数据
-                    Company company = new Company();
-                    company.setId(jsonRow.getString(0));
-                    company.setName(jsonRow.getString(1));
-                    // 加入列表
-                    companyList.add(company);
-                }
+            if (jsonRow.length() > 1) {
+                // 一条公司数据
+                Company company = new Company();
+                company.setId(jsonRow.getString(0));
+                company.setName(jsonRow.getString(1));
+                // 加入列表
+                companyList.add(company);
             }
-
-            Log.i(LOG_TAG + "onRequestSuccess", "company list count is " + companyList.size());
         }
+
+        Log.i(LOG_TAG + "onExtractData", "company list count is " + companyList.size());
     }
 }
