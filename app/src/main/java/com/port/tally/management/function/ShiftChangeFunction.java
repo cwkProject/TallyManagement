@@ -359,6 +359,8 @@ public class ShiftChangeFunction {
             return;
         }
 
+        sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication.getGlobal()
+                .getLoginStatus().getUserID(), shiftChange.getTime()).apply();
         operator.insert(shiftChange);
     }
 
