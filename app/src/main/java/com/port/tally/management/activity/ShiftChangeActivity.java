@@ -505,7 +505,6 @@ public class ShiftChangeActivity extends AppCompatActivity {
         String user_id = viewHolder.sendCacheTool.getForText(StaticValue.IntentTag.USER_ID_TAG);
         if (user_id != null && !user_id.equals(GlobalApplication.getGlobal().getLoginStatus()
                 .getUserID())) {
-
             // 更换了用户
             return;
         }
