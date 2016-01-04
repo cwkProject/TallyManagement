@@ -119,7 +119,7 @@ public class TallyDetail_MachineData extends JsonDataModel {
 
                 JSONArray jsonMachine = jsonArray.getJSONArray(i);
                 Log.i(LOG_TAG + "onRequestSuccess", "get TallyDetail_MachineData count is " + jsonMachine.length());
-                if (jsonMachine.length() > 10) {
+                if (jsonMachine.length() > 11) {
 //         复选框标志（0未选中1选中）+机械编号+司机编号+机械+司机+起始时间+终止时间+数量
                     Map<String,Object> map = new HashMap<String,Object>() ;
                     map.put("select", jsonMachine.getString(0));//是否选中
@@ -133,7 +133,7 @@ public class TallyDetail_MachineData extends JsonDataModel {
                     map.put("pmno",jsonMachine.getString(8));
                     map.put("weight",jsonMachine.getString(9));
                     map.put("count",jsonMachine.getString(10));//数量
-
+                    map.put("code_department",jsonMachine.getString(11));//部门编码
                     // 添加到列表
                     Log.i(LOG_TAG + "onRequestSuccess", "TallyDetail_MachineData  map list count is " + map);
                     all.add(map);

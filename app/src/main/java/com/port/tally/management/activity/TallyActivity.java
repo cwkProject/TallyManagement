@@ -32,6 +32,7 @@ import com.port.tally.management.adapter.TallyCagoAtoAdapter;
 import com.port.tally.management.adapter.TallyManageAdapter;
 import com.port.tally.management.util.InstantAutoComplete;
 import com.port.tally.management.work.EndWorkAutoTeamWork;
+import com.port.tally.management.work.GetDataAndWorkTeamWork;
 import com.port.tally.management.work.TallyCagoAtoWork;
 import com.port.tally.management.work.ToallyManageWork;
 import com.port.tally.management.xlistview.XListView;
@@ -68,6 +69,7 @@ public class TallyActivity extends Activity {
         company = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();
         showProgressDialog();
         Init();
+        loadDateAndWork();
         initListView();
         showData(null, null, null, null, null);
     }
@@ -123,6 +125,36 @@ public class TallyActivity extends Activity {
         });
 
     }
+    //获取货位数据
+    private void loadDateAndWork (){
+        GetDataAndWorkTeamWork getDateWork = new GetDataAndWorkTeamWork();
+        getDateWork.setWorkEndListener(new WorkBack<Map<String, Object>>() {
+            @Override
+            public void doEndWork(boolean b, Map<String, Object> stringObjectMap) {
+                if (b) {
+                    if (stringObjectMap != null) {
+                        Log.i("loadDateAndWork", "" + stringObjectMap);
+                        tv_time.setText(stringObjectMap.get("TakeDate").toString());
+                        if(stringObjectMap.get("WorkTime").toString().equals("白班")){
+                            spin_trust.setSelection(0,true);
+                            showData(null, null, null, tv_time.getText().toString(), "白班");
+                        }
+                        if(stringObjectMap.get("WorkTime").toString().equals("夜班")){
+                            spin_trust.setSelection(1,true);
+//                            spin_trust.isSelected()
+//                                    spin_trust.
+//                                    spin_trust.setSelection();
+                            showData(null, null, null, tv_time.getText().toString(), "夜班");
+                        }
+
+                    }else{
+                        Log.i("loadDateAndWork","获取失败");
+                    }
+                }
+            }
+        });
+        getDateWork.beginExecute(GlobalApplication.getGlobal().getLoginStatus().getCodeCompany());
+    }
 
     private void Init() {
         // TODO Auto-generated method stub
@@ -139,8 +171,10 @@ public class TallyActivity extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int pos, long id) {
                 String[] languages = getResources().getStringArray(R.array.work);
+
                 showData(null, null, null, tv_time.getText().toString(), languages[pos]);
-                Toast.makeText(TallyActivity.this, "你点击的是:" + languages[pos], Toast.LENGTH_SHORT).show();
+
+//                Toast.makeText(TallyActivity.this, "你点击的是:" + languages[pos], Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -172,9 +206,9 @@ public class TallyActivity extends Activity {
          Calendar calendar = Calendar.getInstance();
             final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-        String nowDate = format.format(calendar.getTime());
-
-            tv_time.setText(nowDate);
+//        String nowDate = format.format(calendar.getTime());
+//
+//            tv_time.setText(nowDate);
 
         final DatePickerDialog dutyDateDialog = new DatePickerDialog(TallyActivity
                 .this, new DatePickerDialog.OnDateSetListener() {
@@ -204,65 +238,13 @@ public class TallyActivity extends Activity {
             }
         });
     }
-//    //给个控件赋值
-//    private void loadCagoValue() {
-//
-//        //实例化，传入参数
-//        TallyCagoAtoWork tallyCagoAtoWork= new TallyCagoAtoWork();
-//
-//        tallyCagoAtoWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
-//
-//            public void doEndWork(boolean b, List<Map<String, Object>> data) {
-//
-//
-//                if (b) {
-//                    if(!dataListCago.equals("") || dataListCago!=null)
-//                        dataListCago.clear();
-//                    dataListCago.addAll(data);
-//                    Log.i("dataListCago的值", dataListCago.toString());
-//                    Log.i("data的值", data.toString());
-//                    tallyCagoAtoAdapter = new TallyCagoAtoAdapter(dataListCago, TallyActivity.this.getApplicationContext());
-//                    cagoAuto.setAdapter(tallyCagoAtoAdapter);
-//                    cagoAuto.setThreshold(0);  //设置输入一个字符 提示，默认为2
-//                    cagoAuto.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                            Map<String, Object> pccago = (Map<String, Object>) parent.getItemAtPosition(position);
-//                            cagoAuto.setText(pccago.get("tv2").toString());
-//                            showData(null, null, company, pccago.get("tv2").toString(), null);
-//                            Log.i("showData", "" + pccago.get("tv2").toString());
-//                            Log.i("showDataPosition", "" +  position);
-//
-//                        }
-//                    });
-//                    // Clear autocomplete
-//                    cagoAuto.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            cagoAuto.setText("");
-//                        }
-//                    });
-//
-//                } else {
-////                    showToast("无相关信息");
-//
-//                }
-//                if(tallyCagoAtoAdapter!=null){
-//                    tallyCagoAtoAdapter.notifyDataSetChanged();
-//                }
-//
-//            }
-//
-//        });
-//        tallyCagoAtoWork.beginExecute("");
-//    }
+
 
     //    显示数据
     private void showData(String key, String type, String company,String cargo,String trustno) {
-        key = "3";
+        key = "5";
         type = "1";
-//        company = "14";
+
         loadValue(key, type, company, cargo, trustno);
     }
 
@@ -284,7 +266,6 @@ public class TallyActivity extends Activity {
         toallyManageWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
-//        Log.i("TallyActivity的Data的值是","TallyActivity的Data的值是"+ data.size()+"/"+data);
                 if ("1".equals(type)) {
                     dataList.clear();
                     flag = 1;
@@ -302,6 +283,8 @@ public class TallyActivity extends Activity {
                     if(flag ==1){
                         if(dataList!=null){
                             dataList.clear();
+                            if(tallyManageAdapter!=null)
+                                tallyManageAdapter.notifyDataSetChanged();
                             listView.setPullLoadEnable(true);
                         }
                     }else if(flag>1){
@@ -311,9 +294,9 @@ public class TallyActivity extends Activity {
                         }else {
                             listView.setPullLoadEnable(true);
                         }
-
+                        if(tallyManageAdapter!=null)
+                        tallyManageAdapter.notifyDataSetChanged();
                     }
-
                     showToast("无更多数据");
                 }
                 onLoad();

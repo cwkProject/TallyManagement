@@ -278,6 +278,11 @@ public class TallySaveData extends JsonDataModel {
     private String Weight2= null;
 
     private String Count2= null;
+    private String CodeOperationFact=null;
+
+    public void setCodeOperationFact(String codeOperationFact) {
+        CodeOperationFact = codeOperationFact;
+    }
 
     public void setWeight2(String weight2) {
         Weight2 = weight2;
@@ -374,6 +379,8 @@ public class TallySaveData extends JsonDataModel {
         map.put("MarkFinish",MarkFinish);
         map.put("Allocation",Allocation);
         map.put("AllocationLast",AllocationLast);
+        map.put("CodeOperationFact",CodeOperationFact);
+
         Log.i("TallySaveData的map值",""+map);
 
 

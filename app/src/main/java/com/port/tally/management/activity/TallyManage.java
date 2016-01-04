@@ -81,6 +81,7 @@ public class TallyManage extends Activity {
 //                委托编码
 //                票货编码
 //                提交标志
+                Log.i("Tallymanage的Data的值是",""+map);
                 Bundle b = getIntent().getExtras();
                 value = b.getStringArray("detailString");
                 String[] valueflag = new String[5];
@@ -91,7 +92,8 @@ public class TallyManage extends Activity {
                 valueflag[4] = map.get("Tbno").toString();
                 b.putStringArray("detailString", valueflag);
 //                Log.i("bflag的值是", map.get("MarkFinish").toString());
-                Log.i("valuedetailString的值是", value[0] + "" + value[1] + "" + value[2] + "" + valueflag[3] + "");
+                Log.i("valuedetailString的map值是",""+map);
+                Log.i("valuedetailString的值是", value[0] + "@" + value[1] + "@" + value[2] + "@" + valueflag[3] + "@"+valueflag[4]);
                 intent = new Intent(TallyManage.this, TallyDetail.class);
                 intent.putExtras(b);
                 startActivity(intent);
@@ -206,7 +208,7 @@ public class TallyManage extends Activity {
         toallyManageWork.setWorkEndListener(new WorkBack<List<Map<String, Object>>>() {
 
             public void doEndWork(boolean b, List<Map<String, Object>> data) {
-//                Log.i("TallyActivity的Data的值是", "TallyActivity的Data的值是" + data.size() + "/" + data);
+//                Log.i("Tallymanage的Data的值是", "TallyActivity的Data的值是" + data.size() + "@/" + data);
 
                 if (b && data != null) {
                     if (data != null) {

@@ -6,27 +6,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mobile.library.model.data.base.JsonDataModel;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/21.
+ * Created by song on 2015/12/19.
  */
-public class SubprocessesFlagData extends JsonDataModel {
+public class GetFlagAutoData extends JsonDataModel {
 
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "SubprocessesFlagData.";
-    public void setSearchContent(String searchContent) {
-        this.searchContent = searchContent;
-    }
-    /**
-     * 服务请求传入参数
-     */
-    private String searchContent = null;
+    private static final String LOG_TAG = "GetFlagData.";
 
     public void setSearchContent1(String searchContent1) {
         this.searchContent1 = searchContent1;
@@ -40,7 +34,6 @@ public class SubprocessesFlagData extends JsonDataModel {
 
     List<Map<String,Object>> all = new ArrayList<Map<String,Object>>() ;
     protected void onFillRequestParameters(Map<String, String> map) {
-        map.put("CodeCompany", searchContent);
         map.put("Pmno", searchContent1);
 
     }
@@ -49,7 +42,6 @@ public class SubprocessesFlagData extends JsonDataModel {
     protected boolean onRequestResult(JSONObject jsonObject) throws JSONException {
         // 得到执行结果
         String resultState = jsonObject.getString("IsSuccess");
-
         return resultState != null && "yes".equals(resultState.trim().toLowerCase());
     }
 
@@ -61,28 +53,27 @@ public class SubprocessesFlagData extends JsonDataModel {
     @Override
     protected void onRequestSuccess(JSONObject jsonObject) throws JSONException {
         JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
         if (jsonArray != null) {
 
-            Log.i(LOG_TAG + "subprocessesFlagData的值", "get subprocessesFlagData count is " + jsonArray.length()+jsonArray.toString());
+            Log.i(LOG_TAG + "GetCornerPileData的值", "get GetFlagData count is " + jsonArray.length() + jsonArray.toString());
 
 
             for (int i = 0; i < jsonArray.length(); i++) {
 
-                JSONArray subprocessesFlagData = jsonArray.getJSONArray(i);
+                JSONArray getCornerPileData = jsonArray.getJSONArray(i);
 
-                if (subprocessesFlagData.length() > 2) {
+                if (getCornerPileData.length() > 2) {
                     // 一条委托数据
                     Map<String,Object> map = new HashMap<String,Object>() ;
-                    map.put("tv1", subprocessesFlagData.getString(0));
-                    map.put("tv2",subprocessesFlagData.getString(1));
-                    map.put("tv3", subprocessesFlagData.getString(2));
+                    map.put("tv3", getCornerPileData.getString(0));
+                    map.put("tv2",getCornerPileData.getString(1));
+                    map.put("tv1",getCornerPileData.getString(2));
                     // 添加到列表
                     all.add(map);
                 }
             }
 
-            Log.i(LOG_TAG + "onRequestSuccess", "subprocessesFlagData list count is " + all.size());
+            Log.i(LOG_TAG + "onRequestSuccess", "getFlagData list count is " + all.size());
         }
     }
 

@@ -27,6 +27,7 @@ public class PullWorkPlan extends DefaultWorkModel<String, List<WorkPlan>, WorkP
     @Override
     protected String onTaskUri() {
         return StaticValue.WORK_PLAN_URL;
+
     }
 
     @Override

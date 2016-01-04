@@ -29,6 +29,7 @@ public class PullShiftChangeContent extends DefaultWorkModel<String, List<ShiftC
     @Override
     protected String onTaskUri() {
         return StaticValue.SHIFT_CHANGE_CONTENT_URL;
+
     }
 
     @Override

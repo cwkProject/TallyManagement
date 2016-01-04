@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,13 +33,9 @@ public class TallyMachineAdapter extends BaseAdapter{
     private List<Map<String, Object>> data;
     private Context context;
     private LayoutInflater inflater;
-    private String [] machineitem;//班组列表数据
-    private String [] machineNameitem;//司机列表数据
 
     private AtomicInteger atomicInteger=new AtomicInteger();
-    //    修改后的值
-    private List<Map<String, Object>> updata;
-    private Map<String,String> upmap;
+
     public TallyMachineAdapter(Context context, List<Map<String, Object>> data) {
         this.data = data;
         this.context = context;
@@ -68,7 +66,7 @@ public class TallyMachineAdapter extends BaseAdapter{
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Map<String, Object> item = getItem(position);
         int i = atomicInteger.incrementAndGet();
-        Log.i("atomicInteger的值 in Machine", "" +i);
+        Log.i("atomicInteger的值 in machine", "" +i);
 //        Log.i("item的值", "" + item);
         final Hand hand;
         if (convertView == null) {
@@ -88,21 +86,68 @@ public class TallyMachineAdapter extends BaseAdapter{
         hand.et_count1.setInputType(InputType.TYPE_CLASS_PHONE);
         hand.et_count2.setInputType(InputType.TYPE_CLASS_PHONE);
         hand.et_count3.setInputType(InputType.TYPE_CLASS_PHONE);
-        if(i >2){
-            item.remove("amount");
-            item.remove("weight");
-            item.remove("count");
-            item.remove("begintime");
-            item.remove("endtime");
-            item.put("amount", hand.et_count1.getText().toString());
-            item.put("weight", hand.et_count2.getText().toString());
-            item.put("count", hand.et_count3.getText().toString());
-            item.put("begintime",hand.tv_start.getText().toString());
-            item.put("endtime", hand.tv_end.getText().toString());
-            Log.i("i值", "" + i);
-            Log.i("i值item",""+item.toString());
-            Log.i("TallyMachineAdapter i值item1",""+item.toString());
-        }
+//        if(i >2){
+//            item.remove("amount");
+//            item.remove("weight");
+//            item.remove("count");
+//            item.remove("begintime");
+//            item.remove("endtime");
+//            item.put("amount", hand.et_count1.getText().toString());
+//            item.put("weight", hand.et_count2.getText().toString());
+//            item.put("count", hand.et_count3.getText().toString());
+//            item.put("begintime",hand.tv_start.getText().toString());
+//            item.put("endtime", hand.tv_end.getText().toString());
+//            Log.i("i值", "" + i);
+//            Log.i("i值item",""+item.toString());
+//        }
+        hand.et_count1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                item.put("amount", s.toString());
+            }
+        });
+        hand.et_count2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                item.put("weight", s.toString());
+            }
+        });
+        hand.et_count3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                item.put("count", s.toString());
+            }
+        });
         hand.tv_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,9 +179,10 @@ public class TallyMachineAdapter extends BaseAdapter{
                             }else{
                                 sb.append(timePicker.getCurrentHour()).append(":").append(timePicker.getCurrentMinute());
                             }
+
                         }
                         hand.tv_start.setText(sb);
-                        item.put("begintime", sb.toString());
+                        item.put("begintime",hand.tv_start.getText().toString());
 
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -179,7 +225,8 @@ public class TallyMachineAdapter extends BaseAdapter{
                             }
                         }
                         hand.tv_end.setText(sb);
-                        item.put("endtime", sb.toString());
+                        item.put("endtime", hand.tv_end.getText().toString());
+
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -202,7 +249,7 @@ public class TallyMachineAdapter extends BaseAdapter{
         });
         if(item.get("select").equals("1")){
             hand.ck_mac.setChecked(true);}
-        if(item.get("select").equals("0")){
+        if(item.get("select").equals("0")) {
             hand.ck_mac.setChecked(false);}
         if(!item.get("machine").equals("")){
             hand.tv_mac.setText((CharSequence) item.get("machine"));
@@ -218,37 +265,43 @@ public class TallyMachineAdapter extends BaseAdapter{
         } if(!item.get("count").equals("")){
             hand.et_count3.setText((CharSequence) item.get("count"));
         }
-        if (!item.get("begintime").equals("")) {
-            if (item.get("begintime").toString().length()==4) {
-                Log.i("begintime的值", "" + item.get("begintime").toString());
+
+        if(!item.get("begintime").equals("")){
+            if(item.get("begintime").toString().length()==4){
                 item.put("begintime", item.get("begintime").toString().substring(0, 2) + ":" + item.get("begintime").toString().substring(2, 4));
+                Log.i("begintime的值", "" + item.get("begintime").toString());
+                hand.tv_start.setText(item.get("begintime").toString().substring(0, 2) + ":" + item.get("begintime").toString().substring(2, 4));
             }
-                hand.tv_start.setText(item.get("begintime").toString());
-                Log.i("item handbegintime的值", "" + hand.tv_start.getText().toString());
-                Log.i("itembegintime的值", "" + item.get("begintime").toString());
+            hand.tv_start.setText(item.get("begintime").toString());
         }
-        if(!item.get("endtime").equals("")){
-            if(item.get("endtime").toString().length()==4) {
+
+        if(!item.get("endtime").equals("")) {
+            if (item.get("endtime").toString().length()==4) {
+                Log.i("tv_end atomicInteger的值", "" + atomicInteger.get());
                 item.put("endtime", item.get("endtime").toString().substring(0, 2) + ":" + item.get("endtime").toString().substring(2, 4));
             }
-                hand.tv_end.setText(item.get("endtime").toString());
-            Log.i("itemendtime的值",""+item.get("endtime").toString());
+            Log.i("endtime的值", "" + item.get("endtime").toString());
+            Log.i("endtime的值", "" + item.get("endtime").toString().substring(0, 2) + ":" + item.get("endtime").toString().substring(2, 4));
+//                hand.tv_end.setText(item.get("endtime").toString().substring(0, 2) + ":" + item.get("endtime").toString().substring(2, 4));
+
+            hand.tv_end.setText(item.get("endtime").toString());
+
         }
-        if(i >2){
-            item.remove("amount");
-            item.remove("weight");
-            item.remove("count");
-            item.remove("begintime");
-            item.remove("endtime");
-            item.put("amount", hand.et_count1.getText().toString());
-            item.put("weight", hand.et_count2.getText().toString());
-            item.put("count", hand.et_count3.getText().toString());
-            item.put("begintime",hand.tv_start.getText().toString());
-            item.put("endtime", hand.tv_end.getText().toString());
-            Log.i("i值", "" + i);
-            Log.i("TallyMachineAdapter i值item",""+item.toString());
-        }
-        Log.i("TallyMachineAdapter item的值",""+item.toString());
+//        if(i >2){
+//            item.remove("amount");
+//            item.remove("weight");
+//            item.remove("count");
+//            item.remove("begintime");
+//            item.remove("endtime");
+//            item.put("amount", hand.et_count1.getText().toString());
+//            item.put("weight", hand.et_count2.getText().toString());
+//            item.put("count", hand.et_count3.getText().toString());
+//            item.put("begintime",hand.tv_start.getText().toString());
+//            item.put("endtime", hand.tv_end.getText().toString());
+//            Log.i("i值", "" + i);
+//            Log.i("TallyTeamAdapter i值item", "" + item.toString());
+//        }
+        Log.i("TallyTeamAdapter item的值",""+item.toString());
         convertView.setTag(hand);
         return convertView;
     }

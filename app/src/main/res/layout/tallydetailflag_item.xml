@@ -8,18 +8,18 @@
     <TextView
         android:id="@+id/tv_1"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:textColor="@color/black"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:text=" "
-        android:visibility="gone"
+
         android:textSize="16sp"
         />
     <TextView
         android:id="@+id/tv_2"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:textColor="@color/black"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -28,6 +28,16 @@
         android:textSize="16sp"
         />
 
-
+    <TextView
+        android:id="@+id/tv_3"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:text=" "
+        android:visibility="gone"
+        android:textSize="16sp"
+        />
 
 </LinearLayout>

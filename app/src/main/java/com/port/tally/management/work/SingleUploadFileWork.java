@@ -24,7 +24,7 @@ public class SingleUploadFileWork extends DefaultWorkModel<String, Void, SingleU
 
     @Override
     protected String onTaskUri() {
-        return StaticValue.UPLOAD_FILE_URL;
+       return StaticValue.UPLOAD_FILE_URL;
     }
 
     @Override

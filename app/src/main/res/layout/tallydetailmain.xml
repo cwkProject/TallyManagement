@@ -55,6 +55,42 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1.0px"
                 android:background="@drawable/shape_line"/>
+            <LinearLayout
+                android:layout_below="@+id/table_7"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/shape"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10.0dip"
+                    android:layout_weight="1.0"
+                    android:text="子过程"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"/>
+
+                <com.port.tally.management.util.InstantAutoComplete
+                    android:id="@+id/flag_auto"
+                    android:layout_width="0dip"
+                    android:gravity="center"
+                    android:layout_height="40.0dip"
+                    android:layout_marginRight="5.0dip"
+                    android:layout_marginLeft="12.0dip"
+                    android:layout_weight="4.0"
+                    android:enabled="false"
+                    android:dropDownWidth="350dp"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/BasicTextSize"/>
+            </LinearLayout>
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0px"
+                android:background="@drawable/shape_line"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -237,7 +273,7 @@
                         android:layout_width="0dip"
                         android:layout_marginLeft="10.0dip"
                         android:textColor="@color/black"
-                        android:text="货位"
+                        android:text="堆"
                         android:textSize="@dimen/BasicTextSize"
                         />
                     <TextView
@@ -346,7 +382,7 @@
                         android:layout_width="0dip"
                         android:layout_marginLeft="10.0dip"
                         android:textColor="@color/black"
-                        android:text="货位"
+                        android:text="堆"
 
                         android:textSize="@dimen/BasicTextSize"
                         />

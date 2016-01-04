@@ -1,18 +1,23 @@
 package com.port.tally.management.work;
 
-import com.port.tally.management.data.SubprocessesFlagData;
-import com.port.tally.management.data.Trust1Data;
+import android.util.Log;
+
+import com.port.tally.management.data.GetAllocatinAndCornerData;
+import com.port.tally.management.data.GetDateAndWorkData;
 import com.port.tally.management.util.StaticValue;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.mobile.library.model.data.base.JsonDataModel;
 import org.mobile.library.model.work.DefaultWorkModel;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/21.
+ * Created by song on 2015/12/21.
  */
-public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object>>, Trust1Data> {
+public class GetDataAndWorkTeamWork extends DefaultWorkModel<String, Map<String, Object>,GetDateAndWorkData> {
 
     /**
      * 参数合法性检测，
@@ -36,7 +41,7 @@ public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object
      */
     @Override
     protected String onTaskUri() {
-        return StaticValue.HTTP_GET_TRUSTSHIPMENTDATA_URL;
+        return StaticValue.HTTP_GetDATEANDWORK_URL;
     }
 
     /**
@@ -51,7 +56,7 @@ public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object
      * @return 任务返回数据
      */
     @Override
-    protected List<Map<String, Object>> onRequestSuccessSetResult(Trust1Data data) {
+    protected Map<String, Object> onRequestSuccessSetResult(GetDateAndWorkData data) {
         return data.getAll();
     }
 
@@ -66,8 +71,8 @@ public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object
      *
      * @return 任务返回数据
      */
-    @Override
-    protected List<Map<String, Object>> onRequestFailedSetResult(Trust1Data data) {
+
+    protected Map<String, Object> onRequestFailedSetResult(GetDateAndWorkData data) {
         return null;
     }
 
@@ -80,14 +85,11 @@ public class Trust1Work extends DefaultWorkModel<String, List<Map<String, Object
      * @return 参数设置完毕后的数据模型对象
      */
     @Override
-    protected Trust1Data onCreateDataModel(String... parameters) {
-        Trust1Data trust1Data = new Trust1Data();
-        trust1Data.setSearchContent(parameters[0]);
-        trust1Data.setSearchContent1(parameters[1]);
-        trust1Data.setSearchContent2(parameters[2]);
-        return trust1Data;
+    protected GetDateAndWorkData onCreateDataModel(String... parameters) {
+        GetDateAndWorkData getDateAndWorkData = new GetDateAndWorkData();
+
+        getDateAndWorkData.setSearchContent1(parameters[0]);
+        return getDateAndWorkData;
 
     }
 }
-
-

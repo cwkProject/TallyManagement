@@ -80,6 +80,7 @@ public class GetCornerPileDataWork extends DefaultWorkModel<String,List<Map<Stri
     protected GetCornerPileData onCreateDataModel(String... parameters) {
         GetCornerPileData getCornerPileData = new GetCornerPileData();
         getCornerPileData.setSearchContent1(parameters[0]);
+        getCornerPileData.setSearchContent2(parameters[1]);
         return getCornerPileData;
     }
 }

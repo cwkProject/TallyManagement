@@ -82,7 +82,10 @@ public class SubprocessesFlagWork extends DefaultWorkModel<String, List<Map<Stri
     @Override
     protected SubprocessesFlagData onCreateDataModel(String... parameters) {
 
-        return new SubprocessesFlagData();
+        SubprocessesFlagData allCarryData = new SubprocessesFlagData();
+        allCarryData.setSearchContent(parameters[0]);
+        allCarryData.setSearchContent1(parameters[1]);
+        return allCarryData;
     }
 }
 

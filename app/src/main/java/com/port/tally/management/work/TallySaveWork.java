@@ -8,7 +8,10 @@ import com.port.tally.management.data.TallySaveData;
 import com.port.tally.management.util.StaticValue;
 
 import org.mobile.library.model.work.DefaultWorkModel;
+import org.mobile.library.network.factory.CommunicationFactory;
 import org.mobile.library.network.factory.NetworkType;
+import org.mobile.library.network.util.AsyncCommunication;
+import org.mobile.library.network.util.NetworkTimeoutHandler;
 
 /**
  * Created by song on 2015/11/8.
@@ -38,6 +41,19 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
     @Override
     protected String onTaskUri() {
         return StaticValue.HTTP_POST_TALLYSAVE_URL;
+    }
+
+    @Override
+    protected AsyncCommunication onCreateAsyncCommunication() {
+
+        AsyncCommunication asyncCommunication= CommunicationFactory.CreateAsyncCommunication(onNetworkType());
+
+        NetworkTimeoutHandler networkTimeoutHandler= (NetworkTimeoutHandler) asyncCommunication;
+
+        networkTimeoutHandler.setTimeout(10000);
+        networkTimeoutHandler.setReadTimeout(10000);
+
+        return asyncCommunication;
     }
 
     /**
@@ -134,6 +150,7 @@ public class TallySaveWork extends DefaultWorkModel<String, String,TallySaveData
         tallySaveData.setMarkFinish(parameters[46]);
         tallySaveData.setAllocation(parameters[47]);
         tallySaveData.setAllocationLast(parameters[48]);
+        tallySaveData.setCodeOperationFact(parameters[49]);
         Log.i("TallySaveWork", "" + tallySaveData.toString());
         Log.i("TallySaveWork", "" +tallySaveData);
         return tallySaveData;

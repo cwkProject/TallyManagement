@@ -24,7 +24,7 @@ public class SendShiftChangeWork extends DefaultWorkModel<String, String, ShiftC
 
     @Override
     protected String onTaskUri() {
-        return StaticValue.SHIFT_CHANGE_COMMIT_URL;
+       return StaticValue.SHIFT_CHANGE_COMMIT_URL;
     }
 
     @Override

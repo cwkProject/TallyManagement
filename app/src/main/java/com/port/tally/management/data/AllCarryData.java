@@ -71,6 +71,7 @@ public class AllCarryData extends JsonDataModel {
             all.put("Storage", jsonResult.getString("Storage"));
             all.put("CodeStorage",jsonResult.getString("CodeStorage"));
             all.put("CodeOpstype",jsonResult.getString("CodeOpstype"));
+            all.put("Carrier",jsonResult.getString("Carrier"));
         }
         Log.i("allCarry的值是", "allCarry的值是" + all);
     }

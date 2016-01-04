@@ -26,6 +26,11 @@ public class GetCornerPileData extends JsonDataModel {
         this.searchContent1 = searchContent1;
     }
 
+    public void setSearchContent2(String searchContent2) {
+        this.searchContent2 = searchContent2;
+    }
+
+    private String searchContent2 = null;
     private String searchContent1 = null;
     public List<Map<String, Object>> getAll() {
         return all;
@@ -34,6 +39,7 @@ public class GetCornerPileData extends JsonDataModel {
     List<Map<String,Object>> all = new ArrayList<Map<String,Object>>() ;
     protected void onFillRequestParameters(Map<String, String> map) {
         map.put("CodeCompany", searchContent1);
+        map.put("CodeStorage", searchContent2);
     }
 
     @Override

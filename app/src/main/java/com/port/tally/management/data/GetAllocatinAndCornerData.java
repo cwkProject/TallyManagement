@@ -45,8 +45,8 @@ public class GetAllocatinAndCornerData extends JsonDataModel {
 
     protected void onFillRequestParameters(Map<String, String> dataMap) {
         // 传入请求参数
-        dataMap.put("CarriesType", searchContent);
-        dataMap.put("Tbno", searchContent1);
+        dataMap.put("CarriesType", searchContent1);
+        dataMap.put("Tbno", searchContent);
     }
 
     @Override

@@ -2,45 +2,45 @@ package com.port.tally.management.data;
 
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mobile.library.model.data.base.JsonDataModel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
- * Created by song on 2015/10/27.
+ * Created by song on 2015/12/21.
  */
-public class CodeCarryData extends JsonDataModel {
+public class GetDateAndWorkData extends JsonDataModel {
 
     /**
      * 日志标签前缀
      */
-    private static final String LOG_TAG = "CodeCarryData.";
+    private static final String LOG_TAG = "GetDataAndWorkTeamWork.";
 
-    public void setSearchContent(String searchContent) {
-        this.searchContent = searchContent;
-    }
+
     /**
      * 服务请求传入参数
      */
-    private String searchContent = null;
 
 
+    public void setSearchContent1(String searchContent1) {
+        this.searchContent1 = searchContent1;
+    }
 
+    private String searchContent1 = null;
 
     public Map<String, Object> getAll() {
         return all;
     }
 
-    private Map<String,Object> all;
+    private Map<String, Object> all;
+
     protected void onFillRequestParameters(Map<String, String> dataMap) {
         // 传入请求参数
-        dataMap.put("CodeOperationFact", searchContent);
+
+        dataMap.put("CodeCompany", searchContent1);
     }
 
     @Override
@@ -60,12 +60,11 @@ public class CodeCarryData extends JsonDataModel {
     protected void onRequestSuccess(JSONObject jsonObject) throws JSONException {
 
         JSONObject jsonResult = jsonObject.getJSONObject("Data");
-        all = new HashMap<String,Object>() ;
-        if(jsonResult instanceof JSONObject){
-            all.put("CodeCarriesS", jsonResult.getString("CodeCarriesS"));
-            all.put("CodeCarriesE",jsonResult.getString("CodeCarriesE"));
-            }
-            Log.i("CodeCarry的值是","CodeCarry的值是"+all);
+        all = new HashMap<String, Object>();
+        if (jsonResult instanceof JSONObject) {
+            all.put("TakeDate", jsonResult.getString("TakeDate"));
+            all.put("WorkTime", jsonResult.getString("WorkTime"));
         }
+        Log.i("GetAllocatinAndCornerData的值是", "GetAllocatinAndCornerData的值是" + all);
     }
-
+}

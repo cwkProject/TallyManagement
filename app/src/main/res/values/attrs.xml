@@ -14,6 +14,7 @@
         <item>消息中心</item>
     </string-array>
     <string-array name="work"> //完工
+
         <item>白班</item>
         <item>夜班</item>
 

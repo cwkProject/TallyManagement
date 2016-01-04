@@ -36,6 +36,11 @@ public class Trust1Data extends JsonDataModel {
     private String searchContent = null;
     private String searchContent1 = null;
 
+    public void setSearchContent2(String searchContent2) {
+        this.searchContent2 = searchContent2;
+    }
+
+    private String searchContent2 = null;
     public List<Map<String, Object>> getAll() {
         return all;
     }
@@ -47,6 +52,7 @@ public class Trust1Data extends JsonDataModel {
         // 传入请求参数
         dataMap.put("Pmno", searchContent);
         dataMap.put("Cgno", searchContent1);
+        dataMap.put("CodeOperationFact", searchContent2);
 
     }
 
