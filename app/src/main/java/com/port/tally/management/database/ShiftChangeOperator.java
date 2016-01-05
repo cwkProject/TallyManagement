@@ -212,7 +212,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
         String sql;
 
         if (parameters.length == 1) {
-            sql = String.format("select * from %s where %s=%s", nowTableName, CommonConst.CODE,
+            sql = String.format("select * from %s where %s='%s'", nowTableName, CommonConst.CODE,
                     parameters[0]);
         } else {
             sql = String.format("select * from %s order by %s desc limit %s,%s", nowTableName,

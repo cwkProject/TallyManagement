@@ -1393,8 +1393,8 @@ public class ShiftChangeContentFragment extends Fragment {
         Log.i(LOG_TAG + "downloadImage", "content token:" + token + " key:" + key);
         ShiftChange shiftChange = viewHolder.shiftChangeFunction.findByToken(token);
 
-        if (shiftChange.getImageUrlList() != null && shiftChange.getImageUrlList().containsKey
-                (key)) {
+        if (shiftChange != null && shiftChange.getImageUrlList() != null && shiftChange
+                .getImageUrlList().containsKey(key)) {
             String url = shiftChange.getImageUrlList().get(key);
 
             if (url != null) {
@@ -1425,8 +1425,8 @@ public class ShiftChangeContentFragment extends Fragment {
         Log.i(LOG_TAG + "downloadAudio", "content token:" + token + " key:" + key);
         ShiftChange shiftChange = viewHolder.shiftChangeFunction.findByToken(token);
 
-        if (shiftChange.getAudioUrlList() != null && shiftChange.getAudioUrlList().containsKey
-                (key)) {
+        if (shiftChange != null && shiftChange.getAudioUrlList() != null && shiftChange
+                .getAudioUrlList().containsKey(key)) {
             String url = shiftChange.getAudioUrlList().get(key);
 
             if (url != null) {
