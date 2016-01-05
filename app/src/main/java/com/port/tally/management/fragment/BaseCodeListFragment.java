@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -89,6 +90,11 @@ public abstract class BaseCodeListFragment<DataModel, Result> extends Fragment i
      * 速记码取值标签
      */
     protected static final String SHORT_CODE_TAG = "short_code_tag";
+
+    /**
+     * 本地广播管理器
+     */
+    private LocalBroadcastManager localBroadcastManager = null;
 
     /**
      * 数据加载结果的广播接收者
@@ -315,11 +321,14 @@ public abstract class BaseCodeListFragment<DataModel, Result> extends Fragment i
     private void registerReceivers() {
         Log.i(LOG_TAG + "registerReceivers", "registerReceivers() is invoked");
 
+        localBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
+
         // 新建接收者
         loadingReceiver = new LoadingReceiver();
 
         // 注册
-        getActivity().registerReceiver(loadingReceiver, loadingReceiver.getRegisterIntentFilter());
+        localBroadcastManager.registerReceiver(loadingReceiver, loadingReceiver
+                .getRegisterIntentFilter());
     }
 
     /**
@@ -328,8 +337,8 @@ public abstract class BaseCodeListFragment<DataModel, Result> extends Fragment i
     private void unregisterReceivers() {
         Log.i(LOG_TAG + "unregisterReceivers", "unregisterReceivers() is invoked");
 
-        if (loadingReceiver != null) {
-            getActivity().unregisterReceiver(loadingReceiver);
+        if (localBroadcastManager != null && loadingReceiver != null) {
+            localBroadcastManager.unregisterReceiver(loadingReceiver);
         }
     }
 }

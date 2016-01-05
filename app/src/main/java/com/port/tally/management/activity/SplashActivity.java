@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.port.tally.management.R;
@@ -34,6 +35,11 @@ public class SplashActivity extends Activity {
     private static final String LOG_TAG = "SplashActivity.";
 
     /**
+     * 本地广播管理器
+     */
+    private LocalBroadcastManager localBroadcastManager = null;
+
+    /**
      * 数据加载结果的广播接收者
      */
     private LoadingReceiver loadingReceiver = null;
@@ -42,11 +48,6 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         // 检测并加载数据
         checkLoadData();
     }
@@ -113,11 +114,14 @@ public class SplashActivity extends Activity {
     private void registerReceivers() {
         Log.i(LOG_TAG + "registerReceivers", "registerReceivers() is invoked");
 
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+
         // 新建接收者
         loadingReceiver = new LoadingReceiver();
 
         // 注册
-        registerReceiver(loadingReceiver, loadingReceiver.getRegisterIntentFilter());
+        localBroadcastManager.registerReceiver(loadingReceiver, loadingReceiver
+                .getRegisterIntentFilter());
     }
 
     /**
@@ -126,17 +130,17 @@ public class SplashActivity extends Activity {
     private void unregisterReceivers() {
         Log.i(LOG_TAG + "unregisterReceivers", "unregisterReceivers() is invoked");
 
-        if (loadingReceiver != null) {
-            unregisterReceiver(loadingReceiver);
+        if (localBroadcastManager != null && loadingReceiver != null) {
+            localBroadcastManager.unregisterReceiver(loadingReceiver);
         }
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
         // 注销广播接收者
         unregisterReceivers();
+
+        super.onDestroy();
     }
 
     /**
