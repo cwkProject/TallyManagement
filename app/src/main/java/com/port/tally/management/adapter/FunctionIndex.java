@@ -12,8 +12,6 @@ import com.port.tally.management.activity.EntrustQueryActivity;
 import com.port.tally.management.activity.ShiftChangeActivity;
 import com.port.tally.management.activity.StockQueryActivity;
 import com.port.tally.management.activity.TallyActivity;
-import com.port.tally.management.activity.TrunkActivity;
-import com.port.tally.management.activity.TrunkQuery;
 
 /**
  * 主界面功能索引
@@ -52,23 +50,23 @@ public class FunctionIndex {
                 // 堆存
                 intent = new Intent(context, StockQueryActivity.class);
                 break;
-            case 4:
-                // 汽运查询
-                intent = new Intent(context, TrunkQuery.class);
-                break;
-            case 5:
-                // 汽运作业
-                intent = new Intent(context, TrunkActivity.class);
-                break;
+            //            case 4:
+            //                // 汽运查询
+            //                intent = new Intent(context, TrunkQuery.class);
+            //                break;
+            //            case 5:
+            //                // 汽运作业
+            //                intent = new Intent(context, TrunkActivity.class);
+            //                break;
             //            case 6:
             //                // 作业计划
             //                intent = new Intent(context, WorkPlan.class);
             //                break;
-            case 6:
+            case 4:
                 // 交接班
                 intent = new Intent(context, ShiftChangeActivity.class);
                 break;
-            case 7:
+            case 5:
                 // 电子场图
                 intent = new Intent(context, DianZiMap.class);
                 break;

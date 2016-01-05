@@ -1451,26 +1451,32 @@ public class ShiftChangeContentFragment extends Fragment {
      * 通知列表增加
      *
      * @param shiftChangeContentList 新添加的数据集
+     * @param top                    标识是在头部添加，true表示在0位置添加，false表示在末尾添加
      */
     private void notifyAdapter(final List<ShiftChangeContent> shiftChangeContentList, final
     boolean top) {
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (top) {
-                    // 滚动到头部准备添加
-                    viewHolder.contentRecyclerView.scrollToPosition(0);
-                    viewHolder.adapter.addData(0, shiftChangeContentList);
-                } else {
-                    // 滚动到尾部准备添加
-                    viewHolder.contentRecyclerView.scrollToPosition(viewHolder.adapter
-                            .getItemCount());
-                    viewHolder.adapter.addData(viewHolder.adapter.getItemCount(),
-                            shiftChangeContentList);
+        if (shiftChangeContentList != null && shiftChangeContentList.size() > 0) {
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (top) {
+                        // 从头部添加
+                        viewHolder.adapter.addData(0, shiftChangeContentList);
+                        viewHolder.contentRecyclerView.scrollToPosition(shiftChangeContentList
+                                .size() - 1);
+
+                    } else {
+                        // 从尾部添加
+                        viewHolder.adapter.addData(viewHolder.adapter.getItemCount(),
+                                shiftChangeContentList);
+                        viewHolder.contentRecyclerView.scrollToPosition(viewHolder.adapter
+                                .getItemCount());
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -1481,23 +1487,26 @@ public class ShiftChangeContentFragment extends Fragment {
      */
     private void notifyAdapter(final ShiftChangeContent shiftChangeContent, final boolean top) {
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        if (shiftChangeContent != null) {
 
-                if (top) {
-                    // 滚动到头部准备添加
-                    viewHolder.contentRecyclerView.scrollToPosition(0);
-                    viewHolder.adapter.addData(0, shiftChangeContent);
-                } else {
-                    // 滚动到尾部准备添加
-                    viewHolder.contentRecyclerView.scrollToPosition(viewHolder.adapter
-                            .getItemCount());
-                    viewHolder.adapter.addData(viewHolder.adapter.getItemCount(),
-                            shiftChangeContent);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (top) {
+                        // 从头部添加
+                        viewHolder.adapter.addData(0, shiftChangeContent);
+                        viewHolder.contentRecyclerView.scrollToPosition(0);
+                    } else {
+                        // 从尾部添加
+                        viewHolder.contentRecyclerView.scrollToPosition(viewHolder.adapter
+                                .getItemCount());
+                        viewHolder.adapter.addData(viewHolder.adapter.getItemCount(),
+                                shiftChangeContent);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
