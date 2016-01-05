@@ -12,7 +12,6 @@ import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullForwarderList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.BroadcastUtil;
 
 import java.util.List;
@@ -51,14 +50,9 @@ public class ForwarderListFunction extends BaseCodeListFunction<Forwarder, Strin
 
         PullForwarderList pullForwarderList = new PullForwarderList();
 
-        pullForwarderList.setWorkEndListener(new WorkBack<List<Forwarder>>() {
-            @Override
-            public void doEndWork(boolean state, List<Forwarder> data) {
-                netWorkEndSetData(state, data);
-            }
-        }, false);
+        boolean state = pullForwarderList.execute(parameter);
 
-        pullForwarderList.execute(parameter);
+        netWorkEndSetData(state, pullForwarderList.getResult());
     }
 
     @Override

@@ -11,10 +11,7 @@ import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullOperationList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.BroadcastUtil;
-
-import java.util.List;
 
 /**
  * 作业过程数据列表管理器
@@ -43,14 +40,9 @@ public class OperationListFunction extends BaseCodeListFunction<Operation, Void>
     protected void onLoadFromNetWork(Void parameter) {
         PullOperationList pullOperationList = new PullOperationList();
 
-        pullOperationList.setWorkEndListener(new WorkBack<List<Operation>>() {
-            @Override
-            public void doEndWork(boolean state, List<Operation> data) {
-                netWorkEndSetData(state, data);
-            }
-        }, false);
+        boolean state = pullOperationList.execute();
 
-        pullOperationList.execute();
+        netWorkEndSetData(state, pullOperationList.getResult());
     }
 
     @Override

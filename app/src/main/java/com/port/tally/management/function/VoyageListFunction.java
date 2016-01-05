@@ -11,10 +11,7 @@ import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullVoyageList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.BroadcastUtil;
-
-import java.util.List;
 
 /**
  * 航次数据列表管理器
@@ -43,14 +40,9 @@ public class VoyageListFunction extends BaseCodeListFunction<Voyage, Void> {
     protected void onLoadFromNetWork(Void parameter) {
         PullVoyageList pullVoyageList = new PullVoyageList();
 
-        pullVoyageList.setWorkEndListener(new WorkBack<List<Voyage>>() {
-            @Override
-            public void doEndWork(boolean state, List<Voyage> data) {
-                netWorkEndSetData(state, data);
-            }
-        }, false);
+        boolean state = pullVoyageList.execute();
 
-        pullVoyageList.execute();
+        netWorkEndSetData(state, pullVoyageList.getResult());
     }
 
     @Override

@@ -12,7 +12,6 @@ import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullStorageList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.BroadcastUtil;
 
 import java.util.List;
@@ -51,14 +50,9 @@ public class StorageListFunction extends BaseCodeListFunction<Storage, String> {
 
         PullStorageList pullStorageList = new PullStorageList();
 
-        pullStorageList.setWorkEndListener(new WorkBack<List<Storage>>() {
-            @Override
-            public void doEndWork(boolean state, List<Storage> data) {
-                netWorkEndSetData(state, data);
-            }
-        }, false);
+        boolean state = pullStorageList.execute(parameter);
 
-        pullStorageList.execute(parameter);
+        netWorkEndSetData(state, pullStorageList.getResult());
     }
 
     @Override

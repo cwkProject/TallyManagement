@@ -11,10 +11,7 @@ import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullCargoTypeList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.BroadcastUtil;
-
-import java.util.List;
 
 /**
  * 货物类别数据列表管理器
@@ -43,14 +40,9 @@ public class CargoTypeListFunction extends BaseCodeListFunction<CargoType, Void>
     protected void onLoadFromNetWork(Void parameter) {
         PullCargoTypeList pullCargoTypeList = new PullCargoTypeList();
 
-        pullCargoTypeList.setWorkEndListener(new WorkBack<List<CargoType>>() {
-            @Override
-            public void doEndWork(boolean state, List<CargoType> data) {
-                netWorkEndSetData(state, data);
-            }
-        }, false);
+        boolean state = pullCargoTypeList.execute();
 
-        pullCargoTypeList.execute();
+        netWorkEndSetData(state, pullCargoTypeList.getResult());
     }
 
     @Override

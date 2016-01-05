@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.port.tally.management.R;
@@ -33,11 +32,6 @@ public class SplashActivity extends Activity {
      * 日志标签前缀
      */
     private static final String LOG_TAG = "SplashActivity.";
-
-    /**
-     * 本地广播管理器
-     */
-    private LocalBroadcastManager localBroadcastManager = null;
 
     /**
      * 数据加载结果的广播接收者
@@ -118,15 +112,12 @@ public class SplashActivity extends Activity {
      */
     private void registerReceivers() {
         Log.i(LOG_TAG + "registerReceivers", "registerReceivers() is invoked");
-        // 新建本地广播管理器
-        localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         // 新建接收者
         loadingReceiver = new LoadingReceiver();
 
         // 注册
-        localBroadcastManager.registerReceiver(loadingReceiver, loadingReceiver
-                .getRegisterIntentFilter());
+        registerReceiver(loadingReceiver, loadingReceiver.getRegisterIntentFilter());
     }
 
     /**
@@ -134,12 +125,9 @@ public class SplashActivity extends Activity {
      */
     private void unregisterReceivers() {
         Log.i(LOG_TAG + "unregisterReceivers", "unregisterReceivers() is invoked");
-        if (localBroadcastManager == null) {
-            return;
-        }
 
         if (loadingReceiver != null) {
-            localBroadcastManager.unregisterReceiver(loadingReceiver);
+            unregisterReceiver(loadingReceiver);
         }
     }
 
@@ -230,7 +218,7 @@ public class SplashActivity extends Activity {
             Log.i(LOG_TAG + "LoadingReceiver.onReceive", "now actionSemaphore is " +
                     actionSemaphore);
 
-            if (actionSemaphore <= 0) {
+            if (actionSemaphore == 0) {
                 // 数据加载完成
                 // 跳转
                 jump();

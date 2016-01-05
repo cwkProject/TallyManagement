@@ -11,10 +11,7 @@ import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullCargoOwnerList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.BroadcastUtil;
-
-import java.util.List;
 
 /**
  * 货主数据列表管理器
@@ -43,14 +40,9 @@ public class CargoOwnerListFunction extends BaseCodeListFunction<CargoOwner, Voi
     protected void onLoadFromNetWork(Void parameter) {
         PullCargoOwnerList pullCargoOwnerList = new PullCargoOwnerList();
 
-        pullCargoOwnerList.setWorkEndListener(new WorkBack<List<CargoOwner>>() {
-            @Override
-            public void doEndWork(boolean state, List<CargoOwner> data) {
-                netWorkEndSetData(state, data);
-            }
-        }, false);
+        boolean state = pullCargoOwnerList.execute();
 
-        pullCargoOwnerList.execute();
+        netWorkEndSetData(state, pullCargoOwnerList.getResult());
     }
 
     @Override

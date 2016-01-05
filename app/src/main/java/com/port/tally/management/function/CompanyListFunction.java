@@ -11,10 +11,7 @@ import com.port.tally.management.util.StaticValue;
 import com.port.tally.management.work.PullCompanyList;
 
 import org.mobile.library.model.database.BaseOperator;
-import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.util.BroadcastUtil;
-
-import java.util.List;
 
 /**
  * 公司数据列表管理器
@@ -43,14 +40,9 @@ public class CompanyListFunction extends BaseCodeListFunction<Company, Void> {
     protected void onLoadFromNetWork(Void parameter) {
         PullCompanyList pullCompanyList = new PullCompanyList();
 
-        pullCompanyList.setWorkEndListener(new WorkBack<List<Company>>() {
-            @Override
-            public void doEndWork(boolean state, List<Company> data) {
-                netWorkEndSetData(state, data);
-            }
-        }, false);
+        boolean state = pullCompanyList.execute();
 
-        pullCompanyList.execute();
+        netWorkEndSetData(state, pullCompanyList.getResult());
     }
 
     @Override
