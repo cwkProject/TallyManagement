@@ -192,7 +192,7 @@ public class SplashActivity extends Activity {
             switch (actionString) {
                 case BroadcastUtil.MEMORY_STATE_LOGIN:
                     // 登录执行完毕
-                    if (GlobalApplication.getGlobal().getLoginStatus().isLogin()) {
+                    if (GlobalApplication.getLoginStatus().isLogin()) {
                         // 登录成功
                         // 加载数据
                         onLoginLoadData();
@@ -236,7 +236,7 @@ public class SplashActivity extends Activity {
     private void jump() {
         Log.i(LOG_TAG + "instantJump", "instantJump() is invoked");
 
-        if (GlobalApplication.getGlobal().getLoginStatus().isLogin()) {
+        if (GlobalApplication.getLoginStatus().isLogin()) {
             // 已登录
             Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(mainIntent);

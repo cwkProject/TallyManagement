@@ -27,7 +27,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'] , dir: 'libs')
-    compile 'com.port:mobile-library:0.6.6'
+    compile 'com.port:mobile-library:0.6.7'
     compile files('libs/baidumapapi_v3_2_0.jar')
     compile 'com.android.support:gridlayout-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'

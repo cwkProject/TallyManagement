@@ -66,7 +66,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
     @Override
     protected String onCreateTableName() {
 
-        nowTableName = TableConst.ShiftChange.TABLE_NAME + "_" + GlobalApplication.getGlobal()
+        nowTableName = TableConst.ShiftChange.TABLE_NAME + "_" + GlobalApplication
                 .getLoginStatus().getUserID();
 
         return nowTableName;

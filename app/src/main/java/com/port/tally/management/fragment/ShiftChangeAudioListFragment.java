@@ -184,8 +184,7 @@ public class ShiftChangeAudioListFragment extends Fragment implements DataGetHan
     private void initData() {
 
         String user_id = viewHolder.sendCacheTool.getForText(StaticValue.IntentTag.USER_ID_TAG);
-        if (user_id != null && !user_id.equals(GlobalApplication.getGlobal().getLoginStatus()
-                .getUserID())) {
+        if (user_id != null && !user_id.equals(GlobalApplication.getLoginStatus().getUserID())) {
             // 更换了用户
             return;
         }

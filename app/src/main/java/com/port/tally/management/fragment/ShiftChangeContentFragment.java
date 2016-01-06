@@ -763,7 +763,7 @@ public class ShiftChangeContentFragment extends Fragment {
                     ShiftChange shiftChange = new ShiftChange();
 
                     shiftChange.setToken(s);
-                    shiftChange.setSend(GlobalApplication.getGlobal().getLoginStatus()
+                    shiftChange.setSend(GlobalApplication.getLoginStatus()
                             .getNickname());
                     shiftChange.setReceive(receive);
                     shiftChange.setContent(content);
@@ -831,8 +831,8 @@ public class ShiftChangeContentFragment extends Fragment {
             }
         }, false);
 
-        sendShiftChangeWork.beginExecute(GlobalApplication.getGlobal().getLoginStatus().getUserID
-                (), receive, GlobalApplication.getGlobal().getLoginStatus().getCodeCompany(),
+        sendShiftChangeWork.beginExecute(GlobalApplication.getLoginStatus().getUserID
+                (), receive, GlobalApplication.getLoginStatus().getCodeCompany(),
                 receiveCompany, content, images == null ? "0" : String.valueOf(images.length),
                 audios == null ? "0" : String.valueOf(audios.length));
     }
@@ -855,12 +855,8 @@ public class ShiftChangeContentFragment extends Fragment {
             String finalKey = keyPre == null ? key : keyPre + key;
             Log.i(LOG_TAG + "onMoveFile", "source file path:" + file.getPath() + " final key:" +
                     finalKey);
-            try {
-                viewHolder.contentCacheTool.putAndBack(finalKey).close();
-            } catch (IOException e) {
-                Log.e(LOG_TAG + "onMoveFile", "IOException is " + e.getMessage());
-            }
-            File newFile = viewHolder.contentCacheTool.getForFile(finalKey);
+
+            File newFile = viewHolder.contentCacheTool.putBackFile(finalKey);
             newFile.delete();
 
             // 移动文件

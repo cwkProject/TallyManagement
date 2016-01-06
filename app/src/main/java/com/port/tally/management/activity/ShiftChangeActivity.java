@@ -503,7 +503,7 @@ public class ShiftChangeActivity extends AppCompatActivity {
     private void initData() {
 
         String user_id = viewHolder.sendCacheTool.getForText(StaticValue.IntentTag.USER_ID_TAG);
-        if (user_id != null && !user_id.equals(GlobalApplication.getGlobal().getLoginStatus()
+        if (user_id != null && !user_id.equals(GlobalApplication.getLoginStatus()
                 .getUserID())) {
             // 更换了用户
             return;
@@ -563,8 +563,7 @@ public class ShiftChangeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         AudioFileLengthFunction.release();
-        viewHolder.sendCacheTool.put(StaticValue.IntentTag.USER_ID_TAG, GlobalApplication
-                .getGlobal().getLoginStatus().getUserID());
+        viewHolder.sendCacheTool.put(StaticValue.IntentTag.USER_ID_TAG, GlobalApplication.getLoginStatus().getUserID());
 
         try {
             // 保存数据

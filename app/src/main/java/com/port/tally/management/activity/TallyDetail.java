@@ -18,32 +18,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.FromAreaAdapter;
-import com.port.tally.management.adapter.GetAllocationDataAdapter;
-import com.port.tally.management.adapter.GetCornerPileDataAdapter;
-import com.port.tally.management.adapter.GetFlagAutoDataAdapter;
 import com.port.tally.management.adapter.SubprocessesFlagWorkAdapter;
 import com.port.tally.management.adapter.TallyMachineAdapter;
 import com.port.tally.management.adapter.TallyTeamAdapter;
 import com.port.tally.management.adapter.ToAreaAdapter;
 import com.port.tally.management.adapter.Trust1Adapter;
 import com.port.tally.management.adapter.Trust2Adapter;
-import com.port.tally.management.data.GetCornerPileData;
 import com.port.tally.management.util.InstantAutoComplete;
 import com.port.tally.management.work.AllCarryWork;
 import com.port.tally.management.work.CodeCarryWork;
 import com.port.tally.management.work.FromAreaNewWork;
 import com.port.tally.management.work.GetAllocationAndConerWork;
-import com.port.tally.management.work.GetAllocationDataWork;
-import com.port.tally.management.work.GetCornerPileDataWork;
 import com.port.tally.management.work.GetFlagAutoDataWork;
 import com.port.tally.management.work.SubprocessNewFlagWork;
 import com.port.tally.management.work.TallyDetailNewMountWork;
@@ -54,12 +47,13 @@ import com.port.tally.management.work.TallyDetail_teamWork;
 import com.port.tally.management.work.TallySaveWork;
 import com.port.tally.management.work.ToAreaNewWork;
 import com.port.tally.management.work.ToallyDetailWork;
-import com.port.tally.management.work.Trust1Work;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.work.WorkBack;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -198,7 +192,8 @@ public class TallyDetail extends TabActivity {
     private TallyMachineAdapter tallyMachineAdapter;
     private TallyTeamAdapter tallyTeamAdapter;
     private InstantAutoComplete flag_auto;
-    private LinearLayout shangwu_ly,xiaozhang_ly,linear_show,linear_quality2,linear_quality1,linear_Ehuowei,linear_huowei;;
+    private LinearLayout shangwu_ly,xiaozhang_ly,linear_show,linear_quality2,linear_quality1,linear_Ehuowei,linear_huowei;
+
     private TextView title,tv_shipment,start,end,shipment,business,tv_messgae,tv_cardstate,tv_boatname,tv_quality
             ,tv_tvboatdetail,tv_changbie,tv_huowei,tv_huoweidetail,tv_Eboatname,tv_Eboatdetail,tv_Echangbie,tv_Ehuowei,tv_Ehuoweidetail, tv_changbiedetail,tv_Echangbiedetail;
     private Spinner entrust1_spinner,entrust2_spinner,flag_spinner,quality_spinner,toarea_spinner,fromarea_spinner;
@@ -218,11 +213,11 @@ public class TallyDetail extends TabActivity {
         dataList = new ArrayList<>();
         dataListMachine = new ArrayList<>();
         dataListTeam = new ArrayList<>();
-        CodeCompany = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();//公司编码1
-        CodeDepartment=  GlobalApplication.getGlobal().getLoginStatus().getCodeDepartment();//部门编码2
+        CodeCompany = GlobalApplication.getLoginStatus().getCodeCompany();//公司编码1
+        CodeDepartment=  GlobalApplication.getLoginStatus().getCodeDepartment();//部门编码2
         Log.i(" CodeDepartment",""+CodeDepartment);
-        CodeTallyman=  GlobalApplication.getGlobal().getLoginStatus().getUserID();
-        Tallyman= GlobalApplication.getGlobal().getLoginStatus().getNickname();
+        CodeTallyman=  GlobalApplication.getLoginStatus().getUserID();
+        Tallyman= GlobalApplication.getLoginStatus().getNickname();
         init();
         showProgressDialog();
 

@@ -121,8 +121,8 @@ public class StartWork extends Activity {
         et_noteperson = (TextView) findViewById(R.id.et_noteperson);
         startWork_btn = (Button) findViewById(R.id.startWork_btn);
         title.setText("开工");
-        company = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();
-        et_noteperson.setText(GlobalApplication.getGlobal().getLoginStatus().getNickname());
+        company = GlobalApplication.getLoginStatus().getCodeCompany();
+        et_noteperson.setText(GlobalApplication.getLoginStatus().getNickname());
         tv_startTime.setText("选择时间");
         title.setVisibility(View.VISIBLE);
         imgLeft.setVisibility(View.VISIBLE);
@@ -169,7 +169,6 @@ public class StartWork extends Activity {
                     verifyvehicle(tongxingKey, type, company);
 
                 }
-                ;
 
             }
         });
@@ -183,7 +182,7 @@ public class StartWork extends Activity {
                     SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
                     Date curDate = new Date(System.currentTimeMillis());//获取当前时间
                     String str = formatter.format(curDate);
-                    uploadValue(ID, GlobalApplication.getGlobal().getLoginStatus().getNickname(),
+                    uploadValue(ID, GlobalApplication.getLoginStatus().getNickname(),
                             str);
                 } else {
                     showDialog("提交失败！");
@@ -224,7 +223,6 @@ public class StartWork extends Activity {
             finish();
             return;
         }
-        ;
         mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags
                 (Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         mNdefPushMessage = new NdefMessage(new NdefRecord[]{newTextRecord("Message from NFC " +
@@ -237,14 +235,12 @@ public class StartWork extends Activity {
                         showWirelessSettingsDialog();
 
                 }
-                ;
                 String tongxingKey = tv_cardnum.getText().toString();
 
                 if (validate(tongxingKey, v)) {
                     String type = "NFC";
                     verifyvehicle(tongxingKey, type, company);
                 }
-                ;
             }
         });
         //NFC

@@ -22,7 +22,6 @@ import com.port.tally.management.util.CacheKeyUtil;
 import org.mobile.library.cache.util.CacheTool;
 import org.mobile.library.model.operate.DataChangeObserver;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -206,17 +205,12 @@ public class ShiftChangeRecordFragment extends Fragment {
         // 生成一个缓存key
         viewHolder.cacheKey = CacheKeyUtil.getRandomKey();
 
-        FileOutputStream fileOutputStream = viewHolder.recordCacheTool.putAndBack(AUDIO_CACHE_PRE
-                + viewHolder.cacheKey);
-
         try {
-            fileOutputStream.close();
-
             // 初始化录音机
             initRecorder();
 
-            viewHolder.recorder.setOutputFile(viewHolder.recordCacheTool.getForFile
-                    (AUDIO_CACHE_PRE + viewHolder.cacheKey).getPath());
+            viewHolder.recorder.setOutputFile(viewHolder.recordCacheTool.putBackPath
+                    (AUDIO_CACHE_PRE + viewHolder.cacheKey));
             viewHolder.recorder.prepare();
         } catch (IOException e) {
             Log.e(LOG_TAG + "createAudioFile", "IOException is " + e.getMessage());

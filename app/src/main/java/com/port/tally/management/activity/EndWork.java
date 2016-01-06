@@ -136,11 +136,11 @@ public class EndWork extends Activity {
         tv_note = (TextView) findViewById(R.id.tv_note);
         tv_balanceweight = (TextView) findViewById(R.id.tv_balanceweight);
         tv_subtime = (TextView) findViewById(R.id.tv_subtime);
-        tv_note.setText(GlobalApplication.getGlobal().getLoginStatus().getNickname());
+        tv_note.setText(GlobalApplication.getLoginStatus().getNickname());
         teamAuto = (InstantAutoComplete) findViewById(R.id.et_group);
         dataList = new ArrayList<>();
         spinner_over = (Spinner) findViewById(R.id.spinner_over);
-        company = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();
+        company = GlobalApplication.getLoginStatus().getCodeCompany();
         loadValue(company);
         Log.i("dataList的值", dataList.toString());
         endWork_btn = (Button) findViewById(R.id.save_btn);
@@ -188,7 +188,7 @@ public class EndWork extends Activity {
                     SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
                     Date curDate = new Date(System.currentTimeMillis());//获取当前时间
                     String str = formatter.format(curDate);
-                    uploadValue(ID, GlobalApplication.getGlobal().getLoginStatus().getNickname(),
+                    uploadValue(ID, GlobalApplication.getLoginStatus().getNickname(),
                             str, et_count.getText().toString(), team, spinner_overText);
                 } else {
                     showDialog("提交失败！");
@@ -205,7 +205,6 @@ public class EndWork extends Activity {
                     String type = "CARD";
                     verifyvehicle(tongxingKey, type, company);
                 }
-                ;
 
             }
         });
@@ -242,7 +241,6 @@ public class EndWork extends Activity {
             finish();
             return;
         }
-        ;
         mPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags
                 (Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         mNdefPushMessage = new NdefMessage(new NdefRecord[]{newTextRecord("Message from NFC " +
@@ -255,14 +253,12 @@ public class EndWork extends Activity {
                         showWirelessSettingsDialog();
 
                 }
-                ;
                 String tongxingKey = tv_cardnum.getText().toString();
                 if (validate(tongxingKey, v)) {
                     String type = "NFC";
                     verifyvehicle(tongxingKey, type, company);
                     Log.i("verifyvehicle(tongxingKey, type, company);", "");
                 }
-                ;
             }
         });
         //NFC

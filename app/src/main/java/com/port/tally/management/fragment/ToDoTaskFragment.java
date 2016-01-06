@@ -155,7 +155,7 @@ public class ToDoTaskFragment extends Fragment {
             }
         });
 
-        pullWorkPlan.beginExecute(GlobalApplication.getGlobal().getLoginStatus().getUserID());
+        pullWorkPlan.beginExecute(GlobalApplication.getLoginStatus().getUserID());
     }
 
     /**

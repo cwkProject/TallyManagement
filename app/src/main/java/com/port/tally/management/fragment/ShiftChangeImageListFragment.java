@@ -39,8 +39,6 @@ import org.mobile.library.model.operate.DataGetHandle;
 import org.mobile.library.model.operate.OnItemClickListenerForRecyclerViewItem;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -444,16 +442,7 @@ public class ShiftChangeImageListFragment extends Fragment implements DataGetHan
         viewHolder.sendImageCacheKeyList.add(0, key);
 
         // 获取一个缓存位置
-        FileOutputStream fileOutputStream = viewHolder.sendCacheTool.putAndBack(ImageUtil
-                .SOURCE_IMAGE_CACHE_PRE + key);
-
-        try {
-            fileOutputStream.close();
-        } catch (IOException e) {
-            Log.e(LOG_TAG + "getOutputMediaFileUri", "IOException is " + e.getMessage());
-        }
-
-        File file = viewHolder.sendCacheTool.getForFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE + key);
+        File file = viewHolder.sendCacheTool.putBackFile(ImageUtil.SOURCE_IMAGE_CACHE_PRE + key);
 
         return Uri.fromFile(file);
     }

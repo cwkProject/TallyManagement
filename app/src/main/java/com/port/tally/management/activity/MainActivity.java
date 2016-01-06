@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void onGridItemClick(int position) {
 
-        if (!GlobalApplication.getGlobal().getLoginStatus().isLogin()) {
+        if (!GlobalApplication.getLoginStatus().isLogin()) {
             // 未登录
             // 新建意图,跳转到登录页面
             Intent intent = new Intent(this, LoginActivity.class);

@@ -25,16 +25,15 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.port.tally.management.R;
 import com.port.tally.management.adapter.FromAreaAdapter;
 import com.port.tally.management.adapter.GetAllocationDataAdapter;
 import com.port.tally.management.adapter.GetCornerPileDataAdapter;
 import com.port.tally.management.adapter.GetFlagAutoDataAdapter;
 import com.port.tally.management.adapter.SubprocessesFlagWorkAdapter;
-import com.port.tally.management.adapter.TallyMachine1Adapter;
 import com.port.tally.management.adapter.TallyNewMachineAdapter;
 import com.port.tally.management.adapter.TallyNewTeamAdapter;
-import com.port.tally.management.adapter.TallyTeamAdapter;
 import com.port.tally.management.adapter.ToAreaAdapter;
 import com.port.tally.management.adapter.Trust1Adapter;
 import com.port.tally.management.adapter.Trust2Adapter;
@@ -46,19 +45,19 @@ import com.port.tally.management.work.GetAllocationDataWork;
 import com.port.tally.management.work.GetCornerPileDataWork;
 import com.port.tally.management.work.GetFlagAutoDataWork;
 import com.port.tally.management.work.SubprocessesFlagWork;
-import com.port.tally.management.work.TallyDetail_MachineWork;
 import com.port.tally.management.work.TallyDetail_NewMachineWork;
 import com.port.tally.management.work.TallyDetail_NewTeamWork;
-import com.port.tally.management.work.TallyDetail_teamWork;
 import com.port.tally.management.work.TallySaveWork;
 import com.port.tally.management.work.ToAreaWork;
 import com.port.tally.management.work.ToallyDetailWork;
 import com.port.tally.management.work.Trust1Work;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.work.WorkBack;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -202,7 +201,8 @@ public class TallyDetailNew extends TabActivity {
     private TextView title,tv_shipment,start,end,shipment,business,tv_messgae,tv_cardstate,tv_boatname
             ,tv_tvboatdetail,tv_changbie,tv_huowei,tv_huoweidetail,tv_Eboatname,tv_Eboatdetail,tv_Echangbie,tv_Ehuowei,tv_Ehuoweidetail;
     EditText tv_changbiedetail,tv_Echangbiedetail;
-    private Spinner entrust1_spinner,entrust2_spinner,flag_spinner,quality_spinner,toarea_spinner,fromarea_spinner, Egetallocation_spinner,getallocation_spinner;;
+    private Spinner entrust1_spinner,entrust2_spinner,flag_spinner,quality_spinner,toarea_spinner,fromarea_spinner, Egetallocation_spinner,getallocation_spinner;
+
     private Toast mToast;
     EditText et_count1,et_count2,et_count3,et_count21,et_count22,et_count23,et_vehicle;
     String[] value=null;
@@ -217,11 +217,11 @@ public class TallyDetailNew extends TabActivity {
         dataList = new ArrayList<>();
         dataListMachine = new ArrayList<>();
         dataListTeam = new ArrayList<>();
-        CodeCompany = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();//公司编码1
-        CodeDepartment=  GlobalApplication.getGlobal().getLoginStatus().getCodeDepartment();//部门编码2
+        CodeCompany = GlobalApplication.getLoginStatus().getCodeCompany();//公司编码1
+        CodeDepartment=  GlobalApplication.getLoginStatus().getCodeDepartment();//部门编码2
         Log.i(" CodeDepartment",""+CodeDepartment);
-        CodeTallyman=  GlobalApplication.getGlobal().getLoginStatus().getUserID();
-        Tallyman= GlobalApplication.getGlobal().getLoginStatus().getNickname();
+        CodeTallyman=  GlobalApplication.getLoginStatus().getUserID();
+        Tallyman= GlobalApplication.getLoginStatus().getNickname();
         init();
         showProgressDialog();
         Bundle b=getIntent().getExtras();
@@ -274,7 +274,7 @@ public class TallyDetailNew extends TabActivity {
                 }
             }
         });
-        subprocessesFlagWork.beginExecute(GlobalApplication.getGlobal().getLoginStatus().getCodeCompany(),value[0] );
+        subprocessesFlagWork.beginExecute(GlobalApplication.getLoginStatus().getCodeCompany(),value[0] );
     }
     //    加载到区域数据
     private void loadToAreaData(final String str){
@@ -925,9 +925,9 @@ public class TallyDetailNew extends TabActivity {
                     getCornerPileDataAdapter2.notifyDataSetChanged();
             }
         });
-        Log.i("getCodeCompany()", "" + GlobalApplication.getGlobal().getLoginStatus().getCodeCompany());
+        Log.i("getCodeCompany()", "" + GlobalApplication.getLoginStatus().getCodeCompany());
         Log.i("pubCodeStorage", "" + str+"/"+str);
-        getCornerPileDataWork.beginExecute(GlobalApplication.getGlobal().getLoginStatus().getCodeCompany(),str);
+        getCornerPileDataWork.beginExecute(GlobalApplication.getLoginStatus().getCodeCompany(),str);
     }
     //获取货位数据
     private void loadAllocationData(){

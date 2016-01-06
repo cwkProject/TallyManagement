@@ -1,43 +1,26 @@
 package com.port.tally.management.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-import com.port.tally.management.activity.TallyManage;
+
 import com.port.tally.management.R;
-import com.port.tally.management.adapter.EndWorkTeamAutoAdapter;
-import com.port.tally.management.adapter.TallyCagoAtoAdapter;
 import com.port.tally.management.adapter.TallyManageAdapter;
-import com.port.tally.management.util.InstantAutoComplete;
-import com.port.tally.management.work.EndWorkAutoTeamWork;
 import com.port.tally.management.work.GetDataAndWorkTeamWork;
-import com.port.tally.management.work.TallyCagoAtoWork;
 import com.port.tally.management.work.ToallyManageWork;
 import com.port.tally.management.xlistview.XListView;
 
-import org.mobile.library.common.function.InputMethodController;
 import org.mobile.library.global.GlobalApplication;
 import org.mobile.library.model.work.WorkBack;
 
@@ -66,7 +49,7 @@ public class TallyActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tally_main);
-        company = GlobalApplication.getGlobal().getLoginStatus().getCodeCompany();
+        company = GlobalApplication.getLoginStatus().getCodeCompany();
         showProgressDialog();
         Init();
         loadDateAndWork();
@@ -153,7 +136,7 @@ public class TallyActivity extends Activity {
                 }
             }
         });
-        getDateWork.beginExecute(GlobalApplication.getGlobal().getLoginStatus().getCodeCompany());
+        getDateWork.beginExecute(GlobalApplication.getLoginStatus().getCodeCompany());
     }
 
     private void Init() {
