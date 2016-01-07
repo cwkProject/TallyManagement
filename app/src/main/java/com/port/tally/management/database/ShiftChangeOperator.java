@@ -39,11 +39,6 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
     private static final String LOG_TAG = "ShiftChangeOperator.";
 
     /**
-     * 当前使用的表名(与用户关联)
-     */
-    private String nowTableName = null;
-
-    /**
      * 构造函数
      *
      * @param context 上下文
@@ -65,11 +60,8 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
 
     @Override
     protected String onCreateTableName() {
-
-        nowTableName = TableConst.ShiftChange.TABLE_NAME + "_" + GlobalApplication
-                .getLoginStatus().getUserID();
-
-        return nowTableName;
+        return TableConst.ShiftChange.TABLE_NAME + "_" + GlobalApplication.getLoginStatus()
+                .getUserID();
     }
 
     @Override
@@ -79,7 +71,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
          */
         String createTableSql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s INTEGER " +
                         "PRIMARY KEY, %s TEXT UNIQUE, %s TEXT NOT NULL, %s TEXT, %s TEXT " +
-                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", nowTableName,
+                        "NOT NULL, %s TEXT, %s TEXT, %s TEXT, %s INTEGER)", tableName,
                 CommonConst._ID, CommonConst.CODE, TableConst.ShiftChange.SEND_NAME, TableConst
                         .ShiftChange.RECEIVE_NAME, TableConst.ShiftChange.TIME, TableConst
                         .ShiftChange.CONTENT, TableConst.ShiftChange.IMAGE_URL, TableConst
@@ -212,10 +204,10 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
         String sql;
 
         if (parameters.length == 1) {
-            sql = String.format("select * from %s where %s='%s'", nowTableName, CommonConst.CODE,
+            sql = String.format("select * from %s where %s='%s'", tableName, CommonConst.CODE,
                     parameters[0]);
         } else {
-            sql = String.format("select * from %s order by %s desc limit %s,%s", nowTableName,
+            sql = String.format("select * from %s order by %s desc limit %s,%s", tableName,
                     TableConst.ShiftChange.TIME, parameters[0], parameters[1]);
         }
         return query(sql);
@@ -232,8 +224,7 @@ public class ShiftChangeOperator extends BaseOperator<ShiftChange> {
         Log.i(LOG_TAG + "queryById", "query id is " + id);
 
         // 查询语句
-        String sql = String.format("select * from %s where %s=%s", nowTableName, CommonConst._ID,
-                id);
+        String sql = String.format("select * from %s where %s=%s", tableName, CommonConst._ID, id);
 
         List<ShiftChange> list = query(sql);
 

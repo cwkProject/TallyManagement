@@ -196,7 +196,8 @@ public class ImageUtil {
         ByteArrayOutputStream byteArrayOutputStream = ImageCompression.compressImage(bitmap, size);
 
         // 获取一个缓存位置
-        FileOutputStream fileOutputStream = cacheTool.putAndBack(COMPRESSION_IMAGE_CACHE_PRE + key);
+        FileOutputStream fileOutputStream = cacheTool.putBackStream(COMPRESSION_IMAGE_CACHE_PRE +
+                key);
 
         try {
             byteArrayOutputStream.writeTo(fileOutputStream);
@@ -237,7 +238,7 @@ public class ImageUtil {
                         (bitmap, size);
 
                 // 获取一个缓存位置
-                FileOutputStream fileOutputStream = cacheTool.putAndBack
+                FileOutputStream fileOutputStream = cacheTool.putBackStream
                         (COMPRESSION_IMAGE_CACHE_PRE + key);
 
                 try {

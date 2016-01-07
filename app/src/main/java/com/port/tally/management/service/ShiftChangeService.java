@@ -26,7 +26,6 @@ import org.mobile.library.model.work.WorkBack;
 import org.mobile.library.network.util.NetworkProgressListener;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -498,14 +497,7 @@ public class ShiftChangeService extends Service {
      */
     private void downloadAudio(DirectFileDownLoadWork downLoadWork, String token, String key,
                                String url) {
-        try {
-            cacheTool.putAndBack(key).close();
-        } catch (IOException e) {
-            Log.e(LOG_TAG + "downloadAudio", "token:" + token + " key:" + key + " url:" +
-                    url + " IOException is " + e.getMessage());
-        }
-
-        downLoadWork.beginExecute(url, cacheTool.getForFile(key).getPath());
+        downLoadWork.beginExecute(url, cacheTool.putBackPath(key));
     }
 
     /**
@@ -517,14 +509,7 @@ public class ShiftChangeService extends Service {
      */
     private void downloadImage(DirectFileDownLoadWork downLoadWork, final String token, String
             key, String url) {
-        try {
-            cacheTool.putAndBack(ImageUtil.COMPRESSION_IMAGE_CACHE_PRE + key).close();
-        } catch (IOException e) {
-            Log.e(LOG_TAG + "downloadImage", "token:" + token + " key:" + key + " url:" +
-                    url + " IOException is " + e.getMessage());
-        }
-
-        downLoadWork.beginExecute(url, cacheTool.getForFile(ImageUtil.COMPRESSION_IMAGE_CACHE_PRE
-                + key).getPath());
+        downLoadWork.beginExecute(url, cacheTool.putBackPath(ImageUtil
+                .COMPRESSION_IMAGE_CACHE_PRE + key));
     }
 }

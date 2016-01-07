@@ -217,16 +217,14 @@ public class ShiftChangeFunction {
     public void getLatest(final ShiftChangeRequestListener<List<ShiftChange>> listener) {
 
         // 最近的记录时间
-        String time = sharedPreferences.getString(LATEST_TIME_TAG + "_" + GlobalApplication
-                .getGlobal().getLoginStatus().getUserID(), null);
+        String time = sharedPreferences.getString(LATEST_TIME_TAG + "_" + GlobalApplication.getLoginStatus().getUserID(), null);
 
         if (time == null) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, -3);
             time = format.format(calendar.getTime());
-            sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication
-                    .getGlobal().getLoginStatus().getUserID(), time).apply();
+            sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication.getLoginStatus().getUserID(), time).apply();
             Log.i(LOG_TAG + "getLatest", "no content, use three days ago time is " + time);
         }
 
@@ -239,8 +237,7 @@ public class ShiftChangeFunction {
                     Log.i(LOG_TAG + "getLatest", "shiftChanges count is " + shiftChanges.size());
                     // 记录新时间
                     ShiftChange sc = shiftChanges.get(0);
-                    sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication
-                            .getGlobal().getLoginStatus().getUserID(), sc.getTime()).apply();
+                    sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication.getLoginStatus().getUserID(), sc.getTime()).apply();
 
                     List<Long> idList = operator.insert(shiftChanges);
                     Log.i(LOG_TAG + "getLatest", "id list count is " + idList.size());
@@ -275,7 +272,7 @@ public class ShiftChangeFunction {
             }
         }, false);
 
-        pullShiftChangeContent.beginExecute(GlobalApplication.getGlobal().getLoginStatus()
+        pullShiftChangeContent.beginExecute(GlobalApplication.getLoginStatus()
                 .getUserID(), time);
     }
 
@@ -359,7 +356,7 @@ public class ShiftChangeFunction {
             return;
         }
 
-        sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication.getGlobal()
+        sharedPreferences.edit().putString(LATEST_TIME_TAG + "_" + GlobalApplication
                 .getLoginStatus().getUserID(), shiftChange.getTime()).apply();
         operator.insert(shiftChange);
     }

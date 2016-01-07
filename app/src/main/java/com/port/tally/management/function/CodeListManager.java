@@ -148,13 +148,13 @@ public class CodeListManager {
                 break;
             case StaticValue.CodeListTag.FORWARDER_LIST:
                 // 货代
-                codeList = new ForwarderListFunction(context, GlobalApplication.getGlobal()
-                        .getLoginStatus().getCodeCompany());
+                codeList = new ForwarderListFunction(context, GlobalApplication.getLoginStatus()
+                        .getCodeCompany());
                 break;
             case StaticValue.CodeListTag.STORAGE_LIST:
                 // 货场
-                codeList = new StorageListFunction(context, GlobalApplication.getGlobal()
-                        .getLoginStatus().getCodeCompany());
+                codeList = new StorageListFunction(context, GlobalApplication.getLoginStatus()
+                        .getCodeCompany());
                 break;
             case StaticValue.CodeListTag.COMPANY_LIST:
                 // 公司
@@ -162,8 +162,8 @@ public class CodeListManager {
                 break;
             case StaticValue.CodeListTag.EMPLOYEE_LIST:
                 // 员工
-                codeList = new EmployeeListFunction(context, GlobalApplication.getGlobal()
-                        .getLoginStatus().getCodeCompany());
+                codeList = new EmployeeListFunction(context, GlobalApplication.getLoginStatus()
+                        .getCodeCompany());
                 break;
         }
 
